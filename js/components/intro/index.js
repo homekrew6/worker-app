@@ -29,7 +29,7 @@ class Intro extends Component {
 
 	render() {
 		return (
-			<Container >
+			<Container style={{ backgroundColor: '#e1f5f6' }}>
 				<ImageSlider images={[
 					require('../../../img/splash.png'),
 					require('../../../img/splash-bg.png'),
@@ -39,8 +39,8 @@ class Intro extends Component {
 					position={this.state.position}
 					onPositionChanged={position => this.setState({position})}
 				/>
-				<View style={{top:50,alignItems:'center'}}>
-					<Button block rounded info><Text>Book Now</Text></Button>
+				<View style={{ padding: 10 }}>
+					<Button block info flat style={{ marginTop: 40, backgroundColor: '#72cfc7', borderRadius: 10, shadowColor: 'transparent', shadowOffset: { width: 0, height: 0 }, shadowRadius: 0, shadowOpacity: 0, borderWidth: 0 }}><Text>Book Now</Text></Button>
 				</View>
 			</Container>
 		);

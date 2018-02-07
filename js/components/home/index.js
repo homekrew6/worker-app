@@ -16,7 +16,7 @@ class Home extends Component {
 	}
 	componentWillMount(){
 		setTimeout(() => {
-			this.props.navigation.navigate("Login")
+			this.props.navigation.navigate("Intro")
 		}, 4000)
 
 	}

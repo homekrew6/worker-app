@@ -2,13 +2,17 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {login} from './elements/authActions'
-import { Image, View, StatusBar,Dimensions,Alert } from "react-native";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from "react-native";
 
-import { Container, Header, Button, Content, Form, Item, Input, Label,Text } from "native-base";
+import { Container, Header, Button, Content, Form, Item, Icon, Frame, Input, Label, Text } from "native-base";
 
 import I18n from '../../i18n/i18n';
+import styles from './styles';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
+const launchscreenBg = require("../../../img/bg-login.png");
+const launchscreenLogo = require("../../../img/logo.png");
+const buttonImage = require("../../../img/bg-button.png");
 
 class Login extends Component {
 	constructor(props) {
@@ -54,22 +58,58 @@ class Login extends Component {
 
 	render() {
 		return (
-			<Container >
-				<Content>
-					<Form>
-            <Item inlineLabel>
-              <Label>{I18n.t('username')}</Label>
-              <Input keyboardType="email-address" onChangeText={(text) => this.setState({email:text})} value={this.state.email} />
-            </Item>
-            <Item inlineLabel last>
-              <Label>{I18n.t('password')}</Label>
-              <Input secureTextEntry onChangeText={(text) => this.setState({password:text})} value={this.state.password} />
-            </Item>
-						<Button block onPress={() =>this.pressLogin()}>
-							<Text>{I18n.t('submit')}</Text>
-						</Button>
-          </Form>
-				</Content>
+			<Container > 
+				<StatusBar
+					backgroundColor="#81cdc7"
+				/>
+				<Image source={launchscreenBg} style={styles.imageContainer}>
+					<Content>
+					
+						<View style={styles.logoContainer}>
+							<Image source={launchscreenLogo} style={styles.logo} />
+						</View>
+
+						<View style={{ padding: 20 }}>
+							<Item regular style={{ borderColor: '#29416f', borderWidth: 1, borderRadius: 2, height: 45 }}>
+								<Input placeholder={I18n.t('username_or_email')} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} />
+							</Item>
+							<Item regular style={{ borderColor: '#29416f', marginTop: 10, borderWidth: 1, borderRadius: 2, height: 45 }}>
+								<Input placeholder={I18n.t('password')} secureTextEntry={true} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} />
+							</Item>
+						</View>
+
+						<View transparent style={{ flex: 1, flexDirection: 'row', marginTop: 15, paddingLeft: 15, paddingRight: 15 }} >
+							<Image source={buttonImage} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 55 }} >
+								<Text style={{ color: '#fff', fontSize: 20, marginTop: -10, height: 30 }}>{I18n.t('login')}</Text>
+							</Image>
+						</View>
+
+						<View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: -13 }}>
+							<Text>- {I18n.t('or')} -</Text>
+						</View>
+
+						<View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5, paddingLeft: 15, paddingRight: 15 }}>
+							<Button block transparent style={{ borderWidth: 1, borderColor: '#29416f', flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+								<Text style={{ color: '#29416f' }}>{I18n.t('via_facebook')}</Text>
+							</Button>
+						</View>
+
+						<View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5, paddingLeft: 15, paddingRight: 15 }}>
+							<Button block transparent style={{
+								borderWidth: 1, borderColor: '#29416f', flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row'}}>
+								<Text style={{ color: '#29416f' }}>{I18n.t('via_gmail')}</Text>
+							</Button>
+						</View>
+
+						<View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 20 }}>
+							<Text style={{ color: '#252525' }}>{I18n.t('not_a_register_member')}? </Text>
+							<TouchableOpacity onPress={() => this.props.navigation.navigate("Signup")}>
+								<Text style={{ color: '#29416f' }}>{I18n.t('signup')}</Text>
+							</TouchableOpacity>
+						</View>
+						
+					</Content>
+				</Image>
 			</Container>
 		);
 	}
