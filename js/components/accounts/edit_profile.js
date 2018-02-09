@@ -35,7 +35,7 @@ class EditProfile extends Component {
                 />
 
                 <Content>
-                    <Header style={styles.appHdr} noShadow>
+                    <Header style={styles.appHdr2} noShadow>
                         <Button transparent >
                             <Icon name="chevron-left" style={{ fontSize: 18, color: "#71beb8" }}/>
                         </Button>

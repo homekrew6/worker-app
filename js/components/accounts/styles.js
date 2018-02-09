@@ -27,19 +27,17 @@ export default{
     },
     menuCarditem: {
         paddingTop: 0,
-        marginTOP: 0,
+        marginTop: 0,
         paddingBottom: 0
     },
     menuCardView: {
         flex: 1,
         flexDirection: 'row',
-        alignItem: 1,
         justifyContent: 'center',
-        alignItems: 'center',
         borderBottomColor: '#ececec',
         borderBottomWidth: 1,
         paddingBottom: 10,
-        paddingTop: 10
+        paddingTop: 10 
     },
     menuCardIcon: {
         height: 40,
@@ -50,15 +48,16 @@ export default{
         flexDirection: 'row',
         color: '#606060',
         paddingLeft: 10
-    },
+    }, 
     appHdr: {
+        backgroundColor: '#80cec8',
+
+    },
+    appHdr2: {
         backgroundColor: '#cbf0ed',
         
     },
     appHdrtitleWarp: {
-        textAlign: 'center',
-        alignItems: 'center',
-        justifyContent: 'center'
     },
 
     pname: {
@@ -96,21 +95,17 @@ export default{
     flx_View: {
         flex: 1,
         flexDirection: 'row'
-    },
-    artNt: {
-        width: 20,
-        textAlign: 'right'
-    },
+    }, 
     artNtTxt: {
-        color: '#ff0026'
+        color: '#ff0026',
+        width: 20
     },
     arw_lft: {
-        width: 20,
-        textAlign: 'right'
     },
     arw_lft_img: {
         height: 20,
-        width: 10
+        width: 10,
+        marginLeft: 10
     },
     version: {
         textAlign: 'center',

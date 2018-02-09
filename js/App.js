@@ -30,7 +30,7 @@ const AppNavigator = StackNavigator(
         
     },
     {
-        initialRouteName: "EditProfile",
+        initialRouteName: "Menu",
         headerMode: "none",
     }
 );
