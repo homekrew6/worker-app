@@ -13,7 +13,8 @@ import Signup from "./components/accounts/signup";
 import Login from "./components/accounts/login";
 import ForgotPassword from "./components/accounts/forget_password";
 import ResetPassword from "./components/accounts/reset_password";
-import Menu  from "./components/accounts/menu";
+import Menu from "./components/accounts/menu";
+import EditProfile from "./components/accounts/edit_profile";
 
 const AppNavigator = StackNavigator(
     {
@@ -24,11 +25,12 @@ const AppNavigator = StackNavigator(
         Login: { screen: Login },
         ForgotPassword: { screen: ForgotPassword },
         ResetPassword: { screen: ResetPassword },
-        Menu: { screen: Menu }
+        Menu: { screen: Menu },
+        EditProfile: { screen: EditProfile }
         
     },
     {
-        initialRouteName: "Menu",
+        initialRouteName: "EditProfile",
         headerMode: "none",
     }
 );

@@ -1,9 +1,7 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { login } from './elements/authActions'
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from "react-native";
-
 import { Container, Header, Button, Content, Form, Item, Icon, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title } from "native-base";
 
 import I18n from '../../i18n/i18n';
@@ -21,10 +19,10 @@ const icon7 = require("../../../img/icon7.png");
 const back_arow = require("../../../img/arrow_back.png");
 const logo_hdr = require("../../../img/logo2.png");
 
-class Login extends Component {
+class Menu extends Component {
     constructor(props) {
         super(props);
-    }
+    };
 
 
     render() {
@@ -33,6 +31,7 @@ class Login extends Component {
                 <StatusBar
                     backgroundColor="#81cdc7"
                 />
+
                 <Content>
                     <Header style={styles.appHdr}>
                         <Button transparent />
@@ -42,9 +41,10 @@ class Login extends Component {
                         <Button transparent >
                             <Icon name='search' />
                         </Button>
-
                     </Header>
+
                     <Card>
+
                         <CardItem style={styles.pcard}>
                             <View style={styles.flx_View}>
                                 <Image source={profileImage} style={styles.profileImage} />
@@ -64,6 +64,7 @@ class Login extends Component {
                     </Card>
 
                     <Card>
+
                         <CardItem style={styles.menuCarditem}>
                             <View style={styles.menuCardView}>
                                 <Image source={icon1} style={styles.menuCardIcon} />
@@ -76,6 +77,7 @@ class Login extends Component {
                                 </View>
                             </View>
                         </CardItem>
+
                         <CardItem style={styles.menuCarditem}>
                             <View style={styles.menuCardView}>
                                 <Image source={icon2} style={styles.menuCardIcon} />
@@ -88,6 +90,7 @@ class Login extends Component {
                                 </View>
                             </View>
                         </CardItem>
+
                         <CardItem style={styles.menuCarditem}>
                             <View style={styles.menuCardView}>
                                 <Image source={icon3} style={styles.menuCardIcon} />
@@ -97,6 +100,7 @@ class Login extends Component {
                                 </View>
                             </View>
                         </CardItem>
+
                         <CardItem style={styles.menuCarditem}>
                             <View style={styles.menuCardView}>
                                 <Image source={icon4} style={styles.menuCardIcon} />
@@ -106,6 +110,7 @@ class Login extends Component {
                                 </View>
                             </View>
                         </CardItem>
+
                         <CardItem style={styles.menuCarditem}>
                             <View style={styles.menuCardView}>
                                 <Image source={icon5} style={styles.menuCardIcon} />
@@ -115,6 +120,7 @@ class Login extends Component {
                                 </View>
                             </View>
                         </CardItem>
+
                         <CardItem style={styles.menuCarditem}>
                             <View style={styles.menuCardView}>
                                 <Image source={icon6} style={styles.menuCardIcon} />
@@ -124,6 +130,7 @@ class Login extends Component {
                                 </View>
                             </View>
                         </CardItem>
+
                         <CardItem style={styles.menuCarditem}>
                             <View style={styles.menuCardView} >
                                 <Image source={icon7} style={styles.menuCardIcon} />
@@ -135,28 +142,15 @@ class Login extends Component {
                         </CardItem>
 
                     </Card>
+
                     <View >
                         <Text style={styles.version}>Ver 2.5 Build 2425 - Aug 2017</Text>
                     </View>
+
                 </Content>
             </Container>
         );
-    }
-}
+    };
+};
 
-Login.propTypes = {
-    auth: PropTypes.object.isRequired
-}
-const mapStateToProps = (state) => {
-    return {
-        auth: state.auth
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        login: (email, password) => dispatch(login(email, password))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect()(Menu);

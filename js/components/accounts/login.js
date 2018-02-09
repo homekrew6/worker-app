@@ -83,6 +83,9 @@ class Login extends Component {
 								<Text style={{ color: '#fff', fontSize: 20, marginTop: -10, height: 30 }}>{I18n.t('login')}</Text>
 							</Image>
 						</View>
+						<View>
+							<Text style={{ textAlign: 'center', color: 'red', fontSize: 16, paddingBottom: 20 }}>Forgot your password</Text>
+						</View>
 
 						<View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: -13 }}>
 							<Text>- {I18n.t('or')} -</Text>
