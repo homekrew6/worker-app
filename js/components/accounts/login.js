@@ -5,7 +5,8 @@ import { login,getUserDetail } from './elements/authActions';
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from "react-native";
 
 import { Container, Header, Button, Content, Form, Item, Icon, Frame, Input, Label, Text } from "native-base";
-
+import FSpinner from 'react-native-loading-spinner-overlay';
+import api from '../../api'
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 const deviceHeight = Dimensions.get('window').height;
@@ -23,6 +24,9 @@ class Login extends Component {
 	      }
     }
 
+		pressForgotPassword() {
+			this.props.navigation.navigate("ForgotPassword");
+		}
 		pressLogin(){
 			if (!this.state.email) {
 				Alert.alert('Please enter email');
@@ -34,23 +38,32 @@ class Login extends Component {
 			}
 			const email = this.state.email;
 			const password = this.state.password;
-			this.props.login(email, password).then(res => {
-				console.log('testter2');
-				console.log(res);
-				if (res.type == 'success') {
-					this.props.getUserDetail(res.userId).then(userRes => {
-						console.log(userRes)
-						this.props.navigation.navigate("Menu");
+			api.post('Workers/approveChecking', { email: this.state.email }).then(resEdit => {
+				if (resEdit.response.is_active){
+
+					this.props.login(email, password).then(res => {
+						console.log(res);
+						if (res.type == 'success') {
+							this.props.getUserDetail(res.userId).then(userRes => {
+								console.log(userRes)
+								this.props.navigation.navigate("Menu");
+							}).catch(err => {
+								Alert.alert('Login failed, please try again1');
+							})
+						} else {
+							Alert.alert('Login failed, please try again2');
+						}
 					}).catch(err => {
-						Alert.alert('Login failed, please try again1');
+						console.log(err);
+						Alert.alert('Login fail,please try again3');
 					})
-				} else {
-					Alert.alert('Login failed, please try again2');
+				}else{
+					Alert.alert('You account not active, needs admin approval.');
 				}
 			}).catch(err => {
-				console.log(err);
-				Alert.alert('Login fail,please try again3');
+				Alert.alert('You account not active, needs admin approval.');
 			})
+			
 		}
 
 	render() {
@@ -61,14 +74,14 @@ class Login extends Component {
 				/>
 				<Image source={launchscreenBg} style={styles.imageContainer}>
 					<Content>
-					
+						<FSpinner visible={this.props.auth.busy} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
 						<View style={styles.logoContainer}>
 							<Image source={launchscreenLogo} style={styles.logo} />
 						</View>
 
 						<View style={{ padding: 20 }}>
 							<Item regular style={{ borderColor: '#29416f', borderWidth: 1, borderRadius: 2, height: 45 }}>
-								<Input onChangeText={(text) => this.setState({ email: text })} placeholder={I18n.t('username_or_email')} value={this.state.email} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} />
+								<Input onChangeText={(text) => this.setState({ email: text })} placeholder={I18n.t('email')} keyboardType={'email-address'} value={this.state.email} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} />
 							</Item>
 							<Item regular style={{ borderColor: '#29416f', marginTop: 10, borderWidth: 1, borderRadius: 2, height: 45 }}>
 								<Input placeholder={I18n.t('password')} secureTextEntry={true} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} onChangeText={(text) => this.setState({ password: text })} value={this.state.password}/>
@@ -80,9 +93,11 @@ class Login extends Component {
 								<Text style={{ color: '#fff', fontSize: 20, marginTop: -10, height: 30 }}>{I18n.t('login')}</Text>
 							</Image>
 						</TouchableOpacity>
-						<View>
-							<Text style={{ textAlign: 'center', color: 'red', fontSize: 16, paddingBottom: 20 }}>Forgot your password</Text>
-						</View>
+						<TouchableOpacity onPress={() => this.pressForgotPassword()}>
+							<View>
+								<Text style={{ textAlign: 'center', color: 'red', fontSize: 16, paddingBottom: 20 }}>Forgot password</Text>
+							</View>
+						</TouchableOpacity>
 
 						<View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: -13 }}>
 							<Text>- {I18n.t('or')} -</Text>

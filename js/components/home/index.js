@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Image, View, StatusBar } from "react-native";
-
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { checkAuth, getUserDetail } from '../accounts/elements/authActions'
 import { Container, Button, H3, Text, Header, Title, Body, Left, Right } from "native-base";
 
 import styles from "./styles";
@@ -11,13 +13,25 @@ const launchscreenLogo = require("../../../img/logo-kitchen-sink.png");
 
 class Home extends Component {
 	// eslint-disable-line
-	constructor(params){
+	constructor(params) {
 		super(params)
 	}
-	componentWillMount(){
-		setTimeout(() => {
-			this.props.navigation.navigate("Intro")
-		}, 4000)
+	componentWillMount() {
+		this.props.checkAuth(res => {
+			console.log(res);
+			if (res) {
+				this.props.getUserDetail(res.userId, res.id).then(userRes => {
+					console.log(userRes)
+					this.props.navigation.navigate("Menu");
+				}).catch(err => {
+					Alert.alert('Please login');
+					this.props.navigation.navigate("Login")
+				})
+				//this.props.navigation.navigate("Menu")
+			} else {
+				this.props.navigation.navigate("Intro")
+			}
+		})
 
 	}
 	render() {
@@ -47,4 +61,21 @@ class Home extends Component {
 	}
 }
 
-export default Home;
+Home.propTypes = {
+	auth: PropTypes.object.isRequired,
+	checkAuth: PropTypes.func.isRequired
+}
+
+const mapStateToProps = (state) => {
+	return {
+		auth: state.auth
+	}
+}
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		checkAuth: (cb) => dispatch(checkAuth(cb)),
+		getUserDetail: (id, auth) => dispatch(getUserDetail(id, auth))
+	}
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

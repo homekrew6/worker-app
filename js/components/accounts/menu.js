@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from "react-native";
 import { Container, Header, Button, Content, Form, Item, Icon, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title } from "native-base";
-
+import { logout } from './elements/authActions'
 import I18n from '../../i18n/i18n';
 import styles from "./styles";
 const deviceHeight = Dimensions.get('window').height;
@@ -23,6 +23,16 @@ class Menu extends Component {
     constructor(props) {
         super(props);
     };
+
+    logout() {
+        this.props.logout(res => {
+            if (res) {
+                this.props.navigation.navigate("Login")
+            } else {
+                this.props.navigation.navigate("Menu")
+            }
+        })
+    }
 
 
     render() {
@@ -47,11 +57,19 @@ class Menu extends Component {
 
                         <CardItem style={styles.pcard}>
                             <View style={styles.flx_View}>
-                                <Image source={profileImage} style={styles.profileImage} />
+                                {
+                                    this.props.auth.data.image ? (
+                                        <Image source={profileImage} style={styles.profileImage} />
+                                    ) : (
+                                            <Image source={profileImage} style={styles.profileImage} />
+                                        )
+                                }
                                 <View>
-                                    <Text style={styles.pname}>Tiffany Krew</Text>
-                                    <Text style={styles.pemail}>tiffany@email.com</Text>
-                                    <Text style={styles.pphone}>123456789</Text>
+                                    <TouchableOpacity onPress={() => this.props.navigation.navigate("EditProfile")}>
+                                        <Text style={styles.pname}>{this.props.auth.data.name}</Text>
+                                        <Text style={styles.pemail}>{this.props.auth.data.email}</Text>
+                                        <Text style={styles.pphone}>{this.props.auth.data.phone}</Text>
+                                    </TouchableOpacity>
                                 </View>
                             </View>
 
@@ -141,6 +159,16 @@ class Menu extends Component {
                             </View>
                         </CardItem>
 
+                        <CardItem style={styles.menuCarditem}>
+                            <TouchableOpacity style={styles.menuCardView} onPress={() => this.logout()}>
+                                        <Image source={icon7} style={styles.menuCardIcon} />
+                                        <Text style={styles.menuCardTxt}>Logout</Text>
+                                        <View style={styles.arw_lft}>
+                                            <Image source={back_arow} style={styles.arw_lft_img} />
+                                        </View>
+                            </TouchableOpacity>
+                        </CardItem>
+
                     </Card>
 
                     <View >
@@ -153,4 +181,19 @@ class Menu extends Component {
     };
 };
 
-export default connect()(Menu);
+Menu.propTypes = {
+    auth: PropTypes.object.isRequired
+}
+const mapStateToProps = (state) => {
+    return {
+        auth: state.auth
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        logout: (cb) => dispatch(logout(cb))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Menu);

@@ -24,10 +24,10 @@ export function login(email, password) {
   }
 }
 
-export function getUserDetail(id) {
+export function getUserDetail(id, auth) {
   return function (dispatch) {
     dispatch(authStateBusy())
-    return authApi.getUserDetail(id).then(res => {
+    return authApi.getUserDetail(id, auth).then(res => {
       res.type = 'success';
       console.log(res);
       dispatch(authStateSuccess(res))
@@ -67,7 +67,7 @@ export function checkAuth(cb) {
       if (result) {
         const data = JSON.parse(result)
         dispatch(authStateSuccess(data))
-        cb(true)
+        cb(data)
       } else {
         dispatch(authStateFailed())
         cb(false)
