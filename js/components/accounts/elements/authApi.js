@@ -16,7 +16,7 @@ class authApi {
 	static signup(name, email, password, phone) {
 		console.log('test');
 		return new Promise((resolve, reject) => {
-			api.post('Workers/signup', { name: name, email: email, password: password, phone: phone }).then(responseJson => {
+			api.post('Workers/signup', { name: name, email: email, password: password, phone: phone, is_active: 0 }).then(responseJson => {
 				resolve(responseJson)
 			}).catch(err => {
 				console.log(err);

@@ -30,7 +30,7 @@ const AppNavigator = StackNavigator(
         
     },
     {
-        initialRouteName: "Login",
+        initialRouteName: "Drawer",
         headerMode: "none",
     }
 );

@@ -44,6 +44,35 @@ class api {
 
   }
 
+  static put(endpoint, data) {
+    console.log(config.base_api + endpoint)
+    console.log(data);
+    return new Promise((resolve, reject) => {
+      resolver().then(() => {
+        fetch(config.base_api + endpoint, {
+          method: 'PUT',
+          headers: headers,
+          body: JSON.stringify(data)
+        }).then(response => {
+          console.log(response);
+          if (response.status === 200) {
+            resolve(response.json());
+          } else {
+            if (response.status === 204) {
+              console.log('204')
+              resolve();
+            } else {
+              console.log('500')
+              reject({ "err": "401 found" })
+            }
+          }
+
+        }).catch(error => error)
+      }).catch(err => err)
+    })
+
+  }
+
   static get(endpoint) {
     return new Promise((resolve, reject) => {
       console.log(config.base_api + endpoint)

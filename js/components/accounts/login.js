@@ -6,7 +6,7 @@ import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from "rea
 
 import { Container, Header, Button, Content, Form, Item, Icon, Frame, Input, Label, Text } from "native-base";
 import FSpinner from 'react-native-loading-spinner-overlay';
-
+import api from '../../api'
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 const deviceHeight = Dimensions.get('window').height;
@@ -38,22 +38,32 @@ class Login extends Component {
 			}
 			const email = this.state.email;
 			const password = this.state.password;
-			this.props.login(email, password).then(res => {
-				console.log(res);
-				if (res.type == 'success') {
-					this.props.getUserDetail(res.userId).then(userRes => {
-						console.log(userRes)
-						this.props.navigation.navigate("Menu");
+			api.post('Workers/approveChecking', { email: this.state.email }).then(resEdit => {
+				if (resEdit.response.is_active){
+
+					this.props.login(email, password).then(res => {
+						console.log(res);
+						if (res.type == 'success') {
+							this.props.getUserDetail(res.userId).then(userRes => {
+								console.log(userRes)
+								this.props.navigation.navigate("Menu");
+							}).catch(err => {
+								Alert.alert('Login failed, please try again1');
+							})
+						} else {
+							Alert.alert('Login failed, please try again2');
+						}
 					}).catch(err => {
-						Alert.alert('Login failed, please try again1');
+						console.log(err);
+						Alert.alert('Login fail,please try again3');
 					})
-				} else {
-					Alert.alert('Login failed, please try again2');
+				}else{
+					Alert.alert('You account not active, needs admin approval.');
 				}
 			}).catch(err => {
-				console.log(err);
-				Alert.alert('Login fail,please try again3');
+				Alert.alert('You account not active, needs admin approval.');
 			})
+			
 		}
 
 	render() {
@@ -71,7 +81,7 @@ class Login extends Component {
 
 						<View style={{ padding: 20 }}>
 							<Item regular style={{ borderColor: '#29416f', borderWidth: 1, borderRadius: 2, height: 45 }}>
-								<Input onChangeText={(text) => this.setState({ email: text })} placeholder={I18n.t('username_or_email')} value={this.state.email} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} />
+								<Input onChangeText={(text) => this.setState({ email: text })} placeholder={I18n.t('email')} keyboardType={'email-address'} value={this.state.email} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} />
 							</Item>
 							<Item regular style={{ borderColor: '#29416f', marginTop: 10, borderWidth: 1, borderRadius: 2, height: 45 }}>
 								<Input placeholder={I18n.t('password')} secureTextEntry={true} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} onChangeText={(text) => this.setState({ password: text })} value={this.state.password}/>

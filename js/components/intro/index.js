@@ -33,14 +33,14 @@ class Intro extends Component {
 				<ImageSlider images={[
 					require('../../../img/splash.png'),
 					require('../../../img/splash-bg.png'),
-					require('../../../img/petizen_bg.png')
+					//require('../../../img/petizen_bg.png')
 				]}
 					height= {deviceHeight/1.3}
 					position={this.state.position}
 					onPositionChanged={position => this.setState({position})}
 				/>
 				<View style={{ padding: 10 }}>
-					<Button block info flat style={{ marginTop: 40, backgroundColor: '#72cfc7', borderRadius: 10, shadowColor: 'transparent', shadowOffset: { width: 0, height: 0 }, shadowRadius: 0, shadowOpacity: 0, borderWidth: 0 }}><Text>Book Now</Text></Button>
+					<Button block info flat style={{ marginTop: 40, backgroundColor: '#72cfc7', borderRadius: 10, shadowColor: 'transparent', shadowOffset: { width: 0, height: 0 }, shadowRadius: 0, shadowOpacity: 0, borderWidth: 0 }} onPress={() => this.props.navigation.navigate("Login")}><Text> Login </Text></Button>
 				</View>
 			</Container>
 		);
