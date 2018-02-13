@@ -5,6 +5,7 @@ import { login,getUserDetail } from './elements/authActions';
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from "react-native";
 
 import { Container, Header, Button, Content, Form, Item, Icon, Frame, Input, Label, Text } from "native-base";
+import FSpinner from 'react-native-loading-spinner-overlay';
 
 import I18n from '../../i18n/i18n';
 import styles from './styles';
@@ -23,6 +24,9 @@ class Login extends Component {
 	      }
     }
 
+		pressForgotPassword() {
+			this.props.navigation.navigate("ForgotPassword");
+		}
 		pressLogin(){
 			if (!this.state.email) {
 				Alert.alert('Please enter email');
@@ -35,7 +39,6 @@ class Login extends Component {
 			const email = this.state.email;
 			const password = this.state.password;
 			this.props.login(email, password).then(res => {
-				console.log('testter2');
 				console.log(res);
 				if (res.type == 'success') {
 					this.props.getUserDetail(res.userId).then(userRes => {
@@ -61,7 +64,7 @@ class Login extends Component {
 				/>
 				<Image source={launchscreenBg} style={styles.imageContainer}>
 					<Content>
-					
+						<FSpinner visible={this.props.auth.busy} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
 						<View style={styles.logoContainer}>
 							<Image source={launchscreenLogo} style={styles.logo} />
 						</View>
@@ -80,9 +83,11 @@ class Login extends Component {
 								<Text style={{ color: '#fff', fontSize: 20, marginTop: -10, height: 30 }}>{I18n.t('login')}</Text>
 							</Image>
 						</TouchableOpacity>
-						<View>
-							<Text style={{ textAlign: 'center', color: 'red', fontSize: 16, paddingBottom: 20 }}>Forgot your password</Text>
-						</View>
+						<TouchableOpacity onPress={() => this.pressForgotPassword()}>
+							<View>
+								<Text style={{ textAlign: 'center', color: 'red', fontSize: 16, paddingBottom: 20 }}>Forgot password</Text>
+							</View>
+						</TouchableOpacity>
 
 						<View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: -13 }}>
 							<Text>- {I18n.t('or')} -</Text>

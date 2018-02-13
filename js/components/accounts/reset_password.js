@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { login } from './elements/authActions'
+import api from '../../api'
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from "react-native";
 
 import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Icon, Frame, Input, Label, Text } from "native-base";
 
 import I18n from '../../i18n/i18n';
 import styles from "./styles";
+import FSpinner from 'react-native-loading-spinner-overlay';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const lockImage = require("../../../img/lock.png");
@@ -15,37 +17,39 @@ const buttonImage = require("../../../img/bg-button.png");
 class ResetPassword extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            otp: '',
+            password: '',
+            visible: false
+        }
     }
 
-    pressLogin() {
-        if (!this.state.email) {
-            Alert.alert('Please enter email');
+    pressSend() {
+        if (!this.state.otp) {
+            Alert.alert('Please enter otp');
             return false;
         }
         if (!this.state.password) {
             Alert.alert('Please enter password');
             return false;
         }
-        const email = this.state.email;
-        const password = this.state.password;
-        this.props.login(email, password).then(res => {
-            console.log(res);
-            if (res.status === 200) {
-                console.log(res.json())
-            } else {
-                Alert.alert('Login fail,please try again');
-            }
-
-            // if(res.status!=='success'){
-            //
-            //   this.setState({email:'',password:''});
-            // }else{
-            // 	Alert.alert('Login success');
-            //   //this.props.navigation.navigate("Home");
-            // }
-        }).catch(err => {
-            Alert.alert('Login fail,please try again');
-            //return err
+        this.setState({ visible: true });
+        api.post('Customers/otpChecking', { otp: this.state.otp }).then(res => {
+            console.log('test1');
+            api.post('Workers/reset-password?access_token=' + res.response.access_token, { newPassword: this.state.password }).then(resReset => {
+                
+                this.setState({ visible: false });
+                Alert.alert('Password changed successfully')
+                this.props.navigation.navigate("Login");
+            }).catch((errReset) => {
+                console.log('test2');
+                this.setState({ visible: false });
+                Alert.alert('Please try again')
+            })
+        }).catch((err) => {
+            console.log('test2');
+            this.setState({ visible: false });
+            Alert.alert('Wrong OTP.')
         })
     }
 
@@ -57,6 +61,7 @@ class ResetPassword extends Component {
                     backgroundColor="#81cdc7"
                 />
                 <Content>
+                    <FSpinner visible={this.state.visible} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
                     <Header style={{ backgroundColor: '#fff' }}>
                         <Left style={{ marginRight: -15 }}>
                             <Button transparent>
@@ -109,18 +114,18 @@ class ResetPassword extends Component {
                         </View>
                         <View style={{ marginTop: 30 }}>
                             <Item regular style={{ borderColor: '#29416f', borderWidth: 1, borderRadius: 2, height: 45 }}>
-                                <Input keyboardType={'numeric'} placeholder={I18n.t('four_digit_code')} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} />
+                                <Input onChangeText={(text) => this.setState({ otp: text })} value={this.state.otp}  keyboardType={'numeric'} placeholder={I18n.t('four_digit_code')} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} />
                             </Item>
                             <Item regular style={{ borderColor: '#29416f', borderWidth: 1, borderRadius: 2, height: 45, marginTop: 10 }}>
-                                <Input secureTextEntry={true} placeholder={I18n.t('new_password')} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} />
+                                <Input onChangeText={(text) => this.setState({ password: text })} value={this.state.password} secureTextEntry={true} placeholder={I18n.t('new_password')} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} />
                             </Item>
                         </View>
                     </View>
-                    <Button transparent style={{ height: 70, marginTop: 2 }} >
+                    <TouchableOpacity transparent style={{ height: 70, marginTop: 2, flex: 1, flexDirection: 'row', paddingLeft: 15, paddingRight: 15 }} onPress={() => this.pressSend()} >
                         <Image source={buttonImage} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: deviceWidth / 1.3, height: 55 }} >
                             <Text style={{ color: '#fff', fontSize: 20, marginTop: -10, height: 30 }}>{I18n.t('save_password')}</Text>
                         </Image>
-                    </Button>
+                    </TouchableOpacity>
 
                 </Content>
             </Container>

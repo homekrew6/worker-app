@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { login } from './elements/authActions'
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { login } from './elements/authActions';
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from "react-native";
+import api from '../../api';
+import FSpinner from 'react-native-loading-spinner-overlay';
 
 import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Icon, Frame, Input, Label, Text } from "native-base";
 
@@ -15,38 +17,36 @@ const buttonImage = require("../../../img/bg-button.png");
 class ForgotPassword extends Component {
     constructor(props) {
         super(props);
+        console.log(props);
+        this.state = {
+            email: '',
+            visible: false
+        }
     }
 
-    pressLogin() {
+    pressSend() {
         if (!this.state.email) {
             Alert.alert('Please enter email');
             return false;
         }
-        if (!this.state.password) {
-            Alert.alert('Please enter password');
-            return false;
-        }
-        const email = this.state.email;
-        const password = this.state.password;
-        this.props.login(email, password).then(res => {
+        this.setState({ visible: true });
+        api.post('Workers/emailChecking',{email:this.state.email}).then(res => {
             console.log(res);
-            if (res.status === 200) {
-                console.log(res.json())
-            } else {
-                Alert.alert('Login fail,please try again');
-            }
-
-            // if(res.status!=='success'){
-            //
-            //   this.setState({email:'',password:''});
-            // }else{
-            // 	Alert.alert('Login success');
-            //   //this.props.navigation.navigate("Home");
-            // }
-        }).catch(err => {
-            Alert.alert('Login fail,please try again');
-            //return err
+            api.post('Workers/reset',{email:this.state.email}).then(resReset => {
+                this.setState({ visible: false });
+                this.props.navigation.navigate('ResetPassword');
+            }).catch((errReset) => {
+                console.log(errReset)
+                this.setState({ visible: false });
+                Alert.alert('Please try again')
+            })
+        }).catch((err) => {
+            console.log(err);
+            this.setState({ visible: false });
+            Alert.alert('Email does not exist.')
         })
+
+
     }
 
 
@@ -57,9 +57,10 @@ class ForgotPassword extends Component {
                     backgroundColor="#81cdc7"
                 />
                 <Content>
+                    <FSpinner visible={this.state.visible} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
                     <Header style={{ backgroundColor: '#fff' }}>
                         <Left style={{ marginRight: -15 }}>
-                            <Button transparent>
+                            <Button transparent onPress={() => this.props.navigation.goBack()}>
                                 <Icon style={{ color: '#81cdc7' }} name='arrow-back' />
                             </Button>
                         </Left>
@@ -109,15 +110,15 @@ class ForgotPassword extends Component {
                         </View>
                         <View style={{ marginTop: 30 }}>
                             <Item regular style={{ borderColor: '#29416f', borderWidth: 1, borderRadius: 2, height: 45 }}>
-                                <Input keyboardType={'email-address'} placeholder={I18n.t('email_address')} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} />
+                                <Input onChangeText={(text) => this.setState({ email: text })} value={this.state.email} keyboardType={'email-address'} placeholder={I18n.t('email_address')} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} />
                             </Item>
                         </View>
                     </View>
-                    <Button transparent style={{ height: 70, marginTop: 2 }} >
+                    <TouchableOpacity transparent style={{ height: 70, marginTop: 20, flexDirection: 'row', paddingLeft: 15, paddingRight:15 }} onPress={() => this.pressSend()} >
                         <Image source={buttonImage} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: deviceWidth / 1.3, height: 55 }} >
                             <Text style={{ color: '#fff', fontSize: 20, marginTop: -10, height: 30 }}>{I18n.t('send_otp')}</Text>
                         </Image>
-                    </Button>
+                    </TouchableOpacity>
 
                 </Content>
             </Container>
