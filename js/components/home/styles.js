@@ -26,5 +26,19 @@ export default {
     color: "#D8D8D8",
     bottom: 6,
     marginTop: 5
+  },
+  btmView: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    flex: 1,
+    flexDirection: 'row'
+  },
+  btmText: {
+    fontSize: 10,
+    flex: 1,
+    textAlign: 'center',
+    padding: 10,
+    color: '#8b8b8b'
   }
 };

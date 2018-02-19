@@ -4,10 +4,12 @@ import { connect } from 'react-redux'
 import { signup } from './elements/authActions'
 import { Image, View, ScrollView, StatusBar, Dimensions, Alert, TouchableOpacity } from "react-native";
 
-import { Container, Header, Button, Content, Form, Item, Icon, Frame, Input, Label, Text } from "native-base";
+import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, CheckBox } from "native-base";
 import styles from "./styles";
 import I18n from '../../i18n/i18n';
 import FSpinner from 'react-native-loading-spinner-overlay';
+import PopoverTooltip from 'react-native-popover-tooltip';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const launchscreenBg = require("../../../img/bg-login.png");
@@ -21,7 +23,8 @@ class Signup extends Component {
             name: '',
             email: '',
             password: '',
-            phone: ''
+            phone: '',
+            chkbox_chk: false
         }
     }
 
@@ -39,8 +42,17 @@ class Signup extends Component {
             Alert.alert('Please enter password');
             return false;
         }
+        const password_pattern = /(?=.*[A-Z]).{6,}/;
+        if (!password_pattern.test(this.state.password)) {
+            Alert.alert('Password must have one capital letter and min six characters');
+            return false;
+        }
         if (!this.state.phone) {
             Alert.alert('Please enter phone');
+            return false;
+        }
+        if (!this.state.chkbox_chk) {
+            Alert.alert('Please check Terms and Conditions');
             return false;
         }
         const name = this.state.name;
@@ -53,14 +65,18 @@ class Signup extends Component {
                 Alert.alert('Successfully saved.');
                 this.props.navigation.navigate("Login");
             } else {
-                Alert.alert('Data not saved,please try again');
+                Alert.alert('Please check all fields and try again');
             }
         }).catch(err => {
             console.log(err);
-            Alert.alert('Data not saved,please try again');
+            Alert.alert('Please check all fields and try again');
 
         })
 
+    }
+    chkbox_check() {
+        if (this.state.chkbox_chk) this.setState({ chkbox_chk: false });
+        else this.setState({ chkbox_chk: true });
     }
 
     render() {
@@ -88,11 +104,35 @@ class Signup extends Component {
 
                             <Item regular style={{ borderColor: '#29416f', marginTop: 10, borderWidth: 1, borderRadius: 2, height: 45 }}>
                                 <Input onChangeText={(text) => this.setState({ password: text })} value={this.state.password}  placeholder={I18n.t('password')} secureTextEntry={true} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} />
+                                    <PopoverTooltip
+                                        ref='tooltip1'
+                                        buttonComponent={
+                                            <Icon name="information-outline" style={{ fontSize: 26, paddingRight: 10, color: '#29416f', paddingLeft: 10, paddingTop: 10, paddingBottom: 10 }}></Icon>
+                                        }
+                                        items={[
+                                            {
+                                                label: 'Min length six, one Caps',
+                                                onPress: () => { }
+                                            }
+                                        ]}
+                                    />
                             </Item>
 
                             <Item regular style={{ borderColor: '#29416f', marginTop: 10, borderWidth: 1, borderRadius: 2, height: 45 }}>
                                 <Input onChangeText={(text) => this.setState({ phone: text })} placeholder={I18n.t('phone_number')} keyboardType={'numeric'} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} />
                             </Item>
+
+                            <View style={{ flexDirection: 'row', flex: 1, paddingTop: 15, paddingBottom: 10 }} >
+                                <View style={{ width: 35 }}>
+                                    <CheckBox color='#29416f' checked={this.state.chkbox_chk} onPress={() => this.chkbox_check()} />
+                                </View>
+                                <View style={{ flex: 1, flexDirection: 'row' }}>
+                                    <Text style={{ fontSize: 14 }}>{I18n.t('i_agree_to_the_term_and_conditions')}</Text>
+                                    <TouchableOpacity>
+                                        <Text style={{ fontSize: 14, color: '#29416f' }}>{I18n.t('terms_and_conditions')}</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
 
                             <TouchableOpacity style={{ flex: 1, flexDirection: 'row', marginTop: 15 }} onPress={() => this.pressSignup()} >
                                 <Image source={buttonImage} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 55 }} >
@@ -100,24 +140,26 @@ class Signup extends Component {
                                 </Image>
                             </TouchableOpacity>
 
-                            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: -13 }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'center' , marginBottom: 10, marginTop: 5 }}>
                                 <Text>- {I18n.t('or')} -</Text>
                             </View>
 
                             <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5 }}>
                                 <Button block transparent style={{ borderWidth: 1, borderColor: '#29416f', flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                                    <Icon name="facebook" style={{ color: '#29416f', marginRight: 5, fontSize: 20 }}></Icon>
                                     <Text style={{ color: '#29416f' }}>{I18n.t('via_facebook')}</Text>
                                 </Button>
                             </View>
 
                             <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5 }}>
                                 <Button block transparent style={{ borderWidth: 1, borderColor: '#29416f', flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                                    <Icon name="gmail" style={{ color: '#29416f', marginRight: 5, fontSize: 20 }}></Icon>
                                     <Text style={{ color: '#29416f' }}>{I18n.t('via_gmail')}</Text>
                                 </Button>
                             </View>
 
                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
-                                <Text style={{ color: '#252525' }}>{I18n.t('not_a_register_member')} </Text>
+                                <Text style={{ color: '#252525' }}>{I18n.t('already_registered')} </Text>
                                 <TouchableOpacity onPress={() => this.props.navigation.navigate("Login")}>
                                     <Text style={{ color: '#29416f' }}>{I18n.t('login')}</Text>
                                 </TouchableOpacity>

@@ -32,8 +32,7 @@ class Intro extends Component {
 			<Container style={{ backgroundColor: '#e1f5f6' }}>
 				<ImageSlider images={[
 					require('../../../img/splash.png'),
-					require('../../../img/splash-bg.png'),
-					//require('../../../img/petizen_bg.png')
+					require('../../../img/splash-bg.png')
 				]}
 					height= {deviceHeight/1.3}
 					position={this.state.position}

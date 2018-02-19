@@ -28,7 +28,7 @@ export default{
     menuCarditem: {
         paddingTop: 0,
         marginTop: 0,
-        paddingBottom: 0
+        paddingBottom: 0,
     },
     menuCardView: {
         flex: 1,
@@ -40,14 +40,15 @@ export default{
         paddingTop: 10 
     },
     menuCardIcon: {
-        height: 40,
-        width: 40
+        height: 30,
+        width: 30
     },
     menuCardTxt: {
         flex: 1,
         flexDirection: 'row',
         color: '#606060',
-        paddingLeft: 10
+        paddingLeft: 10,
+        lineHeight: 25,
     }, 
     appHdr: {
         backgroundColor: '#80cec8',
@@ -58,6 +59,7 @@ export default{
         
     },
     appHdrtitleWarp: {
+        alignItems: 'center'
     },
 
     pname: {
@@ -94,13 +96,26 @@ export default{
     },
     flx_View: {
         flex: 1,
-        flexDirection: 'row'
+        flexDirection: 'row',
     }, 
+    artNt:{
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    bg_white:{ 
+        backgroundColor: '#fff' 
+    },
+    bg_head_icon:{ 
+        color: '#1e3768'
+    },
     artNtTxt: {
         color: '#ff0026',
         width: 20
     },
     arw_lft: {
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     arw_lft_img: {
         height: 20,
@@ -156,7 +171,8 @@ export default{
         width: 110, 
         borderRadius: 90 
     },
-    editPflHdrBtn:{ paddingTop: 20, 
+    editPflHdrBtn:{ 
+    paddingTop: 20, 
     paddingBottom: 20, 
     marginTop: 15 
     },

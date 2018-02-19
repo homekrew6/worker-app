@@ -4,12 +4,21 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { checkAuth, getUserDetail } from '../accounts/elements/authActions'
 import { Container, Button, H3, Text, Header, Title, Body, Left, Right } from "native-base";
+import { NavigationActions } from "react-navigation";
 
 import styles from "./styles";
 
 //const launchscreenBg = require("../../../img/launchscreen-bg.png");
 const launchscreenBg = require("../../../img/splash.png");
 const launchscreenLogo = require("../../../img/logo-kitchen-sink.png");
+const resetActionIntro = NavigationActions.reset({
+	index: 0,
+	actions: [NavigationActions.navigate({ routeName: 'Intro' })],
+});
+const resetAction = NavigationActions.reset({
+	index: 0,
+	actions: [NavigationActions.navigate({ routeName: 'Menu' })],
+});
 
 class Home extends Component {
 	// eslint-disable-line
@@ -18,20 +27,24 @@ class Home extends Component {
 	}
 	componentWillMount() {
 		this.props.checkAuth(res => {
-			console.log(res);
-			if (res) {
-				this.props.getUserDetail(res.userId, res.id).then(userRes => {
-					console.log(userRes)
-					this.props.navigation.navigate("Menu");
-				}).catch(err => {
-					Alert.alert('Please login');
-					this.props.navigation.navigate("Login")
-				})
-				//this.props.navigation.navigate("Menu")
-			} else {
-				this.props.navigation.navigate("Intro")
-			}
-		})
+			setTimeout(() => {
+				console.log(res);
+				if (res) {
+					this.props.getUserDetail(res.userId, res.id).then(userRes => {
+						console.log(userRes)
+						//this.props.navigation.navigate("Menu");
+						this.props.navigation.dispatch(resetAction);
+					}).catch(err => {
+						//Alert.alert('Please login');
+						this.props.navigation.navigate("Login");
+					})
+					//this.props.navigation.navigate("Menu")
+				} else {
+					//this.props.navigation.navigate("Intro");
+					this.props.navigation.dispatch(resetActionIntro);
+				}
+			})
+		}, 4000);	
 
 	}
 	render() {
@@ -53,6 +66,10 @@ class Home extends Component {
 						<View style={{ marginTop: 8 }} />
 						{/* <H3 style={styles.text}>NativeBase components</H3> */}
 						<View style={{ marginTop: 8 }} />
+					</View>
+
+					<View style={styles.btmView}>
+						<Text style={styles.btmText}>Copyright © 2018 homekrew. All Rights Reserved.</Text>
 					</View>
 
 				</Image>
