@@ -14,6 +14,7 @@ const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const profileImage = require("../../../img/atul.png");
 const carveImage = require("../../../img/bg-1.png");
+const carve = require("../../../img/carve.png");
 
 class EditProfile extends Component {
     constructor(props) {
@@ -75,7 +76,7 @@ class EditProfile extends Component {
                 <StatusBar
                     backgroundColor="#81cdc7"
                 />
-                <Content>
+                <Content style={styles.bg_white}>
                     <FSpinner visible={this.state.visible} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
                     <Header style={styles.appHdr2} noShadow>
                         <Button transparent onPress={() => this.props.navigation.goBack()}>
@@ -97,13 +98,16 @@ class EditProfile extends Component {
                                     )
                             }
 
-                            <Button primary noShadow small style={styles.editPflHdrBtn}><Text> Change Photo </Text></Button>
+                            <Button primary small style={styles.editPflHdrBtn}><Text style={{ fontSize: 10 }}> Change Photo </Text></Button>
                         </View>
                     </View>
-
-                    <View style={{ paddingBottom: 0, marginBottom: 0 }}>
-                        <Image source={carveImage} style={{ width: deviceWidth }} />
+                    <View style={{ flex: 1, flexDirection: 'row', marginTop: -40 }}>
+                        <Image source={carve} style={{ width: deviceWidth, height: 50 }}></Image>
                     </View>
+
+                    {/* <View style={{ paddingBottom: 0, marginBottom: 0 }}>
+                        <Image source={carveImage} style={{ width: deviceWidth }} />
+                    </View> */}
 
                     <View>
                         <View style={styles.editprofileLst}>
@@ -131,19 +135,6 @@ class EditProfile extends Component {
                                 <Input style={styles.editprofileInput} onChangeText={(text) => this.setState({ phone: text })} value={this.state.phone} />
                             </View>
                         </View>
-
-                        {/* <View style={styles.editprofileLst}>
-                    <View style={styles.editprofileWarp}>
-                      <Text>Password</Text>
-                    </View>
-                    <View style={styles.editprofileInputwrap}>
-                      <Input style={styles.editprofileInput} value={'password'} secureTextEntry />
-                    </View>
-                  </View> */}
-                        {/* <View style={{ padding: 10 }}>
-                    <Text>Skills</Text>
-                    <View></View>
-                  </View> */}
                     </View>
 
                     <Footer>

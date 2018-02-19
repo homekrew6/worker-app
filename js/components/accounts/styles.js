@@ -142,7 +142,7 @@ export default{
         justifyContent: 'center' 
     },
     editprofileWarp:{ 
-        flex: 1, 
+        width: 100, 
         paddingBottom: 0, 
         marginBottom: 0, 
     },
@@ -157,7 +157,8 @@ export default{
     editPflHdr:{ 
         alignItems: 'center', 
         justifyContent: 'center', 
-        backgroundColor: '#cbf0ed' 
+        backgroundColor: '#cbf0ed',
+        paddingBottom: 40 
     },
     editPflHdrWrap:{ 
         alignItems: 'center', 
