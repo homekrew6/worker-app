@@ -106,25 +106,6 @@ class Login extends Component {
 							</View>
 						</TouchableOpacity>
 
-						<View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 0, marginBottom: 15 }}>
-							<Text>- {I18n.t('or')} -</Text>
-						</View>
-
-						<View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5, paddingLeft: 15, paddingRight: 15 }}>
-							<Button block transparent style={{ borderWidth: 1, borderColor: '#29416f', flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-								<Icon name="facebook" style={{ color: '#29416f', marginRight: 5, fontSize: 20 }}></Icon>
-								<Text style={{ color: '#29416f' }}>{I18n.t('via_facebook')}</Text>
-							</Button>
-						</View>
-
-						<View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5, paddingLeft: 15, paddingRight: 15 }}>
-							<Button block transparent style={{
-								borderWidth: 1, borderColor: '#29416f', flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row'}}>
-								<Icon name="gmail" style={{ color: '#29416f', marginRight: 5, fontSize: 20 }}></Icon>
-								<Text style={{ color: '#29416f' }}>{I18n.t('via_gmail')}</Text>
-							</Button>
-						</View>
-
 						<View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 20 }}>
 							<Text style={{ color: '#252525' }}>{I18n.t('not_a_register_member')} </Text>
 							<TouchableOpacity onPress={() => this.props.navigation.navigate("Signup")}>

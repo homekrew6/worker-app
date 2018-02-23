@@ -140,24 +140,6 @@ class Signup extends Component {
                                 </Image>
                             </TouchableOpacity>
 
-                            <View style={{ flexDirection: 'row', justifyContent: 'center' , marginBottom: 10, marginTop: 5 }}>
-                                <Text>- {I18n.t('or')} -</Text>
-                            </View>
-
-                            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5 }}>
-                                <Button block transparent style={{ borderWidth: 1, borderColor: '#29416f', flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-                                    <Icon name="facebook" style={{ color: '#29416f', marginRight: 5, fontSize: 20 }}></Icon>
-                                    <Text style={{ color: '#29416f' }}>{I18n.t('via_facebook')}</Text>
-                                </Button>
-                            </View>
-
-                            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5 }}>
-                                <Button block transparent style={{ borderWidth: 1, borderColor: '#29416f', flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-                                    <Icon name="gmail" style={{ color: '#29416f', marginRight: 5, fontSize: 20 }}></Icon>
-                                    <Text style={{ color: '#29416f' }}>{I18n.t('via_gmail')}</Text>
-                                </Button>
-                            </View>
-
                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
                                 <Text style={{ color: '#252525' }}>{I18n.t('already_registered')} </Text>
                                 <TouchableOpacity onPress={() => this.props.navigation.navigate("Login")}>
