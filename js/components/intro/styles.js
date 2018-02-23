@@ -43,23 +43,5 @@ export default {
         width: deviceWidth,
         height: 200,
         backgroundColor: 'red'
-    },
-    locName:{ 
-        color: "#1e3768", 
-        fontSize: 18 
-    },
-    locName2:{ 
-        color: "#777777", 
-        fontSize: 15 
-    },
-    listHdr:{ 
-        color: '#81cdc7' 
-    },
-    listHdrEdtIcn:{ 
-        color: '#1e3768', 
-        fontSize: 18 
-    },
-    listHdrEdt:{
-        color: '#1e3768'
     }
 };

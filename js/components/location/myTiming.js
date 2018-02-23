@@ -31,15 +31,12 @@ class myTiming extends Component {
 
                     <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed">
                         <Button transparent >
-                            <Ionicons name="ios-arrow-back" style={{ fontSize: 28, color: "#71beb8" }} />
+                            <Ionicons name="ios-arrow-back" style={styles.backBt} />
                         </Button>
                         <Body style={styles.tac}>
-                            <Text style={{ color: '#1e3768' }}>My Timings</Text>
+                            <Text style={styles.hdClr}>My Timings</Text>
                         </Body>
-                        <Button transparent >
-                            <Ico name='edit' style={{ color: '#1e3768', fontSize: 18, fontWeight: 'nornal' }} />
-                            <Text style={{ color: '#1e3768', fontWeight: 'nornal' }}>Edit</Text>
-                        </Button>
+                        <Button transparent />
                     </Header>
 
                    <View>
@@ -132,11 +129,11 @@ class myTiming extends Component {
 
                         <View style={styles.mainItemSec}>
                             <View style={styles.flexOne}>
-                                <Text style={{ color: '#81cdc7' }}>Unavailable Timing</Text>
+                                <Text style={styles.listHdr}>Unavailable Timing</Text>
                             </View>
                             <View style={{ flexDirection: 'row' }}>
-                                <Ico name='add-circle' style={{ color: '#1e3768', fontSize: 18 }} />
-                                <Text style={{ color: '#1e3768' }}>Add</Text>
+                                <Ico name='add-circle' style={styles.listHdrEdtIcn} />
+                                <Text style={styles.listHdrEdt}>Add</Text>
                             </View>
                         </View>
 

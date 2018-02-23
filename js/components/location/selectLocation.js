@@ -31,7 +31,7 @@ class selectLocation extends Component {
                     <Header style={styles.appHdr2} androidStatusBarColor= "#cbf0ed">
 
                         <Button transparent >
-                            <Ionicons name="ios-arrow-back" style={{ fontSize: 28, color: "#71beb8" }} />
+                            <Ionicons name="ios-arrow-back" style={styles.backBt} />
                         </Button>
                         <Body style={styles.tac}>
                             <Text style={styles.hdClr}>My Timings</Text>

@@ -93,5 +93,36 @@ export default {
     },
     dotImg:{ 
         marginRight: 5 
+    },
+    backBt: {
+        fontSize: 28,
+        color: "#71beb8"
+    },
+    editIcon:{
+        color: '#1e3768', 
+        fontSize: 18, 
+        fontWeight: 'nornal'
+    },
+    editIconTxt:{ 
+        color: '#1e3768', 
+        fontWeight: 'nornal' 
+    },
+    locName: {
+        color: "#1e3768",
+        fontSize: 18
+    },
+    locName2: {
+        color: "#777777",
+        fontSize: 15
+    },
+    listHdr: {
+        color: '#81cdc7'
+    },
+    listHdrEdtIcn: {
+        color: '#1e3768',
+        fontSize: 18
+    },
+    listHdrEdt: {
+        color: '#1e3768'
     }
 };

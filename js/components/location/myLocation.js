@@ -30,14 +30,14 @@ class myLocation extends Component {
 
                     <Header style={styles.appHdr2} androidStatusBarColor= "#cbf0ed">
                         <Button transparent >
-                            <Ionicons name="ios-arrow-back" style={{ fontSize: 28, color: "#71beb8" }} />
+                            <Ionicons name="ios-arrow-back" style={styles.backBt} />
                         </Button>
-                        <Body style={{ alignItems: 'center' }}>
-                            <Text style={{ color: '#1e3768' }}>My Location</Text>
+                        <Body style={styles.tac}>
+                            <Text style={styles.hdClr}>My Location</Text>
                         </Body>
                         <Button transparent >
-                            <Ico name='edit' style={{ color: '#1e3768', fontSize: 18,  fontWeight: 'nornal' }} />
-                            <Text style={{ color: '#1e3768', fontWeight: 'nornal' }}>Edit</Text>
+                            <Ico name='edit' style={styles.editIcon} />
+                            <Text style={styles.editIconTxt}>Edit</Text>
                         </Button>
                     </Header>
                     
