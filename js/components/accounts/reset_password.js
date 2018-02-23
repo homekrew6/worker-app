@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { login } from './elements/authActions'
 import api from '../../api'
+import { NavigationActions } from "react-navigation"
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from "react-native";
 
 import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Icon, Frame, Input, Label, Text } from "native-base";
@@ -14,6 +15,10 @@ const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const lockImage = require("../../../img/lock.png");
 const buttonImage = require("../../../img/bg-button.png");
+const resetAction = NavigationActions.reset({
+    index: 0,
+    actions: [NavigationActions.navigate({ routeName: 'Login' })],
+});
 class ResetPassword extends Component {
     constructor(props) {
         super(props);
@@ -35,19 +40,17 @@ class ResetPassword extends Component {
         }
         this.setState({ visible: true });
         api.post('Customers/otpChecking', { otp: this.state.otp }).then(res => {
-            console.log('test1');
             api.post('Workers/reset-password?access_token=' + res.response.access_token, { newPassword: this.state.password }).then(resReset => {
                 
                 this.setState({ visible: false });
                 Alert.alert('Password changed successfully')
-                this.props.navigation.navigate("Login");
+                //this.props.navigation.navigate("Login");
+                this.props.navigation.dispatch(resetAction);                
             }).catch((errReset) => {
-                console.log('test2');
                 this.setState({ visible: false });
                 Alert.alert('Please try again')
             })
         }).catch((err) => {
-            console.log('test2');
             this.setState({ visible: false });
             Alert.alert('Wrong OTP.')
         })
@@ -57,14 +60,12 @@ class ResetPassword extends Component {
     render() {
         return (
             <Container style={{ backgroundColor: '#fff' }}>
-                <StatusBar
-                    backgroundColor="#81cdc7"
-                />
+                <StatusBar backgroundColor="#81cdc7" />
                 <Content>
                     <FSpinner visible={this.state.visible} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
-                    <Header style={{ backgroundColor: '#fff' }}>
+                    <Header style={{ backgroundColor: '#fff' }} androidStatusBarColor="#81cdc7">
                         <Left style={{ marginRight: -15 }}>
-                            <Button transparent>
+                            <Button transparent onPress={() => this.props.navigation.goBack()}>
                                 <Icon style={{ color: '#81cdc7' }} name='arrow-back' />
                             </Button>
                         </Left>

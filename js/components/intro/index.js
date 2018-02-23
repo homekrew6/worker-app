@@ -1,21 +1,67 @@
 import React, { Component } from "react";
-import { Image, View, StatusBar,Dimensions } from "react-native";
-
+import { Image, View, StatusBar, Dimensions, StyleSheet } from "react-native";
 import { Container, Button, H3, Text, Header, Title, Body, Left, Right,Grid } from "native-base";
-import ImageSlider from 'react-native-image-slider';
+// import ImageSlider from 'react-native-image-slider';
+import AppIntroSlider from './AppIntroSlider';
+import styles from './styles';
+
+
+
 
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
+const img1 = require('../../../img/splash-bg2.png'); 
+const launchscreenBg = require("../../../img/bg-login.png");
+const imageht = ( deviceHeight - 88 );
+
+const slides = [
+	{
+		key: 'somethun',
+		title: 'Your Place of Mind - Our Prioroty',
+		text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry! .',
+		icon: 'ios-images-outline',
+		image: img1,
+		imageStyle: styles.image
+	},
+	{
+		key: 'somethun1',
+		title: 'Lorem Ipsum is simply dummy',
+		text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry .',
+		icon: 'ios-options-outline',
+		backgroundColor: '#81cdc7',
+		image: img1,
+		imageStyle: styles.image
+	},
+	{
+		key: 'somethun2',
+		title: 'Lorem Ipsum is simply dummy',
+		text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry. ',
+		icon: 'ios-options-outline',
+		backgroundColor: '#81cdc7',
+		image: img1,
+		imageStyle: styles.image
+	},
+	{
+		key: 'somethun3',
+		title: 'Lorem Ipsum',
+		text: 'The component is also super customizable, so you can adapt it to cover your needs and wants.',
+		icon: 'ios-options-outline',
+		backgroundColor: '#81cdc7',
+		image: img1,
+		imageStyle: styles.image
+	}
+];
+
 
 class Intro extends Component {
 	constructor(props) {
         super(props);
-
+		this.props
         this.state = {
             position: 1,
             interval: null
         };
-    }
+	}
 
     componentWillMount() {
         this.setState({interval: setInterval(() => {
@@ -28,21 +74,22 @@ class Intro extends Component {
     }
 
 	render() {
+
 		return (
-			<Container style={{ backgroundColor: '#e1f5f6' }}>
-				<ImageSlider images={[
-					require('../../../img/splash.png'),
-					require('../../../img/splash-bg.png'),
-					//require('../../../img/petizen_bg.png')
-				]}
-					height= {deviceHeight/1.3}
-					position={this.state.position}
-					onPositionChanged={position => this.setState({position})}
-				/>
-				<View style={{ padding: 10 }}>
-					<Button block info flat style={{ marginTop: 40, backgroundColor: '#72cfc7', borderRadius: 10, shadowColor: 'transparent', shadowOffset: { width: 0, height: 0 }, shadowRadius: 0, shadowOpacity: 0, borderWidth: 0 }} onPress={() => this.props.navigation.navigate("Login")}><Text> Login </Text></Button>
-				</View>
+			<Container>
+					<AppIntroSlider
+						slides={slides}
+					dotColor={'#81cdc7'}
+						activeDotColor = {'#1e3768'}
+						hideDoneButton
+						hideNextButton
+					/>
+					<View style={{ paddingLeft: 10, paddingRight: 10, paddingTop: 0,
+					paddingBottom: 10 }}>
+					<Button full style={{ backgroundColor: '#81cdc7', marginTop: 0 }} onPress={() => this.props.navigation.navigate('Login')} ><Text>LOGIN</Text></Button>
+					</View>
 			</Container>
+			
 		);
 	}
 }

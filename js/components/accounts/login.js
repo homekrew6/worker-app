@@ -2,18 +2,24 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import { login,getUserDetail } from './elements/authActions';
+import { NavigationActions } from "react-navigation";
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from "react-native";
 
-import { Container, Header, Button, Content, Form, Item, Icon, Frame, Input, Label, Text } from "native-base";
+import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text } from "native-base";
 import FSpinner from 'react-native-loading-spinner-overlay';
 import api from '../../api'
 import I18n from '../../i18n/i18n';
 import styles from './styles';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const launchscreenBg = require("../../../img/bg-login.png");
 const launchscreenLogo = require("../../../img/logo.png");
 const buttonImage = require("../../../img/bg-button.png");
+const resetAction = NavigationActions.reset({
+	index: 0,
+	actions: [NavigationActions.navigate({ routeName: 'Menu' })],
+});
 
 class Login extends Component {
 	constructor(props) {
@@ -46,7 +52,8 @@ class Login extends Component {
 						if (res.type == 'success') {
 							this.props.getUserDetail(res.userId).then(userRes => {
 								console.log(userRes)
-								this.props.navigation.navigate("Menu");
+								//this.props.navigation.navigate("Menu");
+								this.props.navigation.dispatch(resetAction);
 							}).catch(err => {
 								Alert.alert('Login failed, please try again1');
 							})
@@ -99,25 +106,8 @@ class Login extends Component {
 							</View>
 						</TouchableOpacity>
 
-						<View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: -13 }}>
-							<Text>- {I18n.t('or')} -</Text>
-						</View>
-
-						<View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5, paddingLeft: 15, paddingRight: 15 }}>
-							<Button block transparent style={{ borderWidth: 1, borderColor: '#29416f', flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-								<Text style={{ color: '#29416f' }}>{I18n.t('via_facebook')}</Text>
-							</Button>
-						</View>
-
-						<View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5, paddingLeft: 15, paddingRight: 15 }}>
-							<Button block transparent style={{
-								borderWidth: 1, borderColor: '#29416f', flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row'}}>
-								<Text style={{ color: '#29416f' }}>{I18n.t('via_gmail')}</Text>
-							</Button>
-						</View>
-
 						<View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 20 }}>
-							<Text style={{ color: '#252525' }}>{I18n.t('not_a_register_member')}? </Text>
+							<Text style={{ color: '#252525' }}>{I18n.t('not_a_register_member')} </Text>
 							<TouchableOpacity onPress={() => this.props.navigation.navigate("Signup")}>
 								<Text style={{ color: '#29416f' }}>{I18n.t('signup')}</Text>
 							</TouchableOpacity>
