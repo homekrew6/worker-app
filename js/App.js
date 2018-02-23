@@ -15,6 +15,11 @@ import ForgotPassword from "./components/accounts/forget_password";
 import ResetPassword from "./components/accounts/reset_password";
 import Menu from "./components/accounts/menu";
 import EditProfile from "./components/accounts/edit_profile";
+import MyLocation from "./components/location/myLocation";
+import SelectLocation from "./components/location/selectLocation";
+import MyTiming from "./components/location/myTiming";
+
+
 
 const AppNavigator = StackNavigator(
     {
@@ -26,7 +31,10 @@ const AppNavigator = StackNavigator(
         ForgotPassword: { screen: ForgotPassword },
         ResetPassword: { screen: ResetPassword },
         Menu: { screen: Menu },
-        EditProfile: { screen: EditProfile }
+        EditProfile: { screen: EditProfile },
+        MyLocation: { screen: MyLocation }, 
+        MyTiming: { screen: MyTiming },
+        SelectLocation: { screen: SelectLocation },
         
     },
     {
