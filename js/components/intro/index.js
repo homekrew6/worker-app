@@ -4,6 +4,9 @@ import { Container, Button, H3, Text, Header, Title, Body, Left, Right,Grid } fr
 // import ImageSlider from 'react-native-image-slider';
 import AppIntroSlider from './AppIntroSlider';
 import styles from './styles';
+import api from '../../api';
+import FSpinner from 'react-native-loading-spinner-overlay';
+
 
 
 
@@ -13,45 +16,9 @@ const deviceWidth = Dimensions.get('window').width;
 const img1 = require('../../../img/splash-bg2.png'); 
 const launchscreenBg = require("../../../img/bg-login.png");
 const imageht = ( deviceHeight - 88 );
+const test = { uri: 'https://s3.eu-central-1.amazonaws.com/files.homekrew.com/1519816388650_splash-bg2.png' };
 
-const slides = [
-	{
-		key: 'somethun',
-		title: 'Your Place of Mind - Our Prioroty',
-		text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry! .',
-		icon: 'ios-images-outline',
-		image: img1,
-		imageStyle: styles.image
-	},
-	{
-		key: 'somethun1',
-		title: 'Lorem Ipsum is simply dummy',
-		text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry .',
-		icon: 'ios-options-outline',
-		backgroundColor: '#81cdc7',
-		image: img1,
-		imageStyle: styles.image
-	},
-	{
-		key: 'somethun2',
-		title: 'Lorem Ipsum is simply dummy',
-		text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry. ',
-		icon: 'ios-options-outline',
-		backgroundColor: '#81cdc7',
-		image: img1,
-		imageStyle: styles.image
-	},
-	{
-		key: 'somethun3',
-		title: 'Lorem Ipsum',
-		text: 'The component is also super customizable, so you can adapt it to cover your needs and wants.',
-		icon: 'ios-options-outline',
-		backgroundColor: '#81cdc7',
-		image: img1,
-		imageStyle: styles.image
-	}
-];
-
+const slides = [];
 
 class Intro extends Component {
 	constructor(props) {
@@ -59,24 +26,50 @@ class Intro extends Component {
 		this.props
         this.state = {
             position: 1,
-            interval: null
+			interval: null,
+			loader: true,
         };
 	}
 
     componentWillMount() {
         this.setState({interval: setInterval(() => {
             this.setState({position: this.state.position === 2 ? 0 : this.state.position + 1});
-        }, 2000)});
+		}, 2000)});
+		api.post('IntroSliders/getSliders', { type: 'Worker' }).then(res => {
+			console.log(res);
+			var sliderList = res.response;
+
+			for (let i = 0; i < sliderList.length; i++) {
+				
+				let rowData = {
+					key: sliderList[i].id,
+					title: sliderList[i].name,
+					text: sliderList[i].description,
+					icon: 'ios-images-outline',
+					image: sliderList[i].image_url
+				}
+				slides.push(rowData);
+			}
+			console.log(slides);
+
+		}).catch((err) => {
+			this.setState({ loader: false })
+			// this.setState({ loader: false })			
+			Alert.alert('Wrong OTP.')
+		})
+		this.setState({ loader: false })
     }
 
     componentWillUnmount() {
         clearInterval(this.state.interval);
-    }
+	}
 
 	render() {
+		
 
 		return (
 			<Container>
+				<FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
 					<AppIntroSlider
 						slides={slides}
 					dotColor={'#81cdc7'}
@@ -86,7 +79,8 @@ class Intro extends Component {
 					/>
 					<View style={{ paddingLeft: 10, paddingRight: 10, paddingTop: 0,
 					paddingBottom: 10 }}>
-					<Button full style={{ backgroundColor: '#81cdc7', marginTop: 0 }} onPress={() => this.props.navigation.navigate('Login')} ><Text>LOGIN</Text></Button>
+					
+					<Button full style={{ backgroundColor: '#81cdc7', marginTop: 0 }} ><Text>LOGIN</Text></Button>
 					</View>
 			</Container>
 			

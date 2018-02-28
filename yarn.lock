@@ -3174,10 +3174,6 @@ react-devtools-core@2.3.1:
     shell-quote "^1.6.1"
     ws "^2.0.3"
 
-react-native-app-intro-slider@^0.2.4:
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/react-native-app-intro-slider/-/react-native-app-intro-slider-0.2.4.tgz#e85e5aab826fd6c131f197ab7878d6686e7b468f"
-
 react-native-dismiss-keyboard@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-native-dismiss-keyboard/-/react-native-dismiss-keyboard-1.0.0.tgz#32886242b3f2317e121f3aeb9b0a585e2b879b49"
@@ -3213,6 +3209,14 @@ react-native-i18n@^2.0.11:
   dependencies:
     i18n-js "^3.0.3"
 
+react-native-image-crop-picker@^0.16.1:
+  version "0.16.1"
+  resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.16.1.tgz#37efb419276c691ac0f99d497ef787b53e652fc2"
+
+react-native-image-picker@^0.26.7:
+  version "0.26.7"
+  resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-0.26.7.tgz#ad2ee957f7f6cc01396893ea03d84cb2adb2e376"
+
 react-native-image-slider@^1.1.5:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/react-native-image-slider/-/react-native-image-slider-1.1.5.tgz#1fa8537d1e0477c41d6c3a05f3fe02ffcdddd150"
@@ -3229,10 +3233,6 @@ react-native-loading-spinner-overlay@^0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/react-native-loading-spinner-overlay/-/react-native-loading-spinner-overlay-0.5.2.tgz#b7bcd277476d596615fd7feee601789f9bdc7acc"
 
-react-native-looped-carousel@^0.1.7:
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/react-native-looped-carousel/-/react-native-looped-carousel-0.1.7.tgz#9e81aec732039250568e367383d0bd70ba4173e9"
-
 react-native-popover-tooltip@^1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/react-native-popover-tooltip/-/react-native-popover-tooltip-1.1.4.tgz#f6f2121e6725e9da2c014a33b946162c197a4eb4"
@@ -3245,10 +3245,6 @@ react-native-safe-area-view@^0.7.0:
   resolved "https://registry.yarnpkg.com/react-native-safe-area-view/-/react-native-safe-area-view-0.7.0.tgz#38f5ab9368d6ef9e5d18ab64212938af3ec39421"
   dependencies:
     hoist-non-react-statics "^2.3.1"
-
-react-native-smart-carousel@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-smart-carousel/-/react-native-smart-carousel-1.1.0.tgz#228ee559204b33639c44219e40baf8784f66587b"
 
 react-native-tab-view@^0.0.74:
   version "0.0.74"

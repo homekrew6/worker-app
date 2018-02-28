@@ -7,7 +7,7 @@ import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from "rea
 
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text } from "native-base";
 import FSpinner from 'react-native-loading-spinner-overlay';
-import api from '../../api'
+import api from '../../api';
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
