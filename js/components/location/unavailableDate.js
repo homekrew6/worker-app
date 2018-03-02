@@ -7,7 +7,6 @@ import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Te
 import styles from './styles';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
-// import HorizontalPicker from 'react-native-horizontal-picker';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width; 
 class MyListItem extends React.PureComponent {

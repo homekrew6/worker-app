@@ -27,8 +27,6 @@
     "react-native-actionsheet": "^2.3.0",
     "react-native-aws3": "0.0.8",
     "react-native-calendars": "^1.17.2",
-    "react-native-horizontal-picker": "0.0.1",
-    "react-native-hpicker": "^1.0.5",
     "react-native-i18n": "^2.0.11",
     "react-native-image-crop-picker": "^0.16.1",
     "react-native-image-picker": "^0.26.7",
