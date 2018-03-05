@@ -6,6 +6,7 @@ import Ico from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome'; 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
+import { allLocation } from './elements/locationAction';
 
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title } from "native-base";
 import I18n from '../../i18n/i18n';
@@ -14,11 +15,12 @@ import styles from './styles';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 
+ 
+
 class myLocation extends Component {
     constructor(props) {
         super(props);
     }
-    
 
     render() {
         return (
@@ -35,7 +37,7 @@ class myLocation extends Component {
                         <Body style={styles.tac}>
                             <Text style={styles.hdClr}>My Location</Text>
                         </Body>
-                        <Button transparent >
+                        <Button transparent onPress={() => this.props.navigation.navigate("SelectLocation")}>
                             <Ico name='edit' style={styles.editIcon} />
                             <Text style={styles.editIconTxt}>Edit</Text>
                         </Button>
@@ -124,4 +126,16 @@ class myLocation extends Component {
     }
 }
 
-export default myLocation;
+const mapStateToProps = (state) => {
+    return {
+        location: state.location
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        allLocation: () => dispatch(allLocation())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(myLocation);
