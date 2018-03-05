@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from "react-native";
-import { Container, Header, Button, Content, Form, Item, Icon, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title } from "native-base";
+import { Container, Header, Button, Content, Form, Item, Icon, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title, Thumbnail } from "native-base";
 import { logout } from './elements/authActions'
 import I18n from '../../i18n/i18n';
 import styles from "./styles";
@@ -64,9 +64,9 @@ class Menu extends Component {
                             <View style={styles.flx_View}>
                                 {
                                     this.props.auth.data.image ? (
-                                        <Image source={profileImage} style={styles.profileImage} />
+                                        <Thumbnail source={{ uri: this.props.auth.data.image }} style={styles.profileImage} />
                                     ) : (
-                                            <Image source={profileImage} style={styles.profileImage} />
+                                        <Thumbnail source={profileImage} style={styles.profileImage} />
                                         )
                                 }
                                 <View>

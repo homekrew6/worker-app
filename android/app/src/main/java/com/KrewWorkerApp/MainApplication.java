@@ -3,6 +3,8 @@ package com.KrewWorkerApp;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
+import com.imagepicker.ImagePickerPackage;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 //import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 //import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
@@ -27,6 +29,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new PickerPackage(),
+            new ImagePickerPackage(),
             new RNI18nPackage(),
             //new RNI18nPackage(),
             //new RNI18nPackage(),

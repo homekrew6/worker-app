@@ -9,7 +9,7 @@ const resolver = () => AsyncStorage.getItem('userData', (err, result) => {
 
   if (result) {
     result = JSON.parse(result);
-    headers.Authorization = 'Bearer ' + result.id
+    //headers.Authorization = 'Bearer ' + result.id
   }
 })
 //headers.Authorization = 'Bearer tdsiUzrbkMWy3HcVoB4UPaTxgDdxTpXeJduwkWKpiOX6XtZKYPBvJAsTXv9M';
@@ -19,7 +19,7 @@ class api {
     console.log(config.base_api + endpoint)
     console.log(data);
     return new Promise((resolve, reject) => {
-      resolver().then(() => {
+     //resolver().then(() => {       
         fetch(config.base_api + endpoint, {
           method: 'POST',
           headers: headers,
@@ -38,8 +38,10 @@ class api {
             }
           }
 
-        }).catch(error => error)
-      }).catch(err => err)
+        }).catch(error => {
+          console.log(error)
+        })
+      //}).catch(err => err)
     })
 
   }
@@ -48,7 +50,7 @@ class api {
     console.log(config.base_api + endpoint)
     console.log(data);
     return new Promise((resolve, reject) => {
-      resolver().then(() => {
+      //resolver().then(() => {
         fetch(config.base_api + endpoint, {
           method: 'PUT',
           headers: headers,
@@ -68,7 +70,7 @@ class api {
           }
 
         }).catch(error => error)
-      }).catch(err => err)
+      //}).catch(err => err)
     })
 
   }
@@ -76,7 +78,7 @@ class api {
   static get(endpoint) {
     return new Promise((resolve, reject) => {
       console.log(config.base_api + endpoint)
-      resolver().then(() => {
+      //resolver().then(() => {
         fetch(config.base_api + endpoint, {
           method: 'GET',
           headers: headers
@@ -91,7 +93,7 @@ class api {
             }
           }
         }).catch(error => error)
-      }).catch(error => error)
+      //}).catch(error => error)
     })
   }
 }
