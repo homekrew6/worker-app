@@ -18,6 +18,7 @@ import EditProfile from "./components/accounts/edit_profile";
 import MyLocation from "./components/location/myLocation";
 import SelectLocation from "./components/location/selectLocation";
 import MyTiming from "./components/location/myTiming";
+import UnavailableDate from "./components/location/unavailableDate";
 
 
 
@@ -35,6 +36,7 @@ const AppNavigator = StackNavigator(
         MyLocation: { screen: MyLocation }, 
         MyTiming: { screen: MyTiming },
         SelectLocation: { screen: SelectLocation },
+        UnavailableDate: { screen: UnavailableDate },
         
     },
     {

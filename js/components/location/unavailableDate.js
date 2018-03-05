@@ -6,7 +6,7 @@ import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, FlatList, 
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body,Card, CardItem  } from "native-base";
 import styles from './styles';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import { Calendar } from 'react-native-calendars';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width; 
 class MyListItem extends React.PureComponent {
@@ -88,7 +88,6 @@ class UnavailableDate extends Component {
         this.setState({
             ColectionData: newColectionData,
         })
-        console.log(newColectionData)
     }
     pressOnCircle2(index) {
         let newColectionData = this.state.colectionData2;
@@ -103,10 +102,6 @@ class UnavailableDate extends Component {
         this.setState({
             ColectionData2: newColectionData,
         })
-        console.log(newColectionData)
-    }
-    componentWillMount() {
-        //console.log(colectionData);
     }
 
     
@@ -132,7 +127,7 @@ class UnavailableDate extends Component {
                         
                         <View style={{ paddingLeft: 15, paddingRight: 15, }}>
                         <Card style={{ backgroundColor: 'transparent', marginBottom: 20 }}>
-                            <CardItem style={{marginBottom: 10, alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
+                            <CardItem style={{marginBottom: 2, alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
                                 <FontAwesome name='calendar' style={{ color: '#81cdc7', fontSize: 20, marginRight: 5 }}/>
                                 <Text>Start Day</Text>
                             </CardItem>
@@ -164,9 +159,8 @@ class UnavailableDate extends Component {
                                 }}
                             />
                             </CardItem>
-                        </Card>
-                        <Card style={{ backgroundColor: 'transparent', marginBottom: 20 }}>
-                            <CardItem style={{ marginBottom: 10, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+
+                            <CardItem style={{ marginTop: 2, marginBottom:2, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
                                 <FontAwesome name='clock-o' style={{ color: '#81cdc7', fontSize: 20, marginRight: 5 }} />
                                 <Text>Start Time</Text>
                             </CardItem>
@@ -178,19 +172,20 @@ class UnavailableDate extends Component {
                                         }
                                         renderItem={({ item }) =>
                                             <TouchableOpacity onPress={() => this.pressOnCircle(item.key)} id={item.key} >
-                                                <Text style={{ paddingTop: 5, paddingBottom: 5, paddingRight: 8, paddingLeft: 8, borderRadius: 4, borderWidth: 1, borderColor: '#ccc', backgroundColor: (item.isActive ? '#81cdc7' : '#ffffff'), color: (item.isActive ? '#ffffff' : '#81cdc7'), marginRight: 5 } }>
+                                                <Text style={{ paddingTop: 5, paddingBottom: 5, paddingRight: 8, paddingLeft: 8, borderRadius: 4, borderWidth: 1, borderColor: '#ccc', backgroundColor: (item.isActive ? '#81cdc7' : '#ffffff'), color: (item.isActive ? '#ffffff' : '#81cdc7'), marginRight: 5 }}>
                                                     {item.time}
                                                 </Text>
                                             </TouchableOpacity>
                                         }
                                         style={{ paddingTop: 10, paddingBottom: 10 }}
-                                        horizontal = {true}
+                                        horizontal={true}
                                     />
                                 </View>
                             </CardItem>
+
                         </Card>
                         <Card style={{ backgroundColor: 'transparent' }}>
-                            <CardItem style={{ marginBottom: 10, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+                            <CardItem style={{ marginBottom: 2, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
                                 <FontAwesome name='calendar' style={{ color: '#81cdc7', fontSize: 20, marginRight: 5 }} />
                                 <Text>End Day</Text>
                             </CardItem>
@@ -222,9 +217,7 @@ class UnavailableDate extends Component {
                                     }}
                                 />
                             </CardItem>
-                        </Card>
-                        <Card style={{ backgroundColor: 'transparent', marginBottom: 20 }}>
-                            <CardItem style={{ marginBottom: 10, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+                            <CardItem style={{ marginBottom: 2, marginTop: 2, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
                                 <FontAwesome name='clock-o' style={{ color: '#81cdc7', fontSize: 20, marginRight: 5 }} />
                                 <Text>End Time</Text>
                             </CardItem>
