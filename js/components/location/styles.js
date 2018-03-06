@@ -104,8 +104,7 @@ export default {
         fontWeight: 'nornal'
     },
     editIconTxt:{ 
-        color: '#1e3768', 
-        fontWeight: 'nornal' 
+        color: '#1e3768',  
     },
     locName: {
         color: "#1e3768",
