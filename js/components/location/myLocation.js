@@ -7,6 +7,7 @@ import Ico from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome'; 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
+import FSpinner from 'react-native-loading-spinner-overlay';
 import { selectedLocation, allLocation } from './elements/locationAction';
 
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title } from "native-base";
@@ -29,17 +30,21 @@ class myLocation extends Component {
         console.log(props);
         this.state = {
             locationFlag: false,
+            loader: false,
         }
     }
 
     componentWillMount() {
-        
+        this.setState({
+            loader: true,
+        })
         
         this.props.selectedLocation(this.props.auth.data.id).then((allLst) => {
             console.log(this.props.location);
             console.log(this.props.auth.data.name);
             this.setState({
-                locationFlag: true
+                locationFlag: true,
+                loader: false,
             })
 
 
@@ -85,6 +90,7 @@ class myLocation extends Component {
                     backgroundColor="#cbf0ed"
                 />
                 <Content>
+                    <FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
 
                     <Header style={styles.appHdr2} androidStatusBarColor= "#cbf0ed">
                         <Button transparent onPress={() => this.props.navigation.goBack()} >
