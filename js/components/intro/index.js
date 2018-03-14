@@ -44,8 +44,6 @@ class Intro extends Component {
 			// var sliderList = res.response;
 			// for (let i = 0; i < sliderList.length; i++) {
 				
-			// for (let i = 0; i < sliderList.length; i++) {
-
 			// 	let rowData = {
 			// 		key: sliderList[i].id,
 			// 		title: sliderList[i].name,
@@ -64,6 +62,7 @@ class Intro extends Component {
 
 		}).catch((err) => {
 			this.setState({ loader: false })		
+			// this.setState({ loader: false })			
 			Alert.alert('Wrong OTP.')
 		})
 		this.setState({ loader: false })
