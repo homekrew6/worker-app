@@ -131,10 +131,10 @@ class myTiming extends Component {
                             <View style={styles.flexOne}>
                                 <Text style={styles.listHdr}>Unavailable Timing</Text>
                             </View>
-                            <View style={{ flexDirection: 'row' }}>
+                            <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => this.props.navigation.navigate('UnavailableDate')}>
                                 <Ico name='add-circle' style={styles.listHdrEdtIcn} />
                                 <Text style={styles.listHdrEdt}>Add</Text>
-                            </View>
+                            </TouchableOpacity>
                         </View>
 
                         <View style={styles.mainItemSec}>
@@ -195,4 +195,21 @@ class myTiming extends Component {
     }
 }
 
-export default myTiming;
+myTiming.propTypes = {
+    location: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired
+}
+
+const mapStateToProps = (state) => {
+    return {
+        location: state.location
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(myTiming);

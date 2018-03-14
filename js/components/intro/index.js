@@ -27,7 +27,7 @@ class Intro extends Component {
         this.state = {
             position: 1,
 			interval: null,
-			loader: true,
+			loader: true
         };
 	}
 
@@ -37,24 +37,26 @@ class Intro extends Component {
 		}, 2000)});
 		api.post('IntroSliders/getSliders', { type: 'Worker' }).then(res => {
 			console.log(res);
+			this.setState({
+				sliderArray: res,
+			});
+		
 			var sliderList = res.response;
-
-			for (let i = 0; i < sliderList.length; i++) {
+			// for (let i = 0; i < sliderList.length; i++) {
 				
-				let rowData = {
-					key: sliderList[i].id,
-					title: sliderList[i].name,
-					text: sliderList[i].description,
-					icon: 'ios-images-outline',
-					image: sliderList[i].image_url
-				}
-				slides.push(rowData);
-			}
+			// 	let rowData = {
+			// 		key: sliderList[i].id,
+			// 		title: sliderList[i].name,
+			// 		text: sliderList[i].description,
+			// 		icon: 'ios-images-outline',
+			// 		image: sliderList[i].image_url
+			// 	}
+			// 	slides.push(rowData);
+			// }
 			console.log(slides);
 
 		}).catch((err) => {
-			this.setState({ loader: false })
-			// this.setState({ loader: false })			
+			this.setState({ loader: false })		
 			Alert.alert('Wrong OTP.')
 		})
 		this.setState({ loader: false })
@@ -72,7 +74,7 @@ class Intro extends Component {
 				<FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
 					<AppIntroSlider
 						slides={slides}
-					dotColor={'#81cdc7'}
+						dotColor={'#81cdc7'}
 						activeDotColor = {'#1e3768'}
 						hideDoneButton
 						hideNextButton
