@@ -66,7 +66,7 @@ class EditProfile extends Component {
             const options = config.s3;
 
             RNS3.put(file, config.s3).then((response) => {
-                console.log(response);
+                console.log("profioleImage",response);
                 if (response.status !== 201) {
                     this.setState({ uploadButton: true });
 
@@ -102,9 +102,9 @@ class EditProfile extends Component {
             height: 300,
             cropping: true
         }).then((response) => {
+            this.setState({ visible: true });
             let uri;
-            console.log(hi);
-            console.log(!response.path);
+            
             if (!response.path) {
                 uri = response.uri;
             } else {
@@ -123,6 +123,7 @@ class EditProfile extends Component {
                 console.log(response);
                 if (response.status !== 201) {
                     this.setState({ cameraButton: true });
+                    this.setState({ visible: true });
                     throw new Error('Failed to upload image to S3');
                 }
 
@@ -130,11 +131,15 @@ class EditProfile extends Component {
                 if (response.status == 201) {
                     this.setState({ cameraButton: true });
                     this.setState({ cameraUploaded: true });
+                    this.setState({ image: response.body.postResponse.location })
+                    this.setState({ visible: false });
                 }
             }).catch((err) => {
+                this.setState({ visible: false });
                 console.log(err);
             });
         }).catch((err) => {
+            this.setState({ visible: false });
             console.log(err);
             this.setState({ cameraButton: true });
         });

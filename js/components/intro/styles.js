@@ -22,6 +22,11 @@ export default {
         width: 151,
         height: 200
     },
+    imageLogo: {
+        width: 120,
+        height: 120,
+        marginBottom: 20
+    },
     image2: {
         width: deviceWidth,
         height: 500
