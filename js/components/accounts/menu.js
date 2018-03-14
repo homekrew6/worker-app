@@ -138,6 +138,18 @@ class Menu extends Component {
 
                         <CardItem style={styles.menuCarditem}>
                             <View style={styles.menuCardView}>
+                                <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate("myTiming")} >
+                                    <Image source={icon4} style={styles.menuCardIcon} />
+                                    <Text style={styles.menuCardTxt}>My Timing</Text>
+                                    <View style={styles.arw_lft}>
+                                        <Image source={back_arow} style={styles.arw_lft_img} />
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        </CardItem>
+
+                        <CardItem style={styles.menuCarditem}>
+                            <View style={styles.menuCardView}>
                                 <Image source={icon5} style={styles.menuCardIcon} />
                                 <Text style={styles.menuCardTxt}>MY promo Code</Text>
                                 <View style={styles.arw_lft}>
