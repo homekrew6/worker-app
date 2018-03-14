@@ -2571,7 +2571,7 @@ lodash@^4.0.0, lodash@^4.10.1, lodash@^4.11.1, lodash@^4.13.1, lodash@^4.14.0, l
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
-lodash@^4.17.4, lodash@^4.2.1:
+lodash@^4.2.1:
   version "4.17.5"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.5.tgz#99a92d65c0272debe8c96b6057bc8fbfa3bed511"
 
@@ -3198,6 +3198,10 @@ react-native-actionsheet@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/react-native-actionsheet/-/react-native-actionsheet-2.3.0.tgz#a9552a356dc5939829062353804d5e5609e8f969"
 
+react-native-app-intro-v2@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-app-intro-v2/-/react-native-app-intro-v2-2.1.2.tgz#5b2be1776d703841f2f2e1e77641a91f5dc3b927"
+
 react-native-aws3@0.0.8:
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/react-native-aws3/-/react-native-aws3-0.0.8.tgz#9a18789ae0cedfb40d29b1f69799a8af4f9927e8"
@@ -3240,16 +3244,6 @@ react-native-easy-grid@0.1.15:
   resolved "https://registry.yarnpkg.com/react-native-easy-grid/-/react-native-easy-grid-0.1.15.tgz#02939ae032d74662b50c9540d902c79866ba638a"
   dependencies:
     lodash "^4.11.1"
-
-react-native-horizontal-picker@0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-horizontal-picker/-/react-native-horizontal-picker-0.0.1.tgz#0772216dd6b1f83226f63e68fcef462cf20c2fc8"
-  dependencies:
-    lodash "^4.17.4"
-
-react-native-hpicker@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/react-native-hpicker/-/react-native-hpicker-1.0.5.tgz#05df272f4c5dad263a24bfb638b83d2c18407b50"
 
 react-native-i18n@^2.0.11:
   version "2.0.12"
