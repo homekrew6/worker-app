@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Image, View, StatusBar, Dimensions, StyleSheet } from "react-native";
-import { Container, Button, H3, Text, Header, Title, Body, Left, Right, Grid } from "native-base";
+import { Container, Button, H3, Text, Header, Title, Body, Left, Right,Grid } from "native-base";
 // import ImageSlider from 'react-native-image-slider';
 import AppIntroSlider from './AppIntroSlider';
 import styles from './styles';
@@ -13,38 +13,37 @@ import Swiper from 'react-native-swiper';
 
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
-const img1 = require('../../../img/splash-bg2.png');
+const img1 = require('../../../img/splash-bg2.png'); 
 const launchscreenBg = require("../../../img/bg-login.png");
-const imageht = (deviceHeight - 88);
+const imageht = ( deviceHeight - 88 );
 const test = { uri: 'https://s3.eu-central-1.amazonaws.com/files.homekrew.com/1519816388650_splash-bg2.png' };
 
 const slides = [];
 const logo = require("../../../img/logo22.png");
 class Intro extends Component {
 	constructor(props) {
-		super(props);
+        super(props);
 		this.props
-		this.state = {
-			position: 1,
+        this.state = {
+            position: 1,
 			interval: null,
 			loader: true,
 			sliderArray: [],
 			slidFlag: false
-		};
+        };
 	}
 
-	componentWillMount() {
+    componentWillMount() {
 		this.setState({
 			interval: setInterval(() => {
-				this.setState({ position: this.state.position === 2 ? 0 : this.state.position + 1 });
+            this.setState({position: this.state.position === 2 ? 0 : this.state.position + 1});
 			}, 2000)
 		});
 		api.post('IntroSliders/getSliders', { type: 'Worker' }).then(res => {
 			// console.log("sliders",res);
 			// var sliderList = res.response;
-
 			// for (let i = 0; i < sliderList.length; i++) {
-
+				
 			// 	let rowData = {
 			// 		key: sliderList[i].id,
 			// 		title: sliderList[i].name,
@@ -62,19 +61,19 @@ class Intro extends Component {
 			console.log('hi', res.response);
 
 		}).catch((err) => {
-			this.setState({ loader: false })
+			this.setState({ loader: false })		
 			// this.setState({ loader: false })			
 			Alert.alert('Wrong OTP.')
 		})
 		this.setState({ loader: false })
-	}
+    }
 
-	componentWillUnmount() {
-		clearInterval(this.state.interval);
+    componentWillUnmount() {
+        clearInterval(this.state.interval);
 	}
 
 	renderSlides() {
-
+		
 		const { slides } = this.state
 
 		return (
@@ -125,15 +124,15 @@ class Intro extends Component {
 		}
 		else {
 			return (
-				<Container >
+			<Container>
 					<Swiper
 						style={styles.wrapper}
 						loop={true}
 						autoplay={true}
 						autoplayTimeout={5}
 						dotColor={'#81cdc7'}
-						activeDotColor={'#1e3768'}
-
+						activeDotColor = {'#1e3768'}
+					
 					>
 						{
 							this.state.sliderArray.map((item, key) => {
@@ -152,14 +151,14 @@ class Intro extends Component {
 						paddingLeft: 10, paddingRight: 10, paddingTop: 10,
 						paddingBottom: 10
 					}}>
-						<Button full style={{ backgroundColor: '#81cdc7', marginTop: 0 }} onPress={() => this.props.navigation.navigate('Login')} ><Text>LOGIN</Text></Button>
+					<Button full style={{ backgroundColor: '#81cdc7', marginTop: 0 }} onPress={() => this.props.navigation.navigate('Login')} ><Text>LOGIN</Text></Button>
 					</View>
 
-				</Container>
-			);
-		}
-
+			</Container>
+		);
 	}
+
+}
 }
 
 export default Intro;
