@@ -13,7 +13,7 @@ import Swiper from 'react-native-swiper';
 
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
-const img1 = require('../../../img/splash-bg2.png'); 
+const img1 = require('../../../img/splash-bg2.png');
 const launchscreenBg = require("../../../img/bg-login.png");
 const imageht = ( deviceHeight - 88 );
 const test = { uri: 'https://s3.eu-central-1.amazonaws.com/files.homekrew.com/1519816388650_splash-bg2.png' };
@@ -26,10 +26,10 @@ class Intro extends Component {
 		this.props
         this.state = {
             position: 1,
-			interval: null,
-			loader: true,
-			sliderArray: [],
-			slidFlag: false
+						interval: null,
+						loader: true,
+						sliderArray: [],
+						slidFlag: false
         };
 	}
 
@@ -43,7 +43,7 @@ class Intro extends Component {
 			// console.log("sliders",res);
 			// var sliderList = res.response;
 			// for (let i = 0; i < sliderList.length; i++) {
-				
+
 			// 	let rowData = {
 			// 		key: sliderList[i].id,
 			// 		title: sliderList[i].name,
@@ -61,8 +61,8 @@ class Intro extends Component {
 			console.log('hi', res.response);
 
 		}).catch((err) => {
-			this.setState({ loader: false })		
-			// this.setState({ loader: false })			
+			this.setState({ loader: false })
+			// this.setState({ loader: false })
 			Alert.alert('Wrong OTP.')
 		})
 		this.setState({ loader: false })
@@ -73,12 +73,17 @@ class Intro extends Component {
 	}
 
 	renderSlides() {
-		
+
 		const { slides } = this.state
 
 		return (
-			<Swiper showsButtons={false} loop={true} autoplay={true}
-				autoplayTimeout={2.5} index={0}>
+			<Swiper
+				showsButtons={false}
+				loop={true}
+			 	autoplay={true}
+				autoplayTimeout={2.5}
+				index={0}
+			>
 				{this.state.sliderArray.map((slide, index) => {
 					return (
 						<View key={slide.id}>
@@ -132,7 +137,7 @@ class Intro extends Component {
 						autoplayTimeout={5}
 						dotColor={'#81cdc7'}
 						activeDotColor = {'#1e3768'}
-					
+
 					>
 						{
 							this.state.sliderArray.map((item, key) => {

@@ -10,12 +10,12 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Calendar } from 'react-native-calendars';
 import { setAvilableDate } from './elements/locationAction';
 const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width; 
+const deviceWidth = Dimensions.get('window').width;
 class MyListItem extends React.PureComponent {
     _onPress = () => {
         this.props.onPressItem(this.props.id);
     };
-    
+
 
     render() {
         const textColor = this.props.selected ? "red" : "black";
@@ -83,9 +83,9 @@ class UnavailableDate extends Component {
                 { key: '21', time: '08:00 PM', isActive: false },
                 { key: '22', time: '09:00 PM', isActive: false },
                 { key: '23', time: '10:00 PM', isActive: false },
-                { key: '24', time: '11:00 PM', isActive: false }    
-            ], 
-            
+                { key: '24', time: '11:00 PM', isActive: false }
+            ],
+
 
         colectionData2 : [
             { key: '1', time: '00:00 AM', isActive: false },
@@ -135,9 +135,9 @@ class UnavailableDate extends Component {
             satStartDate: day.day + '-' + this.state.months[day.month - 1] + '-' + day.year,
             setStartWeek: n
         })
-        
+
     }
-    onDaySelect2(day) { 
+    onDaySelect2(day) {
         let d = new Date(day.dateString);
         let weekday = new Array(7);
         weekday[0] = "Sun";
@@ -158,7 +158,7 @@ class UnavailableDate extends Component {
     }
     pressOnCircle(index){
         let newColectionData = this.state.colectionData;
-       
+
         for (var i = 0; i < (newColectionData.length ); i++){
             newColectionData[i].isActive = false;
             if (newColectionData[i].key == index){
@@ -166,10 +166,8 @@ class UnavailableDate extends Component {
                 this.setState({
                     setStartTimeKey: newColectionData[i].key,
                     setStartTime: newColectionData[i].time
-                    
                 })
             }
-
         }
         this.setState({
             ColectionData: newColectionData,
@@ -199,7 +197,7 @@ class UnavailableDate extends Component {
         if (this.state.satStartDate == ''){
             Alert.alert('please enter Start Date' );
         } else if (this.state.setStartTime == ''){
-            Alert.alert('please enter Start Time');            
+            Alert.alert('please enter Start Time');
         } else if (this.state.satEndDate == '') {
             Alert.alert('please enter End Date');
         } else if (this.state.setEndTime == '') {
@@ -207,16 +205,16 @@ class UnavailableDate extends Component {
         } //else if (this.state.setStartTime < this.state.setEndTime) {
         //      Alert.alert('End time will be getter than start time');
         //  } else if (this.state.setStartTime < this.state.setEndTime){
-        //     Alert.alert('End time will be getter than start time');            
-        // } 
+        //     Alert.alert('End time will be getter than start time');
+        // }
         else{
-            
+
             let d1 = new Date(this.state.satStartDate);
             let d2 = new Date(this.state.satEndDate);
             if (d1 <= d2 ){
                 if (!(d1 < d2)){
                     if (this.state.setStartTimeKey > this.state.setEndTimeKey) {
-                        Alert.alert('End time will be getter than start time');                     
+                        Alert.alert('End time will be getter than start time');
                     }else{
                         api.post('WorkerUnavailabilities/', {
                             "start_time": this.state.setStartTime,
@@ -252,17 +250,15 @@ class UnavailableDate extends Component {
                 Alert.alert("Start date is less than or equal to end Date ")
             }
 
-            
+
         }
     }
 
-
-    
     render() {
         return (
             <Container >
                 <StatusBar
-                    backgroundColor="#81cdc7"/>  
+                    backgroundColor="#81cdc7"/>
 
                     <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed">
                     <Button transparent onPress={() => this.props.navigation.goBack()}>
@@ -277,7 +273,7 @@ class UnavailableDate extends Component {
                     </Header>
 
                     <Content>
-                        
+
                         <View style={{ paddingLeft: 15, paddingRight: 15, }}>
                         <Card style={{ backgroundColor: 'transparent', marginBottom: 20 }}>
                             <CardItem style={{marginBottom: 2, alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
@@ -287,7 +283,7 @@ class UnavailableDate extends Component {
                             <CardItem>
                             <Calendar
                                 onDayPress={(day) => this.onDaySelect(day)}
-                                monthFormat={ 'MMM yyyy'} 
+                                monthFormat={ 'MMM yyyy'}
                                 hideArrows={false}
                                 hideExtraDays={true}
                                 disableMonthChange={false}
@@ -308,7 +304,7 @@ class UnavailableDate extends Component {
                                     textDayFontSize: 14,
                                     textMonthFontSize: 16,
                                     textDayHeaderFontSize: 16,
-                                    
+
                                 }}
                             />
                             </CardItem>

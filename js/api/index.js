@@ -19,7 +19,7 @@ class api {
     console.log(config.base_api + endpoint)
     console.log(data);
     return new Promise((resolve, reject) => {
-     //resolver().then(() => {       
+     //resolver().then(() => {
         fetch(config.base_api + endpoint, {
           method: 'POST',
           headers: headers,
@@ -96,14 +96,13 @@ class api {
       //}).catch(error => error)
     })
   }
-
   static delete(endpoint) {
-    console.log(config.base_api + endpoint)    
+    console.log(config.base_api + endpoint)
     return new Promise((resolve, reject) => {
       //resolver().then(() => {
       fetch(config.base_api + endpoint, {
         method: 'DELETE',
-        headers: headers        
+        headers: headers
       }).then(response => {
         console.log(response);
         if (response.status === 200) {
@@ -119,7 +118,7 @@ class api {
         }
       }).catch(error => error)
     })
-
+    
   }
 }
 
