@@ -58,7 +58,7 @@ class WeekCalendar extends Component {
       console.log('item', item);
         return(
             <View style={{ flex: 5 }}>
-                <View style={{ justifyContent: 'center', alignSelf: 'center' }} >
+                <View style={{ justifyContent: 'center', alignSelf: 'center', width: 50, alignItems: 'center' }} >
                     <Text style={{ fontSize: 18 }}>{item.time}</Text>
                 </View>
                 <CheckBox status={item.sun} date={item.date} day="sun" time={item.time} id={item.id} />
@@ -113,7 +113,7 @@ class WeekCalendar extends Component {
                         </Button>
                     </Header>
                     <View style={{ paddingLeft: 20, paddingTop: 10, paddingRight: 5, flexDirection: 'row' }}>
-                        <View style={{ paddingTop: 18 }}>
+                        <View style={{ paddingTop: 25 }}>
                             <View style={styleSelf.TimingContainerFirst} >
                                 <Text style={styleSelf.TimingText} >Sun</Text>
                             </View>
@@ -138,9 +138,11 @@ class WeekCalendar extends Component {
                         </View>
 
                         <View>
-                              <TouchableOpacity onPress={this.ScrollLeft.bind(this)}>
-                                  <View><Image source={require('./left-arrow.png')} style={{ width: 24, height: 24 }} /></View>
-                              </TouchableOpacity>
+                            <TouchableOpacity onPress={this.ScrollLeft.bind(this)}>
+                                <View>
+                                    <Image source={require('./left-arrow.png')} style={{ width: 24, height: 24 }} />
+                                </View>
+                            </TouchableOpacity>
                           </View>
                           <FlatList
                               ref={ref => this.flatList = ref}
@@ -166,14 +168,14 @@ styleSelf = {
     fontSize: 20,
   },
   TimingContainer: {
-      paddingLeft: 5,
-      paddingRight: 5,
-      paddingTop: 31,
+      width: 50,
+      height: 50,
+      justifyContent: 'center',
   },
   TimingContainerFirst: {
-      paddingLeft: 5,
-      paddingRight: 5,
-      paddingTop: 20,
+      width: 50,
+      height: 50,
+      justifyContent: 'center'
   },
   hdClr:{
       color: '#1e3768',
