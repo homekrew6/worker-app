@@ -9,51 +9,310 @@ import { ChangeData } from '../../actions/ActionWeek';
 import api from '../../api';
 
 class WeekCalendar extends Component {
-  state = { dataRemote: {}, ScrollWidth: 10 }
-  componentWillMount(){
-    const data = [
-        {
-            "id": 1,
-            "date": "8-03-2018",
-            "time": "8 am",
-            "sun": true,
-            "mon": false,
-            "tue": false,
-            "wed": false,
-            "thu": false,
-            "fri": false,
-            "sat": true
-        },
-        {
-            "id": 2,
-            "date": "8-03-2018",
-            "time": "9 am",
-            "sun": true,
-            "mon": false,
-            "tue": false,
-            "wed": false,
-            "thu": false,
-            "fri": false,
-            "sat": true
-        }
-    ];
-    this.setState({ dataRemote: data });
-    const dataRemote = this.state.dataRemote;
-    this.props.ChangeData(data);
+  state = { dataRemote: '', ScrollWidth: 10 }
+
+
+  componentDidMount(){
+    const workerId = this.props.workerId;
     AsyncStorage.removeItem('StoreData', (err) => console.log('finished', err));
-    dataRemoteString = JSON.stringify(data);
-    AsyncStorage.setItem('StoreData', dataRemoteString);
+    const data =  {
+    	"workerId": workerId,
+    	"data": [{
+    			"id": 1,
+    			"time": "8 am",
+    			"sun": false,
+    			"mon": false,
+    			"tue": false,
+    			"wed": false,
+    			"thu": false,
+    			"fri": false,
+    			"sat": false
+    		},
+    		{
+    			"id": 2,
+    			"time": "9 am",
+    			"sun": false,
+    			"mon": false,
+    			"tue": false,
+    			"wed": false,
+    			"thu": false,
+    			"fri": false,
+    			"sat": false
+    		},
+    		{
+    			"id": 3,
+    			"time": "10 am",
+    			"sun": false,
+    			"mon": false,
+    			"tue": false,
+    			"wed": false,
+    			"thu": false,
+    			"fri": false,
+    			"sat": false
+    		},
+    		{
+    			"id": 4,
+    			"time": "11 am",
+    			"sun": false,
+    			"mon": false,
+    			"tue": false,
+    			"wed": false,
+    			"thu": false,
+    			"fri": false,
+    			"sat": false
+    		},
+    		{
+    			"id": 5,
+    			"time": "12 pm",
+    			"sun": false,
+    			"mon": false,
+    			"tue": false,
+    			"wed": false,
+    			"thu": false,
+    			"fri": false,
+    			"sat": false
+    		},
+    		{
+    			"id": 6,
+    			"time": "1 pm",
+    			"sun": false,
+    			"mon": false,
+    			"tue": false,
+    			"wed": false,
+    			"thu": false,
+    			"fri": false,
+    			"sat": false
+    		},
+    		{
+    			"id": 7,
+    			"time": "2 pm",
+    			"sun": false,
+    			"mon": false,
+    			"tue": false,
+    			"wed": false,
+    			"thu": false,
+    			"fri": false,
+    			"sat": false
+    		},
+    		{
+    			"id": 8,
+    			"time": "3 pm",
+    			"sun": false,
+    			"mon": false,
+    			"tue": false,
+    			"wed": false,
+    			"thu": false,
+    			"fri": false,
+    			"sat": false
+    		},
+    		{
+    			"id": 9,
+    			"time": "4 pm",
+    			"sun": false,
+    			"mon": false,
+    			"tue": false,
+    			"wed": false,
+    			"thu": false,
+    			"fri": false,
+    			"sat": false
+    		},
+    		{
+    			"id": 10,
+    			"time": "5 pm",
+    			"sun": false,
+    			"mon": false,
+    			"tue": false,
+    			"wed": false,
+    			"thu": false,
+    			"fri": false,
+    			"sat": false
+    		},
+    		{
+    			"id": 11,
+    			"time": "6 pm",
+    			"sun": false,
+    			"mon": false,
+    			"tue": false,
+    			"wed": false,
+    			"thu": false,
+    			"fri": false,
+    			"sat": false
+    		},
+    		{
+    			"id": 12,
+    			"time": "7 pm",
+    			"sun": false,
+    			"mon": false,
+    			"tue": false,
+    			"wed": false,
+    			"thu": false,
+    			"fri": false,
+    			"sat": false
+    		},
+    		{
+    			"id": 13,
+    			"time": "8 pm",
+    			"sun": false,
+    			"mon": false,
+    			"tue": false,
+    			"wed": false,
+    			"thu": false,
+    			"fri": false,
+    			"sat": false
+    		},
+    		{
+    			"id": 14,
+    			"time": "9 pm",
+    			"sun": false,
+    			"mon": false,
+    			"tue": false,
+    			"wed": false,
+    			"thu": false,
+    			"fri": false,
+    			"sat": false
+    		},
+    		{
+    			"id": 15,
+    			"time": "10 pm",
+    			"sun": false,
+    			"mon": false,
+    			"tue": false,
+    			"wed": false,
+    			"thu": false,
+    			"fri": false,
+    			"sat": false
+    		},
+    		{
+    			"id": 16,
+    			"time": "11 pm",
+    			"sun": false,
+    			"mon": false,
+    			"tue": false,
+    			"wed": false,
+    			"thu": false,
+    			"fri": false,
+    			"sat": false
+    		},
+    		{
+    			"id": 17,
+    			"time": "12 am",
+    			"sun": false,
+    			"mon": false,
+    			"tue": false,
+    			"wed": false,
+    			"thu": false,
+    			"fri": false,
+    			"sat": false
+    		},
+    		{
+    			"id": 18,
+    			"time": "1 am",
+    			"sun": false,
+    			"mon": false,
+    			"tue": false,
+    			"wed": false,
+    			"thu": false,
+    			"fri": false,
+    			"sat": false
+    		},
+    		{
+    			"id": 19,
+    			"time": "2 am",
+    			"sun": false,
+    			"mon": false,
+    			"tue": false,
+    			"wed": false,
+    			"thu": false,
+    			"fri": false,
+    			"sat": false
+    		},
+    		{
+    			"id": 20,
+    			"time": "3 am",
+    			"sun": false,
+    			"mon": false,
+    			"tue": false,
+    			"wed": false,
+    			"thu": false,
+    			"fri": false,
+    			"sat": false
+    		},
+    		{
+    			"id": 21,
+    			"time": "4 am",
+    			"sun": false,
+    			"mon": false,
+    			"tue": false,
+    			"wed": false,
+    			"thu": false,
+    			"fri": false,
+    			"sat": false
+    		},
+    		{
+    			"id": 22,
+    			"time": "5 am",
+    			"sun": false,
+    			"mon": false,
+    			"tue": false,
+    			"wed": false,
+    			"thu": false,
+    			"fri": false,
+    			"sat": false
+    		},
+    		{
+    			"id": 23,
+    			"time": "6 am",
+    			"sun": false,
+    			"mon": false,
+    			"tue": false,
+    			"wed": false,
+    			"thu": false,
+    			"fri": false,
+    			"sat": false
+    		},
+    		{
+    			"id": 24,
+    			"time": "7 am",
+    			"sun": false,
+    			"mon": false,
+    			"tue": false,
+    			"wed": false,
+    			"thu": false,
+    			"fri": false,
+    			"sat": false
+    		}
+    	]
+    };
+
+    const timimgData = this.props.navigation.state.params.timimgData;
+    if (timimgData.length === 0) {
+      this.setState({ dataRemote: data.data });
+      const dataRemoteString = JSON.stringify(data.data);
+      console.log('dataRemoteString', dataRemoteString);
+
+      AsyncStorage.setItem('StoreData', dataRemoteString, (res) => {
+           console.log('====FirstPage====setItem==async==='+res)
+       })
+
+    }else {
+      this.setState({ dataRemote: timimgData });
+      const dataRemoteString = JSON.stringify(timimgData);
+      AsyncStorage.setItem('StoreData', dataRemoteString);
+    }
+    this.props.ChangeData(this.state.dataRemote);
+
   }
+
   ScrollRight(){
      this.setState({ ScrollWidth: EffectWidth });
      const EffectWidth = Number(this.state.ScrollWidth) + 67;
      this.flatList.scrollToOffset({ offset: EffectWidth });
- }
- ScrollLeft(){
-     this.setState({ ScrollWidth: EffectWidth });
-     const EffectWidth = Number(this.state.ScrollWidth) - 67;
-     this.flatList.scrollToOffset({ offset: EffectWidth });
- }
+   }
+   ScrollLeft(){
+       this.setState({ ScrollWidth: EffectWidth });
+       const EffectWidth = Number(this.state.ScrollWidth) - 67;
+       this.flatList.scrollToOffset({ offset: EffectWidth });
+   }
     renderWeekData(item) {
       console.log('item', item);
         return(
@@ -72,21 +331,35 @@ class WeekCalendar extends Component {
         );
     }
     onDonePress(){
+      const timimgDataCheck = this.props.navigation.state.params.timimgData;
+      const tableRowId = this.props.navigation.state.params.tableRowId;
       const workerId = this.props.workerId;
       AsyncStorage.getItem("StoreData").then((value) => {
         const JSONdata = JSON.parse(value);
-        //api to hit Timing
-        const finalData = { };
-        console.log('finalData', finalData);
-        console.log()
-        api.post('worker-available-timings',{"timings": JSONdata, "workerId": workerId}).then(res => {
-            console.log(res);
-        }).catch((err) => {
-            console.log(err);
-        })
+
+        if (timimgDataCheck === 0) {
+          //api to hit adding Timing
+          api.post('worker-available-timings',{"timings": JSONdata, "workerId": workerId}).then(res => {
+              console.log(res);
+          }).catch((err) => {
+              console.log(err);
+          });
+        }else {
+          //API hiting editiing
+          const patchUrl = `worker-available-timings/${tableRowId}`;
+          api.put(patchUrl, {"timings": JSONdata,"id": tableRowId,"workerId": workerId}).then(res => {
+              console.log('patch Promise', res);
+          }).catch((err) => {
+              console.log(err);
+          });
+        }
+
+
+
       }).then(res => {
           AsyncStorage.setItem('StoreData', dataRemoteString);
       });
+      this.props.navigation.goBack();
     }
 
     render() {
@@ -99,7 +372,7 @@ class WeekCalendar extends Component {
                 <Content>
                     <Header style={styleSelf.appHdr2} androidStatusBarColor= "#cbf0ed">
                         <Button transparent >
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate("Menu")}>
+                            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
                                 <Text style={styleSelf.backBt} >Cancel</Text>
                             </TouchableOpacity>
                         </Button>
@@ -147,6 +420,7 @@ class WeekCalendar extends Component {
                               data={this.state.dataRemote}
                               renderItem={({ item }) => this.renderWeekData(item)}
                               horizontal={true}
+                              keyExtractor={(item, index) => index}
                           />
                           <View>
                               <TouchableOpacity onPress={this.ScrollRight.bind(this)}>

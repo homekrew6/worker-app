@@ -10,7 +10,7 @@ const config = {
     accessKey: "AKIAJUKBBDPNW5ED2M2A",
     secretKey: "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",
     successActionStatus: 201
-  } 
+  }
 }
 
 export default config
