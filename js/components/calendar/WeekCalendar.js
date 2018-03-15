@@ -304,13 +304,13 @@ class WeekCalendar extends Component {
   }
 
   ScrollRight(){
+     const EffectWidth = Number(this.state.ScrollWidth) + 67;\
      this.setState({ ScrollWidth: EffectWidth });
-     const EffectWidth = Number(this.state.ScrollWidth) + 67;
      this.flatList.scrollToOffset({ offset: EffectWidth });
    }
    ScrollLeft(){
-       this.setState({ ScrollWidth: EffectWidth });
        const EffectWidth = Number(this.state.ScrollWidth) - 67;
+       this.setState({ ScrollWidth: EffectWidth });
        this.flatList.scrollToOffset({ offset: EffectWidth });
    }
     renderWeekData(item) {
