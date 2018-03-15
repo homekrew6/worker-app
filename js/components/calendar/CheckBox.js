@@ -53,12 +53,12 @@ class CheckBox extends Component {
 
     render() {
         return(
-            <View style={{ paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5 }}>
+            <View style={{ height: 50, width: 50, alignItems: 'center', justifyContent: 'center'}}>
                 <TouchableOpacity onPress={this.onCheckBoxPress.bind(this)}>
                     {this.state.status === true ?
-                    <Image source={require('./checked.png')} style={styles.ImageCheckBox} />
+                        <Image source={require('../../../img/check-box.png')} style={styles.ImageCheckBox} />
                     :
-                    <Image source={require('./unchecked.png')} style={styles.ImageCheckBox} />
+                        <Image source={require('../../../img/check-box-empty.png')} style={styles.ImageCheckBox} />
                     }
                 </TouchableOpacity>
             </View>
@@ -68,8 +68,10 @@ class CheckBox extends Component {
 
 const styles = {
     ImageCheckBox: {
-        width: 48,
-        height: 48
+        width: 20,
+        height: 20,
+        marginLeft: 10,
+        marginRight: 10,
     }
 }
 function mapStateToProps(state) {
