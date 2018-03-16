@@ -304,21 +304,21 @@ class WeekCalendar extends Component {
   }
 
   ScrollRight(){
-     this.setState({ ScrollWidth: EffectWidth });
      const EffectWidth = Number(this.state.ScrollWidth) + 67;
+     this.setState({ ScrollWidth: EffectWidth });
      this.flatList.scrollToOffset({ offset: EffectWidth });
    }
    ScrollLeft(){
-       this.setState({ ScrollWidth: EffectWidth });
        const EffectWidth = Number(this.state.ScrollWidth) - 67;
+       this.setState({ ScrollWidth: EffectWidth });
        this.flatList.scrollToOffset({ offset: EffectWidth });
    }
     renderWeekData(item) {
       console.log('item', item);
         return(
             <View style={{ flex: 5 }}>
-                <View style={{ justifyContent: 'center', alignSelf: 'center', width: 50, alignItems: 'center' }} >
-                    <Text style={{ fontSize: 18 }}>{item.time}</Text>
+                <View style={{ justifyContent: 'center', alignSelf: 'center', width: 50, height: 28, alignItems: 'center' }} >
+                    <Text style={{ fontSize: 16 }}>{item.time}</Text>
                 </View>
                 <CheckBox status={item.sun} date={item.date} day="sun" time={item.time} id={item.id} />
                 <CheckBox status={item.mon} date={item.date} day="mon" time={item.time} id={item.id}/>
@@ -411,8 +411,8 @@ class WeekCalendar extends Component {
                         </View>
 
                         <View>
-                            <TouchableOpacity onPress={this.ScrollLeft.bind(this)}>
-                                <View>
+                            <TouchableOpacity onPress={this.ScrollLeft.bind(this)} style={{height: 30, width: 30, alignItems: 'center'}}>
+                                <View >
                                     <Image source={require('./left-arrow.png')} style={{ width: 24, height: 24 }} />
                                 </View>
                             </TouchableOpacity>
@@ -425,7 +425,7 @@ class WeekCalendar extends Component {
                               keyExtractor={(item, index) => index}
                           />
                           <View>
-                              <TouchableOpacity onPress={this.ScrollRight.bind(this)}>
+                              <TouchableOpacity onPress={this.ScrollRight.bind(this)} style={{height: 30, width: 30, alignItems: 'center'}}>
                                   <View><Image source={require('./right-arrow.png')} style={{ width: 24, height: 24 }} /></View>
                               </TouchableOpacity>
                           </View>
@@ -443,12 +443,12 @@ styleSelf = {
   },
   TimingContainer: {
       width: 50,
-      height: 50,
+      height: 60,
       justifyContent: 'center',
   },
   TimingContainerFirst: {
       width: 50,
-      height: 50,
+      height: 60,
       justifyContent: 'center'
   },
   hdClr:{
