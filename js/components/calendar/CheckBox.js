@@ -53,7 +53,7 @@ class CheckBox extends Component {
 
     render() {
         return(
-            <View style={{ height: 50, width: 50, alignItems: 'center', justifyContent: 'center'}}>
+            <View style={{ height: 60, width: 50, alignItems: 'center', justifyContent: 'center'}}>
                 <TouchableOpacity onPress={this.onCheckBoxPress.bind(this)}>
                     {this.state.status === true ?
                         <Image source={require('../../../img/check-box.png')} style={styles.ImageCheckBox} />

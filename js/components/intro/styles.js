@@ -18,10 +18,6 @@ export default {
         display: 'flex',
         alignItems: 'center',
     },
-    image1: {
-        width: 151,
-        height: 200
-    },
     imageLogo: {
         width: 120,
         height: 120,
@@ -39,7 +35,7 @@ export default {
     },
     title: {
         fontSize: 22,
-        color: 'red',
+        color: '#1e3768',
         backgroundColor: 'transparent',
         textAlign: 'center',
         marginBottom: 16,
@@ -48,5 +44,15 @@ export default {
         width: deviceWidth,
         height: 200,
         backgroundColor: 'red'
+    },
+     wrapper: {
+    },
+    slide: {
+        width: deviceWidth,
+        height: imageht,
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#92BBD9',
+        paddingTop: 20
     }
 };
