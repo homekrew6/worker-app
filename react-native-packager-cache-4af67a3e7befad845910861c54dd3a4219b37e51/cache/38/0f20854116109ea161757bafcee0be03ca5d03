@@ -1,0 +1,791 @@
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/worker-app/js/components/calendar/WeekCalendar.js';
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _nativeBase = require('native-base');
+
+var _reactRedux = require('react-redux');
+
+var _styles = require('../location/styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _Ionicons = require('react-native-vector-icons/Ionicons');
+
+var _Ionicons2 = babelHelpers.interopRequireDefault(_Ionicons);
+
+var _CheckBox = require('./CheckBox');
+
+var _CheckBox2 = babelHelpers.interopRequireDefault(_CheckBox);
+
+var _ActionWeek = require('../../actions/ActionWeek');
+
+var _api = require('../../api');
+
+var _api2 = babelHelpers.interopRequireDefault(_api);
+
+var WeekCalendar = function (_Component) {
+    babelHelpers.inherits(WeekCalendar, _Component);
+
+    function WeekCalendar() {
+        var _ref;
+
+        var _temp, _this, _ret;
+
+        babelHelpers.classCallCheck(this, WeekCalendar);
+
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+        }
+
+        return _ret = (_temp = (_this = babelHelpers.possibleConstructorReturn(this, (_ref = WeekCalendar.__proto__ || Object.getPrototypeOf(WeekCalendar)).call.apply(_ref, [this].concat(args))), _this), _this.state = { dataRemote: '', ScrollWidth: 10 }, _temp), babelHelpers.possibleConstructorReturn(_this, _ret);
+    }
+
+    babelHelpers.createClass(WeekCalendar, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var workerId = this.props.workerId;
+            _reactNative.AsyncStorage.removeItem('StoreData', function (err) {
+                return console.log('finished', err);
+            });
+            var data = {
+                "workerId": workerId,
+                "data": [{
+                    "id": 1,
+                    "time": "8 am",
+                    "sun": false,
+                    "mon": false,
+                    "tue": false,
+                    "wed": false,
+                    "thu": false,
+                    "fri": false,
+                    "sat": false
+                }, {
+                    "id": 2,
+                    "time": "9 am",
+                    "sun": false,
+                    "mon": false,
+                    "tue": false,
+                    "wed": false,
+                    "thu": false,
+                    "fri": false,
+                    "sat": false
+                }, {
+                    "id": 3,
+                    "time": "10 am",
+                    "sun": false,
+                    "mon": false,
+                    "tue": false,
+                    "wed": false,
+                    "thu": false,
+                    "fri": false,
+                    "sat": false
+                }, {
+                    "id": 4,
+                    "time": "11 am",
+                    "sun": false,
+                    "mon": false,
+                    "tue": false,
+                    "wed": false,
+                    "thu": false,
+                    "fri": false,
+                    "sat": false
+                }, {
+                    "id": 5,
+                    "time": "12 pm",
+                    "sun": false,
+                    "mon": false,
+                    "tue": false,
+                    "wed": false,
+                    "thu": false,
+                    "fri": false,
+                    "sat": false
+                }, {
+                    "id": 6,
+                    "time": "1 pm",
+                    "sun": false,
+                    "mon": false,
+                    "tue": false,
+                    "wed": false,
+                    "thu": false,
+                    "fri": false,
+                    "sat": false
+                }, {
+                    "id": 7,
+                    "time": "2 pm",
+                    "sun": false,
+                    "mon": false,
+                    "tue": false,
+                    "wed": false,
+                    "thu": false,
+                    "fri": false,
+                    "sat": false
+                }, {
+                    "id": 8,
+                    "time": "3 pm",
+                    "sun": false,
+                    "mon": false,
+                    "tue": false,
+                    "wed": false,
+                    "thu": false,
+                    "fri": false,
+                    "sat": false
+                }, {
+                    "id": 9,
+                    "time": "4 pm",
+                    "sun": false,
+                    "mon": false,
+                    "tue": false,
+                    "wed": false,
+                    "thu": false,
+                    "fri": false,
+                    "sat": false
+                }, {
+                    "id": 10,
+                    "time": "5 pm",
+                    "sun": false,
+                    "mon": false,
+                    "tue": false,
+                    "wed": false,
+                    "thu": false,
+                    "fri": false,
+                    "sat": false
+                }, {
+                    "id": 11,
+                    "time": "6 pm",
+                    "sun": false,
+                    "mon": false,
+                    "tue": false,
+                    "wed": false,
+                    "thu": false,
+                    "fri": false,
+                    "sat": false
+                }, {
+                    "id": 12,
+                    "time": "7 pm",
+                    "sun": false,
+                    "mon": false,
+                    "tue": false,
+                    "wed": false,
+                    "thu": false,
+                    "fri": false,
+                    "sat": false
+                }, {
+                    "id": 13,
+                    "time": "8 pm",
+                    "sun": false,
+                    "mon": false,
+                    "tue": false,
+                    "wed": false,
+                    "thu": false,
+                    "fri": false,
+                    "sat": false
+                }, {
+                    "id": 14,
+                    "time": "9 pm",
+                    "sun": false,
+                    "mon": false,
+                    "tue": false,
+                    "wed": false,
+                    "thu": false,
+                    "fri": false,
+                    "sat": false
+                }, {
+                    "id": 15,
+                    "time": "10 pm",
+                    "sun": false,
+                    "mon": false,
+                    "tue": false,
+                    "wed": false,
+                    "thu": false,
+                    "fri": false,
+                    "sat": false
+                }, {
+                    "id": 16,
+                    "time": "11 pm",
+                    "sun": false,
+                    "mon": false,
+                    "tue": false,
+                    "wed": false,
+                    "thu": false,
+                    "fri": false,
+                    "sat": false
+                }, {
+                    "id": 17,
+                    "time": "12 am",
+                    "sun": false,
+                    "mon": false,
+                    "tue": false,
+                    "wed": false,
+                    "thu": false,
+                    "fri": false,
+                    "sat": false
+                }, {
+                    "id": 18,
+                    "time": "1 am",
+                    "sun": false,
+                    "mon": false,
+                    "tue": false,
+                    "wed": false,
+                    "thu": false,
+                    "fri": false,
+                    "sat": false
+                }, {
+                    "id": 19,
+                    "time": "2 am",
+                    "sun": false,
+                    "mon": false,
+                    "tue": false,
+                    "wed": false,
+                    "thu": false,
+                    "fri": false,
+                    "sat": false
+                }, {
+                    "id": 20,
+                    "time": "3 am",
+                    "sun": false,
+                    "mon": false,
+                    "tue": false,
+                    "wed": false,
+                    "thu": false,
+                    "fri": false,
+                    "sat": false
+                }, {
+                    "id": 21,
+                    "time": "4 am",
+                    "sun": false,
+                    "mon": false,
+                    "tue": false,
+                    "wed": false,
+                    "thu": false,
+                    "fri": false,
+                    "sat": false
+                }, {
+                    "id": 22,
+                    "time": "5 am",
+                    "sun": false,
+                    "mon": false,
+                    "tue": false,
+                    "wed": false,
+                    "thu": false,
+                    "fri": false,
+                    "sat": false
+                }, {
+                    "id": 23,
+                    "time": "6 am",
+                    "sun": false,
+                    "mon": false,
+                    "tue": false,
+                    "wed": false,
+                    "thu": false,
+                    "fri": false,
+                    "sat": false
+                }, {
+                    "id": 24,
+                    "time": "7 am",
+                    "sun": false,
+                    "mon": false,
+                    "tue": false,
+                    "wed": false,
+                    "thu": false,
+                    "fri": false,
+                    "sat": false
+                }]
+            };
+
+            var timimgData = this.props.navigation.state.params.timimgData;
+            if (timimgData.length === 0) {
+                this.setState({ dataRemote: data.data });
+                var _dataRemoteString = JSON.stringify(data.data);
+                console.log('dataRemoteString', _dataRemoteString);
+
+                _reactNative.AsyncStorage.setItem('StoreData', _dataRemoteString, function (res) {
+                    console.log('====FirstPage====setItem==async===' + res);
+                });
+            } else {
+                this.setState({ dataRemote: timimgData });
+                var _dataRemoteString2 = JSON.stringify(timimgData);
+                _reactNative.AsyncStorage.setItem('StoreData', _dataRemoteString2);
+            }
+            this.props.ChangeData(this.state.dataRemote);
+        }
+    }, {
+        key: 'ScrollRight',
+        value: function ScrollRight() {
+            var EffectWidth = Number(this.state.ScrollWidth) + 67;
+            this.setState({ ScrollWidth: EffectWidth });
+            this.flatList.scrollToOffset({ offset: EffectWidth });
+        }
+    }, {
+        key: 'ScrollLeft',
+        value: function ScrollLeft() {
+            var EffectWidth = Number(this.state.ScrollWidth) - 67;
+            this.setState({ ScrollWidth: EffectWidth });
+            this.flatList.scrollToOffset({ offset: EffectWidth });
+        }
+    }, {
+        key: 'renderWeekData',
+        value: function renderWeekData(item) {
+            console.log('item', item);
+            return _react2.default.createElement(
+                _reactNative.View,
+                { style: { flex: 5 }, __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 319
+                    }
+                },
+                _react2.default.createElement(
+                    _reactNative.View,
+                    { style: { justifyContent: 'center', alignSelf: 'center', width: 50, height: 28, alignItems: 'center' }, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 320
+                        }
+                    },
+                    _react2.default.createElement(
+                        _reactNative.Text,
+                        { style: { fontSize: 16 }, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 321
+                            }
+                        },
+                        item.time
+                    )
+                ),
+                _react2.default.createElement(_CheckBox2.default, { status: item.sun, date: item.date, day: 'sun', time: item.time, id: item.id, __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 323
+                    }
+                }),
+                _react2.default.createElement(_CheckBox2.default, { status: item.mon, date: item.date, day: 'mon', time: item.time, id: item.id, __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 324
+                    }
+                }),
+                _react2.default.createElement(_CheckBox2.default, { status: item.tue, date: item.date, day: 'tue', time: item.time, id: item.id, __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 325
+                    }
+                }),
+                _react2.default.createElement(_CheckBox2.default, { status: item.wed, date: item.date, day: 'wed', time: item.time, id: item.id, __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 326
+                    }
+                }),
+                _react2.default.createElement(_CheckBox2.default, { status: item.thu, date: item.date, day: 'thu', time: item.time, id: item.id, __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 327
+                    }
+                }),
+                _react2.default.createElement(_CheckBox2.default, { status: item.fri, date: item.date, day: 'fri', time: item.time, id: item.id, __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 328
+                    }
+                }),
+                _react2.default.createElement(_CheckBox2.default, { status: item.sat, date: item.date, day: 'sat', time: item.time, id: item.id, __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 329
+                    }
+                })
+            );
+        }
+    }, {
+        key: 'onDonePress',
+        value: function onDonePress() {
+            var timimgDataCheck = this.props.navigation.state.params.timimgData;
+            var tableRowId = this.props.navigation.state.params.tableRowId;
+            var workerId = this.props.workerId;
+            _reactNative.AsyncStorage.getItem("StoreData").then(function (value) {
+                var JSONdata = JSON.parse(value);
+
+                if (timimgDataCheck === 0) {
+                    _api2.default.post('worker-available-timings', { "timings": JSONdata, "workerId": workerId }).then(function (res) {
+                        console.log(res);
+                    }).catch(function (err) {
+                        console.log(err);
+                    });
+                } else {
+                    var patchUrl = 'worker-available-timings/' + tableRowId;
+                    _api2.default.put(patchUrl, { "timings": JSONdata, "id": tableRowId, "workerId": workerId }).then(function (res) {
+                        console.log('patch Promise', res);
+                    }).catch(function (err) {
+                        console.log(err);
+                    });
+                }
+            }).then(function (res) {
+                _reactNative.AsyncStorage.setItem('StoreData', dataRemoteString);
+            });
+            this.props.navigation.goBack();
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            return _react2.default.createElement(
+                _nativeBase.Container,
+                {
+                    __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 368
+                    }
+                },
+                _react2.default.createElement(_reactNative.StatusBar, {
+                    backgroundColor: '#cbf0ed',
+                    __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 369
+                    }
+                }),
+                _react2.default.createElement(
+                    _nativeBase.Content,
+                    {
+                        __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 372
+                        }
+                    },
+                    _react2.default.createElement(
+                        _nativeBase.Header,
+                        { style: styleSelf.appHdr2, androidStatusBarColor: '#cbf0ed', __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 373
+                            }
+                        },
+                        _react2.default.createElement(
+                            _nativeBase.Button,
+                            { transparent: true, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 374
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.TouchableOpacity,
+                                { onPress: function onPress() {
+                                        return _this2.props.navigation.goBack();
+                                    }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 375
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _reactNative.Text,
+                                    { style: styleSelf.backBt, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 376
+                                        }
+                                    },
+                                    'Cancel'
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _nativeBase.Body,
+                            { style: styleSelf.tac, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 379
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.Text,
+                                { style: styleSelf.hdClr, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 380
+                                    }
+                                },
+                                'Add Timing'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _nativeBase.Button,
+                            { transparent: true, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 382
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.TouchableOpacity,
+                                { onPress: this.onDonePress.bind(this), __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 383
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _reactNative.Text,
+                                    { style: styleSelf.backBt, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 384
+                                        }
+                                    },
+                                    'Done'
+                                )
+                            )
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactNative.View,
+                        { style: { paddingLeft: 20, paddingTop: 10, paddingRight: 5, flexDirection: 'row' }, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 388
+                            }
+                        },
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            { style: { paddingTop: 25 }, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 389
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: styleSelf.TimingContainerFirst, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 390
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _reactNative.Text,
+                                    { style: styleSelf.TimingText, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 391
+                                        }
+                                    },
+                                    'Sun'
+                                )
+                            ),
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: styleSelf.TimingContainer, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 393
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _reactNative.Text,
+                                    { style: styleSelf.TimingText, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 394
+                                        }
+                                    },
+                                    'Mon'
+                                )
+                            ),
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: styleSelf.TimingContainer, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 396
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _reactNative.Text,
+                                    { style: styleSelf.TimingText, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 397
+                                        }
+                                    },
+                                    'Tue'
+                                )
+                            ),
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: styleSelf.TimingContainer, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 399
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _reactNative.Text,
+                                    { style: styleSelf.TimingText, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 400
+                                        }
+                                    },
+                                    'Wed'
+                                )
+                            ),
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: styleSelf.TimingContainer, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 402
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _reactNative.Text,
+                                    { style: styleSelf.TimingText, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 403
+                                        }
+                                    },
+                                    'Thu'
+                                )
+                            ),
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: styleSelf.TimingContainer, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 405
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _reactNative.Text,
+                                    { style: styleSelf.TimingText, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 406
+                                        }
+                                    },
+                                    'Fri'
+                                )
+                            ),
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: styleSelf.TimingContainer, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 408
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _reactNative.Text,
+                                    { style: styleSelf.TimingText, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 409
+                                        }
+                                    },
+                                    'Sat'
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            {
+                                __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 413
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.TouchableOpacity,
+                                { onPress: this.ScrollLeft.bind(this), style: { height: 30, width: 30, alignItems: 'center' }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 414
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _reactNative.View,
+                                    {
+                                        __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 415
+                                        }
+                                    },
+                                    _react2.default.createElement(_reactNative.Image, { source: require('./left-arrow.png'), style: { width: 24, height: 24 }, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 416
+                                        }
+                                    })
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(_reactNative.FlatList, {
+                            ref: function ref(_ref3) {
+                                return _this2.flatList = _ref3;
+                            },
+                            data: this.state.dataRemote,
+                            renderItem: function renderItem(_ref2) {
+                                var item = _ref2.item;
+                                return _this2.renderWeekData(item);
+                            },
+                            horizontal: true,
+                            keyExtractor: function keyExtractor(item, index) {
+                                return index;
+                            },
+                            __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 420
+                            }
+                        }),
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            {
+                                __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 427
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.TouchableOpacity,
+                                { onPress: this.ScrollRight.bind(this), style: { height: 30, width: 30, alignItems: 'center' }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 428
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _reactNative.View,
+                                    {
+                                        __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 429
+                                        }
+                                    },
+                                    _react2.default.createElement(_reactNative.Image, { source: require('./right-arrow.png'), style: { width: 24, height: 24 }, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 429
+                                        }
+                                    })
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+    return WeekCalendar;
+}(_react.Component);
+
+styleSelf = {
+    TimingText: {
+        fontSize: 20
+    },
+    TimingContainer: {
+        width: 50,
+        height: 60,
+        justifyContent: 'center'
+    },
+    TimingContainerFirst: {
+        width: 50,
+        height: 60,
+        justifyContent: 'center'
+    },
+    hdClr: {
+        color: '#1e3768',
+        fontSize: 22
+    },
+    appHdr2: {
+        backgroundColor: '#cbf0ed'
+    },
+    backBt: {
+        fontSize: 16,
+        color: "#71beb8"
+    },
+    tac: {
+        alignItems: 'center'
+    }
+};
+
+function mapStateToProps(state) {
+    console.log('WeekCalendar', state);
+    return {
+        loading: state.CheckBox.loading,
+        workerId: state.auth.data.id
+    };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, { ChangeData: _ActionWeek.ChangeData })(WeekCalendar);

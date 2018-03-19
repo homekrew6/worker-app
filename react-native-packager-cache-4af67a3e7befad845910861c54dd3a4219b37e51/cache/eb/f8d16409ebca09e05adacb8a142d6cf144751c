@@ -1,0 +1,82 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = styleConstructor;
+
+var _reactNative = require('react-native');
+
+var _style = require('../../../style');
+
+var defaultStyle = babelHelpers.interopRequireWildcard(_style);
+
+
+var STYLESHEET_ID = 'stylesheet.day.period';
+
+var FILLER_HEIGHT = 34;
+
+function styleConstructor() {
+  var theme = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  var appStyle = babelHelpers.extends({}, defaultStyle, theme);
+  return _reactNative.StyleSheet.create(babelHelpers.extends({
+    wrapper: {
+      flex: 1,
+      alignItems: 'center',
+      alignSelf: 'stretch',
+      marginLeft: -1
+    },
+    base: {
+      width: 38,
+      height: FILLER_HEIGHT,
+      alignItems: 'center'
+    },
+    fillers: {
+      position: 'absolute',
+      height: FILLER_HEIGHT,
+      flexDirection: 'row',
+      left: 0,
+      right: 0
+    },
+    leftFiller: {
+      height: FILLER_HEIGHT,
+      flex: 1
+    },
+    rightFiller: {
+      height: FILLER_HEIGHT,
+      flex: 1
+    },
+    text: {
+      marginTop: 7,
+      fontSize: appStyle.textDayFontSize,
+      fontFamily: appStyle.textDayFontFamily,
+      fontWeight: '300',
+      color: appStyle.dayTextColor || '#2d4150',
+      backgroundColor: 'rgba(255, 255, 255, 0)'
+    },
+    todayText: {
+      fontWeight: '500',
+      color: theme.todayTextColor || appStyle.dayTextColor
+    },
+    disabledText: {
+      color: appStyle.textDisabledColor
+    },
+    quickAction: {
+      backgroundColor: 'white',
+      borderWidth: 1,
+      borderColor: '#c1e4fe'
+    },
+    quickActionText: {
+      marginTop: 6,
+      color: appStyle.textColor
+    },
+    firstQuickAction: {
+      backgroundColor: appStyle.textLinkColor
+    },
+    firstQuickActionText: {
+      color: 'white'
+    },
+    naText: {
+      color: '#b6c1cd'
+    }
+  }, theme[STYLESHEET_ID] || {}));
+}

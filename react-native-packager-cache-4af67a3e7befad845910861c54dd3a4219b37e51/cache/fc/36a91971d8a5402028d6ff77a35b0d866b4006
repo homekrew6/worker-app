@@ -1,0 +1,205 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/worker-app/node_modules/react-native-calendars/src/calendar/header/index.js';
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _xdate = require('xdate');
+
+var _xdate2 = babelHelpers.interopRequireDefault(_xdate);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _style = require('./style');
+
+var _style2 = babelHelpers.interopRequireDefault(_style);
+
+var _dateutils = require('../../dateutils');
+
+var CalendarHeader = function (_Component) {
+  babelHelpers.inherits(CalendarHeader, _Component);
+
+  function CalendarHeader(props) {
+    babelHelpers.classCallCheck(this, CalendarHeader);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (CalendarHeader.__proto__ || Object.getPrototypeOf(CalendarHeader)).call(this, props));
+
+    _this.style = (0, _style2.default)(props.theme);
+    _this.addMonth = _this.addMonth.bind(_this);
+    _this.substractMonth = _this.substractMonth.bind(_this);
+    return _this;
+  }
+
+  babelHelpers.createClass(CalendarHeader, [{
+    key: 'addMonth',
+    value: function addMonth() {
+      this.props.addMonth(1);
+    }
+  }, {
+    key: 'substractMonth',
+    value: function substractMonth() {
+      this.props.addMonth(-1);
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps) {
+      if (nextProps.month.toString('yyyy MM') !== this.props.month.toString('yyyy MM')) {
+        return true;
+      }
+      if (nextProps.showIndicator !== this.props.showIndicator) {
+        return true;
+      }
+      if (nextProps.hideDayNames !== this.props.hideDayNames) {
+        return true;
+      }
+      return false;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var leftArrow = _react2.default.createElement(_reactNative.View, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 54
+        }
+      });
+      var rightArrow = _react2.default.createElement(_reactNative.View, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 55
+        }
+      });
+      var weekDaysNames = (0, _dateutils.weekDayNames)(this.props.firstDay);
+      if (!this.props.hideArrows) {
+        leftArrow = _react2.default.createElement(
+          _reactNative.TouchableOpacity,
+          {
+            onPress: this.substractMonth,
+            style: this.style.arrow,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 59
+            }
+          },
+          this.props.renderArrow ? this.props.renderArrow('left') : _react2.default.createElement(_reactNative.Image, {
+            source: require('../img/previous.png'),
+            style: this.style.arrowImage,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 65
+            }
+          })
+        );
+        rightArrow = _react2.default.createElement(
+          _reactNative.TouchableOpacity,
+          { onPress: this.addMonth, style: this.style.arrow, __source: {
+              fileName: _jsxFileName,
+              lineNumber: 72
+            }
+          },
+          this.props.renderArrow ? this.props.renderArrow('right') : _react2.default.createElement(_reactNative.Image, {
+            source: require('../img/next.png'),
+            style: this.style.arrowImage,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 75
+            }
+          })
+        );
+      }
+      var indicator = void 0;
+      if (this.props.showIndicator) {
+        indicator = _react2.default.createElement(_reactNative.ActivityIndicator, {
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 84
+          }
+        });
+      }
+      return _react2.default.createElement(
+        _reactNative.View,
+        {
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 87
+          }
+        },
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: this.style.header, __source: {
+              fileName: _jsxFileName,
+              lineNumber: 88
+            }
+          },
+          leftArrow,
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: 'row' }, __source: {
+                fileName: _jsxFileName,
+                lineNumber: 90
+              }
+            },
+            _react2.default.createElement(
+              _reactNative.Text,
+              { allowFontScaling: false, style: this.style.monthText, __source: {
+                  fileName: _jsxFileName,
+                  lineNumber: 91
+                }
+              },
+              this.props.month.toString(this.props.monthFormat ? this.props.monthFormat : 'MMMM yyyy')
+            ),
+            indicator
+          ),
+          rightArrow
+        ),
+        !this.props.hideDayNames && _react2.default.createElement(
+          _reactNative.View,
+          { style: this.style.week, __source: {
+              fileName: _jsxFileName,
+              lineNumber: 100
+            }
+          },
+          this.props.weekNumbers && _react2.default.createElement(_reactNative.Text, { allowFontScaling: false, style: this.style.dayHeader, __source: {
+              fileName: _jsxFileName,
+              lineNumber: 101
+            }
+          }),
+          weekDaysNames.map(function (day, idx) {
+            return _react2.default.createElement(
+              _reactNative.Text,
+              { allowFontScaling: false, key: idx, style: _this2.style.dayHeader, numberOfLines: 1, __source: {
+                  fileName: _jsxFileName,
+                  lineNumber: 103
+                }
+              },
+              day
+            );
+          })
+        )
+      );
+    }
+  }]);
+  return CalendarHeader;
+}(_react.Component);
+
+CalendarHeader.propTypes = {
+  theme: _propTypes2.default.object,
+  hideArrows: _propTypes2.default.bool,
+  month: _propTypes2.default.instanceOf(_xdate2.default),
+  addMonth: _propTypes2.default.func,
+  showIndicator: _propTypes2.default.bool,
+  firstDay: _propTypes2.default.number,
+  renderArrow: _propTypes2.default.func,
+  hideDayNames: _propTypes2.default.bool,
+  weekNumbers: _propTypes2.default.bool
+};
+exports.default = CalendarHeader;

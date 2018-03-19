@@ -1,0 +1,20 @@
+
+
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var RNI18n = require('react-native').NativeModules.RNI18n;
+var I18nJs = require('i18n-js');
+
+if (typeof RNI18n !== 'undefined') {
+  I18nJs.locale = RNI18n.languages[0];
+} else if (__DEV__) {
+  console.warn('react-native-i18n module is not correctly linked');
+}
+
+var getLanguages = exports.getLanguages = function getLanguages() {
+  return RNI18n.getLanguages();
+};
+exports.default = I18nJs;

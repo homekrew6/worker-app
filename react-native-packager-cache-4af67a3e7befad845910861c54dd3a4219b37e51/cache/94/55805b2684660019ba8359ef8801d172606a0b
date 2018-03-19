@@ -1,0 +1,782 @@
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/worker-app/js/components/accounts/edit_profile.js';
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _reactRedux = require('react-redux');
+
+var _authActions = require('./elements/authActions');
+
+var _reactNative = require('react-native');
+
+var _FontAwesome = require('react-native-vector-icons/FontAwesome');
+
+var _FontAwesome2 = babelHelpers.interopRequireDefault(_FontAwesome);
+
+var _reactNativeLoadingSpinnerOverlay = require('react-native-loading-spinner-overlay');
+
+var _reactNativeLoadingSpinnerOverlay2 = babelHelpers.interopRequireDefault(_reactNativeLoadingSpinnerOverlay);
+
+var _reactNativeImageCropPicker = require('react-native-image-crop-picker');
+
+var _reactNativeImageCropPicker2 = babelHelpers.interopRequireDefault(_reactNativeImageCropPicker);
+
+var _config = require('../../config');
+
+var _config2 = babelHelpers.interopRequireDefault(_config);
+
+var _reactNativeAws = require('react-native-aws3');
+
+var _api = require('../../api');
+
+var _api2 = babelHelpers.interopRequireDefault(_api);
+
+var _nativeBase = require('native-base');
+
+var _i18n = require('../../i18n/i18n');
+
+var _i18n2 = babelHelpers.interopRequireDefault(_i18n);
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var deviceHeight = _reactNative.Dimensions.get('window').height;
+var deviceWidth = _reactNative.Dimensions.get('window').width;
+var profileImage = require('../../../img/atul.png');
+var carveImage = require('../../../img/bg-1.png');
+var BUTTONS = [{ text: "Camera", icon: "ios-camera", iconColor: "#2c8ef4" }, { text: "File", icon: "ios-images", iconColor: "#f42ced" }];
+
+var EditProfile = function (_Component) {
+    babelHelpers.inherits(EditProfile, _Component);
+
+    function EditProfile(props) {
+        babelHelpers.classCallCheck(this, EditProfile);
+
+        var _this = babelHelpers.possibleConstructorReturn(this, (EditProfile.__proto__ || Object.getPrototypeOf(EditProfile)).call(this, props));
+
+        console.log(props);
+        _this.state = {
+            email: props.auth.data.email,
+            name: props.auth.data.name,
+            phone: props.auth.data.phone,
+            image: props.auth.data.image,
+            id: props.auth.data.id,
+            visible: false,
+            uploadButton: true,
+            uploaded: false,
+            cameraButton: true,
+            cameraUploaded: false,
+            filecat: 3,
+            serviceList: [],
+            zoneList: []
+        };
+        return _this;
+    }
+
+    babelHelpers.createClass(EditProfile, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            var _this2 = this;
+
+            _api2.default.get('Zones/getParentZone').then(function (res) {
+                if (res.zone.length > 0) {
+                    _this2.setState({ zoneList: res.zone, selectedZoneDetails: res.zone[0], selected1: res.zone[0].id });
+
+                    _api2.default.post('serviceZones/getZoneRelatedService', { id: res.zone[0].id }).then(function (resService) {
+                        if (resService.response.length > 0) {
+                            _this2.setState({ serviceList: resService.response });
+                            _this2.state.serviceList.map(function (data) {
+                                data.selected = false;
+                            });
+                            _this2.props.checkAuth(function (res) {
+                                _this2.props.getUserDetail(res.userId, res.id).then(function (userRes) {
+
+                                    var filter = '{"where":{"workerId":' + res.userId + '}}';
+                                    _api2.default.get('WorkerSkills?filter=' + filter + '&access_token=' + res.id).then(function (skills) {
+                                        console.log(skills);
+                                        var serviceIds = [];
+                                        skills.map(function (item) {
+                                            serviceIds.push(item.serviceId);
+                                        });
+                                        resService.response.map(function (data1) {
+                                            if (serviceIds.includes(data1.id)) {
+                                                data1.selected = true;
+                                            }
+                                        });
+                                        _this2.setState({ serviceList: resService.response });
+                                    }).catch(function (err) {
+                                        _this2.setState({ visible: false });
+                                    });
+                                }).catch(function (err) {
+                                    _this2.setState({ visible: false });
+                                    _reactNative.Alert.alert('Data not saved, Please try again');
+                                });
+                            });
+                        }
+                    }).catch(function (err) {
+                        _this2.setState({ visible: false });
+                    });
+                }
+            }).catch(function (err) {
+                _this2.setState({ visible: false });
+            });
+        }
+    }, {
+        key: 'attachFile',
+        value: function attachFile() {
+            var _this3 = this;
+
+            _reactNativeImageCropPicker2.default.openPicker({
+                width: 400,
+                height: 300,
+                cropping: true
+            }).then(function (response) {
+                _this3.setState({ visible: true });
+                var uri = void 0;
+                if (!response.path) {
+                    uri = response.uri;
+                } else {
+                    uri = response.path;
+                }
+                var file = {
+                    uri: uri,
+                    name: Math.floor(Math.random() * 100000000 + 1) + '_.png',
+                    type: response.mime || 'image/png'
+                };
+
+                var options = _config2.default.s3;
+
+                _reactNativeAws.RNS3.put(file, _config2.default.s3).then(function (response) {
+                    console.log("profioleImage", response);
+                    if (response.status !== 201) {
+                        _this3.setState({ uploadButton: true });
+
+                        _this3.setState({ visible: false });
+                        throw new Error('Failed to upload image to S3');
+                    }
+
+                    if (response.status == 201) {
+                        _this3.setState({ uploadButton: true });
+                        _this3.setState({ uploaded: true });
+
+                        _this3.setState({ image: response.body.postResponse.location });
+                        _this3.setState({ visible: false });
+                    }
+                }).catch(function (err) {
+                    console.log(err);
+                    _this3.setState({ visible: false });
+                });
+            }).catch(function (err) {
+                _this3.setState({ visible: false });
+            });
+        }
+    }, {
+        key: 'captureFile',
+        value: function captureFile() {
+            var _this4 = this;
+
+            this.setState({ cameraButton: false });
+
+            _reactNativeImageCropPicker2.default.openCamera({
+                width: 400,
+                height: 300,
+                cropping: true
+            }).then(function (response) {
+                _this4.setState({ visible: true });
+                var uri = void 0;
+
+                if (!response.path) {
+                    uri = response.uri;
+                } else {
+                    uri = response.path;
+                }
+                var file = {
+                    uri: uri,
+                    name: Math.floor(Math.random() * 100000000 + 1) + '_.png',
+                    type: response.mime || 'image/png'
+                };
+                console.log(file);
+
+                var options = _config2.default.s3;
+                console.log(options);
+                _reactNativeAws.RNS3.put(file, _config2.default.s3).then(function (response) {
+                    console.log(response);
+                    if (response.status !== 201) {
+                        _this4.setState({ cameraButton: true });
+                        _this4.setState({ visible: true });
+                        throw new Error('Failed to upload image to S3');
+                    }
+
+                    if (response.status == 201) {
+                        _this4.setState({ cameraButton: true });
+                        _this4.setState({ cameraUploaded: true });
+                        _this4.setState({ image: response.body.postResponse.location });
+                        _this4.setState({ visible: false });
+                    }
+                }).catch(function (err) {
+                    _this4.setState({ visible: false });
+                    console.log(err);
+                });
+            }).catch(function (err) {
+                _this4.setState({ visible: false });
+                console.log(err);
+                _this4.setState({ cameraButton: true });
+            });
+        }
+    }, {
+        key: 'pressSave',
+        value: function pressSave() {
+            var _this5 = this;
+
+            if (!this.state.email) {
+                _reactNative.Alert.alert('Please enter email');
+                return false;
+            }
+            if (!this.state.name) {
+                _reactNative.Alert.alert('Please enter name');
+                return false;
+            }
+            if (!this.state.phone) {
+                _reactNative.Alert.alert('Please enter phone');
+                return false;
+            }
+            this.setState({ visible: true });
+            this.props.checkAuth(function (res) {
+                console.log(res);
+                if (res) {
+                    _api2.default.put('Workers/editWorker/' + res.userId + '?access_token=' + res.id, { name: _this5.state.name, phone: _this5.state.phone, image: _this5.state.image }).then(function (resEdit) {
+                        var data = {};
+                        var serviceIds = [];
+                        _this5.state.serviceList.map(function (item) {
+                            if (item.selected) {
+                                serviceIds.push(item.id);
+                            }
+                        });
+                        if (serviceIds.length > 0) {
+                            data.serviceIds = serviceIds;
+                            data.workerId = res.userId;
+                            console.log(data);
+                            _api2.default.post('WorkerSkills/insertWorkerSkill?access_token=' + res.id, data).then(function (skillRes) {
+                                console.log(skillRes);
+                                _this5.props.getUserDetail(res.userId, res.id).then(function (userRes) {
+                                    _this5.setState({ visible: false });
+                                    _this5.props.navigation.navigate('Menu');
+                                }).catch(function (err) {
+                                    _this5.setState({ visible: false });
+                                    _reactNative.Alert.alert('Data not saved, Please try again');
+                                });
+                            }).catch(function (err) {
+                                _this5.setState({ visible: false });
+                                _reactNative.Alert.alert("Please try again later.");
+                                console.log(err);
+                            });
+                        } else {
+                            _this5.props.getUserDetail(res.userId, res.id).then(function (userRes) {
+                                _this5.setState({ visible: false });
+                                _this5.props.navigation.navigate('Menu');
+                            }).catch(function (err) {
+                                _this5.setState({ visible: false });
+                                _reactNative.Alert.alert('Data not saved, Please try again');
+                            });
+                        }
+                    }).catch(function (err) {
+                        _this5.setState({ visible: false });
+                        _reactNative.Alert.alert('Data not saved, please try again.');
+                    });
+                } else {
+                    _this5.setState({ visible: false });
+                    _this5.props.navigation.navigate('Login');
+                }
+            });
+        }
+    }, {
+        key: 'fileUploadType',
+        value: function fileUploadType(buttonIndex) {
+            if (buttonIndex == 0) {
+                this.captureFile();
+            }
+            if (buttonIndex == 1) {
+                this.attachFile();
+            }
+        }
+    }, {
+        key: 'switchChange',
+        value: function switchChange(value, data) {
+
+            var itemList = [];
+            this.state.serviceList.map(function (item) {
+                itemList.push(item);
+            });
+            itemList.map(function (item1) {
+                if (item1.id == data.id) {
+                    item1.selected = value;
+                }
+            });
+            this.setState({ serviceList: itemList });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this6 = this;
+
+            var serviceListing = void 0;
+            if (this.state.serviceList.length > 0) {
+
+                serviceListing = this.state.serviceList.map(function (data, key) {
+                    if (!data.service) return;
+                    return _react2.default.createElement(
+                        _reactNative.View,
+                        { key: data.id, style: _styles2.default.catIten, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 299
+                            }
+                        },
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            { style: _styles2.default.catIten_img_view, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 300
+                                }
+                            },
+                            _react2.default.createElement(_nativeBase.Switch, { value: data.selected, onValueChange: function onValueChange(value) {
+                                    return _this6.switchChange(value, data);
+                                }, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 301
+                                }
+                            })
+                        ),
+                        _react2.default.createElement(
+                            _nativeBase.Text,
+                            { style: _styles2.default.catIten_txt, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 303
+                                }
+                            },
+                            data.service.name || null
+                        )
+                    );
+                });
+            }
+            return _react2.default.createElement(
+                _nativeBase.Container,
+                {
+                    __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 310
+                    }
+                },
+                _react2.default.createElement(_reactNative.StatusBar, {
+                    backgroundColor: '#81cdc7',
+                    __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 311
+                    }
+                }),
+                _react2.default.createElement(
+                    _nativeBase.Content,
+                    {
+                        __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 314
+                        }
+                    },
+                    _react2.default.createElement(_reactNativeLoadingSpinnerOverlay2.default, { visible: this.state.visible, textContent: 'Loading...', textStyle: { color: '#FFF' }, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 315
+                        }
+                    }),
+                    _react2.default.createElement(
+                        _nativeBase.Header,
+                        { style: _styles2.default.appHdr2, noShadow: true, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 316
+                            }
+                        },
+                        _react2.default.createElement(
+                            _nativeBase.Button,
+                            { transparent: true, onPress: function onPress() {
+                                    return _this6.props.navigation.goBack();
+                                }, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 317
+                                }
+                            },
+                            _react2.default.createElement(_FontAwesome2.default, { name: 'chevron-left', style: { fontSize: 18, color: '#71beb8' }, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 318
+                                }
+                            })
+                        ),
+                        _react2.default.createElement(
+                            _nativeBase.Body,
+                            { style: _styles2.default.appHdrtitleWarp, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 320
+                                }
+                            },
+                            _react2.default.createElement(
+                                _nativeBase.Text,
+                                { style: { color: '#1e3768' }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 321
+                                    }
+                                },
+                                'Edit My Profile'
+                            )
+                        ),
+                        _react2.default.createElement(_nativeBase.Button, { transparent: true, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 323
+                            }
+                        })
+                    ),
+                    _react2.default.createElement(
+                        _reactNative.View,
+                        { style: _styles2.default.editPflHdr, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 326
+                            }
+                        },
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            { style: _styles2.default.editPflHdrWrap, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 327
+                                }
+                            },
+                            this.props.auth.data.image ? _react2.default.createElement(_nativeBase.Thumbnail, { source: { uri: this.state.image }, style: _styles2.default.editPflHdrThumbnail, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 330
+                                }
+                            }) : _react2.default.createElement(_nativeBase.Thumbnail, { source: profileImage, style: _styles2.default.editPflHdrThumbnail, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 332
+                                }
+                            }),
+                            _react2.default.createElement(
+                                _nativeBase.Button,
+                                {
+                                    primary: true, noShadow: true, small: true,
+                                    style: _styles2.default.editPflHdrBtn,
+                                    onPress: function onPress() {
+                                        return _nativeBase.ActionSheet.show({
+                                            options: BUTTONS
+                                        }, function (buttonIndex) {
+                                            _this6.setState({ clicked: BUTTONS[buttonIndex] });
+
+                                            console.log(buttonIndex);
+
+                                            _this6.fileUploadType(buttonIndex);
+                                        });
+                                    },
+                                    __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 336
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    {
+                                        __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 354
+                                        }
+                                    },
+                                    ' Change Photo '
+                                )
+                            )
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactNative.View,
+                        { style: { paddingBottom: 0, marginBottom: 0 }, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 359
+                            }
+                        },
+                        _react2.default.createElement(_reactNative.Image, { source: carveImage, style: { width: deviceWidth }, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 360
+                            }
+                        })
+                    ),
+                    _react2.default.createElement(
+                        _reactNative.View,
+                        {
+                            __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 363
+                            }
+                        },
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            { style: _styles2.default.editprofileLst, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 364
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.editprofileWarp, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 365
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    {
+                                        __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 366
+                                        }
+                                    },
+                                    'Name'
+                                )
+                            ),
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.editprofileInputwrap, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 368
+                                    }
+                                },
+                                _react2.default.createElement(_nativeBase.Input, { style: _styles2.default.editprofileInput, onChangeText: function onChangeText(text) {
+                                        return _this6.setState({ name: text });
+                                    }, value: this.state.name, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 369
+                                    }
+                                })
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            { style: _styles2.default.editprofileLst, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 372
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.editprofileWarp, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 373
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    {
+                                        __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 374
+                                        }
+                                    },
+                                    'Email Id'
+                                )
+                            ),
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.editprofileInputwrap, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 376
+                                    }
+                                },
+                                _react2.default.createElement(_nativeBase.Input, { editable: false, style: _styles2.default.editprofileInput, onChangeText: function onChangeText(text) {
+                                        return _this6.setState({ email: text });
+                                    }, value: this.state.email, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 377
+                                    }
+                                })
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            { style: _styles2.default.editprofileLst, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 381
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.editprofileWarp, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 382
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    {
+                                        __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 383
+                                        }
+                                    },
+                                    'Phone No'
+                                )
+                            ),
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.editprofileInputwrap, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 385
+                                    }
+                                },
+                                _react2.default.createElement(_nativeBase.Input, { style: _styles2.default.editprofileInput, onChangeText: function onChangeText(text) {
+                                        return _this6.setState({ phone: text });
+                                    }, value: this.state.phone, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 386
+                                    }
+                                })
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            { style: _styles2.default.editprofileLst, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 390
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.editprofileWarp, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 391
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    {
+                                        __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 392
+                                        }
+                                    },
+                                    'Password'
+                                )
+                            ),
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.editprofileInputwrap, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 394
+                                    }
+                                },
+                                _react2.default.createElement(_nativeBase.Input, { style: _styles2.default.editprofileInput, value: 'password', secureTextEntry: true, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 395
+                                    }
+                                })
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            { style: { padding: 10 }, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 398
+                                }
+                            },
+                            _react2.default.createElement(
+                                _nativeBase.Text,
+                                {
+                                    __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 399
+                                    }
+                                },
+                                'Skills'
+                            ),
+                            _react2.default.createElement(_reactNative.View, {
+                                __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 400
+                                }
+                            }),
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                {
+                                    __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 401
+                                    }
+                                },
+                                serviceListing
+                            )
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _nativeBase.Footer,
+                        {
+                            __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 405
+                            }
+                        },
+                        _react2.default.createElement(
+                            _nativeBase.FooterTab,
+                            {
+                                __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 406
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.TouchableOpacity,
+                                { full: true, style: { flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#81cdc7' }, onPress: function onPress() {
+                                        return _this6.pressSave();
+                                    }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 407
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    { style: { color: '#fff', fontSize: 16 }, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 408
+                                        }
+                                    },
+                                    'Save'
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+    return EditProfile;
+}(_react.Component);
+
+EditProfile.propTypes = {
+    auth: _propTypes2.default.object.isRequired
+};
+var mapStateToProps = function mapStateToProps(state) {
+    return {
+        auth: state.auth
+    };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+    return {
+        checkAuth: function checkAuth(cb) {
+            return dispatch((0, _authActions.checkAuth)(cb));
+        },
+        getUserDetail: function getUserDetail(id, auth) {
+            return dispatch((0, _authActions.getUserDetail)(id, auth));
+        }
+    };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(EditProfile);

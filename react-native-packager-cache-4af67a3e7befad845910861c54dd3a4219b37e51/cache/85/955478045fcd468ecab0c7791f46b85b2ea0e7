@@ -1,0 +1,122 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.login = login;
+exports.getUserDetail = getUserDetail;
+exports.signup = signup;
+exports.checkAuth = checkAuth;
+exports.logout = logout;
+exports.authStateBusy = authStateBusy;
+exports.authStateFailed = authStateFailed;
+exports.authStateSuccess = authStateSuccess;
+
+var _authApi = require('./authApi');
+
+var _authApi2 = babelHelpers.interopRequireDefault(_authApi);
+
+var _actionTypes = require('../../../actions/actionTypes');
+
+var TYPES = babelHelpers.interopRequireWildcard(_actionTypes);
+
+var _reactNative = require('react-native');
+
+function login(email, password) {
+  return function (dispatch) {
+    dispatch(authStateBusy());
+    return _authApi2.default.login(email, password).then(function (res) {
+
+      _reactNative.AsyncStorage.setItem('userToken', JSON.stringify(res), function (err, result) {
+        _reactNative.AsyncStorage.getItem('userToken', function (err, result) {
+          console.log(result);
+        });
+      });
+      res.type = 'success';
+
+      return res;
+    }).catch(function (err) {
+      err.type = 'error';
+      console.log(err);
+      dispatch(authStateFailed());
+      return err;
+    });
+  };
+}
+
+function getUserDetail(id, auth) {
+  return function (dispatch) {
+    dispatch(authStateBusy());
+    return _authApi2.default.getUserDetail(id, auth).then(function (res) {
+      res.type = 'success';
+      console.log(res);
+      dispatch(authStateSuccess(res));
+      return res;
+    }).catch(function (err) {
+      err.type = 'error';
+      console.log(err);
+      dispatch(authStateFailed());
+      return err;
+    });
+  };
+}
+
+function signup(name, email, password, phone) {
+  return function (dispatch) {
+    dispatch(authStateBusy());
+    return _authApi2.default.signup(name, email, password, phone).then(function (res) {
+      res.type = 'success';
+      console.log(res);
+      dispatch(authStateSuccess(res));
+      return res;
+    }).catch(function (err) {
+      err.type = 'error';
+      console.log(err);
+      dispatch(authStateFailed());
+      return err;
+    });
+  };
+}
+
+function checkAuth(cb) {
+  return function (dispatch) {
+    dispatch(authStateBusy());
+    _reactNative.AsyncStorage.getItem('userToken', function (err, result) {
+      if (result) {
+        var data = JSON.parse(result);
+        dispatch(authStateSuccess(data));
+        cb(data);
+      } else {
+        dispatch(authStateFailed());
+        cb(false);
+      }
+    });
+  };
+}
+
+function logout(cb) {
+  return function (dispatch) {
+    dispatch(authStateBusy());
+    _reactNative.AsyncStorage.removeItem('userToken', function (err, res) {
+      dispatch(authStateFailed());
+      cb(true);
+    });
+  };
+}
+
+function authStateBusy() {
+  return {
+    type: TYPES.AUTH_STATE_BUSY
+  };
+}
+
+function authStateFailed() {
+  return {
+    type: TYPES.AUTH_STATE_FAILED
+  };
+}
+
+function authStateSuccess(data) {
+  return {
+    type: TYPES.AUTH_STATE_SUCCESS,
+    data: data
+  };
+}

@@ -1,0 +1,19 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = CheckBox;
+
+var INITIAL_STATE = { loading: false };
+
+function CheckBox() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : INITIAL_STATE;
+  var action = arguments[1];
+
+  switch (action.type) {
+    case 'none':
+      return { loading: true };
+      break;
+    default:
+      return { loading: false };
+  }
+}

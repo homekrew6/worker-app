@@ -1,0 +1,243 @@
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/worker-app/node_modules/react-native-image-slider/ImageSlider.js';
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var reactNativePackage = require('react-native/package.json');
+var splitVersion = reactNativePackage.version.split('.');
+var majorVersion = +splitVersion[0];
+var minorVersion = +splitVersion[1];
+
+var styles = _reactNative.StyleSheet.create({
+    container: {
+        flexDirection: 'row',
+        backgroundColor: '#222'
+    },
+    buttons: {
+        height: 15,
+        marginTop: -15,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row'
+    },
+    button: {
+        margin: 3,
+        width: 8,
+        height: 8,
+        borderRadius: 8 / 2,
+        backgroundColor: '#ccc',
+        opacity: 0.9
+    },
+    buttonSelected: {
+        opacity: 1,
+        backgroundColor: '#fff'
+    }
+});
+
+var ImageSlider = function (_Component) {
+    babelHelpers.inherits(ImageSlider, _Component);
+
+    function ImageSlider(props) {
+        babelHelpers.classCallCheck(this, ImageSlider);
+
+        var _this = babelHelpers.possibleConstructorReturn(this, (ImageSlider.__proto__ || Object.getPrototypeOf(ImageSlider)).call(this, props));
+
+        _this.state = {
+            position: 0,
+            height: _reactNative.Dimensions.get('window').width * (4 / 9),
+            width: _reactNative.Dimensions.get('window').width,
+            scrolling: false
+        };
+        return _this;
+    }
+
+    babelHelpers.createClass(ImageSlider, [{
+        key: '_onRef',
+        value: function _onRef(ref) {
+            this._ref = ref;
+            if (ref && this.state.position !== this._getPosition()) {
+                this._move(this._getPosition());
+            }
+        }
+    }, {
+        key: '_move',
+        value: function _move(index) {
+            var isUpdating = index !== this._getPosition();
+            var x = this.state.width * index;
+            if (majorVersion === 0 && minorVersion <= 19) {
+                this._ref.scrollTo(0, x, true);
+            } else {
+                this._ref.scrollTo({ x: this.state.width * index, y: 0, animated: true });
+            }
+            this.setState({ position: index });
+            if (isUpdating && this.props.onPositionChanged) {
+                this.props.onPositionChanged(index);
+            }
+        }
+    }, {
+        key: '_getPosition',
+        value: function _getPosition() {
+            if (typeof this.props.position === 'number') {
+                return this.props.position;
+            }
+            return this.state.position;
+        }
+    }, {
+        key: 'componentDidUpdate',
+        value: function componentDidUpdate(prevProps) {
+            if (prevProps.position !== this.props.position) {
+                this._move(this.props.position);
+            }
+        }
+    }, {
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            var _this2 = this;
+
+            var width = this.state.width;
+
+            var release = function release(e, gestureState) {
+                var width = _this2.state.width;
+                var relativeDistance = gestureState.dx / width;
+                var vx = gestureState.vx;
+                var change = 0;
+
+                if (relativeDistance < -0.5 || relativeDistance < 0 && vx <= 0.5) {
+                    change = 1;
+                } else if (relativeDistance > 0.5 || relativeDistance > 0 && vx >= 0.5) {
+                    change = -1;
+                }
+                var position = _this2._getPosition();
+                if (position === 0 && change === -1) {
+                    change = 0;
+                } else if (position + change >= _this2.props.images.length) {
+                    change = _this2.props.images.length - (position + change);
+                }
+                _this2._move(position + change);
+                return true;
+            };
+
+            this._panResponder = _reactNative.PanResponder.create({
+                onPanResponderRelease: release
+            });
+
+            this._interval = setInterval(function () {
+                var newWidth = _reactNative.Dimensions.get('window').width;
+                if (newWidth !== _this2.state.width) {
+                    _this2.setState({ width: newWidth });
+                }
+            }, 16);
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            clearInterval(this._interval);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this3 = this;
+
+            var width = this.state.width;
+            var height = this.props.height || this.state.height;
+            var position = this._getPosition();
+            return _react2.default.createElement(
+                _reactNative.View,
+                {
+                    __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 137
+                    }
+                },
+                _react2.default.createElement(
+                    _reactNative.ScrollView,
+                    babelHelpers.extends({
+                        ref: function ref(_ref) {
+                            return _this3._onRef(_ref);
+                        },
+                        decelerationRate: 0.99,
+                        horizontal: true,
+                        showsHorizontalScrollIndicator: false
+                    }, this._panResponder.panHandlers, {
+                        style: [styles.container, this.props.style, { height: height }], __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 138
+                        }
+                    }),
+                    this.props.images.map(function (image, index) {
+                        var imageObject = typeof image === 'string' ? { uri: image } : image;
+                        var imageComponent = _react2.default.createElement(_reactNative.Image, {
+                            key: index,
+                            source: imageObject,
+                            style: { height: height, width: width },
+                            __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 147
+                            }
+                        });
+                        if (_this3.props.onPress) {
+                            return _react2.default.createElement(
+                                _reactNative.TouchableOpacity,
+                                {
+                                    key: index,
+                                    style: { height: height, width: width },
+                                    onPress: function onPress() {
+                                        return _this3.props.onPress({ image: image, index: index });
+                                    },
+                                    delayPressIn: 200,
+                                    __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 154
+                                    }
+                                },
+                                imageComponent
+                            );
+                        } else {
+                            return imageComponent;
+                        }
+                    })
+                ),
+                _react2.default.createElement(
+                    _reactNative.View,
+                    { style: styles.buttons, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 168
+                        }
+                    },
+                    this.props.images.map(function (image, index) {
+                        return _react2.default.createElement(
+                            _reactNative.TouchableHighlight,
+                            {
+                                key: index,
+                                underlayColor: '#ccc',
+                                onPress: function onPress() {
+                                    return _this3._move(index);
+                                },
+                                style: [styles.button, position === index && styles.buttonSelected], __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 170
+                                }
+                            },
+                            _react2.default.createElement(_reactNative.View, {
+                                __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 177
+                                }
+                            })
+                        );
+                    })
+                )
+            );
+        }
+    }]);
+    return ImageSlider;
+}(_react.Component);
+
+exports.default = ImageSlider;

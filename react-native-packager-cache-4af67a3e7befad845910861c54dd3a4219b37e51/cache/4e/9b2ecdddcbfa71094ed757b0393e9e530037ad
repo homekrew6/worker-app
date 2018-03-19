@@ -1,0 +1,19 @@
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	auth: {
+		loggedIn: false,
+		busy: false,
+		data: ''
+	},
+	location: {
+		busy: false,
+		data: '',
+		selectedData: ''
+	},
+	payment: {
+		busy: false,
+		data: ''
+	}
+};

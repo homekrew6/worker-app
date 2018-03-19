@@ -1,0 +1,190 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/worker-app/node_modules/react-native-loading-spinner-overlay/src/index.js';
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _reactNative = require('react-native');
+
+var styles = _reactNative.StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0
+  },
+  background: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  textContainer: {
+    flex: 1,
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute'
+  },
+  textContent: {
+    top: 80,
+    height: 50,
+    fontSize: 20,
+    fontWeight: 'bold'
+  }
+});
+
+var ANIMATION = ['none', 'slide', 'fade'];
+var SIZES = ['small', 'normal', 'large'];
+
+var Spinner = function (_React$Component) {
+  babelHelpers.inherits(Spinner, _React$Component);
+
+  function Spinner(props) {
+    babelHelpers.classCallCheck(this, Spinner);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (Spinner.__proto__ || Object.getPrototypeOf(Spinner)).call(this, props));
+
+    _this.state = { visible: _this.props.visible, textContent: _this.props.textContent };
+    return _this;
+  }
+
+  babelHelpers.createClass(Spinner, [{
+    key: 'close',
+    value: function close() {
+      this.setState({ visible: false });
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      var visible = nextProps.visible,
+          textContent = nextProps.textContent;
+
+      this.setState({ visible: visible, textContent: textContent });
+    }
+  }, {
+    key: '_handleOnRequestClose',
+    value: function _handleOnRequestClose() {
+      if (this.props.cancelable) {
+        this.close();
+      }
+    }
+  }, {
+    key: '_renderDefaultContent',
+    value: function _renderDefaultContent() {
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: styles.background, __source: {
+            fileName: _jsxFileName,
+            lineNumber: 112
+          }
+        },
+        _react2.default.createElement(_reactNative.ActivityIndicator, {
+          color: this.props.color,
+          size: this.props.size,
+          style: { flex: 1 },
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 113
+          }
+        }),
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: styles.textContainer, __source: {
+              fileName: _jsxFileName,
+              lineNumber: 118
+            }
+          },
+          _react2.default.createElement(
+            _reactNative.Text,
+            { style: [styles.textContent, this.props.textStyle], __source: {
+                fileName: _jsxFileName,
+                lineNumber: 119
+              }
+            },
+            this.state.textContent
+          )
+        )
+      );
+    }
+  }, {
+    key: '_renderSpinner',
+    value: function _renderSpinner() {
+      var _this2 = this;
+
+      var visible = this.state.visible;
+
+
+      if (!visible) return null;
+
+      var spinner = _react2.default.createElement(
+        _reactNative.View,
+        { style: [styles.container, { backgroundColor: this.props.overlayColor }], key: 'spinner_' + Date.now(), __source: {
+            fileName: _jsxFileName,
+            lineNumber: 131
+          }
+        },
+        this.props.children ? this.props.children : this._renderDefaultContent()
+      );
+
+      return _react2.default.createElement(
+        _reactNative.Modal,
+        {
+          animationType: this.props.animation,
+          onRequestClose: function onRequestClose() {
+            return _this2._handleOnRequestClose();
+          },
+          supportedOrientations: ['landscape', 'portrait'],
+          transparent: true,
+          visible: visible, __source: {
+            fileName: _jsxFileName,
+            lineNumber: 140
+          }
+        },
+        spinner
+      );
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return this._renderSpinner();
+    }
+  }]);
+  return Spinner;
+}(_react2.default.Component);
+
+Spinner.propTypes = {
+  visible: _propTypes2.default.bool,
+  cancelable: _propTypes2.default.bool,
+  textContent: _propTypes2.default.string,
+  animation: _propTypes2.default.oneOf(ANIMATION),
+  color: _propTypes2.default.string,
+  size: _propTypes2.default.oneOf(SIZES),
+  overlayColor: _propTypes2.default.string
+};
+Spinner.defaultProps = {
+  visible: false,
+  cancelable: false,
+  textContent: '',
+  animation: 'none',
+  color: 'white',
+  size: 'large',
+  overlayColor: 'rgba(0, 0, 0, 0.25)'
+};
+exports.default = Spinner;

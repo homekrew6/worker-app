@@ -1,0 +1,38 @@
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/worker-app/index.android.js';
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _configureStore = require('./js/store/configureStore');
+
+var _configureStore2 = babelHelpers.interopRequireDefault(_configureStore);
+
+var _App = require('./App');
+
+var _App2 = babelHelpers.interopRequireDefault(_App);
+
+var store = (0, _configureStore2.default)();
+var ReduxApp = function ReduxApp() {
+  return _react2.default.createElement(
+    _reactRedux.Provider,
+    { store: store, __source: {
+        fileName: _jsxFileName,
+        lineNumber: 8
+      }
+    },
+    _react2.default.createElement(_App2.default, {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 9
+      }
+    })
+  );
+};
+_reactNative.AppRegistry.registerComponent('KrewWorkerApp', function () {
+  return ReduxApp;
+});

@@ -1,0 +1,90 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/worker-app/js/components/intro/DefaultSlide.js';
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _logo = require('../../../img/logo.png');
+
+var _logo2 = babelHelpers.interopRequireDefault(_logo);
+
+var deviceHeight = _reactNative.Dimensions.get("window").height;
+var deviceWidth = _reactNative.Dimensions.get("window").width;
+var imageht = deviceHeight - 88;
+
+var DefaultSlide = function (_React$PureComponent) {
+  babelHelpers.inherits(DefaultSlide, _React$PureComponent);
+
+  function DefaultSlide(props) {
+    babelHelpers.classCallCheck(this, DefaultSlide);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (DefaultSlide.__proto__ || Object.getPrototypeOf(DefaultSlide)).call(this, props));
+
+    console.log('logo');
+    return _this;
+  }
+
+  babelHelpers.createClass(DefaultSlide, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        _reactNative.Image,
+        { source: { uri: this.props.image }, style: styles.imgt, __source: {
+            fileName: _jsxFileName,
+            lineNumber: 17
+          }
+        },
+        _react2.default.createElement(_reactNative.Image, { source: _logo2.default, style: { height: 120, width: 91, marginBottom: 30 }, __source: {
+            fileName: _jsxFileName,
+            lineNumber: 18
+          }
+        }),
+        _react2.default.createElement(
+          _reactNative.Text,
+          { style: styles.title, __source: {
+              fileName: _jsxFileName,
+              lineNumber: 19
+            }
+          },
+          this.props.title
+        ),
+        _react2.default.createElement(
+          _reactNative.Text,
+          { style: styles.text, __source: {
+              fileName: _jsxFileName,
+              lineNumber: 20
+            }
+          },
+          this.props.text
+        )
+      );
+    }
+  }]);
+  return DefaultSlide;
+}(_react2.default.PureComponent);
+
+exports.default = DefaultSlide;
+
+
+var styles = _reactNative.StyleSheet.create({
+
+  mainContent: { justifyContent: 'space-around', alignItems: 'center', backgroundColor: 'transparent' },
+
+  text: { color: '#1e3768', fontSize: 14, textAlign: 'center', fontWeight: '300', paddingHorizontal: 16 },
+
+  title: { fontSize: 22, color: '#1e3768', fontWeight: '300', paddingHorizontal: 16, marginBottom: 25, textAlign: 'center' },
+  imgt: {
+    paddingTop: 40,
+    width: deviceWidth,
+    height: imageht,
+    display: 'flex',
+    alignItems: 'center',
+    position: 'relative',
+    zIndex: 999
+  }
+});

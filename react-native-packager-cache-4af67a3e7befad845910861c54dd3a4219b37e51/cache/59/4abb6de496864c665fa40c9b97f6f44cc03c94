@@ -1,0 +1,249 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/worker-app/js/components/intro/AppIntroSlider.js';
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _DefaultSlide = require('./DefaultSlide');
+
+var _DefaultSlide2 = babelHelpers.interopRequireDefault(_DefaultSlide);
+
+var _Dimensions$get = _reactNative.Dimensions.get('window'),
+    width = _Dimensions$get.width,
+    height = _Dimensions$get.height;
+
+var isIphoneX = _reactNative.Platform.OS === 'ios' && !_reactNative.Platform.isPad && !_reactNative.Platform.isTVOS && (height === 812 || width === 812);
+
+var AppIntroSlider = function (_React$Component) {
+  babelHelpers.inherits(AppIntroSlider, _React$Component);
+
+  function AppIntroSlider() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    babelHelpers.classCallCheck(this, AppIntroSlider);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = babelHelpers.possibleConstructorReturn(this, (_ref = AppIntroSlider.__proto__ || Object.getPrototypeOf(AppIntroSlider)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+      width: width,
+      height: height,
+      activeIndex: 0
+    }, _this.goToSlide = function (pageNum) {
+      _this.setState({ activeIndex: pageNum });
+      _this.flatList.scrollToOffset({ offset: pageNum * _this.state.width });
+    }, _this._onNextPress = function () {
+      _this.goToSlide(_this.state.activeIndex + 1);
+      _this.props.onSlideChange && _this.props.onSlideChange(_this.state.activeIndex + 1, _this.state.activeIndex);
+    }, _this._onPrevPress = function () {
+      _this.goToSlide(_this.state.activeIndex - 1);
+      _this.props.onSlideChange && _this.props.onSlideChange(_this.state.activeIndex - 1, _this.state.activeIndex);
+    }, _this._renderItem = function (item) {
+      var _this$state = _this.state,
+          width = _this$state.width,
+          height = _this$state.height;
+
+      var bottomSpacer = (_this.props.bottomButton ? (_this.props.showSkipButton ? 44 : 0) + 44 : 0) + (isIphoneX ? 34 : 0) + 64;
+      var topSpacer = (isIphoneX ? 44 : 0) + (_reactNative.Platform.OS === 'ios' ? 20 : _reactNative.StatusBar.currentHeight);
+      var props = babelHelpers.extends({}, item.item, { bottomSpacer: bottomSpacer, topSpacer: topSpacer, width: width, height: height });
+
+      return _this.props.renderItem ? _this.props.renderItem(props) : _react2.default.createElement(_DefaultSlide2.default, babelHelpers.extends({}, props, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 49
+        }
+      }));
+    }, _this._renderButton = function (name, onPress) {
+      var show = name === 'Skip' || name === 'Prev' ? _this.props['show' + name + 'Button'] : !_this.props['hide' + name + 'Button'];
+      var content = _this.props['render' + name + 'Button'] ? _this.props['render' + name + 'Button']() : _this._renderDefaultButton(name);
+      return show && _this._renderOuterButton(content, name, onPress);
+    }, _this._renderDefaultButton = function (name) {
+      var content = _react2.default.createElement(
+        _reactNative.Text,
+        { style: styles.buttonText, __source: {
+            fileName: _jsxFileName,
+            lineNumber: 59
+          }
+        },
+        _this.props[name.toLowerCase() + 'Label']
+      );
+      if (_this.props.bottomButton) {
+        content = _react2.default.createElement(
+          _reactNative.View,
+          { style: [styles.bottomButton, (name === 'Skip' || name === 'Prev') && { backgroundColor: 'transparent' }], __source: {
+              fileName: _jsxFileName,
+              lineNumber: 61
+            }
+          },
+          content
+        );
+      }
+      return content;
+    }, _this._renderOuterButton = function (content, name, onPress) {
+      var style = name === 'Skip' || name === 'Prev' ? styles.leftButtonContainer : styles.rightButtonContainer;
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: _this.props.bottomButton ? styles.bottomButtonContainer : style, __source: {
+            fileName: _jsxFileName,
+            lineNumber: 69
+          }
+        },
+        _react2.default.createElement(
+          _reactNative.TouchableOpacity,
+          { onPress: onPress, style: _this.props.bottomButton && styles.flexOne, __source: {
+              fileName: _jsxFileName,
+              lineNumber: 70
+            }
+          },
+          content
+        )
+      );
+    }, _this._renderNextButton = function () {
+      return _this._renderButton('Next', _this._onNextPress);
+    }, _this._renderPrevButton = function () {
+      return _this._renderButton('Prev', _this._onPrevPress);
+    }, _this._renderDoneButton = function () {
+      return _this._renderButton('Done', _this.props.onDone && _this.props.onDone);
+    }, _this._renderSkipButton = function () {
+      return _this._renderButton('Skip', _this.props.onSkip && _this.props.onSkip);
+    }, _this._renderPagination = function () {
+      var isLastSlide = _this.state.activeIndex === _this.props.slides.length - 1;
+      var isFirstSlide = _this.state.activeIndex === 0;
+
+      var skipBtn = !isFirstSlide && _this._renderPrevButton() || !isLastSlide && _this._renderSkipButton();
+      var btn = isLastSlide ? _this._renderDoneButton() : _this._renderNextButton();
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: styles.paginationContainer, __source: {
+            fileName: _jsxFileName,
+            lineNumber: 93
+          }
+        },
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: styles.paginationDots, __source: {
+              fileName: _jsxFileName,
+              lineNumber: 94
+            }
+          },
+          !_this.props.bottomButton && skipBtn,
+          _this.props.slides.length > 1 && _this.props.slides.map(function (_, i) {
+            return _react2.default.createElement(_reactNative.View, {
+              key: i,
+              style: [{ backgroundColor: i === _this.state.activeIndex ? _this.props.activeDotColor : _this.props.dotColor }, styles.dot],
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 97
+              }
+            });
+          }),
+          !_this.props.bottomButton && btn
+        ),
+        _this.props.bottomButton && btn,
+        _this.props.bottomButton && skipBtn
+      );
+    }, _this._onMomentumScrollEnd = function (e) {
+      var offset = e.nativeEvent.contentOffset.x;
+
+      var newIndex = Math.round(offset / _this.state.width);
+      if (newIndex === _this.state.activeIndex) {
+        return;
+      }
+      var lastIndex = _this.state.activeIndex;
+      _this.setState({ activeIndex: newIndex });
+      _this.props.onSlideChange && _this.props.onSlideChange(newIndex, lastIndex);
+    }, _this._onLayout = function () {
+      var _Dimensions$get2 = _reactNative.Dimensions.get('window'),
+          width = _Dimensions$get2.width,
+          height = _Dimensions$get2.height;
+
+      if (width !== _this.state.width || height !== _this.state.height) {
+        _this.setState({ width: width, height: height });
+
+        var func = function func() {
+          _this.flatList.scrollToOffset({ offset: _this.state.activeIndex * width, animated: false });
+        };
+        _reactNative.Platform.OS === 'android' ? setTimeout(func, 0) : func();
+      }
+    }, _temp), babelHelpers.possibleConstructorReturn(_this, _ret);
+  }
+
+  babelHelpers.createClass(AppIntroSlider, [{
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: styles.flexOne, __source: {
+            fileName: _jsxFileName,
+            lineNumber: 142
+          }
+        },
+        _react2.default.createElement(_reactNative.FlatList, {
+          ref: function ref(_ref2) {
+            return _this2.flatList = _ref2;
+          },
+          data: this.props.slides,
+          horizontal: true,
+          pagingEnabled: true,
+          showsHorizontalScrollIndicator: false,
+          bounces: false,
+          style: styles.flexOne,
+          renderItem: this._renderItem,
+          onMomentumScrollEnd: this._onMomentumScrollEnd,
+          extraData: this.state.width,
+          onLayout: this._onLayout,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 143
+          }
+        }),
+        this._renderPagination()
+      );
+    }
+  }]);
+  return AppIntroSlider;
+}(_react2.default.Component);
+
+AppIntroSlider.defaultProps = {
+  activeDotColor: 'rgba(255, 255, 255, .9)',
+  dotColor: 'rgba(0, 0, 0, .2)',
+  skipLabel: 'Skip',
+  doneLabel: 'Done',
+  nextLabel: 'Next',
+  prevLabel: 'Back'
+};
+exports.default = AppIntroSlider;
+
+
+var styles = _reactNative.StyleSheet.create({
+
+  flexOne: { flex: 1 },
+
+  paginationContainer: { position: 'absolute', bottom: 16 + (isIphoneX ? 34 : 0), left: 0, right: 0 },
+
+  paginationDots: { height: 16, margin: 16, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' },
+
+  dot: { width: 10, height: 10, borderRadius: 5, marginHorizontal: 4 },
+
+  leftButtonContainer: { position: 'absolute', left: 0 },
+
+  rightButtonContainer: { position: 'absolute', right: 0 },
+
+  bottomButtonContainer: { height: 44, marginHorizontal: 16 },
+
+  bottomButton: { flex: 1, backgroundColor: 'rgba(0, 0, 0, .3)', alignItems: 'center', justifyContent: 'center' },
+
+  buttonText: { backgroundColor: 'transparent', color: 'white', fontSize: 18, padding: 16 }
+
+});

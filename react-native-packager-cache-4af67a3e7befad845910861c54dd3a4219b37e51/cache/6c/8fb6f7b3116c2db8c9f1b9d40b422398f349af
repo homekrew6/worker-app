@@ -1,0 +1,89 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/worker-app/node_modules/react-navigation/src/views/withNavigationFocus.js';
+exports.default = withNavigationFocus;
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _hoistNonReactStatics = require('hoist-non-react-statics');
+
+var _hoistNonReactStatics2 = babelHelpers.interopRequireDefault(_hoistNonReactStatics);
+
+var _invariant = require('../utils/invariant');
+
+var _invariant2 = babelHelpers.interopRequireDefault(_invariant);
+
+function withNavigationFocus(Component) {
+  var ComponentWithNavigationFocus = function (_React$Component) {
+    babelHelpers.inherits(ComponentWithNavigationFocus, _React$Component);
+
+    function ComponentWithNavigationFocus() {
+      var _ref;
+
+      var _temp, _this, _ret;
+
+      babelHelpers.classCallCheck(this, ComponentWithNavigationFocus);
+
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      return _ret = (_temp = (_this = babelHelpers.possibleConstructorReturn(this, (_ref = ComponentWithNavigationFocus.__proto__ || Object.getPrototypeOf(ComponentWithNavigationFocus)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+        isFocused: false
+      }, _this.getNavigation = function () {
+        var navigation = _this.props.navigation || _this.context.navigation;
+        (0, _invariant2.default)(!!navigation, 'withNavigationFocus can only be used on a view hierarchy of a navigator. The wrapped component is unable to get access to navigation from props or context.');
+        return navigation;
+      }, _temp), babelHelpers.possibleConstructorReturn(_this, _ret);
+    }
+
+    babelHelpers.createClass(ComponentWithNavigationFocus, [{
+      key: 'componentDidMount',
+      value: function componentDidMount() {
+        var _this2 = this;
+
+        var navigation = this.getNavigation();
+        this.subscriptions = [navigation.addListener('didFocus', function () {
+          return _this2.setState({ isFocused: true });
+        }), navigation.addListener('willBlur', function () {
+          return _this2.setState({ isFocused: false });
+        })];
+      }
+    }, {
+      key: 'componentWillUnmount',
+      value: function componentWillUnmount() {
+        this.subscriptions.forEach(function (sub) {
+          return sub.remove();
+        });
+      }
+    }, {
+      key: 'render',
+      value: function render() {
+        return _react2.default.createElement(Component, babelHelpers.extends({}, this.props, {
+          isFocused: this.state.isFocused,
+          ref: this.props.onRef,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 46
+          }
+        }));
+      }
+    }]);
+    return ComponentWithNavigationFocus;
+  }(_react2.default.Component);
+
+  ComponentWithNavigationFocus.displayName = 'withNavigationFocus(' + (Component.displayName || Component.name) + ')';
+  ComponentWithNavigationFocus.contextTypes = {
+    navigation: _propTypes2.default.object.isRequired
+  };
+
+
+  return (0, _hoistNonReactStatics2.default)(ComponentWithNavigationFocus, Component);
+}

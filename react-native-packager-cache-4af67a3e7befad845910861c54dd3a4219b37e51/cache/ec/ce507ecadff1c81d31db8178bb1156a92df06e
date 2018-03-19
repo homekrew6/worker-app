@@ -1,0 +1,140 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _config = require('../config');
+
+var _config2 = babelHelpers.interopRequireDefault(_config);
+
+var headers = {
+  'Accept': 'application/json',
+  'Content-Type': 'application/json'
+};
+
+var resolver = function resolver() {
+  return _reactNative.AsyncStorage.getItem('userData', function (err, result) {
+
+    if (result) {
+      result = JSON.parse(result);
+    }
+  });
+};
+
+var api = function () {
+  function api() {
+    babelHelpers.classCallCheck(this, api);
+  }
+
+  babelHelpers.createClass(api, null, [{
+    key: 'post',
+    value: function post(endpoint, data) {
+      console.log(_config2.default.base_api + endpoint);
+      console.log(data);
+      return new Promise(function (resolve, reject) {
+        fetch(_config2.default.base_api + endpoint, {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify(data)
+        }).then(function (response) {
+          console.log(response);
+          if (response.status === 200) {
+            resolve(response.json());
+          } else {
+            if (response.status === 204) {
+              console.log('204');
+              resolve();
+            } else {
+              console.log('500');
+              reject({ "err": "401 found" });
+            }
+          }
+        }).catch(function (error) {
+          console.log(error);
+        });
+      });
+    }
+  }, {
+    key: 'put',
+    value: function put(endpoint, data) {
+      console.log(_config2.default.base_api + endpoint);
+      console.log(data);
+      return new Promise(function (resolve, reject) {
+        fetch(_config2.default.base_api + endpoint, {
+          method: 'PUT',
+          headers: headers,
+          body: JSON.stringify(data)
+        }).then(function (response) {
+          console.log(response);
+          if (response.status === 200) {
+            resolve(response.json());
+          } else {
+            if (response.status === 204) {
+              console.log('204');
+              resolve();
+            } else {
+              console.log('500');
+              reject({ "err": "401 found" });
+            }
+          }
+        }).catch(function (error) {
+          return error;
+        });
+      });
+    }
+  }, {
+    key: 'get',
+    value: function get(endpoint) {
+      return new Promise(function (resolve, reject) {
+        console.log(_config2.default.base_api + endpoint);
+
+        fetch(_config2.default.base_api + endpoint, {
+          method: 'GET',
+          headers: headers
+        }).then(function (response) {
+          if (response.status === 200) {
+            resolve(response.json());
+          } else {
+            if (response.status === 204) {
+              resolve({ "msg": "success" });
+            } else {
+              reject({ "err": "401 found" });
+            }
+          }
+        }).catch(function (error) {
+          return error;
+        });
+      });
+    }
+  }, {
+    key: 'delete',
+    value: function _delete(endpoint) {
+      console.log(_config2.default.base_api + endpoint);
+      return new Promise(function (resolve, reject) {
+        fetch(_config2.default.base_api + endpoint, {
+          method: 'DELETE',
+          headers: headers
+        }).then(function (response) {
+          console.log(response);
+          if (response.status === 200) {
+            resolve(response.json());
+          } else {
+            if (response.status === 204) {
+              console.log('204');
+              resolve();
+            } else {
+              console.log('500');
+              reject({ "err": "401 found" });
+            }
+          }
+        }).catch(function (error) {
+          return error;
+        });
+      });
+    }
+  }]);
+  return api;
+}();
+
+exports.default = api;
