@@ -144,7 +144,8 @@ export default{
     editprofileWarp:{ 
         width: 100, 
         paddingBottom: 0, 
-        marginBottom: 0, 
+        marginBottom: 0,
+        flexDirection: 'row'
     },
     editprofileInputwrap:{
         flex: 1
@@ -177,5 +178,9 @@ export default{
     paddingBottom: 20, 
     marginTop: 15 
     },
+
+
+    starRed:{ color: 'red', fontSize: 12 },
+    starRedSkill:{ color: 'red', fontSize: 10 }
 
 };
