@@ -1,0 +1,114 @@
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var _jsxFileName = "/home/nits-58/Desktop/project/anup/loopback/worker-app/js/App.js";
+
+var _react = require("react");
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require("react-native");
+
+var _nativeBase = require("native-base");
+
+var _reactNavigation = require("react-navigation");
+
+var _Drawer = require("./Drawer");
+
+var _Drawer2 = babelHelpers.interopRequireDefault(_Drawer);
+
+var _intro = require("./components/intro");
+
+var _intro2 = babelHelpers.interopRequireDefault(_intro);
+
+var _demo = require("./components/intro/demo");
+
+var _demo2 = babelHelpers.interopRequireDefault(_demo);
+
+var _signup = require("./components/accounts/signup");
+
+var _signup2 = babelHelpers.interopRequireDefault(_signup);
+
+var _login = require("./components/accounts/login");
+
+var _login2 = babelHelpers.interopRequireDefault(_login);
+
+var _forget_password = require("./components/accounts/forget_password");
+
+var _forget_password2 = babelHelpers.interopRequireDefault(_forget_password);
+
+var _reset_password = require("./components/accounts/reset_password");
+
+var _reset_password2 = babelHelpers.interopRequireDefault(_reset_password);
+
+var _menu = require("./components/accounts/menu");
+
+var _menu2 = babelHelpers.interopRequireDefault(_menu);
+
+var _edit_profile = require("./components/accounts/edit_profile");
+
+var _edit_profile2 = babelHelpers.interopRequireDefault(_edit_profile);
+
+var _myLocation = require("./components/location/myLocation");
+
+var _myLocation2 = babelHelpers.interopRequireDefault(_myLocation);
+
+var _selectLocation = require("./components/location/selectLocation");
+
+var _selectLocation2 = babelHelpers.interopRequireDefault(_selectLocation);
+
+var _myTiming = require("./components/location/myTiming");
+
+var _myTiming2 = babelHelpers.interopRequireDefault(_myTiming);
+
+var _unavailableDate = require("./components/location/unavailableDate");
+
+var _unavailableDate2 = babelHelpers.interopRequireDefault(_unavailableDate);
+
+var _WeekCalendar = require("./components/calendar/WeekCalendar");
+
+var _WeekCalendar2 = babelHelpers.interopRequireDefault(_WeekCalendar);
+
+var _paymentList = require("./components/payment/payment-list");
+
+var _paymentList2 = babelHelpers.interopRequireDefault(_paymentList);
+
+var AppNavigator = (0, _reactNavigation.StackNavigator)({
+    Drawer: { screen: _Drawer2.default },
+    Intro: { screen: _intro2.default },
+    Demo: { screen: _demo2.default },
+    Signup: { screen: _signup2.default },
+    Login: { screen: _login2.default },
+    ForgotPassword: { screen: _forget_password2.default },
+    ResetPassword: { screen: _reset_password2.default },
+    Menu: { screen: _menu2.default },
+    EditProfile: { screen: _edit_profile2.default },
+    MyLocation: { screen: _myLocation2.default },
+    MyTiming: { screen: _myTiming2.default },
+    SelectLocation: { screen: _selectLocation2.default },
+    UnavailableDate: { screen: _unavailableDate2.default },
+    WeekCalendar: { screen: _WeekCalendar2.default },
+    myTiming: { screen: _myTiming2.default },
+    MyPaymentList: { screen: _paymentList2.default }
+}, {
+    initialRouteName: "Drawer",
+    headerMode: "none"
+});
+
+exports.default = function () {
+    return _react2.default.createElement(
+        _nativeBase.Root,
+        {
+            __source: {
+                fileName: _jsxFileName,
+                lineNumber: 52
+            }
+        },
+        _react2.default.createElement(AppNavigator, {
+            __source: {
+                fileName: _jsxFileName,
+                lineNumber: 53
+            }
+        })
+    );
+};

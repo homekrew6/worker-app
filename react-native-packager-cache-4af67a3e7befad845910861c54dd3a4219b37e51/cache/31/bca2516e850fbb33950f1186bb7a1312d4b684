@@ -1,0 +1,264 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/worker-app/node_modules/react-native-calendars/src/agenda/reservation-list/index.js';
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reservation = require('./reservation');
+
+var _reservation2 = babelHelpers.interopRequireDefault(_reservation);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _xdate = require('xdate');
+
+var _xdate2 = babelHelpers.interopRequireDefault(_xdate);
+
+var _dateutils = require('../../dateutils');
+
+var _dateutils2 = babelHelpers.interopRequireDefault(_dateutils);
+
+var _style = require('./style');
+
+var _style2 = babelHelpers.interopRequireDefault(_style);
+
+var ReactComp = function (_Component) {
+  babelHelpers.inherits(ReactComp, _Component);
+
+  function ReactComp(props) {
+    babelHelpers.classCallCheck(this, ReactComp);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (ReactComp.__proto__ || Object.getPrototypeOf(ReactComp)).call(this, props));
+
+    _this.styles = (0, _style2.default)(props.theme);
+    _this.state = {
+      reservations: []
+    };
+    _this.heights = [];
+    _this.selectedDay = _this.props.selectedDay;
+    _this.scrollOver = true;
+    return _this;
+  }
+
+  babelHelpers.createClass(ReactComp, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      this.updateDataSource(this.getReservations(this.props).reservations);
+    }
+  }, {
+    key: 'updateDataSource',
+    value: function updateDataSource(reservations) {
+      this.setState({
+        reservations: reservations
+      });
+    }
+  }, {
+    key: 'updateReservations',
+    value: function updateReservations(props) {
+      var reservations = this.getReservations(props);
+      if (this.list && !_dateutils2.default.sameDate(props.selectedDay, this.selectedDay)) {
+        var scrollPosition = 0;
+        for (var i = 0; i < reservations.scrollPosition; i++) {
+          scrollPosition += this.heights[i] || 0;
+        }
+        this.scrollOver = false;
+        this.list.scrollToOffset({ offset: scrollPosition, animated: true });
+      }
+      this.selectedDay = props.selectedDay;
+      this.updateDataSource(reservations.reservations);
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(props) {
+      var _this2 = this;
+
+      if (!_dateutils2.default.sameDate(props.topDay, this.props.topDay)) {
+        this.setState({
+          reservations: []
+        }, function () {
+          _this2.updateReservations(props);
+        });
+      } else {
+        this.updateReservations(props);
+      }
+    }
+  }, {
+    key: 'onScroll',
+    value: function onScroll(event) {
+      var yOffset = event.nativeEvent.contentOffset.y;
+      this.props.onScroll(yOffset);
+      var topRowOffset = 0;
+      var topRow = void 0;
+      for (topRow = 0; topRow < this.heights.length; topRow++) {
+        if (topRowOffset + this.heights[topRow] / 2 >= yOffset) {
+          break;
+        }
+        topRowOffset += this.heights[topRow];
+      }
+      var row = this.state.reservations[topRow];
+      if (!row) return;
+      var day = row.day;
+      var sameDate = _dateutils2.default.sameDate(day, this.selectedDay);
+      if (!sameDate && this.scrollOver) {
+        this.selectedDay = day.clone();
+        this.props.onDayChange(day.clone());
+      }
+    }
+  }, {
+    key: 'onRowLayoutChange',
+    value: function onRowLayoutChange(ind, event) {
+      this.heights[ind] = event.nativeEvent.layout.height;
+    }
+  }, {
+    key: 'renderRow',
+    value: function renderRow(_ref) {
+      var item = _ref.item,
+          index = _ref.index;
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { onLayout: this.onRowLayoutChange.bind(this, index), __source: {
+            fileName: _jsxFileName,
+            lineNumber: 111
+          }
+        },
+        _react2.default.createElement(_reservation2.default, {
+          item: item,
+          renderItem: this.props.renderItem,
+          renderDay: this.props.renderDay,
+          renderEmptyDate: this.props.renderEmptyDate,
+          theme: this.props.theme,
+          rowHasChanged: this.props.rowHasChanged,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 112
+          }
+        })
+      );
+    }
+  }, {
+    key: 'getReservationsForDay',
+    value: function getReservationsForDay(iterator, props) {
+      var day = iterator.clone();
+      var res = props.reservations[day.toString('yyyy-MM-dd')];
+      if (res && res.length) {
+        return res.map(function (reservation, i) {
+          return {
+            reservation: reservation,
+            date: i ? false : day,
+            day: day
+          };
+        });
+      } else if (res) {
+        return [{
+          date: iterator.clone(),
+          day: day
+        }];
+      } else {
+        return false;
+      }
+    }
+  }, {
+    key: 'onListTouch',
+    value: function onListTouch() {
+      this.scrollOver = true;
+    }
+  }, {
+    key: 'getReservations',
+    value: function getReservations(props) {
+      if (!props.reservations || !props.selectedDay) {
+        return { reservations: [], scrollPosition: 0 };
+      }
+      var reservations = [];
+      if (this.state.reservations && this.state.reservations.length) {
+        var _iterator = this.state.reservations[0].day.clone();
+        while (_iterator.getTime() < props.selectedDay.getTime()) {
+          var res = this.getReservationsForDay(_iterator, props);
+          if (!res) {
+            reservations = [];
+            break;
+          } else {
+            reservations = reservations.concat(res);
+          }
+          _iterator.addDays(1);
+        }
+      }
+      var scrollPosition = reservations.length;
+      var iterator = props.selectedDay.clone();
+      for (var i = 0; i < 31; i++) {
+        var _res = this.getReservationsForDay(iterator, props);
+        if (_res) {
+          reservations = reservations.concat(_res);
+        }
+        iterator.addDays(1);
+      }
+
+      return { reservations: reservations, scrollPosition: scrollPosition };
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this3 = this;
+
+      if (!this.props.reservations || !this.props.reservations[this.props.selectedDay.toString('yyyy-MM-dd')]) {
+        if (this.props.renderEmptyData) {
+          return this.props.renderEmptyData();
+        }
+        return _react2.default.createElement(_reactNative.ActivityIndicator, { style: { marginTop: 80 }, __source: {
+            fileName: _jsxFileName,
+            lineNumber: 185
+          }
+        });
+      }
+      return _react2.default.createElement(_reactNative.FlatList, {
+        ref: function ref(c) {
+          return _this3.list = c;
+        },
+        style: this.props.style,
+        renderItem: this.renderRow.bind(this),
+        data: this.state.reservations,
+        onScroll: this.onScroll.bind(this),
+        showsVerticalScrollIndicator: false,
+        scrollEventThrottle: 200,
+        onMoveShouldSetResponderCapture: function onMoveShouldSetResponderCapture() {
+          _this3.onListTouch();return false;
+        },
+        keyExtractor: function keyExtractor(item, index) {
+          return String(index);
+        },
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 188
+        }
+      });
+    }
+  }]);
+  return ReactComp;
+}(_react.Component);
+
+ReactComp.propTypes = {
+  rowHasChanged: _propTypes2.default.func,
+
+  renderItem: _propTypes2.default.func,
+
+  renderDay: _propTypes2.default.func,
+
+  renderEmptyDate: _propTypes2.default.func,
+
+  onDayChange: _propTypes2.default.func,
+
+  onScroll: _propTypes2.default.func,
+
+  reservations: _propTypes2.default.object,
+
+  selectedDay: _propTypes2.default.instanceOf(_xdate2.default),
+  topDay: _propTypes2.default.instanceOf(_xdate2.default)
+};
+exports.default = ReactComp;

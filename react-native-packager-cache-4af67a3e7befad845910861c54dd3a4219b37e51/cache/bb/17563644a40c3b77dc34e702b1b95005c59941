@@ -1,0 +1,38 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = getStyle;
+
+var _reactNative = require('react-native');
+
+var _style = require('../style');
+
+var defaultStyle = babelHelpers.interopRequireWildcard(_style);
+
+
+var STYLESHEET_ID = 'stylesheet.calendar-list.main';
+
+function getStyle() {
+  var theme = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  var appStyle = babelHelpers.extends({}, defaultStyle, theme);
+  return _reactNative.StyleSheet.create(babelHelpers.extends({
+    container: {
+      backgroundColor: appStyle.calendarBackground
+    },
+    placeholder: {
+      backgroundColor: appStyle.calendarBackground,
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    placeholderText: {
+      fontSize: 30,
+      fontWeight: '200',
+      color: appStyle.dayTextColor
+    },
+    calendar: {
+      paddingLeft: 15,
+      paddingRight: 15
+    }
+  }, theme[STYLESHEET_ID] || {}));
+}

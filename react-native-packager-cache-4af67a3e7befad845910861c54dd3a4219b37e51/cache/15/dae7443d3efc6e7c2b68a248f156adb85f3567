@@ -1,0 +1,91 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.labelPropType = undefined;
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/worker-app/node_modules/react-native-popover-tooltip/src/PopoverTooltipItem.js';
+
+var _react = require('react');
+
+var React = babelHelpers.interopRequireWildcard(_react);
+
+var _reactNative = require('react-native');
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var labelPropType = exports.labelPropType = _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.func]);
+
+var PopoverTooltipItem = function (_React$PureComponent) {
+  babelHelpers.inherits(PopoverTooltipItem, _React$PureComponent);
+
+  function PopoverTooltipItem() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    babelHelpers.classCallCheck(this, PopoverTooltipItem);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = babelHelpers.possibleConstructorReturn(this, (_ref = PopoverTooltipItem.__proto__ || Object.getPrototypeOf(PopoverTooltipItem)).call.apply(_ref, [this].concat(args))), _this), _this.onPress = function () {
+      _this.props.onPress(_this.props.onPressUserCallback);
+    }, _temp), babelHelpers.possibleConstructorReturn(_this, _ret);
+  }
+
+  babelHelpers.createClass(PopoverTooltipItem, [{
+    key: 'render',
+    value: function render() {
+      var label = typeof this.props.label === 'string' ? React.createElement(
+        _reactNative.Text,
+        { style: this.props.labelStyle, __source: {
+            fileName: _jsxFileName,
+            lineNumber: 46
+          }
+        },
+        this.props.label
+      ) : this.props.label();
+      return React.createElement(
+        _reactNative.View,
+        { style: [styles.itemContainer, this.props.containerStyle], __source: {
+            fileName: _jsxFileName,
+            lineNumber: 49
+          }
+        },
+        React.createElement(
+          _reactNative.TouchableOpacity,
+          { onPress: this.onPress, __source: {
+              fileName: _jsxFileName,
+              lineNumber: 50
+            }
+          },
+          label
+        )
+      );
+    }
+  }]);
+  return PopoverTooltipItem;
+}(React.PureComponent);
+
+PopoverTooltipItem.propTypes = {
+  onPress: _propTypes2.default.func.isRequired,
+  onPressUserCallback: _propTypes2.default.func.isRequired,
+  label: labelPropType.isRequired,
+  containerStyle: _reactNative.ViewPropTypes.style,
+  labelStyle: _reactNative.Text.propTypes.style
+};
+PopoverTooltipItem.defaultProps = {
+  labelStyle: null,
+  containerStyle: null
+};
+
+
+var styles = _reactNative.StyleSheet.create({
+  itemContainer: {
+    padding: 10
+  }
+});
+
+exports.default = PopoverTooltipItem;

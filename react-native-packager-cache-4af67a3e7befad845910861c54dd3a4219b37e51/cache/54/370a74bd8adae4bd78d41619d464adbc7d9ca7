@@ -1,0 +1,74 @@
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _index = require('../../../api/index');
+
+var _index2 = babelHelpers.interopRequireDefault(_index);
+
+var _reactNative = require('react-native');
+
+var locationApi = function () {
+    function locationApi() {
+        babelHelpers.classCallCheck(this, locationApi);
+    }
+
+    babelHelpers.createClass(locationApi, null, [{
+        key: 'allLocation',
+        value: function allLocation() {
+            return new Promise(function (resolve, reject) {
+                _reactNative.AsyncStorage.getItem('userToken', function (err, result) {
+                    console.log(result);
+                    if (!err) {
+                        _index2.default.get('Zones?access_token=' + JSON.parse(result).id).then(function (res) {
+                            resolve(res);
+                        }).catch(function (err) {
+                            reject(err);
+                        });
+                    } else {
+                        reject(err);
+                    }
+                });
+            });
+        }
+    }, {
+        key: 'myLoaction',
+        value: function myLoaction(workerID) {
+            return new Promise(function (resolve, reject) {
+                _reactNative.AsyncStorage.getItem('userToken', function (err, result) {
+                    var workerInclude = '{"include":["zone"]}';
+                    console.log(workerID);
+                    if (!err) {
+                        _index2.default.get('Workers/' + workerID + '/workerLocations?filter=' + workerInclude + '&' + 'Zones?access_token=' + JSON.parse(result).id).then(function (res) {
+                            resolve(res);
+                        }).catch(function (err) {
+                            reject(err);
+                        });
+                    } else {
+                        reject(err);
+                    }
+                });
+            });
+        }
+    }, {
+        key: 'clearMyLocation',
+        value: function clearMyLocation(id) {
+            return new Promise(function (resolve, reject) {
+                _reactNative.AsyncStorage.getItem('userToken', function (err, result) {
+                    if (!err) {
+                        _index2.default.delete('Workers/' + id + '/workerLocations?' + 'access_token=' + JSON.parse(result).id).then(function (res) {
+                            resolve(res);
+                        }).catch(function (err) {
+                            reject(err);
+                        });
+                    } else {
+                        reject(err);
+                    }
+                });
+            });
+        }
+    }]);
+    return locationApi;
+}();
+
+exports.default = locationApi;

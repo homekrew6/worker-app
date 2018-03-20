@@ -1,0 +1,339 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/worker-app/node_modules/react-native-calendars/src/calendar/index.js';
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _xdate = require('xdate');
+
+var _xdate2 = babelHelpers.interopRequireDefault(_xdate);
+
+var _dateutils = require('../dateutils');
+
+var _dateutils2 = babelHelpers.interopRequireDefault(_dateutils);
+
+var _interface = require('../interface');
+
+var _style = require('./style');
+
+var _style2 = babelHelpers.interopRequireDefault(_style);
+
+var _basic = require('./day/basic');
+
+var _basic2 = babelHelpers.interopRequireDefault(_basic);
+
+var _period = require('./day/period');
+
+var _period2 = babelHelpers.interopRequireDefault(_period);
+
+var _multiDot = require('./day/multi-dot');
+
+var _multiDot2 = babelHelpers.interopRequireDefault(_multiDot);
+
+var _header = require('./header');
+
+var _header2 = babelHelpers.interopRequireDefault(_header);
+
+var _updater = require('./updater');
+
+var _updater2 = babelHelpers.interopRequireDefault(_updater);
+
+var viewPropTypes = _reactNative.ViewPropTypes || _reactNative.View.propTypes;
+
+var EmptyArray = [];
+
+var Calendar = function (_Component) {
+  babelHelpers.inherits(Calendar, _Component);
+
+  function Calendar(props) {
+    babelHelpers.classCallCheck(this, Calendar);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (Calendar.__proto__ || Object.getPrototypeOf(Calendar)).call(this, props));
+
+    _this.style = (0, _style2.default)(_this.props.theme);
+    var currentMonth = void 0;
+    if (props.current) {
+      currentMonth = (0, _interface.parseDate)(props.current);
+    } else {
+      currentMonth = (0, _xdate2.default)();
+    }
+    _this.state = {
+      currentMonth: currentMonth
+    };
+
+    _this.updateMonth = _this.updateMonth.bind(_this);
+    _this.addMonth = _this.addMonth.bind(_this);
+    _this.pressDay = _this.pressDay.bind(_this);
+    _this.shouldComponentUpdate = _updater2.default;
+    return _this;
+  }
+
+  babelHelpers.createClass(Calendar, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      var current = (0, _interface.parseDate)(nextProps.current);
+      if (current && current.toString('yyyy MM') !== this.state.currentMonth.toString('yyyy MM')) {
+        this.setState({
+          currentMonth: current.clone()
+        });
+      }
+    }
+  }, {
+    key: 'updateMonth',
+    value: function updateMonth(day, doNotTriggerListeners) {
+      var _this2 = this;
+
+      if (day.toString('yyyy MM') === this.state.currentMonth.toString('yyyy MM')) {
+        return;
+      }
+      this.setState({
+        currentMonth: day.clone()
+      }, function () {
+        if (!doNotTriggerListeners) {
+          var currMont = _this2.state.currentMonth.clone();
+          if (_this2.props.onMonthChange) {
+            _this2.props.onMonthChange((0, _interface.xdateToData)(currMont));
+          }
+          if (_this2.props.onVisibleMonthsChange) {
+            _this2.props.onVisibleMonthsChange([(0, _interface.xdateToData)(currMont)]);
+          }
+        }
+      });
+    }
+  }, {
+    key: 'pressDay',
+    value: function pressDay(date) {
+      var day = (0, _interface.parseDate)(date);
+      var minDate = (0, _interface.parseDate)(this.props.minDate);
+      var maxDate = (0, _interface.parseDate)(this.props.maxDate);
+      if (!(minDate && !_dateutils2.default.isGTE(day, minDate)) && !(maxDate && !_dateutils2.default.isLTE(day, maxDate))) {
+        var shouldUpdateMonth = this.props.disableMonthChange === undefined || !this.props.disableMonthChange;
+        if (shouldUpdateMonth) {
+          this.updateMonth(day);
+        }
+        if (this.props.onDayPress) {
+          this.props.onDayPress((0, _interface.xdateToData)(day));
+        }
+      }
+    }
+  }, {
+    key: 'addMonth',
+    value: function addMonth(count) {
+      this.updateMonth(this.state.currentMonth.clone().addMonths(count, true));
+    }
+  }, {
+    key: 'renderDay',
+    value: function renderDay(day, id) {
+      var minDate = (0, _interface.parseDate)(this.props.minDate);
+      var maxDate = (0, _interface.parseDate)(this.props.maxDate);
+      var state = '';
+      if (this.props.disabledByDefault) {
+        state = 'disabled';
+      } else if (minDate && !_dateutils2.default.isGTE(day, minDate) || maxDate && !_dateutils2.default.isLTE(day, maxDate)) {
+        state = 'disabled';
+      } else if (!_dateutils2.default.sameMonth(day, this.state.currentMonth)) {
+        state = 'disabled';
+      } else if (_dateutils2.default.sameDate(day, (0, _xdate2.default)())) {
+        state = 'today';
+      }
+      var dayComp = void 0;
+      if (!_dateutils2.default.sameMonth(day, this.state.currentMonth) && this.props.hideExtraDays) {
+        if (this.props.markingType === 'period') {
+          dayComp = _react2.default.createElement(_reactNative.View, { key: id, style: { flex: 1 }, __source: {
+              fileName: _jsxFileName,
+              lineNumber: 155
+            }
+          });
+        } else {
+          dayComp = _react2.default.createElement(_reactNative.View, { key: id, style: { width: 32 }, __source: {
+              fileName: _jsxFileName,
+              lineNumber: 157
+            }
+          });
+        }
+      } else {
+        var DayComp = this.getDayComponent();
+        var date = day.getDate();
+        dayComp = _react2.default.createElement(
+          DayComp,
+          {
+            key: id,
+            state: state,
+            theme: this.props.theme,
+            onPress: this.pressDay,
+            date: (0, _interface.xdateToData)(day),
+            marking: this.getDateMarking(day),
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 163
+            }
+          },
+          date
+        );
+      }
+      return dayComp;
+    }
+  }, {
+    key: 'getDayComponent',
+    value: function getDayComponent() {
+      if (this.props.dayComponent) {
+        return this.props.dayComponent;
+      }
+
+      switch (this.props.markingType) {
+        case 'period':
+          return _period2.default;
+        case 'multi-dot':
+          return _multiDot2.default;
+        default:
+          return _basic2.default;
+      }
+    }
+  }, {
+    key: 'getDateMarking',
+    value: function getDateMarking(day) {
+      if (!this.props.markedDates) {
+        return false;
+      }
+      var dates = this.props.markedDates[day.toString('yyyy-MM-dd')] || EmptyArray;
+      if (dates.length || dates) {
+        return dates;
+      } else {
+        return false;
+      }
+    }
+  }, {
+    key: 'renderWeekNumber',
+    value: function renderWeekNumber(weekNumber) {
+      return _react2.default.createElement(
+        _basic2.default,
+        { key: 'week-' + weekNumber, theme: this.props.theme, state: 'disabled', __source: {
+            fileName: _jsxFileName,
+            lineNumber: 206
+          }
+        },
+        weekNumber
+      );
+    }
+  }, {
+    key: 'renderWeek',
+    value: function renderWeek(days, id) {
+      var _this3 = this;
+
+      var week = [];
+      days.forEach(function (day, id2) {
+        week.push(_this3.renderDay(day, id2));
+      }, this);
+
+      if (this.props.showWeekNumbers) {
+        week.unshift(this.renderWeekNumber(days[days.length - 1].getWeek()));
+      }
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: this.style.week, key: id, __source: {
+            fileName: _jsxFileName,
+            lineNumber: 219
+          }
+        },
+        week
+      );
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var days = _dateutils2.default.page(this.state.currentMonth, this.props.firstDay);
+      var weeks = [];
+      while (days.length) {
+        weeks.push(this.renderWeek(days.splice(0, 7), weeks.length));
+      }
+      var indicator = void 0;
+      var current = (0, _interface.parseDate)(this.props.current);
+      if (current) {
+        var lastMonthOfDay = current.clone().addMonths(1, true).setDate(1).addDays(-1).toString('yyyy-MM-dd');
+        if (this.props.displayLoadingIndicator && !(this.props.markedDates && this.props.markedDates[lastMonthOfDay])) {
+          indicator = true;
+        }
+      }
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: [this.style.container, this.props.style], __source: {
+            fileName: _jsxFileName,
+            lineNumber: 238
+          }
+        },
+        _react2.default.createElement(_header2.default, {
+          theme: this.props.theme,
+          hideArrows: this.props.hideArrows,
+          month: this.state.currentMonth,
+          addMonth: this.addMonth,
+          showIndicator: indicator,
+          firstDay: this.props.firstDay,
+          renderArrow: this.props.renderArrow,
+          monthFormat: this.props.monthFormat,
+          hideDayNames: this.props.hideDayNames,
+          weekNumbers: this.props.showWeekNumbers,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 239
+          }
+        }),
+        weeks
+      );
+    }
+  }]);
+  return Calendar;
+}(_react.Component);
+
+Calendar.propTypes = {
+  theme: _propTypes2.default.object,
+
+  markedDates: _propTypes2.default.object,
+
+  style: viewPropTypes.style,
+
+  current: _propTypes2.default.any,
+
+  minDate: _propTypes2.default.any,
+
+  maxDate: _propTypes2.default.any,
+
+  firstDay: _propTypes2.default.number,
+
+  markingType: _propTypes2.default.string,
+
+  hideArrows: _propTypes2.default.bool,
+
+  displayLoadingIndicator: _propTypes2.default.bool,
+
+  hideExtraDays: _propTypes2.default.bool,
+
+  onDayPress: _propTypes2.default.func,
+
+  onMonthChange: _propTypes2.default.func,
+  onVisibleMonthsChange: _propTypes2.default.func,
+
+  renderArrow: _propTypes2.default.func,
+
+  dayComponent: _propTypes2.default.any,
+
+  monthFormat: _propTypes2.default.string,
+
+  disableMonthChange: _propTypes2.default.bool,
+
+  hideDayNames: _propTypes2.default.bool,
+
+  disabledByDefault: _propTypes2.default.bool,
+
+  showWeekNumbers: _propTypes2.default.bool
+};
+exports.default = Calendar;

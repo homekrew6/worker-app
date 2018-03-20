@@ -1,0 +1,10 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ChangeData = ChangeData;
+function ChangeData(dataRemote) {
+  console.log('dataRemote', dataRemote);
+  return function (dispatch) {
+    dispatch({ type: 'dataChange', dataManu: dataRemote });
+  };
+}

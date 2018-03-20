@@ -1,0 +1,24 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNativeI18n = require('react-native-i18n');
+
+var _reactNativeI18n2 = babelHelpers.interopRequireDefault(_reactNativeI18n);
+
+var _en = require('./locales/en');
+
+var _en2 = babelHelpers.interopRequireDefault(_en);
+
+var _ar = require('./locales/ar');
+
+var _ar2 = babelHelpers.interopRequireDefault(_ar);
+
+_reactNativeI18n2.default.fallbacks = true;
+
+_reactNativeI18n2.default.translations = {
+  en: _en2.default,
+  ar: _ar2.default
+};
+
+exports.default = _reactNativeI18n2.default;

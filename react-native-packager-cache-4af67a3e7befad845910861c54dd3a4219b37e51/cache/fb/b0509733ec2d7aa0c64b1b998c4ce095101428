@@ -1,0 +1,402 @@
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/worker-app/js/components/accounts/signup.js';
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _reactRedux = require('react-redux');
+
+var _authActions = require('./elements/authActions');
+
+var _reactNative = require('react-native');
+
+var _nativeBase = require('native-base');
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _i18n = require('../../i18n/i18n');
+
+var _i18n2 = babelHelpers.interopRequireDefault(_i18n);
+
+var _reactNativeLoadingSpinnerOverlay = require('react-native-loading-spinner-overlay');
+
+var _reactNativeLoadingSpinnerOverlay2 = babelHelpers.interopRequireDefault(_reactNativeLoadingSpinnerOverlay);
+
+var _reactNativePopoverTooltip = require('react-native-popover-tooltip');
+
+var _reactNativePopoverTooltip2 = babelHelpers.interopRequireDefault(_reactNativePopoverTooltip);
+
+var _MaterialCommunityIcons = require('react-native-vector-icons/MaterialCommunityIcons');
+
+var _MaterialCommunityIcons2 = babelHelpers.interopRequireDefault(_MaterialCommunityIcons);
+
+var deviceHeight = _reactNative.Dimensions.get('window').height;
+var deviceWidth = _reactNative.Dimensions.get('window').width;
+var launchscreenBg = require("../../../img/bg-login.png");
+var launchscreenLogo = require("../../../img/logo.png");
+var buttonImage = require("../../../img/bg-button.png");
+
+var Signup = function (_Component) {
+    babelHelpers.inherits(Signup, _Component);
+
+    function Signup(props) {
+        babelHelpers.classCallCheck(this, Signup);
+
+        var _this = babelHelpers.possibleConstructorReturn(this, (Signup.__proto__ || Object.getPrototypeOf(Signup)).call(this, props));
+
+        _this.state = {
+            name: '',
+            email: '',
+            password: '',
+            phone: '',
+            chkbox_chk: false
+        };
+        return _this;
+    }
+
+    babelHelpers.createClass(Signup, [{
+        key: 'pressSignup',
+        value: function pressSignup() {
+            var _this2 = this;
+
+            if (!this.state.name) {
+                _reactNative.Alert.alert('Please enter name');
+                return false;
+            }
+            if (!this.state.email) {
+                _reactNative.Alert.alert('Please enter email');
+                return false;
+            }
+            if (!this.state.password) {
+                _reactNative.Alert.alert('Please enter password');
+                return false;
+            }
+            var password_pattern = /(?=.*[A-Z]).{6,}/;
+            if (!password_pattern.test(this.state.password)) {
+                _reactNative.Alert.alert('Password must have one capital letter and min six characters');
+                return false;
+            }
+            if (!this.state.phone) {
+                _reactNative.Alert.alert('Please enter phone');
+                return false;
+            }
+            if (!this.state.chkbox_chk) {
+                _reactNative.Alert.alert('Please check Terms and Conditions');
+                return false;
+            }
+            var name = this.state.name;
+            var email = this.state.email;
+            var password = this.state.password;
+            var phone = this.state.phone;
+
+            this.props.signup(name, email, password, phone).then(function (res) {
+                if (res.type == 'success') {
+                    _reactNative.Alert.alert('Successfully saved.');
+                    _this2.props.navigation.navigate("Login");
+                } else {
+                    _reactNative.Alert.alert('Please check all fields and try again');
+                }
+            }).catch(function (err) {
+                console.log(err);
+                _reactNative.Alert.alert('Please check all fields and try again');
+            });
+        }
+    }, {
+        key: 'chkbox_check',
+        value: function chkbox_check() {
+            if (this.state.chkbox_chk) this.setState({ chkbox_chk: false });else this.setState({ chkbox_chk: true });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this3 = this;
+
+            return _react2.default.createElement(
+                _nativeBase.Container,
+                {
+                    __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 84
+                    }
+                },
+                _react2.default.createElement(_reactNative.StatusBar, {
+                    backgroundColor: '#81cdc7',
+                    __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 85
+                    }
+                }),
+                _react2.default.createElement(
+                    _reactNative.Image,
+                    { source: launchscreenBg, style: _styles2.default.imageContainer, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 88
+                        }
+                    },
+                    _react2.default.createElement(
+                        _nativeBase.Content,
+                        {
+                            __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 89
+                            }
+                        },
+                        _react2.default.createElement(_reactNativeLoadingSpinnerOverlay2.default, { visible: this.props.auth.busy, textContent: "Loading...", textStyle: { color: '#FFF' }, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 90
+                            }
+                        }),
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            { style: _styles2.default.logoContainer, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 91
+                                }
+                            },
+                            _react2.default.createElement(_reactNative.Image, { source: launchscreenLogo, style: _styles2.default.logo, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 92
+                                }
+                            })
+                        ),
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            { style: { padding: 20 }, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 95
+                                }
+                            },
+                            _react2.default.createElement(
+                                _nativeBase.Item,
+                                { regular: true, style: { borderColor: '#29416f', borderWidth: 1, borderRadius: 2, height: 45 }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 97
+                                    }
+                                },
+                                _react2.default.createElement(_nativeBase.Input, { onChangeText: function onChangeText(text) {
+                                        return _this3.setState({ name: text });
+                                    }, value: this.state.name, placeholder: _i18n2.default.t('name'), style: { textAlign: 'center', color: '#29416f', fontSize: 14 }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 98
+                                    }
+                                })
+                            ),
+                            _react2.default.createElement(
+                                _nativeBase.Item,
+                                { regular: true, style: { borderColor: '#29416f', marginTop: 10, borderWidth: 1, borderRadius: 2, height: 45 }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 101
+                                    }
+                                },
+                                _react2.default.createElement(_nativeBase.Input, { onChangeText: function onChangeText(text) {
+                                        return _this3.setState({ email: text });
+                                    }, value: this.state.email, placeholder: _i18n2.default.t('email'), keyboardType: 'email-address', style: { textAlign: 'center', color: '#29416f', fontSize: 14 }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 102
+                                    }
+                                })
+                            ),
+                            _react2.default.createElement(
+                                _nativeBase.Item,
+                                { regular: true, style: { borderColor: '#29416f', marginTop: 10, borderWidth: 1, borderRadius: 2, height: 45 }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 105
+                                    }
+                                },
+                                _react2.default.createElement(_nativeBase.Input, { onChangeText: function onChangeText(text) {
+                                        return _this3.setState({ password: text });
+                                    }, value: this.state.password, placeholder: _i18n2.default.t('password'), secureTextEntry: true, style: { textAlign: 'center', color: '#29416f', fontSize: 14 }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 106
+                                    }
+                                }),
+                                _react2.default.createElement(_reactNativePopoverTooltip2.default, {
+                                    ref: 'tooltip1',
+                                    buttonComponent: _react2.default.createElement(_MaterialCommunityIcons2.default, { name: 'information-outline', style: { fontSize: 26, paddingRight: 10, color: '#29416f', paddingLeft: 10, paddingTop: 10, paddingBottom: 10 }, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 110
+                                        }
+                                    }),
+                                    items: [{
+                                        label: 'Min length six, one Caps',
+                                        onPress: function onPress() {}
+                                    }],
+                                    __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 107
+                                    }
+                                })
+                            ),
+                            _react2.default.createElement(
+                                _nativeBase.Item,
+                                { regular: true, style: { borderColor: '#29416f', marginTop: 10, borderWidth: 1, borderRadius: 2, height: 45 }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 121
+                                    }
+                                },
+                                _react2.default.createElement(_nativeBase.Input, { onChangeText: function onChangeText(text) {
+                                        return _this3.setState({ phone: text });
+                                    }, placeholder: _i18n2.default.t('phone_number'), keyboardType: 'numeric', style: { textAlign: 'center', color: '#29416f', fontSize: 14 }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 122
+                                    }
+                                })
+                            ),
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: { flexDirection: 'row', flex: 1, paddingTop: 15, paddingBottom: 10 }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 125
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _reactNative.View,
+                                    { style: { width: 35 }, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 126
+                                        }
+                                    },
+                                    _react2.default.createElement(_nativeBase.CheckBox, { color: '#29416f', checked: this.state.chkbox_chk, onPress: function onPress() {
+                                            return _this3.chkbox_check();
+                                        }, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 127
+                                        }
+                                    })
+                                ),
+                                _react2.default.createElement(
+                                    _reactNative.View,
+                                    { style: { flex: 1, flexDirection: 'row' }, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 129
+                                        }
+                                    },
+                                    _react2.default.createElement(
+                                        _nativeBase.Text,
+                                        { style: { fontSize: 14 }, __source: {
+                                                fileName: _jsxFileName,
+                                                lineNumber: 130
+                                            }
+                                        },
+                                        _i18n2.default.t('i_agree_to_the_term_and_conditions')
+                                    ),
+                                    _react2.default.createElement(
+                                        _reactNative.TouchableOpacity,
+                                        {
+                                            __source: {
+                                                fileName: _jsxFileName,
+                                                lineNumber: 131
+                                            }
+                                        },
+                                        _react2.default.createElement(
+                                            _nativeBase.Text,
+                                            { style: { fontSize: 14, color: '#29416f' }, __source: {
+                                                    fileName: _jsxFileName,
+                                                    lineNumber: 132
+                                                }
+                                            },
+                                            _i18n2.default.t('terms_and_conditions')
+                                        )
+                                    )
+                                )
+                            ),
+                            _react2.default.createElement(
+                                _reactNative.TouchableOpacity,
+                                { style: { flex: 1, flexDirection: 'row', marginTop: 15 }, onPress: function onPress() {
+                                        return _this3.pressSignup();
+                                    }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 137
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _reactNative.Image,
+                                    { source: buttonImage, style: { flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 55 }, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 138
+                                        }
+                                    },
+                                    _react2.default.createElement(
+                                        _nativeBase.Text,
+                                        { style: { color: '#fff', fontSize: 20, marginTop: -10, height: 30 }, __source: {
+                                                fileName: _jsxFileName,
+                                                lineNumber: 139
+                                            }
+                                        },
+                                        _i18n2.default.t('signup')
+                                    )
+                                )
+                            ),
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10 }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 143
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    { style: { color: '#252525' }, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 144
+                                        }
+                                    },
+                                    _i18n2.default.t('already_registered'),
+                                    ' '
+                                ),
+                                _react2.default.createElement(
+                                    _reactNative.TouchableOpacity,
+                                    { onPress: function onPress() {
+                                            return _this3.props.navigation.navigate("Login");
+                                        }, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 145
+                                        }
+                                    },
+                                    _react2.default.createElement(
+                                        _nativeBase.Text,
+                                        { style: { color: '#29416f' }, __source: {
+                                                fileName: _jsxFileName,
+                                                lineNumber: 146
+                                            }
+                                        },
+                                        _i18n2.default.t('login')
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+    return Signup;
+}(_react.Component);
+
+Signup.propTypes = {
+    auth: _propTypes2.default.object.isRequired
+};
+var mapStateToProps = function mapStateToProps(state) {
+    return {
+        auth: state.auth
+    };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+    return {
+        signup: function signup(name, email, password, phone) {
+            return dispatch((0, _authActions.signup)(name, email, password, phone));
+        }
+    };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Signup);

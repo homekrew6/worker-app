@@ -1,0 +1,132 @@
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/worker-app/js/components/calendar/CheckBox.js';
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _ActionCheckBox = require('../../actions/ActionCheckBox');
+
+var CheckBox = function (_Component) {
+    babelHelpers.inherits(CheckBox, _Component);
+
+    function CheckBox() {
+        var _ref;
+
+        var _temp, _this, _ret;
+
+        babelHelpers.classCallCheck(this, CheckBox);
+
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+        }
+
+        return _ret = (_temp = (_this = babelHelpers.possibleConstructorReturn(this, (_ref = CheckBox.__proto__ || Object.getPrototypeOf(CheckBox)).call.apply(_ref, [this].concat(args))), _this), _this.state = { status: false }, _temp), babelHelpers.possibleConstructorReturn(_this, _ret);
+    }
+
+    babelHelpers.createClass(CheckBox, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this.setState({ status: this.props.status });
+            var dataRemote = this.props.dataRemote;
+        }
+    }, {
+        key: 'onCheckBoxPress',
+        value: function onCheckBoxPress() {
+            if (this.state.status) {
+                this.setState({ status: false });
+            } else {
+                this.setState({ status: true });
+            }
+            var _props = this.props,
+                time = _props.time,
+                day = _props.day,
+                id = _props.id,
+                dataRemote = _props.dataRemote;
+
+            var status = this.state.status;
+
+            dataRemoteString = JSON.stringify(dataRemote);
+
+            _reactNative.AsyncStorage.getItem("StoreData").then(function (value) {
+                var JSONdata = JSON.parse(value);
+                console.log(day, id, status);
+                console.log('JSONdata E', JSONdata);
+                var index;
+                for (var i = 0; i < JSONdata.length; i++) {
+                    if (id === JSONdata[i].id) {
+                        index = i;
+                        break;
+                    }
+                }
+
+                if (index !== null) {
+                    console.log('index', index);
+                    if (status === true) {
+                        JSONdata[index][day] = false;
+                    } else {
+                        JSONdata[index][day] = true;
+                    }
+                    dataRemoteString = JSON.stringify(JSONdata);
+                    _reactNative.AsyncStorage.setItem('StoreData', dataRemoteString);
+                    console.log('JSONdata changed', JSONdata, dataRemoteString);
+                } else {}
+            }).then(function (res) {
+                _reactNative.AsyncStorage.setItem('StoreData', dataRemoteString);
+            });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                _reactNative.View,
+                { style: { height: 60, width: 50, alignItems: 'center', justifyContent: 'center' }, __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 56
+                    }
+                },
+                _react2.default.createElement(
+                    _reactNative.TouchableOpacity,
+                    { onPress: this.onCheckBoxPress.bind(this), __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 57
+                        }
+                    },
+                    this.state.status === true ? _react2.default.createElement(_reactNative.Image, { source: require('../../../img/check-box.png'), style: styles.ImageCheckBox, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 59
+                        }
+                    }) : _react2.default.createElement(_reactNative.Image, { source: require('../../../img/check-box-empty.png'), style: styles.ImageCheckBox, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 61
+                        }
+                    })
+                )
+            );
+        }
+    }]);
+    return CheckBox;
+}(_react.Component);
+
+var styles = {
+    ImageCheckBox: {
+        width: 20,
+        height: 20,
+        marginLeft: 10,
+        marginRight: 10
+    }
+};
+function mapStateToProps(state) {
+    console.log('CheckBox', state);
+    return {
+        dataRemote: state.WeekData.dataManu
+    };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, { ChangeCheckBox: _ActionCheckBox.ChangeCheckBox })(CheckBox);

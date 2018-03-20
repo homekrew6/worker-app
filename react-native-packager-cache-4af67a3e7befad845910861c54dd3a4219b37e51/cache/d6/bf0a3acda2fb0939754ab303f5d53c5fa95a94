@@ -1,0 +1,46 @@
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = authReducer;
+
+var _actionTypes = require('../../../actions/actionTypes');
+
+var TYPES = babelHelpers.interopRequireWildcard(_actionTypes);
+
+var _initialState = require('../../../reducers/initialState');
+
+var _initialState2 = babelHelpers.interopRequireDefault(_initialState);
+
+function authReducer() {
+	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _initialState2.default.auth;
+	var action = arguments[1];
+
+	switch (action.type) {
+		case TYPES.AUTH_STATE_BUSY:
+			{
+				return {
+					loggedIn: false,
+					busy: true,
+					data: ''
+				};
+			}
+		case TYPES.AUTH_STATE_FAILED:
+			{
+				return {
+					loggedIn: false,
+					busy: false,
+					data: ''
+				};
+			}
+		case TYPES.AUTH_STATE_SUCCESS:
+			{
+				return {
+					loggedIn: true,
+					busy: false,
+					data: action.data
+				};
+			}
+		default:
+			return state;
+	}
+}

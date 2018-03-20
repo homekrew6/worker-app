@@ -1,0 +1,140 @@
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = lacationReducer;
+
+var _actionTypes = require('../../../actions/actionTypes');
+
+var TYPES = babelHelpers.interopRequireWildcard(_actionTypes);
+
+var _initialState = require('../../../reducers/initialState');
+
+var _initialState2 = babelHelpers.interopRequireDefault(_initialState);
+
+function lacationReducer() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _initialState2.default.auth;
+    var action = arguments[1];
+
+    switch (action.type) {
+        case TYPES.LOCATION_STATE_BUSY:
+            {
+                return {
+                    busy: true,
+                    data: '',
+                    selectedData: state.selectedData
+                };
+            }
+        case TYPES.LOCATION_STATE_FAILED:
+            {
+                return {
+                    busy: false,
+                    data: '',
+                    selectedData: state.selectedData
+                };
+            }
+        case TYPES.LOCATION_STATE_SUCCESS:
+            {
+                var i = void 0;
+                var newLocationArray = action.data;
+                var selectedLocationId = [];
+                if (state.selectedData.length > 0 && action.data.length > 0) {
+                    for (i = 0; i < state.selectedData.length; i++) {
+                        selectedLocationId.push(state.selectedData[i].zoneId);
+                    }
+
+                    if (selectedLocationId.length > 0) {
+                        var j = void 0;
+                        for (j = 0; j < newLocationArray.length; j++) {
+                            var locationSelectedCheck = selectedLocationId.indexOf(newLocationArray[j].id);
+                            if (locationSelectedCheck > -1) {
+                                newLocationArray[j].selected = true;
+                            } else {
+                                newLocationArray[j].selected = false;
+                            }
+                        }
+                    }
+                }
+
+                return {
+                    busy: false,
+                    data: newLocationArray,
+                    selectedData: state.selectedData
+                };
+            }
+        case TYPES.MYLOCATION_STATE_BUSY:
+            {
+                return {
+                    busy: true,
+                    data: state.data,
+                    selectedData: ''
+                };
+            }
+        case TYPES.MYLOCATION_STATE_FAILED:
+            {
+                return {
+                    busy: false,
+                    data: state.data,
+                    selectedData: ''
+                };
+            }
+        case TYPES.MYLOCATION_STATE_SUCCESS:
+            {
+                return {
+                    busy: false,
+                    data: state.data,
+                    selectedData: action.data
+                };
+            }
+        case TYPES.CHECK_UNCHECK_STATE_BUSY:
+            {
+                return {
+                    busy: true,
+                    data: state.data,
+                    selectedData: state.selectedData
+                };
+            }
+        case TYPES.CHECK_UNCHECK_STATE_FAILED:
+            {
+                return {
+                    busy: false,
+                    data: state.data,
+                    selectedData: state.selectedData
+                };
+            }
+        case TYPES.CHECK_UNCHECK_STATE_SUCCESS:
+            {
+                return {
+                    busy: false,
+                    data: action.data,
+                    selectedData: state.data
+                };
+            }
+        case TYPES.CLEAR_MY_LOCATION_STATE_BUSY:
+            {
+                return {
+                    busy: true,
+                    data: state.data,
+                    selectedData: state.selectedData
+
+                };
+            }
+        case TYPES.CLEAR_MY_LOCATION_STATE_FAILED:
+            {
+                return {
+                    busy: false,
+                    data: state.data,
+                    selectedData: state.selectedData
+                };
+            }
+        case TYPES.CLEAR_MY_LOCATION_STATE_SUCCESS:
+            {
+                return {
+                    busy: false,
+                    data: state.data,
+                    selectedData: state.selectedData
+                };
+            }
+        default:
+            return state;
+    }
+}

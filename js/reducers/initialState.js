@@ -8,5 +8,9 @@ export default {
 		busy: false,
 		data: '',
 		selectedData: ''
+	},
+	payment:{
+		busy:false,
+		data:''
 	}
 }

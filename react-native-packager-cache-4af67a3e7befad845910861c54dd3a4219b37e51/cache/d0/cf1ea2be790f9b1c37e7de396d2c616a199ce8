@@ -1,0 +1,79 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/worker-app/node_modules/react-navigation/src/withCachedChildNavigation.js';
+exports.default = withCachedChildNavigation;
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _addNavigationHelpers = require('./addNavigationHelpers');
+
+var _addNavigationHelpers2 = babelHelpers.interopRequireDefault(_addNavigationHelpers);
+
+var _getChildEventSubscriber = require('./getChildEventSubscriber');
+
+var _getChildEventSubscriber2 = babelHelpers.interopRequireDefault(_getChildEventSubscriber);
+
+function withCachedChildNavigation(Comp) {
+  var _class, _temp2;
+
+  var displayName = Comp.displayName || Comp.name;
+  return _temp2 = _class = function (_React$PureComponent) {
+    babelHelpers.inherits(_class, _React$PureComponent);
+
+    function _class() {
+      var _ref;
+
+      var _temp, _this, _ret;
+
+      babelHelpers.classCallCheck(this, _class);
+
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      return _ret = (_temp = (_this = babelHelpers.possibleConstructorReturn(this, (_ref = _class.__proto__ || Object.getPrototypeOf(_class)).call.apply(_ref, [this].concat(args))), _this), _this._updateNavigationProps = function (navigation) {
+        if (!_this._childNavigationProps) {
+          _this._childNavigationProps = {};
+        }
+        navigation.state.routes.forEach(function (route) {
+          var childNavigation = _this._childNavigationProps[route.key];
+          if (childNavigation && childNavigation.state === route) {
+            return;
+          }
+          _this._childNavigationProps[route.key] = (0, _addNavigationHelpers2.default)({
+            dispatch: navigation.dispatch,
+            state: route,
+            addListener: (0, _getChildEventSubscriber2.default)(navigation.addListener, route.key)
+          });
+        });
+      }, _temp), babelHelpers.possibleConstructorReturn(_this, _ret);
+    }
+
+    babelHelpers.createClass(_class, [{
+      key: 'componentWillMount',
+      value: function componentWillMount() {
+        this._updateNavigationProps(this.props.navigation);
+      }
+    }, {
+      key: 'componentWillReceiveProps',
+      value: function componentWillReceiveProps(nextProps) {
+        this._updateNavigationProps(nextProps.navigation);
+      }
+    }, {
+      key: 'render',
+      value: function render() {
+        return _react2.default.createElement(Comp, babelHelpers.extends({}, this.props, {
+          childNavigationProps: this._childNavigationProps,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 44
+          }
+        }));
+      }
+    }]);
+    return _class;
+  }(_react2.default.PureComponent), _class.displayName = 'withCachedChildNavigation(' + displayName + ')', _temp2;
+}

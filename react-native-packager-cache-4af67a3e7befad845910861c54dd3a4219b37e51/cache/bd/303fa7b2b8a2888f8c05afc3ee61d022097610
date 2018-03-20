@@ -1,0 +1,258 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/worker-app/node_modules/react-navigation/src/createNavigationContainer.js';
+exports.default = createNavigationContainer;
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _PlatformHelpers = require('./PlatformHelpers');
+
+var _NavigationActions = require('./NavigationActions');
+
+var _NavigationActions2 = babelHelpers.interopRequireDefault(_NavigationActions);
+
+var _addNavigationHelpers = require('./addNavigationHelpers');
+
+var _addNavigationHelpers2 = babelHelpers.interopRequireDefault(_addNavigationHelpers);
+
+var _invariant = require('./utils/invariant');
+
+var _invariant2 = babelHelpers.interopRequireDefault(_invariant);
+
+function createNavigationContainer(Component) {
+  var NavigationContainer = function (_React$Component) {
+    babelHelpers.inherits(NavigationContainer, _React$Component);
+
+    function NavigationContainer(props) {
+      babelHelpers.classCallCheck(this, NavigationContainer);
+
+      var _this = babelHelpers.possibleConstructorReturn(this, (NavigationContainer.__proto__ || Object.getPrototypeOf(NavigationContainer)).call(this, props));
+
+      _this.subs = null;
+      _this._actionEventSubscribers = new Set();
+
+      _this._handleOpenURL = function (_ref) {
+        var url = _ref.url;
+
+        var parsedUrl = _this._urlToPathAndParams(url);
+        if (parsedUrl) {
+          var path = parsedUrl.path,
+              params = parsedUrl.params;
+
+          var action = Component.router.getActionForPathAndParams(path, params);
+          if (action) {
+            _this.dispatch(action);
+          }
+        }
+      };
+
+      _this.dispatch = function (inputAction) {
+        var action = _NavigationActions2.default.mapDeprecatedActionAndWarn(inputAction);
+        if (!_this._isStateful()) {
+          return false;
+        }
+        _this._nav = _this._nav || _this.state.nav;
+        var oldNav = _this._nav;
+        (0, _invariant2.default)(oldNav, 'should be set in constructor if stateful');
+        var nav = Component.router.getStateForAction(action, oldNav);
+        var dispatchActionEvents = function dispatchActionEvents() {
+          _this._actionEventSubscribers.forEach(function (subscriber) {
+            return subscriber({
+              type: 'action',
+              action: action,
+              state: nav,
+              lastState: oldNav
+            });
+          });
+        };
+        if (nav && nav !== oldNav) {
+          _this._nav = nav;
+          _this.setState({ nav: nav }, function () {
+            _this._onNavigationStateChange(oldNav, nav, action);
+            dispatchActionEvents();
+          });
+          return true;
+        } else {
+          dispatchActionEvents();
+        }
+        return false;
+      };
+
+      _this._validateProps(props);
+
+      _this._initialAction = _NavigationActions2.default.init();
+
+      if (_this._isStateful()) {
+        _this.subs = _PlatformHelpers.BackHandler.addEventListener('hardwareBackPress', function () {
+          if (!_this._isMounted) {
+            _this.subs && _this.subs.remove();
+          } else {
+            return _this.dispatch(_NavigationActions2.default.back());
+          }
+        });
+      }
+
+      _this.state = {
+        nav: _this._isStateful() ? Component.router.getStateForAction(_this._initialAction) : null
+      };
+      return _this;
+    }
+
+    babelHelpers.createClass(NavigationContainer, [{
+      key: '_isStateful',
+      value: function _isStateful() {
+        return !this.props.navigation;
+      }
+    }, {
+      key: '_validateProps',
+      value: function _validateProps(props) {
+        if (this._isStateful()) {
+          return;
+        }
+
+        var navigation = props.navigation,
+            screenProps = props.screenProps,
+            containerProps = babelHelpers.objectWithoutProperties(props, ['navigation', 'screenProps']);
+
+
+        var keys = Object.keys(containerProps);
+
+        if (keys.length !== 0) {
+          throw new Error('This navigator has both navigation and container props, so it is ' + ('unclear if it should own its own state. Remove props: "' + keys.join(', ') + '" ') + 'if the navigator should get its state from the navigation prop. If the ' + 'navigator should maintain its own state, do not pass a navigation prop.');
+        }
+      }
+    }, {
+      key: '_urlToPathAndParams',
+      value: function _urlToPathAndParams(url) {
+        var params = {};
+        var delimiter = this.props.uriPrefix || '://';
+        var path = url.split(delimiter)[1];
+        if (typeof path === 'undefined') {
+          path = url;
+        } else if (path === '') {
+          path = '/';
+        }
+        return {
+          path: path,
+          params: params
+        };
+      }
+    }, {
+      key: '_onNavigationStateChange',
+      value: function _onNavigationStateChange(prevNav, nav, action) {
+        if (typeof this.props.onNavigationStateChange === 'undefined' && this._isStateful() && !!process.env.REACT_NAV_LOGGING) {
+          if (console.group) {
+            console.group('Navigation Dispatch: ');
+            console.log('Action: ', action);
+            console.log('New State: ', nav);
+            console.log('Last State: ', prevNav);
+            console.groupEnd();
+          } else {
+            console.log('Navigation Dispatch: ', {
+              action: action,
+              newState: nav,
+              lastState: prevNav
+            });
+          }
+
+          return;
+        }
+
+        if (typeof this.props.onNavigationStateChange === 'function') {
+          this.props.onNavigationStateChange(prevNav, nav, action);
+        }
+      }
+    }, {
+      key: 'componentWillReceiveProps',
+      value: function componentWillReceiveProps(nextProps) {
+        this._validateProps(nextProps);
+      }
+    }, {
+      key: 'componentDidUpdate',
+      value: function componentDidUpdate() {
+        if (this._nav === this.state.nav) {
+          this._nav = null;
+        }
+      }
+    }, {
+      key: 'componentDidMount',
+      value: function componentDidMount() {
+        var _this2 = this;
+
+        this._isMounted = true;
+        if (!this._isStateful()) {
+          return;
+        }
+
+        _reactNative.Linking.addEventListener('url', this._handleOpenURL);
+
+        _reactNative.Linking.getInitialURL().then(function (url) {
+          return url && _this2._handleOpenURL({ url: url });
+        });
+
+        this._actionEventSubscribers.forEach(function (subscriber) {
+          return subscriber({
+            type: 'action',
+            action: _this2._initialAction,
+            state: _this2.state.nav,
+            lastState: null
+          });
+        });
+      }
+    }, {
+      key: 'componentWillUnmount',
+      value: function componentWillUnmount() {
+        this._isMounted = false;
+        _reactNative.Linking.removeEventListener('url', this._handleOpenURL);
+        this.subs && this.subs.remove();
+      }
+    }, {
+      key: 'render',
+      value: function render() {
+        var _this3 = this;
+
+        var navigation = this.props.navigation;
+        if (this._isStateful()) {
+          var nav = this.state.nav;
+          (0, _invariant2.default)(nav, 'should be set in constructor if stateful');
+          if (!this._navigation || this._navigation.state !== nav) {
+            this._navigation = (0, _addNavigationHelpers2.default)({
+              dispatch: this.dispatch,
+              state: nav,
+              addListener: function addListener(eventName, handler) {
+                if (eventName !== 'action') {
+                  return { remove: function remove() {} };
+                }
+                _this3._actionEventSubscribers.add(handler);
+                return {
+                  remove: function remove() {
+                    _this3._actionEventSubscribers.delete(handler);
+                  }
+                };
+              }
+            });
+          }
+          navigation = this._navigation;
+        }
+        (0, _invariant2.default)(navigation, 'failed to get navigation');
+        return _react2.default.createElement(Component, babelHelpers.extends({}, this.props, { navigation: navigation, __source: {
+            fileName: _jsxFileName,
+            lineNumber: 227
+          }
+        }));
+      }
+    }]);
+    return NavigationContainer;
+  }(_react2.default.Component);
+
+  NavigationContainer.router = Component.router;
+  NavigationContainer.navigationOptions = null;
+
+
+  return NavigationContainer;
+}

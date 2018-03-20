@@ -1,0 +1,93 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/worker-app/node_modules/react-native-calendars/src/calendar-list/item.js';
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _calendar = require('../calendar');
+
+var _calendar2 = babelHelpers.interopRequireDefault(_calendar);
+
+var _style = require('./style');
+
+var _style2 = babelHelpers.interopRequireDefault(_style);
+
+var CalendarListItem = function (_Component) {
+  babelHelpers.inherits(CalendarListItem, _Component);
+
+  function CalendarListItem(props) {
+    babelHelpers.classCallCheck(this, CalendarListItem);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (CalendarListItem.__proto__ || Object.getPrototypeOf(CalendarListItem)).call(this, props));
+
+    _this.style = (0, _style2.default)(props.theme);
+    return _this;
+  }
+
+  babelHelpers.createClass(CalendarListItem, [{
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps) {
+      var r1 = this.props.item;
+      var r2 = nextProps.item;
+      return r1.toString('yyyy MM') !== r2.toString('yyyy MM') || !!(r2.propbump && r2.propbump !== r1.propbump);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var row = this.props.item;
+      if (row.getTime) {
+        return _react2.default.createElement(_calendar2.default, {
+          theme: this.props.theme,
+          style: [{ height: this.props.calendarHeight }, this.style.calendar],
+          current: row,
+          hideArrows: true,
+          hideExtraDays: this.props.hideExtraDays === undefined ? true : this.props.hideExtraDays,
+          disableMonthChange: true,
+          markedDates: this.props.markedDates,
+          markingType: this.props.markingType,
+          hideDayNames: this.props.hideDayNames,
+          onDayPress: this.props.onDayPress,
+          displayLoadingIndicator: this.props.displayLoadingIndicator,
+          minDate: this.props.minDate,
+          maxDate: this.props.maxDate,
+          firstDay: this.props.firstDay,
+          monthFormat: this.props.monthFormat,
+          dayComponent: this.props.dayComponent,
+          disabledByDefault: this.props.disabledByDefault,
+          showWeekNumbers: this.props.showWeekNumbers,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 22
+          }
+        });
+      } else {
+        var text = row.toString();
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: [{ height: this.props.calendarHeight }, this.style.placeholder], __source: {
+              fileName: _jsxFileName,
+              lineNumber: 45
+            }
+          },
+          _react2.default.createElement(
+            _reactNative.Text,
+            { allowFontScaling: false, style: this.style.placeholderText, __source: {
+                fileName: _jsxFileName,
+                lineNumber: 46
+              }
+            },
+            text
+          )
+        );
+      }
+    }
+  }]);
+  return CalendarListItem;
+}(_react.Component);
+
+exports.default = CalendarListItem;
