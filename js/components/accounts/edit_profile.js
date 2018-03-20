@@ -63,7 +63,6 @@ class EditProfile extends Component {
 
                                 let filter = '{"where":{"workerId":' + res.userId + '}}';
                                 api.get('WorkerSkills?filter=' + filter + '&access_token=' + res.id).then((skills) => {
-                                    console.log(skills);
                                     let serviceIds = [];
                                     skills.map((item) => {
                                         serviceIds.push(item.serviceId);
@@ -228,7 +227,6 @@ class EditProfile extends Component {
                         data.workerId = res.userId;
                         console.log(data);
                         api.post(`WorkerSkills/insertWorkerSkill?access_token=${res.id}`, data).then((skillRes) => {
-                            console.log(skillRes);
                             this.props.getUserDetail(res.userId, res.id).then((userRes) => {
                                 this.setState({ visible: false });
                                 this.props.navigation.navigate('Menu');
@@ -296,11 +294,11 @@ class EditProfile extends Component {
                 this.state.serviceList.map((data, key) => {
                     if (!data.service) return;
                     return (
-                        <View key={data.id} style={styles.catIten}>
+                        <View key={data.id} style={{flexDirection: 'row', paddingTop: 7, paddingBottom: 7, alignItems: 'center'}}>
                             <View style={styles.catIten_img_view}>
                                 <Switch value={data.selected} onValueChange={(value) => this.switchChange(value, data)} />
                             </View>
-                            <Text style={styles.catIten_txt}>{data.service.name || null}</Text>
+                            <Text style={{ flex: 1, paddingLeft: 10 }}>{data.service.name || null}</Text>
                         </View>
                     )
                 })
@@ -364,6 +362,7 @@ class EditProfile extends Component {
                         <View style={styles.editprofileLst}>
                             <View style={styles.editprofileWarp}>
                                 <Text>Name</Text>
+                                <Text style={styles.starRed}>*</Text>
                             </View>
                             <View style={styles.editprofileInputwrap}>
                                 <Input style={styles.editprofileInput} onChangeText={text => this.setState({ name: text })} value={this.state.name} />
@@ -372,6 +371,7 @@ class EditProfile extends Component {
                         <View style={styles.editprofileLst}>
                             <View style={styles.editprofileWarp}>
                                 <Text>Email Id</Text>
+                                <Text style={styles.starRed}>*</Text>
                             </View>
                             <View style={styles.editprofileInputwrap}>
                                 <Input editable={false} style={styles.editprofileInput} onChangeText={text => this.setState({ email: text })} value={this.state.email} />
@@ -381,6 +381,7 @@ class EditProfile extends Component {
                         <View style={styles.editprofileLst}>
                             <View style={styles.editprofileWarp}>
                                 <Text>Phone No</Text>
+                                <Text style={styles.starRed}>*</Text>
                             </View>
                             <View style={styles.editprofileInputwrap}>
                                 <Input style={styles.editprofileInput} onChangeText={text => this.setState({ phone: text })} value={this.state.phone} />
@@ -390,14 +391,18 @@ class EditProfile extends Component {
                         <View style={styles.editprofileLst}>
                             <View style={styles.editprofileWarp}>
                                 <Text>Password</Text>
+                                <Text style={styles.starRed}>*</Text>
                             </View>
                             <View style={styles.editprofileInputwrap}>
                                 <Input style={styles.editprofileInput} value={'password'} secureTextEntry />
                             </View>
                         </View>
                         <View style={{ padding: 10 }}>
-                            <Text>Skills</Text>
-                            <View></View>
+                            <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+                                <Text style={{ paddingBottom: 5, paddingLeft: 5 }}>Skills</Text>
+                                <Text style={styles.starRedSkill}>*</Text>
+                            </View>
+                            
                             <View>{serviceListing}</View>
                         </View>
                     </View>
