@@ -22,6 +22,7 @@ import UnavailableDate from "./components/location/unavailableDate";
 import WeekCalendar from './components/calendar/WeekCalendar';
 import myTiming from './components/location/myTiming';
 import MyPaymentList from './components/payment/payment-list';
+import AvailableJobs from './components/jobList/availableJobs';
 
 const AppNavigator = StackNavigator(
     {
@@ -40,7 +41,8 @@ const AppNavigator = StackNavigator(
         UnavailableDate: { screen: UnavailableDate },
         WeekCalendar: { screen: WeekCalendar },
         myTiming: { screen: myTiming },
-        MyPaymentList:{screen:MyPaymentList}
+        MyPaymentList: { screen: MyPaymentList },
+        AvailableJobs: { screen: AvailableJobs}
     },
     {
         initialRouteName: "Drawer",
