@@ -92,9 +92,6 @@ class Menu extends Component {
                             <View style={styles.menuCardView}>
                                 <Image source={icon1} style={styles.menuCardIcon} />
                                 <Text style={styles.menuCardTxt}>Google Plus</Text>
-                                <View style={styles.artNt}>
-                                    <Text style={styles.artNtTxt}>4</Text>
-                                </View>
                                 <View style={styles.arw_lft}>
                                     <Image source={back_arow} style={styles.arw_lft_img} />
                                 </View>
@@ -105,9 +102,6 @@ class Menu extends Component {
                             <View style={styles.menuCardView}>
                                 <Image source={icon2} style={styles.menuCardIcon} />
                                 <Text style={styles.menuCardTxt}>My Jobs</Text>
-                                <View style={styles.artNt}>
-                                    <Text style={styles.artNtTxt}>2</Text>
-                                </View>
                                 <View style={styles.arw_lft}>
                                     <Image source={back_arow} style={styles.arw_lft_img} />
                                 </View>
@@ -135,7 +129,6 @@ class Menu extends Component {
                         </CardItem>
 
                         <CardItem style={styles.menuCarditem}>
-                            <View style={styles.menuCardView}>
                                 <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate("myTiming")} >
                                     <Image source={icon4} style={styles.menuCardIcon} />
                                     <Text style={styles.menuCardTxt}>My Timing</Text>
@@ -143,13 +136,12 @@ class Menu extends Component {
                                         <Image source={back_arow} style={styles.arw_lft_img} />
                                     </View>
                                 </TouchableOpacity>
-                            </View>
                         </CardItem>
 
                         <CardItem style={styles.menuCarditem}>
                             <View style={styles.menuCardView}>
                                 <Image source={icon5} style={styles.menuCardIcon} />
-                                <Text style={styles.menuCardTxt}>MY promo Code</Text>
+                                <Text style={styles.menuCardTxt}>My promo Code</Text>
                                 <View style={styles.arw_lft}>
                                     <Image source={back_arow} style={styles.arw_lft_img} />
                                 </View>
@@ -189,7 +181,7 @@ class Menu extends Component {
                     </Card>
 
                     <View >
-                        <Text style={styles.version}>Ver 2.5 Build 2425 - Aug 2017</Text>
+                        <Text style={styles.version}>Ver 2.6 Build 2425 - March 2018</Text>
                     </View>
 
                 </Content>

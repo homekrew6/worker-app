@@ -52,23 +52,22 @@ class Login extends Component {
 						if (res.type == 'success') {
 							this.props.getUserDetail(res.userId).then(userRes => {
 								console.log(userRes)
-								//this.props.navigation.navigate("Menu");
 								this.props.navigation.dispatch(resetAction);
 							}).catch(err => {
-								Alert.alert('Login failed, please try again1');
+								Alert.alert('Login failed, please try again');
 							})
 						} else {
-							Alert.alert('Login failed, please try again2');
+							Alert.alert('Login failed, please try again');
 						}
 					}).catch(err => {
 						console.log(err);
-						Alert.alert('Login fail,please try again3');
+						Alert.alert('Login failed,please try again');
 					})
 				}else{
-					Alert.alert('You account not active, needs admin approval.');
+					Alert.alert('Your account is not activated yet, Please contact admin.');
 				}
 			}).catch(err => {
-				Alert.alert('You account not active, needs admin approval.');
+				Alert.alert('Please enter a valied email ID');
 			})
 			
 		}
@@ -102,7 +101,7 @@ class Login extends Component {
 						</TouchableOpacity>
 						<TouchableOpacity onPress={() => this.pressForgotPassword()}>
 							<View>
-								<Text style={{ textAlign: 'center', color: 'red', fontSize: 16, paddingBottom: 20 }}>Forgot password</Text>
+								<Text style={{ textAlign: 'right', color: '#1e3768', fontSize: 12, paddingBottom: 20, textDecorationStyle: 'solid', paddingLeft: 15, paddingRight: 15, textDecorationLine: 'underline', textDecorationColor: '#1e3768' }}>Forgot password?</Text>
 							</View>
 						</TouchableOpacity>
 

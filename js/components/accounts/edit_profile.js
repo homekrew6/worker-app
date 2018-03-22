@@ -167,10 +167,10 @@ class EditProfile extends Component {
                         // console.log(userRes)
                         // this.props.navigation.navigate("Menu");
                         this.setState({ visible: false });
-                        Alert.alert('Sucessfully saved');
+                        this.props.navigation.navigate('Menu');
                     }).catch((err) => {
                         this.setState({ visible: false });
-                        Alert.alert('Data not saved, please try again');
+                        Alert.alert('Data not saved, Please try again');
                     });
                 }).catch((err) => {
                     this.setState({ visible: false });
