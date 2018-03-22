@@ -6,6 +6,7 @@ import com.facebook.react.ReactApplication;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
+import com.airbnb.android.react.maps.MapsPackage;
 //import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 //import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -34,7 +35,8 @@ public class MainApplication extends Application implements ReactApplication {
             new RNI18nPackage(),
             //new RNI18nPackage(),
             //new RNI18nPackage(),
-            new VectorIconsPackage()
+            new VectorIconsPackage(),
+            new MapsPackage()
       );
     }
   };

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image } from "react-native";
+import { Image, ImageBackground } from "react-native";
 
 import {
 	Content,
@@ -197,9 +197,9 @@ class SideBar extends Component {
 		return (
 			<Container>
 				<Content bounces={false} style={{ flex: 1, backgroundColor: "#fff", top: -1 }}>
-					<Image source={drawerCover} style={styles.drawerCover}>
+					<ImageBackground source={drawerCover} style={styles.drawerCover}>
 						<Image square style={styles.drawerImage} source={drawerImage} />
-					</Image>
+					</ImageBackground>
 					<List
 						dataArray={datas}
 						renderRow={data =>

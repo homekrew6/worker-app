@@ -61,6 +61,7 @@
 		436432A149CC49AE84A67FCC /* libRNI18n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8167BF64B69F4F009CB74748 /* libRNI18n.a */; };
 		4A272BA621BD452D93E34B11 /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58ADC658C41C4318BFDF2C0F /* libRNImagePicker.a */; };
 		CE8B9FBC5C204781A3FE6B05 /* libimageCropPicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A331D4B631140B8B6103204 /* libimageCropPicker.a */; };
+		3A3CF878E45147A8A03B0A41 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F245A997F69C43C48E7BE556 /* Feather.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -345,6 +346,7 @@
 		58ADC658C41C4318BFDF2C0F /* libRNImagePicker.a */ = {isa = PBXFileReference; name = "libRNImagePicker.a"; path = "libRNImagePicker.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		D33A89470FDB4105AE391429 /* imageCropPicker.xcodeproj */ = {isa = PBXFileReference; name = "imageCropPicker.xcodeproj"; path = "../node_modules/react-native-image-crop-picker/ios/imageCropPicker.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		2A331D4B631140B8B6103204 /* libimageCropPicker.a */ = {isa = PBXFileReference; name = "libimageCropPicker.a"; path = "libimageCropPicker.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		F245A997F69C43C48E7BE556 /* Feather.ttf */ = {isa = PBXFileReference; name = "Feather.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -547,6 +549,7 @@
 				D0E00EFA9A3D4A50AFC359C6 /* Octicons.ttf */,
 				6199411C465A4CBA8B4E3059 /* SimpleLineIcons.ttf */,
 				09B87D51AA6749408B167EE3 /* Zocial.ttf */,
+				F245A997F69C43C48E7BE556 /* Feather.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1046,6 +1049,7 @@
 				0F46AC2F1A924D7BB3F97310 /* Octicons.ttf in Resources */,
 				A697FC5224BA4F498B12E40B /* SimpleLineIcons.ttf in Resources */,
 				FFDC93E86C9B42D9BE566AF6 /* Zocial.ttf in Resources */,
+				3A3CF878E45147A8A03B0A41 /* Feather.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
