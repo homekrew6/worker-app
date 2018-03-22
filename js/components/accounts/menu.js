@@ -66,7 +66,7 @@ class Menu extends Component {
                                     this.props.auth.data.image ? (
                                         <Thumbnail source={{ uri: this.props.auth.data.image }} style={styles.profileImage} />
                                     ) : (
-                                        <Thumbnail source={profileImage} style={styles.profileImage} />
+                                            <Thumbnail source={profileImage} style={styles.profileImage} />
                                         )
                                 }
                                 <View>
@@ -110,32 +110,32 @@ class Menu extends Component {
 
                         <CardItem style={styles.menuCarditem}>
                             <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate("TestLocation")} >
-                                    <Image source={icon3} style={styles.menuCardIcon} />
-                                    <Text style={styles.menuCardTxt}>My Location</Text>
-                                    <View style={styles.arw_lft}>
-                                        <Image source={back_arow} style={styles.arw_lft_img} />
-                                    </View>
+                                <Image source={icon3} style={styles.menuCardIcon} />
+                                <Text style={styles.menuCardTxt}>My Location</Text>
+                                <View style={styles.arw_lft}>
+                                    <Image source={back_arow} style={styles.arw_lft_img} />
+                                </View>
                             </TouchableOpacity>
                         </CardItem>
 
                         <CardItem style={styles.menuCarditem}>
-                            <View style={styles.menuCardView}>
+                            <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate("MyPaymentList")}>
                                 <Image source={icon4} style={styles.menuCardIcon} />
                                 <Text style={styles.menuCardTxt}>My Card</Text>
                                 <View style={styles.arw_lft}>
                                     <Image source={back_arow} style={styles.arw_lft_img} />
                                 </View>
-                            </View>
+                            </TouchableOpacity>
                         </CardItem>
 
                         <CardItem style={styles.menuCarditem}>
-                                <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate("myTiming")} >
-                                    <Image source={icon4} style={styles.menuCardIcon} />
-                                    <Text style={styles.menuCardTxt}>My Timing</Text>
-                                    <View style={styles.arw_lft}>
-                                        <Image source={back_arow} style={styles.arw_lft_img} />
-                                    </View>
-                                </TouchableOpacity>
+                            <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate("myTiming")} >
+                                <Image source={icon4} style={styles.menuCardIcon} />
+                                <Text style={styles.menuCardTxt}>My Timing</Text>
+                                <View style={styles.arw_lft}>
+                                    <Image source={back_arow} style={styles.arw_lft_img} />
+                                </View>
+                            </TouchableOpacity>
                         </CardItem>
 
                         <CardItem style={styles.menuCarditem}>
@@ -170,11 +170,11 @@ class Menu extends Component {
 
                         <CardItem style={styles.menuCarditem}>
                             <TouchableOpacity style={styles.menuCardView} onPress={() => this.logout()}>
-                                        <Image source={icon8} style={styles.menuCardIcon} />
-                                        <Text style={styles.menuCardTxt}>Logout</Text>
-                                        <View style={styles.arw_lft}>
-                                            <Image source={back_arow} style={styles.arw_lft_img} />
-                                        </View>
+                                <Image source={icon8} style={styles.menuCardIcon} />
+                                <Text style={styles.menuCardTxt}>Logout</Text>
+                                <View style={styles.arw_lft}>
+                                    <Image source={back_arow} style={styles.arw_lft_img} />
+                                </View>
                             </TouchableOpacity>
                         </CardItem>
 

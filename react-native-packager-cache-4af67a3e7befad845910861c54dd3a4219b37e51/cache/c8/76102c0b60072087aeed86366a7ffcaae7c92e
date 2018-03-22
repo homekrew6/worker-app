@@ -1,0 +1,55 @@
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _index = require('../../../api/index');
+
+var _index2 = babelHelpers.interopRequireDefault(_index);
+
+var authApi = function () {
+	function authApi() {
+		babelHelpers.classCallCheck(this, authApi);
+	}
+
+	babelHelpers.createClass(authApi, null, [{
+		key: 'login',
+		value: function login(email, password) {
+			return new Promise(function (resolve, reject) {
+				_index2.default.post('Workers/login', { email: email, password: password }).then(function (responseJson) {
+					resolve(responseJson);
+				}).catch(function (err) {
+					console.log(err);
+					reject(err);
+				});
+			});
+		}
+	}, {
+		key: 'signup',
+		value: function signup(name, email, password, phone) {
+			console.log('test');
+			return new Promise(function (resolve, reject) {
+				_index2.default.post('Workers/signup', { name: name, email: email, password: password, phone: phone, is_active: 0 }).then(function (responseJson) {
+					resolve(responseJson);
+				}).catch(function (err) {
+					console.log(err);
+					reject(err);
+				});
+			});
+		}
+	}, {
+		key: 'getUserDetail',
+		value: function getUserDetail(id) {
+			return new Promise(function (resolve, reject) {
+				_index2.default.get('Workers/' + id).then(function (responseJson) {
+					resolve(responseJson);
+				}).catch(function (err) {
+					console.log(err);
+					reject(err);
+				});
+			});
+		}
+	}]);
+	return authApi;
+}();
+
+exports.default = authApi;

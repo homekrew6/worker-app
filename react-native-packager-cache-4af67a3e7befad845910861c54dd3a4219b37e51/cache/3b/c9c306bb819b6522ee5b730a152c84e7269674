@@ -1,0 +1,29 @@
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.purge = undefined;
+
+var _redux = require('redux');
+
+var _rootReducer = require('../reducers/rootReducer');
+
+var _rootReducer2 = babelHelpers.interopRequireDefault(_rootReducer);
+
+var _reduxThunk = require('redux-thunk');
+
+var _reduxThunk2 = babelHelpers.interopRequireDefault(_reduxThunk);
+
+var _reduxLogger = require('redux-logger');
+
+var _reduxLogger2 = babelHelpers.interopRequireDefault(_reduxLogger);
+
+var store = (0, _redux.createStore)(_rootReducer2.default, undefined, (0, _redux.compose)((0, _redux.applyMiddleware)(_reduxThunk2.default, _reduxLogger2.default)));
+
+var purge = exports.purge = function purge() {
+
+	persistStore(store).purge();
+};
+var configureStore = function configureStore() {
+	return store;
+};
+exports.default = configureStore;

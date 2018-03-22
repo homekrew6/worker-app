@@ -14,7 +14,7 @@ import Swiper from 'react-native-swiper';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const img1 = require('../../../img/splash-bg2.png');
-const launchscreenBg = require("../../../img/bg-login.png");
+const launchscreenBg = require("../../../img/splash.png");
 const imageht = ( deviceHeight - 88 );
 const test = { uri: 'https://s3.eu-central-1.amazonaws.com/files.homekrew.com/1519816388650_splash-bg2.png' };
 
@@ -124,7 +124,10 @@ class Intro extends Component {
 		if (this.state.sliderArray.length == 0) {
 
 			return (
-				<Container><Text>Loading...</Text></Container>
+				<Container>
+					<Image source={launchscreenBg} style={styles.slide}>
+					</Image>
+				</Container>
 			)
 		}
 		else {

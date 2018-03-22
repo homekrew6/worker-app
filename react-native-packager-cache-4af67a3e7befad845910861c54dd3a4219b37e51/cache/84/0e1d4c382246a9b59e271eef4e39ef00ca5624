@@ -1,0 +1,779 @@
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/worker-app/js/components/location/myTiming.js';
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _reactRedux = require('react-redux');
+
+var _moment = require('moment');
+
+var _moment2 = babelHelpers.interopRequireDefault(_moment);
+
+var _reactNative = require('react-native');
+
+var _MaterialIcons = require('react-native-vector-icons/MaterialIcons');
+
+var _MaterialIcons2 = babelHelpers.interopRequireDefault(_MaterialIcons);
+
+var _FontAwesome = require('react-native-vector-icons/FontAwesome');
+
+var _FontAwesome2 = babelHelpers.interopRequireDefault(_FontAwesome);
+
+var _Ionicons = require('react-native-vector-icons/Ionicons');
+
+var _Ionicons2 = babelHelpers.interopRequireDefault(_Ionicons);
+
+var _nativeBase = require('native-base');
+
+var _i18n = require('../../i18n/i18n');
+
+var _i18n2 = babelHelpers.interopRequireDefault(_i18n);
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _api = require('../../api');
+
+var _api2 = babelHelpers.interopRequireDefault(_api);
+
+var buttonImage = require("../../../img/lgo2.png");
+
+
+var deviceHeight = _reactNative.Dimensions.get('window').height;
+var deviceWidth = _reactNative.Dimensions.get('window').width;
+
+var myTiming = function (_Component) {
+    babelHelpers.inherits(myTiming, _Component);
+
+    function myTiming() {
+        var _ref;
+
+        var _temp, _this, _ret;
+
+        babelHelpers.classCallCheck(this, myTiming);
+
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+        }
+
+        return _ret = (_temp = (_this = babelHelpers.possibleConstructorReturn(this, (_ref = myTiming.__proto__ || Object.getPrototypeOf(myTiming)).call.apply(_ref, [this].concat(args))), _this), _this.state = { timimgData: '', weekOffStatus: true, unavailableTiming: '', tableRowId: '' }, _temp), babelHelpers.possibleConstructorReturn(_this, _ret);
+    }
+
+    babelHelpers.createClass(myTiming, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this2 = this;
+
+            var workerId = this.props.auth.data.id;
+            var WorkerAvailabilitiesUrl = 'worker-available-timings?{"where":{"workerId":"' + workerId + '"}}';
+            _api2.default.get(WorkerAvailabilitiesUrl).then(function (res) {
+                console.log('timimgData', res);
+                _this2.setState({ timimgData: res[0].timings, tableRowId: res[0].id });
+            }).catch(function (err) {});
+
+            var WorkerUnavailabilitiesUrl = 'WorkerUnavailabilities?{"where":{"workerId":"' + workerId + '"}}';
+            _api2.default.get(WorkerUnavailabilitiesUrl).then(function (res) {
+                _this2.setState({ unavailableTiming: res });
+                console.log('unavailableTiming', _this2.state.unavailableTiming);
+            }).catch(function (err) {
+                console.log(err);
+            });
+        }
+    }, {
+        key: 'getWeekOff',
+        value: function getWeekOff(day, data) {
+            var VarAr = [];
+            data.map(function (OffCheck, key) {
+                var day_status = OffCheck[day];
+                if (day_status === true) {
+                    VarAr.push(day_status);
+                }
+            });
+            if (VarAr.length === 0) {
+                return _react2.default.createElement(
+                    _nativeBase.Text,
+                    { key: 1, style: { color: '#828282', fontSize: 13, paddingLeft: 5, paddingRight: 5 }, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 52
+                        }
+                    },
+                    'Week Off'
+                );
+            }
+        }
+    }, {
+        key: 'getTimeAmPm',
+        value: function getTimeAmPm(day, DataWeek, key) {
+            var day_status = DataWeek[day];
+            if (key !== 24) {
+                var CommaValue = ",";
+            } else {
+                var CommaValue = "";
+            }
+
+            var timing = DataWeek.time + CommaValue;
+            console.log('CommaValue', CommaValue, timing);
+            if (day_status === true) {
+                return _react2.default.createElement(
+                    _nativeBase.Text,
+                    { key: DataWeek.id, style: { color: '#828282', fontSize: 13, paddingLeft: 5, paddingRight: 5 }, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 69
+                        }
+                    },
+                    timing
+                );
+            }
+        }
+    }, {
+        key: 'renderUnavalData',
+        value: function renderUnavalData(UnAvData, key) {
+            console.log('UnAvData', UnAvData, key);
+            _moment2.default.locale('en');
+            var start_date = UnAvData.start_date;
+            var end_date = UnAvData.end_date;
+            return _react2.default.createElement(
+                _reactNative.View,
+                { style: _styles2.default.mainItemSec, key: key, __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 84
+                    }
+                },
+                _react2.default.createElement(_reactNative.Image, { source: buttonImage, style: _styles2.default.dotImg, __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 85
+                    }
+                }),
+                _react2.default.createElement(
+                    _reactNative.View,
+                    { style: _styles2.default.flexOne, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 86
+                        }
+                    },
+                    _react2.default.createElement(
+                        _reactNative.View,
+                        { style: _styles2.default.startTime, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 87
+                            }
+                        },
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            { style: _styles2.default.wkDay, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 88
+                                }
+                            },
+                            _react2.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.wkDayd, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 89
+                                    }
+                                },
+                                ' Start Date '
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            {
+                                __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 91
+                                }
+                            },
+                            _react2.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.timedata, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 92
+                                    }
+                                },
+                                ' ',
+                                (0, _moment2.default)(start_date).format('ddd, D MMM YYYY'),
+                                ' ',
+                                UnAvData.start_time,
+                                ' '
+                            )
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactNative.View,
+                        { style: _styles2.default.endTime, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 95
+                            }
+                        },
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            { style: _styles2.default.wkDay, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 96
+                                }
+                            },
+                            _react2.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.wkDayd, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 97
+                                    }
+                                },
+                                ' End Date '
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            {
+                                __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 99
+                                }
+                            },
+                            _react2.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.timedata, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 100
+                                    }
+                                },
+                                ' ',
+                                (0, _moment2.default)(end_date).format('ddd, D MMM YYYY'),
+                                ' ',
+                                UnAvData.end_time,
+                                ' '
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this3 = this;
+
+            var data = [{
+                "id": 1,
+                "date": "8-03-2018",
+                "time": "8 am",
+                "sun": false,
+                "mon": true,
+                "tue": false,
+                "wed": false,
+                "thu": false,
+                "fri": false,
+                "sat": true
+            }, {
+                "id": 2,
+                "date": "8-03-2018",
+                "time": "9 am",
+                "sun": true,
+                "mon": true,
+                "tue": false,
+                "wed": true,
+                "thu": false,
+                "fri": false,
+                "sat": true
+            }, {
+                "id": 3,
+                "date": "8-03-2018",
+                "time": "10 am",
+                "sun": true,
+                "mon": true,
+                "tue": false,
+                "wed": false,
+                "thu": false,
+                "fri": false,
+                "sat": true
+            }];
+
+            return _react2.default.createElement(
+                _nativeBase.Container,
+                {
+                    __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 149
+                    }
+                },
+                _react2.default.createElement(_reactNative.StatusBar, {
+                    backgroundColor: '#cbf0ed',
+                    __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 150
+                    }
+                }),
+                _react2.default.createElement(
+                    _nativeBase.Content,
+                    {
+                        __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 153
+                        }
+                    },
+                    _react2.default.createElement(
+                        _nativeBase.Header,
+                        { style: _styles2.default.appHdr2, androidStatusBarColor: '#cbf0ed', __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 154
+                            }
+                        },
+                        _react2.default.createElement(
+                            _reactNative.TouchableOpacity,
+                            { onPress: function onPress() {
+                                    return _this3.props.navigation.goBack();
+                                }, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 155
+                                }
+                            },
+                            _react2.default.createElement(
+                                _nativeBase.Button,
+                                { transparent: true, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 156
+                                    }
+                                },
+                                _react2.default.createElement(_Ionicons2.default, { name: 'ios-arrow-back', style: _styles2.default.backBt, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 157
+                                    }
+                                })
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _nativeBase.Body,
+                            { style: _styles2.default.tac, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 160
+                                }
+                            },
+                            _react2.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.hdClr, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 161
+                                    }
+                                },
+                                'My Timings'
+                            )
+                        ),
+                        _react2.default.createElement(_nativeBase.Button, { transparent: true, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 163
+                            }
+                        })
+                    ),
+                    _react2.default.createElement(
+                        _reactNative.View,
+                        {
+                            __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 165
+                            }
+                        },
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            { style: _styles2.default.mainItemSec, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 167
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.flexOne, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 168
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    { style: _styles2.default.listHdr, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 169
+                                        }
+                                    },
+                                    'Available Timing'
+                                )
+                            ),
+                            _react2.default.createElement(
+                                _reactNative.TouchableOpacity,
+                                { onPress: function onPress() {
+                                        return _this3.props.navigation.navigate("WeekCalendar", {
+                                            timimgData: _this3.state.timimgData,
+                                            tableRowId: _this3.state.tableRowId
+                                        });
+                                    }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 171
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _reactNative.View,
+                                    { style: { flexDirection: 'row' }, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 175
+                                        }
+                                    },
+                                    _react2.default.createElement(_MaterialIcons2.default, { name: 'edit', style: _styles2.default.listHdrEdtIcn, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 176
+                                        }
+                                    }),
+                                    _react2.default.createElement(
+                                        _nativeBase.Text,
+                                        { style: _styles2.default.listHdrEdt, __source: {
+                                                fileName: _jsxFileName,
+                                                lineNumber: 177
+                                            }
+                                        },
+                                        'Edit'
+                                    )
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            { style: _styles2.default.mainItemSec, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 182
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.wkDay, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 183
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    { style: _styles2.default.wkDayd, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 184
+                                        }
+                                    },
+                                    'Sunday'
+                                )
+                            ),
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: { flexDirection: 'row' }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 186
+                                    }
+                                },
+                                this.state.timimgData !== '' ? this.state.timimgData.map(function (DataWeek, key) {
+                                    return _this3.getTimeAmPm('sun', DataWeek, key);
+                                }) : console.log(null),
+                                this.state.timimgData !== '' ? this.getWeekOff('sun', this.state.timimgData) : console.log('null')
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            { style: _styles2.default.mainItemSec, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 195
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.wkDay, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 196
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    { style: _styles2.default.wkDayd, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 197
+                                        }
+                                    },
+                                    'Monday'
+                                )
+                            ),
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: { flexDirection: 'row' }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 199
+                                    }
+                                },
+                                this.state.timimgData !== '' ? this.state.timimgData.map(function (DataWeek, key) {
+                                    return _this3.getTimeAmPm('mon', DataWeek, key);
+                                }) : console.log(null),
+                                this.state.timimgData !== '' ? this.getWeekOff('mon', this.state.timimgData) : console.log('null')
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            { style: _styles2.default.mainItemSec, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 208
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.wkDay, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 209
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    { style: _styles2.default.wkDayd, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 210
+                                        }
+                                    },
+                                    ' Tuesday '
+                                )
+                            ),
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: { flexDirection: 'row' }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 212
+                                    }
+                                },
+                                this.state.timimgData !== '' ? this.state.timimgData.map(function (DataWeek, key) {
+                                    return _this3.getTimeAmPm('tue', DataWeek, key);
+                                }) : console.log(null),
+                                this.state.timimgData !== '' ? this.getWeekOff('tue', this.state.timimgData) : console.log('null')
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            { style: _styles2.default.mainItemSec, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 222
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.wkDay, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 223
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    { style: _styles2.default.wkDayd, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 224
+                                        }
+                                    },
+                                    ' Wednesday '
+                                )
+                            ),
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: { flexDirection: 'row' }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 226
+                                    }
+                                },
+                                this.state.timimgData !== '' ? this.state.timimgData.map(function (DataWeek, key) {
+                                    return _this3.getTimeAmPm('wed', DataWeek, key);
+                                }) : console.log(null),
+                                this.state.timimgData !== '' ? this.getWeekOff('wed', this.state.timimgData) : console.log('null')
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            { style: _styles2.default.mainItemSec, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 236
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.wkDay, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 237
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    { style: _styles2.default.wkDayd, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 238
+                                        }
+                                    },
+                                    ' Thursday '
+                                )
+                            ),
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: { flexDirection: 'row' }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 240
+                                    }
+                                },
+                                this.state.timimgData !== '' ? this.state.timimgData.map(function (DataWeek, key) {
+                                    return _this3.getTimeAmPm('thu', DataWeek, key);
+                                }) : console.log(null),
+                                this.state.timimgData !== '' ? this.getWeekOff('thu', this.state.timimgData) : console.log('null')
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            { style: _styles2.default.mainItemSec, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 249
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.wkDay, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 250
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    { style: _styles2.default.wkDayd, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 251
+                                        }
+                                    },
+                                    ' Friday '
+                                )
+                            ),
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: { flexDirection: 'row' }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 253
+                                    }
+                                },
+                                this.state.timimgData !== '' ? this.state.timimgData.map(function (DataWeek, key) {
+                                    return _this3.getTimeAmPm('fri', DataWeek, key);
+                                }) : console.log(null),
+                                this.state.timimgData !== '' ? this.getWeekOff('fri', this.state.timimgData) : console.log('null')
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            { style: _styles2.default.mainItemSec, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 261
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.wkDay, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 262
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    { style: _styles2.default.wkDayd, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 263
+                                        }
+                                    },
+                                    ' Saturday '
+                                )
+                            ),
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: { flexDirection: 'row' }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 265
+                                    }
+                                },
+                                this.state.timimgData !== '' ? this.state.timimgData.map(function (DataWeek, key) {
+                                    return _this3.getTimeAmPm('sat', DataWeek, key);
+                                }) : console.log(null),
+                                this.state.timimgData !== '' ? this.getWeekOff('sat', this.state.timimgData) : console.log('null')
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            { style: _styles2.default.mainItemSec, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 274
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.flexOne, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 275
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    { style: _styles2.default.listHdr, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 276
+                                        }
+                                    },
+                                    'Unavailable Timing'
+                                )
+                            ),
+                            _react2.default.createElement(
+                                _reactNative.TouchableOpacity,
+                                { style: { flexDirection: 'row' }, onPress: function onPress() {
+                                        return _this3.props.navigation.navigate('UnavailableDate');
+                                    }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 278
+                                    }
+                                },
+                                _react2.default.createElement(_MaterialIcons2.default, { name: 'add-circle', style: _styles2.default.listHdrEdtIcn, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 279
+                                    }
+                                }),
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    { style: _styles2.default.listHdrEdt, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 280
+                                        }
+                                    },
+                                    'Add'
+                                )
+                            )
+                        ),
+                        this.state.unavailableTiming !== '' ? this.state.unavailableTiming.map(function (UnAvData, key) {
+                            return _this3.renderUnavalData(UnAvData, key);
+                        }) : console.log("null")
+                    )
+                )
+            );
+        }
+    }]);
+    return myTiming;
+}(_react.Component);
+
+myTiming.propTypes = {
+    location: _propTypes2.default.object.isRequired,
+    auth: _propTypes2.default.object.isRequired
+};
+
+var mapStateToProps = function mapStateToProps(state) {
+    return {
+        location: state.location,
+        auth: state.auth
+    };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+    return {};
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(myTiming);

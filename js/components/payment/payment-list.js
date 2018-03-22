@@ -1,0 +1,132 @@
+import React, { Component } from "react";
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { NavigationActions } from "react-navigation";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, ListView } from "react-native";
+import Ico from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Entypo from 'react-native-vector-icons/Entypo';
+import FSpinner from 'react-native-loading-spinner-overlay';
+import { selectedLocation, myPaymentList, checkUncheck } from './elements/paymentAction';
+
+import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, CheckBox } from "native-base";
+import I18n from '../../i18n/i18n';
+import styles from './styles';
+
+const deviceHeight = Dimensions.get('window').height;
+const deviceWidth = Dimensions.get('window').width;
+
+const resetAction = NavigationActions.reset({
+    index: 0,
+    actions: [NavigationActions.navigate({ routeName: 'SelectLocation' })]
+});
+
+
+
+class MyPaymentList extends Component {
+    constructor(props) {
+        super(props);
+        console.log(props);
+        this.state = {
+            paymentList: [],
+            loader: false,
+        }
+    }
+
+
+    componentWillMount() {
+        this.setState({
+            loader: true,
+        })
+        this.props.myPaymentList(this.props.auth.data.id).then((allLst) => {
+            this.setState({
+                paymentList: allLst,
+                loader: false,
+            });
+        }).catch(err => {
+            this.setState({
+                loader: false
+            });
+            Alert.alert('Please try again later.');
+        })
+    }
+
+    chkbox_check(e) {
+        console.log(this.props.payment.data, "props data");
+        this.props.checkUncheck(e, this.state.paymentList);
+    }
+    render() {
+
+        let myPaymentList
+        console.log(this.state.myPaymentList, "My payment List");
+        if (this.state.paymentList && this.state.paymentList.length > 0) {
+            myPaymentList = (
+                this.state.paymentList.map((data, key) => (
+                    <View style={styles.mainItem} key={data.id}>
+                        <View style={styles.checkBoxWarp}>
+                            <CheckBox color='#29416f' checked={data.selected} id={data.id} onPress={() => this.chkbox_check(data.id)} />
+                        </View>
+                        <View style={styles.mainItemText}>
+                            <Text style={styles.lstHeader}>{data.bank_name}</Text>
+                            <Text style={styles.lstHeader2}>{data.account_number}</Text>
+                        </View>
+                    </View>
+                ))
+            )
+        }
+
+        return (
+            <Container >
+                <StatusBar
+                    backgroundColor="#cbf0ed"
+                />
+                <Content>
+                    <FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
+                    <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed">
+
+                        <Button transparent onPress={() => this.props.navigation.goBack()}>
+                            <Ionicons name="ios-arrow-back" style={styles.backBt} />
+                        </Button>
+
+                        <Body style={styles.tac}>
+                            <Text style={styles.hdClr}>My Payment Method</Text>
+                        </Body>
+                        <Button transparent onPress={() => this.save_select_location()}>
+                            <Text>Add</Text>
+                        </Button>
+
+                    </Header>
+
+                    <View>
+                        <Text style={{ backgroundColor: 'lightgray', textAlign: 'center' }}>Payment method cannt be edited, you can only add.</Text>
+                        {myPaymentList}
+                    </View>
+
+
+                </Content>
+            </Container>
+        );
+    }
+}
+
+MyPaymentList.propTypes = {
+    payment: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired
+}
+
+const mapStateToProps = (state) => {
+    return {
+        payment: state.payment,
+        auth: state.auth
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        myPaymentList: (id) => dispatch(myPaymentList(id)),
+        checkUncheck: (a, b) => dispatch(checkUncheck(a, b)),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyPaymentList);

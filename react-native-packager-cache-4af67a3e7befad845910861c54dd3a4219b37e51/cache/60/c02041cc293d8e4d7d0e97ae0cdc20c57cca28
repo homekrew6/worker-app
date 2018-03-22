@@ -1,0 +1,45 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var VelocityTracker = exports.VelocityTracker = function () {
+  function VelocityTracker() {
+    babelHelpers.classCallCheck(this, VelocityTracker);
+
+    this.history = [];
+    this.lastPosition = undefined;
+    this.lastTimestamp = undefined;
+  }
+
+  babelHelpers.createClass(VelocityTracker, [{
+    key: "add",
+    value: function add(position) {
+      var timestamp = new Date().valueOf();
+      if (this.lastPosition && timestamp > this.lastTimestamp) {
+        var diff = position - this.lastPosition;
+        if (diff > 0.001 || diff < -0.001) {
+          this.history.push(diff / (timestamp - this.lastTimestamp));
+        }
+      }
+      this.lastPosition = position;
+      this.lastTimestamp = timestamp;
+    }
+  }, {
+    key: "estimateSpeed",
+    value: function estimateSpeed() {
+      var finalTrend = this.history.slice(-3);
+      var sum = finalTrend.reduce(function (r, v) {
+        return r + v;
+      }, 0);
+      return sum / finalTrend.length;
+    }
+  }, {
+    key: "reset",
+    value: function reset() {
+      this.history = [];
+      this.lastPosition = undefined;
+      this.lastTimestamp = undefined;
+    }
+  }]);
+  return VelocityTracker;
+}();

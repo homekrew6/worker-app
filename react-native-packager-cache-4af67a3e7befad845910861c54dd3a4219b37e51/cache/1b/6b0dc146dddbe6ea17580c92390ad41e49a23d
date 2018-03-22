@@ -1,0 +1,109 @@
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.myPaymentList = myPaymentList;
+exports.selectedLocation = selectedLocation;
+exports.checkUncheck = checkUncheck;
+exports.clearMyLocation = clearMyLocation;
+exports.paymentStateBusy = paymentStateBusy;
+exports.paymentStateFailed = paymentStateFailed;
+exports.paymentStateSuccess = paymentStateSuccess;
+
+var _paymentApi = require('./paymentApi');
+
+var _paymentApi2 = babelHelpers.interopRequireDefault(_paymentApi);
+
+var _actionTypes = require('../../../actions/actionTypes');
+
+var TYPES = babelHelpers.interopRequireWildcard(_actionTypes);
+
+var _reactNative = require('react-native');
+
+function myPaymentList(workerId) {
+    return function (dispatch) {
+        console.log('test');
+        dispatch(paymentStateBusy());
+        return _paymentApi2.default.myPaymentList(workerId).then(function (res) {
+            dispatch(paymentStateSuccess(res));
+            res.type = 'success';
+
+            return res;
+        }).catch(function (err) {
+            err.type = 'error';
+            console.log(err);
+            dispatch(paymentStateFailed());
+            return err;
+        });
+    };
+}
+
+function selectedLocation(workerID) {
+    return function (dispatch) {
+        console.log(workerID);
+        dispatch(paymentStateBusy());
+        return _paymentApi2.default.myLoaction(workerID).then(function (res) {
+            console.log(res);
+            dispatch(paymentStateSuccess(res));
+            res.type = 'success';
+
+            return res;
+        }).catch(function (err) {
+            err.type = 'error';
+            console.log(err);
+            dispatch(paymentStateFailed());
+            return err;
+        });
+    };
+}
+
+function checkUncheck(id, data) {
+    console.log(data);
+    return function (dispatch) {
+        dispatch(paymentStateBusy());
+        var newData = data.map(function (data, key) {
+            if (data.id === id) {
+                data.selected = !data.selected;
+            }
+            return data;
+        });
+
+        debugger;
+        dispatch(paymentStateSuccess(newData));
+    };
+}
+
+function clearMyLocation(id) {
+    return function (dispatch) {
+        dispatch(clearMyLocationStateBusy());
+        return _paymentApi2.default.clearMyLocation(id).then(function (res) {
+            console.log(res);
+            dispatch(clearMyLocationStateSuccess());
+            return res;
+        }).catch(function (err) {
+            err.type = 'error';
+            console.log('error2');
+
+            dispatch(clearMyLocationStateFailed());
+            return err;
+        });
+    };
+}
+
+function paymentStateBusy() {
+    return {
+        type: TYPES.PAYMENT_STATE_BUSY
+    };
+}
+
+function paymentStateFailed() {
+    return {
+        type: TYPES.PAYMENT_STATE_FAILED
+    };
+}
+
+function paymentStateSuccess(data) {
+    return {
+        type: TYPES.PAYMENT_STATE_SUCCESS,
+        data: data
+    };
+}

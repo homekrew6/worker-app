@@ -1,0 +1,36 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/worker-app/node_modules/react-native-tab-view/src/SceneMap.js';
+exports.default = SceneMap;
+
+var _react = require('react');
+
+var React = babelHelpers.interopRequireWildcard(_react);
+function SceneMap(scenes) {
+  var SceneComponent = function (_React$PureComponent) {
+    babelHelpers.inherits(SceneComponent, _React$PureComponent);
+
+    function SceneComponent() {
+      babelHelpers.classCallCheck(this, SceneComponent);
+      return babelHelpers.possibleConstructorReturn(this, (SceneComponent.__proto__ || Object.getPrototypeOf(SceneComponent)).apply(this, arguments));
+    }
+
+    babelHelpers.createClass(SceneComponent, [{
+      key: 'render',
+      value: function render() {
+        return React.createElement(scenes[this.props.route.key], this.props);
+      }
+    }]);
+    return SceneComponent;
+  }(React.PureComponent);
+
+  return function (_ref) {
+    var route = _ref.route;
+    return React.createElement(SceneComponent, { key: route.key, route: route, __source: {
+        fileName: _jsxFileName,
+        lineNumber: 12
+      }
+    });
+  };
+}

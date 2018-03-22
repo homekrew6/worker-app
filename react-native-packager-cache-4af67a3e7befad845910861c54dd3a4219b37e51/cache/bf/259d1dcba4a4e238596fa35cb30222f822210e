@@ -1,0 +1,285 @@
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+var _jsxFileName = "/home/nits-58/Desktop/project/anup/loopback/worker-app/js/components/sidebar/index.js";
+
+var _react = require("react");
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require("react-native");
+
+var _nativeBase = require("native-base");
+
+var _style = require("./style");
+
+var _style2 = babelHelpers.interopRequireDefault(_style);
+
+var drawerCover = require("../../../img/splash-bg.png");
+var drawerImage = require("../../../img/splash-logo.png");
+
+var datas = [{
+	name: "Anatomy",
+	route: "Anatomy",
+	icon: "phone-portrait",
+	bg: "#C5F442"
+}, {
+	name: "Actionsheet",
+	route: "Actionsheet",
+	icon: "easel",
+	bg: "#C5F442"
+}, {
+	name: "Header",
+	route: "Header",
+	icon: "phone-portrait",
+	bg: "#477EEA",
+	types: "8"
+}, {
+	name: "Footer",
+	route: "Footer",
+	icon: "phone-portrait",
+	bg: "#DA4437",
+	types: "4"
+}, {
+	name: "Badge",
+	route: "NHBadge",
+	icon: "notifications",
+	bg: "#4DCAE0"
+}, {
+	name: "Button",
+	route: "NHButton",
+	icon: "radio-button-off",
+	bg: "#1EBC7C",
+	types: "9"
+}, {
+	name: "Card",
+	route: "NHCard",
+	icon: "keypad",
+	bg: "#B89EF5",
+	types: "5"
+}, {
+	name: "Check Box",
+	route: "NHCheckbox",
+	icon: "checkmark-circle",
+	bg: "#EB6B23"
+}, {
+	name: "Deck Swiper",
+	route: "NHDeckSwiper",
+	icon: "swap",
+	bg: "#3591FA",
+	types: "2"
+}, {
+	name: "Fab",
+	route: "NHFab",
+	icon: "help-buoy",
+	bg: "#EF6092",
+	types: "2"
+}, {
+	name: "Form & Inputs",
+	route: "NHForm",
+	icon: "call",
+	bg: "#EFB406",
+	types: "12"
+}, {
+	name: "Icon",
+	route: "NHIcon",
+	icon: "information-circle",
+	bg: "#EF6092"
+}, {
+	name: "Layout",
+	route: "NHLayout",
+	icon: "grid",
+	bg: "#9F897C",
+	types: "5"
+}, {
+	name: "List",
+	route: "NHList",
+	icon: "lock",
+	bg: "#5DCEE2",
+	types: "7"
+}, {
+	name: "ListSwipe",
+	route: "ListSwipe",
+	icon: "swap",
+	bg: "#C5F442",
+	types: "2"
+}, {
+	name: "Picker",
+	route: "NHPicker",
+	icon: "arrow-dropdown",
+	bg: "#F50C75"
+}, {
+	name: "Radio",
+	route: "NHRadio",
+	icon: "radio-button-on",
+	bg: "#6FEA90"
+}, {
+	name: "SearchBar",
+	route: "NHSearchbar",
+	icon: "search",
+	bg: "#29783B"
+}, {
+	name: "Segment",
+	route: "Segment",
+	icon: "menu",
+	bg: "#0A2C6B",
+	types: "2"
+}, {
+	name: "Spinner",
+	route: "NHSpinner",
+	icon: "navigate",
+	bg: "#BE6F50"
+}, {
+	name: "Tabs",
+	route: "NHTab",
+	icon: "home",
+	bg: "#AB6AED",
+	types: "3"
+}, {
+	name: "Thumbnail",
+	route: "NHThumbnail",
+	icon: "image",
+	bg: "#cc0000",
+	types: "2"
+}, {
+	name: "Toast",
+	route: "Toast",
+	icon: "albums",
+	bg: "#C5F442"
+}, {
+	name: "Typography",
+	route: "NHTypography",
+	icon: "paper",
+	bg: "#48525D"
+}];
+
+var SideBar = function (_Component) {
+	babelHelpers.inherits(SideBar, _Component);
+
+	function SideBar(props) {
+		babelHelpers.classCallCheck(this, SideBar);
+
+		var _this = babelHelpers.possibleConstructorReturn(this, (SideBar.__proto__ || Object.getPrototypeOf(SideBar)).call(this, props));
+
+		_this.state = {
+			shadowOffsetWidth: 1,
+			shadowRadius: 4
+		};
+		return _this;
+	}
+
+	babelHelpers.createClass(SideBar, [{
+		key: "render",
+		value: function render() {
+			var _this2 = this;
+
+			return _react2.default.createElement(
+				_nativeBase.Container,
+				{
+					__source: {
+						fileName: _jsxFileName,
+						lineNumber: 198
+					}
+				},
+				_react2.default.createElement(
+					_nativeBase.Content,
+					{ bounces: false, style: { flex: 1, backgroundColor: "#fff", top: -1 }, __source: {
+							fileName: _jsxFileName,
+							lineNumber: 199
+						}
+					},
+					_react2.default.createElement(
+						_reactNative.Image,
+						{ source: drawerCover, style: _style2.default.drawerCover, __source: {
+								fileName: _jsxFileName,
+								lineNumber: 200
+							}
+						},
+						_react2.default.createElement(_reactNative.Image, { square: true, style: _style2.default.drawerImage, source: drawerImage, __source: {
+								fileName: _jsxFileName,
+								lineNumber: 201
+							}
+						})
+					),
+					_react2.default.createElement(_nativeBase.List, {
+						dataArray: datas,
+						renderRow: function renderRow(data) {
+							return _react2.default.createElement(
+								_nativeBase.ListItem,
+								{ button: true, noBorder: true, onPress: function onPress() {
+										return _this2.props.navigation.navigate(data.route);
+									}, __source: {
+										fileName: _jsxFileName,
+										lineNumber: 206
+									}
+								},
+								_react2.default.createElement(
+									_nativeBase.Left,
+									{
+										__source: {
+											fileName: _jsxFileName,
+											lineNumber: 207
+										}
+									},
+									_react2.default.createElement(_nativeBase.Icon, { active: true, name: data.icon, style: { color: "#777", fontSize: 26, width: 30 }, __source: {
+											fileName: _jsxFileName,
+											lineNumber: 208
+										}
+									}),
+									_react2.default.createElement(
+										_nativeBase.Text,
+										{ style: _style2.default.text, __source: {
+												fileName: _jsxFileName,
+												lineNumber: 209
+											}
+										},
+										data.name
+									)
+								),
+								data.types && _react2.default.createElement(
+									_nativeBase.Right,
+									{ style: { flex: 1 }, __source: {
+											fileName: _jsxFileName,
+											lineNumber: 214
+										}
+									},
+									_react2.default.createElement(
+										_nativeBase.Badge,
+										{
+											style: {
+												borderRadius: 3,
+												height: 25,
+												width: 72,
+												backgroundColor: data.bg
+											},
+											__source: {
+												fileName: _jsxFileName,
+												lineNumber: 215
+											}
+										},
+										_react2.default.createElement(
+											_nativeBase.Text,
+											{ style: _style2.default.badgeText, __source: {
+													fileName: _jsxFileName,
+													lineNumber: 223
+												}
+											},
+											data.types + " Types"
+										)
+									)
+								)
+							);
+						},
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 203
+						}
+					})
+				)
+			);
+		}
+	}]);
+	return SideBar;
+}(_react.Component);
+
+exports.default = SideBar;

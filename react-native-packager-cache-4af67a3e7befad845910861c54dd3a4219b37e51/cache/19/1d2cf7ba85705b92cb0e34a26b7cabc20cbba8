@@ -1,0 +1,447 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/worker-app/node_modules/react-native-popover-tooltip/src/index.js';
+
+var _react = require('react');
+
+var React = babelHelpers.interopRequireWildcard(_react);
+
+var _reactNative = require('react-native');
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _invariant = require('invariant');
+
+var _invariant2 = babelHelpers.interopRequireDefault(_invariant);
+
+var _PopoverTooltipItem = require('./PopoverTooltipItem');
+
+var _PopoverTooltipItem2 = babelHelpers.interopRequireDefault(_PopoverTooltipItem);
+
+var window = _reactNative.Dimensions.get('window');
+
+var PopoverTooltip = function (_React$PureComponent) {
+  babelHelpers.inherits(PopoverTooltip, _React$PureComponent);
+
+  function PopoverTooltip(props) {
+    babelHelpers.classCallCheck(this, PopoverTooltip);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (PopoverTooltip.__proto__ || Object.getPrototypeOf(PopoverTooltip)).call(this, props));
+
+    _this.toggleModal = function () {
+      _this.setState({ isModalOpen: !_this.state.isModalOpen });
+    };
+
+    _this.openModal = function () {
+      _this.setState({ willPopUp: true });
+      _this.toggleModal();
+      _this.props.onOpenTooltipMenu && _this.props.onOpenTooltipMenu();
+    };
+
+    _this.hideModal = function () {
+      _this.setState({ willPopUp: false });
+      _this.showZoomingOutAnimation();
+      _this.props.onCloseTooltipMenu && _this.props.onCloseTooltipMenu();
+    };
+
+    _this.onPressItem = function (userCallback) {
+      _this.toggle();
+      userCallback();
+    };
+
+    _this.onInnerContainerLayout = function (event) {
+      var tooltipContainerWidth = event.nativeEvent.layout.width;
+      var tooltipContainerHeight = event.nativeEvent.layout.height;
+      if (!_this.state.willPopUp || tooltipContainerWidth === 0 || tooltipContainerHeight === 0) {
+        return;
+      }
+
+      var componentWrapper = _this.wrapperComponent;
+      (0, _invariant2.default)(componentWrapper, "should be set");
+      componentWrapper.measure(function (x, y, width, height, pageX, pageY) {
+        var fullWidth = pageX + tooltipContainerWidth + (width - tooltipContainerWidth) / 2;
+        var tooltipContainerX_final = fullWidth > window.width ? window.width - tooltipContainerWidth : pageX + (width - tooltipContainerWidth) / 2;
+        var tooltipContainerY_final = _this.state.tooltipTriangleDown ? pageY - tooltipContainerHeight - 20 : pageY + tooltipContainerHeight - 20;
+        var tooltipTriangleDown = _this.state.tooltipTriangleDown;
+        if (pageY - tooltipContainerHeight - 20 < 0) {
+          tooltipContainerY_final = pageY + height + 20;
+          tooltipTriangleDown = false;
+        }
+        if (pageY + tooltipContainerHeight + 80 > window.height) {
+          tooltipContainerY_final = pageY - tooltipContainerHeight - 20;
+          tooltipTriangleDown = true;
+        }
+        var tooltipContainerX = _this.state.tooltipContainerScale.interpolate({
+          inputRange: [0, 1],
+          outputRange: [tooltipContainerX_final, tooltipContainerX_final]
+        });
+        var tooltipContainerY = _this.state.tooltipContainerScale.interpolate({
+          inputRange: [0, 1],
+          outputRange: [tooltipContainerY_final + tooltipContainerHeight / 2 + 20, tooltipContainerY_final]
+        });
+        var buttonComponentContainerScale = _this.state.tooltipContainerScale.interpolate({
+          inputRange: [0, 1],
+          outputRange: [1, _this.props.buttonComponentExpandRatio]
+        });
+        var tooltipTriangleLeftMargin = pageX + width / 2 - tooltipContainerX_final - 10;
+        _this.setState({
+          x: pageX,
+          y: pageY,
+          width: width,
+          height: height,
+          tooltipContainerX: tooltipContainerX,
+          tooltipContainerY: tooltipContainerY,
+          tooltipTriangleDown: tooltipTriangleDown,
+          tooltipTriangleLeftMargin: tooltipTriangleLeftMargin,
+          buttonComponentContainerScale: buttonComponentContainerScale,
+          buttonComponentOpacity: 1
+        }, _this.showZoomingInAnimation);
+      });
+      _this.setState({ willPopUp: false });
+    };
+
+    _this.wrapperRef = function (wrapperComponent) {
+      _this.wrapperComponent = wrapperComponent;
+    };
+
+    _this.showZoomingInAnimation = function () {
+      var tooltipAnimation = _reactNative.Animated.timing(_this.state.tooltipContainerScale, {
+        toValue: 1,
+        duration: _this.props.timingConfig && _this.props.timingConfig.duration ? _this.props.timingConfig.duration : 200
+      });
+      if (_this.props.animationType == 'spring') {
+        tooltipAnimation = _reactNative.Animated.spring(_this.state.tooltipContainerScale, {
+          toValue: 1,
+          tension: _this.props.springConfig && _this.props.springConfig.tension ? _this.props.springConfig.tension : 100,
+          friction: _this.props.springConfig && _this.props.springConfig.friction ? _this.props.springConfig.friction : 7
+        });
+      }
+      _reactNative.Animated.parallel([tooltipAnimation, _reactNative.Animated.timing(_this.state.opacity, {
+        toValue: 1,
+        duration: _this.props.opacityChangeDuration ? _this.props.opacityChangeDuration : 200
+      })]).start();
+    };
+
+    _this.toggle = function () {
+      if (_this.state.isModalOpen) {
+        _this.hideModal();
+      } else {
+        _this.openModal();
+      }
+    };
+
+    _this.state = {
+      isModalOpen: false,
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0,
+      opacity: new _reactNative.Animated.Value(0),
+      tooltipContainerScale: new _reactNative.Animated.Value(0),
+      buttonComponentContainerScale: 1,
+      tooltipTriangleDown: !props.setBelow,
+      tooltipTriangleLeftMargin: 0,
+      triangleOffset: props.triangleOffset,
+      willPopUp: false,
+      oppositeOpacity: undefined,
+      tooltipContainerX: undefined,
+      tooltipContainerY: undefined,
+      buttonComponentOpacity: 0
+    };
+    return _this;
+  }
+
+  babelHelpers.createClass(PopoverTooltip, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      var newOppositeOpacity = this.state.opacity.interpolate({
+        inputRange: [0, 1],
+        outputRange: [1, 0]
+      });
+      this.setState({ oppositeOpacity: newOppositeOpacity });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var tooltipContainerStyle = {
+        left: this.state.tooltipContainerX,
+        top: this.state.tooltipContainerY,
+        transform: [{ scale: this.state.tooltipContainerScale }]
+      };
+
+      var items = this.props.items.map(function (item, index) {
+        var classes = [_this2.props.labelContainerStyle];
+
+        if (index !== _this2.props.items.length - 1) {
+          classes.push([styles.tooltipMargin, { borderBottomColor: _this2.props.labelSeparatorColor }]);
+        }
+
+        return React.createElement(_PopoverTooltipItem2.default, {
+          key: index,
+          label: item.label,
+          onPressUserCallback: item.onPress,
+          onPress: _this2.onPressItem,
+          containerStyle: classes,
+          labelStyle: _this2.props.labelStyle,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 247
+          }
+        });
+      });
+
+      var labelContainerStyle = this.props.labelContainerStyle;
+      var borderStyle = labelContainerStyle && labelContainerStyle.backgroundColor ? { borderTopColor: labelContainerStyle.backgroundColor } : null;
+      var triangleDown = null;
+      var triangleUp = null;
+      if (this.state.tooltipTriangleDown) {
+        triangleDown = React.createElement(_reactNative.View, { style: [styles.triangleDown, {
+            marginLeft: this.state.tooltipTriangleLeftMargin,
+            left: this.state.triangleOffset
+          }, borderStyle], __source: {
+            fileName: _jsxFileName,
+            lineNumber: 267
+          }
+        });
+      } else {
+        triangleUp = React.createElement(_reactNative.View, { style: [styles.triangleUp, {
+            marginLeft: this.state.tooltipTriangleLeftMargin,
+            left: this.state.triangleOffset
+          }, borderStyle], __source: {
+            fileName: _jsxFileName,
+            lineNumber: 278
+          }
+        });
+      }
+
+      return React.createElement(
+        _reactNative.TouchableOpacity,
+        {
+          ref: this.wrapperRef,
+          style: this.props.componentWrapperStyle,
+          onPress: this.props.onPress,
+          onLongPress: this.toggle,
+          delayLongPress: this.props.delayLongPress,
+          activeOpacity: 1.0,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 290
+          }
+        },
+        React.createElement(
+          _reactNative.Animated.View,
+          { style: [{ opacity: this.state.oppositeOpacity }, this.props.componentContainerStyle], __source: {
+              fileName: _jsxFileName,
+              lineNumber: 298
+            }
+          },
+          this.props.buttonComponent
+        ),
+        React.createElement(
+          _reactNative.Modal,
+          {
+            visible: this.state.isModalOpen,
+            onRequestClose: this.props.onRequestClose,
+            transparent: true,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 304
+            }
+          },
+          React.createElement(
+            _reactNative.Animated.View,
+            { style: [styles.overlay, this.props.overlayStyle, { opacity: this.state.opacity }], __source: {
+                fileName: _jsxFileName,
+                lineNumber: 309
+              }
+            },
+            React.createElement(
+              _reactNative.TouchableOpacity,
+              {
+                activeOpacity: 1,
+                focusedOpacity: 1,
+                style: styles.button,
+                onPress: this.toggle,
+                __source: {
+                  fileName: _jsxFileName,
+                  lineNumber: 314
+                }
+              },
+              React.createElement(
+                _reactNative.Animated.View,
+                {
+                  style: [styles.tooltipContainer, this.props.tooltipContainerStyle, tooltipContainerStyle],
+                  __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 320
+                  }
+                },
+                React.createElement(
+                  _reactNative.View,
+                  {
+                    onLayout: this.onInnerContainerLayout,
+                    style: styles.innerContainer,
+                    __source: {
+                      fileName: _jsxFileName,
+                      lineNumber: 327
+                    }
+                  },
+                  triangleUp,
+                  React.createElement(
+                    _reactNative.View,
+                    { style: [styles.allItemContainer, this.props.tooltipContainerStyle], __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 332
+                      }
+                    },
+                    items
+                  ),
+                  triangleDown
+                )
+              )
+            )
+          ),
+          React.createElement(
+            _reactNative.Animated.View,
+            { style: {
+                position: 'absolute',
+                left: this.state.x,
+                top: this.state.y,
+                width: this.state.width,
+                height: this.state.height,
+                backgroundColor: 'transparent',
+                opacity: this.state.buttonComponentOpacity,
+                transform: [{ scale: this.state.buttonComponentContainerScale }]
+              }, __source: {
+                fileName: _jsxFileName,
+                lineNumber: 343
+              }
+            },
+            React.createElement(
+              _reactNative.TouchableOpacity,
+              {
+                onPress: this.toggle,
+                activeOpacity: 1.0,
+                __source: {
+                  fileName: _jsxFileName,
+                  lineNumber: 357
+                }
+              },
+              this.props.buttonComponent
+            )
+          )
+        )
+      );
+    }
+  }, {
+    key: 'showZoomingOutAnimation',
+    value: function showZoomingOutAnimation() {
+      _reactNative.Animated.parallel([_reactNative.Animated.timing(this.state.tooltipContainerScale, {
+        toValue: 0,
+        duration: this.props.opacityChangeDuration ? this.props.opacityChangeDuration : 200
+      }), _reactNative.Animated.timing(this.state.opacity, {
+        toValue: 0,
+        duration: this.props.opacityChangeDuration ? this.props.opacityChangeDuration : 200
+      })]).start(this.toggleModal);
+    }
+  }]);
+  return PopoverTooltip;
+}(React.PureComponent);
+
+PopoverTooltip.propTypes = {
+  buttonComponent: _propTypes2.default.node.isRequired,
+  buttonComponentExpandRatio: _propTypes2.default.number,
+  items: _propTypes2.default.arrayOf(_propTypes2.default.shape({
+    label: _PopoverTooltipItem.labelPropType.isRequired,
+    onPress: _propTypes2.default.func.isRequired
+  })).isRequired,
+  componentWrapperStyle: _reactNative.ViewPropTypes.style,
+  overlayStyle: _reactNative.ViewPropTypes.style,
+  tooltipContainerStyle: _reactNative.ViewPropTypes.style,
+  labelContainerStyle: _reactNative.ViewPropTypes.style,
+  labelSeparatorColor: _propTypes2.default.string,
+  labelStyle: _reactNative.Text.propTypes.style,
+  setBelow: _propTypes2.default.bool,
+  animationType: _propTypes2.default.oneOf(["timing", "spring"]),
+  onRequestClose: _propTypes2.default.func,
+  triangleOffset: _propTypes2.default.number,
+  delayLongPress: _propTypes2.default.number,
+  onOpenTooltipMenu: _propTypes2.default.func,
+  onCloseTooltipMenu: _propTypes2.default.func,
+  onPress: _propTypes2.default.func,
+  componentContainerStyle: _reactNative.ViewPropTypes.style,
+  timingConfig: _propTypes2.default.object,
+  springConfig: _propTypes2.default.object,
+  opacityChangeDuration: _propTypes2.default.number
+};
+PopoverTooltip.defaultProps = {
+  buttonComponentExpandRatio: 1.0,
+  labelSeparatorColor: "#E1E1E1",
+  onRequestClose: function onRequestClose() {},
+  setBelow: false,
+  delayLongPress: 100,
+  triangleOffset: 0
+};
+
+
+var styles = _reactNative.StyleSheet.create({
+  overlay: {
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    flex: 1
+  },
+  innerContainer: {
+    backgroundColor: 'transparent',
+    alignItems: 'flex-start'
+  },
+  tooltipMargin: {
+    borderBottomWidth: 1
+  },
+  tooltipContainer: {
+    backgroundColor: 'transparent',
+    position: 'absolute'
+  },
+  triangleDown: {
+    width: 10,
+    height: 10,
+    backgroundColor: 'transparent',
+    borderStyle: 'solid',
+    borderTopWidth: 10,
+    borderRightWidth: 10,
+    borderBottomWidth: 0,
+    borderLeftWidth: 10,
+    borderTopColor: 'white',
+    borderRightColor: 'transparent',
+    borderBottomColor: 'transparent',
+    borderLeftColor: 'transparent'
+  },
+  triangleUp: {
+    width: 10,
+    height: 10,
+    backgroundColor: 'transparent',
+    borderStyle: 'solid',
+    borderTopWidth: 0,
+    borderRightWidth: 10,
+    borderBottomWidth: 10,
+    borderLeftWidth: 10,
+    borderBottomColor: 'white',
+    borderTopColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderLeftColor: 'transparent'
+  },
+  button: {
+    flex: 1
+  },
+  allItemContainer: {
+    borderRadius: 5,
+    backgroundColor: 'white',
+    alignSelf: 'stretch',
+    overflow: 'hidden'
+  }
+});
+
+exports.default = PopoverTooltip;

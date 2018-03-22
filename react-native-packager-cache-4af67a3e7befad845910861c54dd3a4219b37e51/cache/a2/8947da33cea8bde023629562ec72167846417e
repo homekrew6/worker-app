@@ -1,0 +1,690 @@
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/worker-app/js/components/accounts/menu.js';
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _reactRedux = require('react-redux');
+
+var _reactNative = require('react-native');
+
+var _nativeBase = require('native-base');
+
+var _authActions = require('./elements/authActions');
+
+var _i18n = require('../../i18n/i18n');
+
+var _i18n2 = babelHelpers.interopRequireDefault(_i18n);
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _reactNavigation = require('react-navigation');
+
+var deviceHeight = _reactNative.Dimensions.get('window').height;
+var deviceWidth = _reactNative.Dimensions.get('window').width;
+var profileImage = require("../../../img/atul.png");
+var icon1 = require("../../../img/icon1.png");
+var icon2 = require("../../../img/icon2.png");
+var icon3 = require("../../../img/icon3.png");
+var icon4 = require("../../../img/icon4.png");
+var icon5 = require("../../../img/icon5.png");
+var icon6 = require("../../../img/icon6.png");
+var icon7 = require("../../../img/icon7.png");
+var icon8 = require("../../../img/icon8.png");
+var back_arow = require("../../../img/arrow_back.png");
+var logo_hdr = require("../../../img/logo2.png");
+var resetAction = _reactNavigation.NavigationActions.reset({
+    index: 0,
+    actions: [_reactNavigation.NavigationActions.navigate({ routeName: 'Login' })]
+});
+
+var Menu = function (_Component) {
+    babelHelpers.inherits(Menu, _Component);
+
+    function Menu(props) {
+        babelHelpers.classCallCheck(this, Menu);
+        return babelHelpers.possibleConstructorReturn(this, (Menu.__proto__ || Object.getPrototypeOf(Menu)).call(this, props));
+    }
+
+    babelHelpers.createClass(Menu, [{
+        key: 'logout',
+        value: function logout() {
+            var _this2 = this;
+
+            this.props.logout(function (res) {
+                if (res) {
+                    _this2.props.navigation.dispatch(resetAction);
+                } else {
+                    _this2.props.navigation.navigate("Menu");
+                }
+            });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this3 = this;
+
+            return _react2.default.createElement(
+                _nativeBase.Container,
+                {
+                    __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 47
+                    }
+                },
+                _react2.default.createElement(_reactNative.StatusBar, { backgroundColor: '#81cdc7', __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 48
+                    }
+                }),
+                _react2.default.createElement(
+                    _nativeBase.Content,
+                    {
+                        __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 50
+                        }
+                    },
+                    _react2.default.createElement(
+                        _nativeBase.Header,
+                        { style: _styles2.default.bg_white, androidStatusBarColor: '#81cdc7', __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 51
+                            }
+                        },
+                        _react2.default.createElement(_nativeBase.Button, { transparent: true, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 52
+                            }
+                        }),
+                        _react2.default.createElement(
+                            _nativeBase.Body,
+                            { style: _styles2.default.appHdrtitleWarp, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 53
+                                }
+                            },
+                            _react2.default.createElement(_reactNative.Image, { source: logo_hdr, style: { height: 18, width: 110 }, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 54
+                                }
+                            })
+                        ),
+                        _react2.default.createElement(
+                            _nativeBase.Button,
+                            { transparent: true, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 56
+                                }
+                            },
+                            _react2.default.createElement(_nativeBase.Icon, { name: 'search', style: _styles2.default.bg_head_icon, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 57
+                                }
+                            })
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _nativeBase.Card,
+                        {
+                            __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 61
+                            }
+                        },
+                        _react2.default.createElement(
+                            _nativeBase.CardItem,
+                            { style: _styles2.default.pcard, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 63
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.flx_View, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 64
+                                    }
+                                },
+                                this.props.auth.data.image ? _react2.default.createElement(_nativeBase.Thumbnail, { source: { uri: this.props.auth.data.image }, style: _styles2.default.profileImage, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 67
+                                    }
+                                }) : _react2.default.createElement(_nativeBase.Thumbnail, { source: profileImage, style: _styles2.default.profileImage, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 69
+                                    }
+                                }),
+                                _react2.default.createElement(
+                                    _reactNative.View,
+                                    {
+                                        __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 72
+                                        }
+                                    },
+                                    _react2.default.createElement(
+                                        _reactNative.TouchableOpacity,
+                                        { onPress: function onPress() {
+                                                return _this3.props.navigation.navigate("EditProfile");
+                                            }, __source: {
+                                                fileName: _jsxFileName,
+                                                lineNumber: 73
+                                            }
+                                        },
+                                        _react2.default.createElement(
+                                            _nativeBase.Text,
+                                            { style: _styles2.default.pname, __source: {
+                                                    fileName: _jsxFileName,
+                                                    lineNumber: 74
+                                                }
+                                            },
+                                            this.props.auth.data.name
+                                        ),
+                                        _react2.default.createElement(
+                                            _nativeBase.Text,
+                                            { style: _styles2.default.pemail, __source: {
+                                                    fileName: _jsxFileName,
+                                                    lineNumber: 75
+                                                }
+                                            },
+                                            this.props.auth.data.email
+                                        ),
+                                        _react2.default.createElement(
+                                            _nativeBase.Text,
+                                            { style: _styles2.default.pphone, __source: {
+                                                    fileName: _jsxFileName,
+                                                    lineNumber: 76
+                                                }
+                                            },
+                                            this.props.auth.data.phone
+                                        )
+                                    )
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _nativeBase.CardItem,
+                            {
+                                __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 82
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.pBtmTxt, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 83
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    { style: _styles2.default.pBtmTxt_Txt, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 84
+                                        }
+                                    },
+                                    'Credit: AED 0.00'
+                                )
+                            )
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _nativeBase.Card,
+                        {
+                            __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 89
+                            }
+                        },
+                        _react2.default.createElement(
+                            _nativeBase.CardItem,
+                            { style: _styles2.default.menuCarditem, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 91
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.menuCardView, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 92
+                                    }
+                                },
+                                _react2.default.createElement(_reactNative.Image, { source: icon1, style: _styles2.default.menuCardIcon, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 93
+                                    }
+                                }),
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    { style: _styles2.default.menuCardTxt, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 94
+                                        }
+                                    },
+                                    'Google Plus'
+                                ),
+                                _react2.default.createElement(
+                                    _reactNative.View,
+                                    { style: _styles2.default.arw_lft, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 95
+                                        }
+                                    },
+                                    _react2.default.createElement(_reactNative.Image, { source: back_arow, style: _styles2.default.arw_lft_img, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 96
+                                        }
+                                    })
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _nativeBase.CardItem,
+                            { style: _styles2.default.menuCarditem, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 101
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.menuCardView, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 102
+                                    }
+                                },
+                                _react2.default.createElement(_reactNative.Image, { source: icon2, style: _styles2.default.menuCardIcon, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 103
+                                    }
+                                }),
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    { style: _styles2.default.menuCardTxt, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 104
+                                        }
+                                    },
+                                    'My Jobs'
+                                ),
+                                _react2.default.createElement(
+                                    _reactNative.View,
+                                    { style: _styles2.default.arw_lft, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 105
+                                        }
+                                    },
+                                    _react2.default.createElement(_reactNative.Image, { source: back_arow, style: _styles2.default.arw_lft_img, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 106
+                                        }
+                                    })
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _nativeBase.CardItem,
+                            { style: _styles2.default.menuCarditem, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 111
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.TouchableOpacity,
+                                { style: _styles2.default.menuCardView, onPress: function onPress() {
+                                        return _this3.props.navigation.navigate("MyLocation");
+                                    }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 112
+                                    }
+                                },
+                                _react2.default.createElement(_reactNative.Image, { source: icon3, style: _styles2.default.menuCardIcon, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 113
+                                    }
+                                }),
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    { style: _styles2.default.menuCardTxt, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 114
+                                        }
+                                    },
+                                    'My Location'
+                                ),
+                                _react2.default.createElement(
+                                    _reactNative.View,
+                                    { style: _styles2.default.arw_lft, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 115
+                                        }
+                                    },
+                                    _react2.default.createElement(_reactNative.Image, { source: back_arow, style: _styles2.default.arw_lft_img, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 116
+                                        }
+                                    })
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _nativeBase.CardItem,
+                            { style: _styles2.default.menuCarditem, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 121
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.TouchableOpacity,
+                                { style: _styles2.default.menuCardView, onPress: function onPress() {
+                                        return _this3.props.navigation.navigate("MyPaymentList");
+                                    }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 122
+                                    }
+                                },
+                                _react2.default.createElement(_reactNative.Image, { source: icon4, style: _styles2.default.menuCardIcon, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 123
+                                    }
+                                }),
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    { style: _styles2.default.menuCardTxt, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 124
+                                        }
+                                    },
+                                    'My Card'
+                                ),
+                                _react2.default.createElement(
+                                    _reactNative.View,
+                                    { style: _styles2.default.arw_lft, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 125
+                                        }
+                                    },
+                                    _react2.default.createElement(_reactNative.Image, { source: back_arow, style: _styles2.default.arw_lft_img, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 126
+                                        }
+                                    })
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _nativeBase.CardItem,
+                            { style: _styles2.default.menuCarditem, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 131
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.TouchableOpacity,
+                                { style: _styles2.default.menuCardView, onPress: function onPress() {
+                                        return _this3.props.navigation.navigate("myTiming");
+                                    }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 132
+                                    }
+                                },
+                                _react2.default.createElement(_reactNative.Image, { source: icon4, style: _styles2.default.menuCardIcon, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 133
+                                    }
+                                }),
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    { style: _styles2.default.menuCardTxt, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 134
+                                        }
+                                    },
+                                    'My Timing'
+                                ),
+                                _react2.default.createElement(
+                                    _reactNative.View,
+                                    { style: _styles2.default.arw_lft, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 135
+                                        }
+                                    },
+                                    _react2.default.createElement(_reactNative.Image, { source: back_arow, style: _styles2.default.arw_lft_img, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 136
+                                        }
+                                    })
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _nativeBase.CardItem,
+                            { style: _styles2.default.menuCarditem, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 141
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.menuCardView, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 142
+                                    }
+                                },
+                                _react2.default.createElement(_reactNative.Image, { source: icon5, style: _styles2.default.menuCardIcon, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 143
+                                    }
+                                }),
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    { style: _styles2.default.menuCardTxt, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 144
+                                        }
+                                    },
+                                    'My promo Code'
+                                ),
+                                _react2.default.createElement(
+                                    _reactNative.View,
+                                    { style: _styles2.default.arw_lft, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 145
+                                        }
+                                    },
+                                    _react2.default.createElement(_reactNative.Image, { source: back_arow, style: _styles2.default.arw_lft_img, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 146
+                                        }
+                                    })
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _nativeBase.CardItem,
+                            { style: _styles2.default.menuCarditem, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 151
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.menuCardView, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 152
+                                    }
+                                },
+                                _react2.default.createElement(_reactNative.Image, { source: icon6, style: _styles2.default.menuCardIcon, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 153
+                                    }
+                                }),
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    { style: _styles2.default.menuCardTxt, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 154
+                                        }
+                                    },
+                                    'Support'
+                                ),
+                                _react2.default.createElement(
+                                    _reactNative.View,
+                                    { style: _styles2.default.arw_lft, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 155
+                                        }
+                                    },
+                                    _react2.default.createElement(_reactNative.Image, { source: back_arow, style: _styles2.default.arw_lft_img, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 156
+                                        }
+                                    })
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _nativeBase.CardItem,
+                            { style: _styles2.default.menuCarditem, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 161
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.menuCardView, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 162
+                                    }
+                                },
+                                _react2.default.createElement(_reactNative.Image, { source: icon7, style: _styles2.default.menuCardIcon, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 163
+                                    }
+                                }),
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    { style: _styles2.default.menuCardTxt, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 164
+                                        }
+                                    },
+                                    'Settings'
+                                ),
+                                _react2.default.createElement(
+                                    _reactNative.View,
+                                    { style: _styles2.default.arw_lft, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 165
+                                        }
+                                    },
+                                    _react2.default.createElement(_reactNative.Image, { source: back_arow, style: _styles2.default.arw_lft_img, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 166
+                                        }
+                                    })
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _nativeBase.CardItem,
+                            { style: _styles2.default.menuCarditem, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 171
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.TouchableOpacity,
+                                { style: _styles2.default.menuCardView, onPress: function onPress() {
+                                        return _this3.logout();
+                                    }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 172
+                                    }
+                                },
+                                _react2.default.createElement(_reactNative.Image, { source: icon8, style: _styles2.default.menuCardIcon, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 173
+                                    }
+                                }),
+                                _react2.default.createElement(
+                                    _nativeBase.Text,
+                                    { style: _styles2.default.menuCardTxt, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 174
+                                        }
+                                    },
+                                    'Logout'
+                                ),
+                                _react2.default.createElement(
+                                    _reactNative.View,
+                                    { style: _styles2.default.arw_lft, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 175
+                                        }
+                                    },
+                                    _react2.default.createElement(_reactNative.Image, { source: back_arow, style: _styles2.default.arw_lft_img, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 176
+                                        }
+                                    })
+                                )
+                            )
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactNative.View,
+                        {
+                            __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 183
+                            }
+                        },
+                        _react2.default.createElement(
+                            _nativeBase.Text,
+                            { style: _styles2.default.version, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 184
+                                }
+                            },
+                            'Ver 2.6 Build 2425 - March 2018'
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+    return Menu;
+}(_react.Component);
+
+;
+
+Menu.propTypes = {
+    auth: _propTypes2.default.object.isRequired
+};
+var mapStateToProps = function mapStateToProps(state) {
+    return {
+        auth: state.auth
+    };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+    return {
+        logout: function logout(cb) {
+            return dispatch((0, _authActions.logout)(cb));
+        }
+    };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Menu);

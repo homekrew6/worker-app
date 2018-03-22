@@ -1,0 +1,181 @@
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.allLocation = allLocation;
+exports.selectedLocation = selectedLocation;
+exports.checkUncheck = checkUncheck;
+exports.clearMyLocation = clearMyLocation;
+exports.locationStateBusy = locationStateBusy;
+exports.locationStateFailed = locationStateFailed;
+exports.locationStateSuccess = locationStateSuccess;
+exports.myLocationStateBusy = myLocationStateBusy;
+exports.myLocationStateFailed = myLocationStateFailed;
+exports.myLocationStateSuccess = myLocationStateSuccess;
+exports.checkUncheckStateBusy = checkUncheckStateBusy;
+exports.checkUncheckStateFailed = checkUncheckStateFailed;
+exports.checkUncheckStateSuccess = checkUncheckStateSuccess;
+exports.clearMyLocationStateBusy = clearMyLocationStateBusy;
+exports.clearMyLocationStateFailed = clearMyLocationStateFailed;
+exports.clearMyLocationStateSuccess = clearMyLocationStateSuccess;
+
+var _locationApi = require('./locationApi');
+
+var _locationApi2 = babelHelpers.interopRequireDefault(_locationApi);
+
+var _actionTypes = require('../../../actions/actionTypes');
+
+var TYPES = babelHelpers.interopRequireWildcard(_actionTypes);
+
+var _reactNative = require('react-native');
+
+function allLocation() {
+    return function (dispatch) {
+        console.log('test');
+        dispatch(locationStateBusy());
+        return _locationApi2.default.allLocation().then(function (res) {
+            console.log(res);
+            var i = void 0;
+            for (i = 0; i < res.length; i++) {
+                res[i].selected = false;
+            }
+            console.log(res);
+            dispatch(locationStateSuccess(res));
+            res.type = 'success';
+
+            return res;
+        }).catch(function (err) {
+            err.type = 'error';
+            console.log(err);
+            dispatch(locationStateFailed());
+            return err;
+        });
+    };
+}
+
+function selectedLocation(workerID) {
+    return function (dispatch) {
+        console.log(workerID);
+        dispatch(myLocationStateBusy());
+        return _locationApi2.default.myLoaction(workerID).then(function (res) {
+            console.log(res);
+            dispatch(myLocationStateSuccess(res));
+            res.type = 'success';
+
+            return res;
+        }).catch(function (err) {
+            err.type = 'error';
+            console.log(err);
+            dispatch(myLocationStateFailed());
+            return err;
+        });
+    };
+}
+
+function checkUncheck(id, data) {
+    console.log(data);
+    return function (dispatch) {
+        dispatch(checkUncheckStateBusy());
+        var newData = data.map(function (data, key) {
+            if (data.id === id) {
+                data.selected = !data.selected;
+            }
+            return data;
+        });
+
+        console.log(newData);
+    };
+}
+
+function clearMyLocation(id) {
+    return function (dispatch) {
+        dispatch(clearMyLocationStateBusy());
+        return _locationApi2.default.clearMyLocation(id).then(function (res) {
+            console.log(res);
+            dispatch(clearMyLocationStateSuccess());
+            return res;
+        }).catch(function (err) {
+            err.type = 'error';
+            console.log('error2');
+
+            dispatch(clearMyLocationStateFailed());
+            return err;
+        });
+    };
+}
+
+function locationStateBusy() {
+    return {
+        type: TYPES.LOCATION_STATE_BUSY
+    };
+}
+
+function locationStateFailed() {
+    return {
+        type: TYPES.LOCATION_STATE_FAILED
+    };
+}
+
+function locationStateSuccess(data, selectedData) {
+    return {
+        type: TYPES.LOCATION_STATE_SUCCESS,
+        data: data,
+        selectedData: selectedData
+    };
+}
+
+function myLocationStateBusy() {
+    return {
+        type: TYPES.MYLOCATION_STATE_BUSY
+    };
+}
+
+function myLocationStateFailed() {
+    return {
+        type: TYPES.MYLOCATION_STATE_FAILED
+    };
+}
+
+function myLocationStateSuccess(data, selectedData) {
+    return {
+        type: TYPES.MYLOCATION_STATE_SUCCESS,
+        data: data,
+        selectedData: selectedData
+    };
+}
+
+function checkUncheckStateBusy() {
+    return {
+        type: TYPES.CHECK_UNCHECK_STATE_BUSY
+    };
+}
+
+function checkUncheckStateFailed() {
+    return {
+        type: TYPES.CHECK_UNCHECK_STATE_FAILED
+    };
+}
+
+function checkUncheckStateSuccess(data) {
+    return {
+        type: TYPES.CHECK_UNCHECK_STATE_SUCCESS,
+        data: data
+    };
+}
+
+function clearMyLocationStateBusy() {
+    return {
+        type: TYPES.CLEAR_MY_LOCATION_STATE_BUSY
+    };
+}
+
+function clearMyLocationStateFailed() {
+    return {
+        type: TYPES.CLEAR_MY_LOCATION_STATE_FAILED
+    };
+}
+
+function clearMyLocationStateSuccess() {
+    return {
+        type: TYPES.CLEAR_MY_LOCATION_STATE_SUCCESS
+    };
+}

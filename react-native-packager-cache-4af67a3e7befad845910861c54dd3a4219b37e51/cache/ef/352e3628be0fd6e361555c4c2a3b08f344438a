@@ -1,0 +1,63 @@
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var React = require("react-native");
+
+var StyleSheet = React.StyleSheet,
+    Dimensions = React.Dimensions,
+    Platform = React.Platform;
+
+
+var deviceHeight = Dimensions.get("window").height;
+var deviceWidth = Dimensions.get("window").width;
+var imageht = deviceHeight - 88;
+
+exports.default = {
+    mainContent: {
+        alignItems: 'center',
+        justifyContent: 'space-around'
+    },
+    image: {
+        paddingTop: 40,
+        width: deviceWidth,
+        height: imageht,
+        display: 'flex',
+        alignItems: 'center'
+    },
+    imageLogo: {
+        width: 120,
+        height: 120,
+        marginBottom: 20
+    },
+    image2: {
+        width: deviceWidth,
+        height: 500
+    },
+    text: {
+        color: '#000',
+        backgroundColor: 'transparent',
+        textAlign: 'center',
+        paddingHorizontal: 16
+    },
+    title: {
+        fontSize: 22,
+        color: '#1e3768',
+        backgroundColor: 'transparent',
+        textAlign: 'center',
+        marginBottom: 16
+    },
+    imagestl2: {
+        width: deviceWidth,
+        height: 200,
+        backgroundColor: 'red'
+    },
+    wrapper: {},
+    slide: {
+        width: deviceWidth,
+        height: imageht,
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#92BBD9',
+        paddingTop: 20
+    }
+};

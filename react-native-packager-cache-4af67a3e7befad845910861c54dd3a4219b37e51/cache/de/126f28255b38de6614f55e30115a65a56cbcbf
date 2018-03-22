@@ -1,0 +1,294 @@
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/worker-app/js/components/location/myLocation.js';
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _reactRedux = require('react-redux');
+
+var _reactNavigation = require('react-navigation');
+
+var _reactNative = require('react-native');
+
+var _MaterialIcons = require('react-native-vector-icons/MaterialIcons');
+
+var _MaterialIcons2 = babelHelpers.interopRequireDefault(_MaterialIcons);
+
+var _FontAwesome = require('react-native-vector-icons/FontAwesome');
+
+var _FontAwesome2 = babelHelpers.interopRequireDefault(_FontAwesome);
+
+var _Ionicons = require('react-native-vector-icons/Ionicons');
+
+var _Ionicons2 = babelHelpers.interopRequireDefault(_Ionicons);
+
+var _Entypo = require('react-native-vector-icons/Entypo');
+
+var _Entypo2 = babelHelpers.interopRequireDefault(_Entypo);
+
+var _reactNativeLoadingSpinnerOverlay = require('react-native-loading-spinner-overlay');
+
+var _reactNativeLoadingSpinnerOverlay2 = babelHelpers.interopRequireDefault(_reactNativeLoadingSpinnerOverlay);
+
+var _locationAction = require('./elements/locationAction');
+
+var _nativeBase = require('native-base');
+
+var _i18n = require('../../i18n/i18n');
+
+var _i18n2 = babelHelpers.interopRequireDefault(_i18n);
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var deviceHeight = _reactNative.Dimensions.get('window').height;
+var deviceWidth = _reactNative.Dimensions.get('window').width;
+
+var resetAction = _reactNavigation.NavigationActions.reset({
+    index: 0,
+    actions: [_reactNavigation.NavigationActions.navigate({ routeName: 'SelectLocation' })]
+});
+
+var myLocation = function (_Component) {
+    babelHelpers.inherits(myLocation, _Component);
+
+    function myLocation(props) {
+        babelHelpers.classCallCheck(this, myLocation);
+
+        var _this = babelHelpers.possibleConstructorReturn(this, (myLocation.__proto__ || Object.getPrototypeOf(myLocation)).call(this, props));
+
+        console.log(props);
+        _this.state = {
+            locationFlag: false,
+            loader: false
+        };
+        return _this;
+    }
+
+    babelHelpers.createClass(myLocation, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            var _this2 = this;
+
+            this.setState({
+                loader: true
+            });
+
+            this.props.selectedLocation(this.props.auth.data.id).then(function (allLst) {
+                console.log(_this2.props.location);
+                console.log(_this2.props.auth.data.name);
+                _this2.setState({
+                    locationFlag: true,
+                    loader: false
+                });
+            }).catch(function (err) {
+                console.log(err);
+            });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this3 = this;
+
+            var myLocationlist = void 0;
+            if (this.state.locationFlag && this.props.location.selectedData != "") {
+                myLocationlist = this.props.location.selectedData.map(function (data, key) {
+                    return _react2.default.createElement(
+                        _reactNative.View,
+                        { style: _styles2.default.mainItem, key: data.id, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 72
+                            }
+                        },
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            { style: _styles2.default.mainItemIcon, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 73
+                                }
+                            },
+                            _react2.default.createElement(
+                                _reactNative.View,
+                                {
+                                    __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 74
+                                    }
+                                },
+                                _react2.default.createElement(_Entypo2.default, { name: 'location-pin', style: _styles2.default.mainItemIconIcon, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 75
+                                    }
+                                })
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactNative.View,
+                            { style: _styles2.default.mainItemText, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 78
+                                }
+                            },
+                            _react2.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.locName, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 79
+                                    }
+                                },
+                                data.zone.name
+                            ),
+                            _react2.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.locName2, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 80
+                                    }
+                                },
+                                data.zone.description
+                            )
+                        )
+                    );
+                });
+            }
+
+            return _react2.default.createElement(
+                _nativeBase.Container,
+                {
+                    __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 88
+                    }
+                },
+                _react2.default.createElement(_reactNative.StatusBar, {
+                    backgroundColor: '#cbf0ed',
+                    __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 89
+                    }
+                }),
+                _react2.default.createElement(
+                    _nativeBase.Content,
+                    {
+                        __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 92
+                        }
+                    },
+                    _react2.default.createElement(_reactNativeLoadingSpinnerOverlay2.default, { visible: this.state.loader, textContent: "Loading...", textStyle: { color: '#FFF' }, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 93
+                        }
+                    }),
+                    _react2.default.createElement(
+                        _nativeBase.Header,
+                        { style: _styles2.default.appHdr2, androidStatusBarColor: '#cbf0ed', __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 95
+                            }
+                        },
+                        _react2.default.createElement(
+                            _nativeBase.Button,
+                            { transparent: true, onPress: function onPress() {
+                                    return _this3.props.navigation.goBack();
+                                }, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 96
+                                }
+                            },
+                            _react2.default.createElement(_Ionicons2.default, { name: 'ios-arrow-back', style: _styles2.default.backBt, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 97
+                                }
+                            })
+                        ),
+                        _react2.default.createElement(
+                            _nativeBase.Body,
+                            { style: _styles2.default.tac, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 99
+                                }
+                            },
+                            _react2.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.hdClr, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 100
+                                    }
+                                },
+                                'My Location'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _nativeBase.Button,
+                            { transparent: true,
+                                onPress: function onPress() {
+                                    return _this3.props.navigation.navigate('SelectLocation');
+                                },
+                                __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 102
+                                }
+                            },
+                            _react2.default.createElement(_MaterialIcons2.default, { name: 'edit', style: _styles2.default.editIcon, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 105
+                                }
+                            }),
+                            _react2.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.editIconTxt, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 106
+                                    }
+                                },
+                                'Edit'
+                            )
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactNative.View,
+                        {
+                            __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 110
+                            }
+                        },
+                        myLocationlist
+                    )
+                )
+            );
+        }
+    }]);
+    return myLocation;
+}(_react.Component);
+
+myLocation.propTypes = {
+    location: _propTypes2.default.object.isRequired,
+    auth: _propTypes2.default.object.isRequired
+};
+
+var mapStateToProps = function mapStateToProps(state) {
+    return {
+        location: state.location,
+        auth: state.auth
+    };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+    return {
+        selectedLocation: function selectedLocation(id) {
+            return dispatch((0, _locationAction.selectedLocation)(id));
+        }
+    };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(myLocation);

@@ -1,0 +1,267 @@
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+var _jsxFileName = "/home/nits-58/Desktop/project/anup/loopback/worker-app/js/components/intro/index.js";
+
+var _react = require("react");
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require("react-native");
+
+var _nativeBase = require("native-base");
+
+var _AppIntroSlider = require("./AppIntroSlider");
+
+var _AppIntroSlider2 = babelHelpers.interopRequireDefault(_AppIntroSlider);
+
+var _styles = require("./styles");
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _api = require("../../api");
+
+var _api2 = babelHelpers.interopRequireDefault(_api);
+
+var _reactNativeLoadingSpinnerOverlay = require("react-native-loading-spinner-overlay");
+
+var _reactNativeLoadingSpinnerOverlay2 = babelHelpers.interopRequireDefault(_reactNativeLoadingSpinnerOverlay);
+
+var _reactNativeSwiper = require("react-native-swiper");
+
+var _reactNativeSwiper2 = babelHelpers.interopRequireDefault(_reactNativeSwiper);
+
+var deviceHeight = _reactNative.Dimensions.get('window').height;
+var deviceWidth = _reactNative.Dimensions.get('window').width;
+var img1 = require('../../../img/splash-bg2.png');
+var launchscreenBg = require("../../../img/bg-login.png");
+var imageht = deviceHeight - 88;
+var test = { uri: 'https://s3.eu-central-1.amazonaws.com/files.homekrew.com/1519816388650_splash-bg2.png' };
+
+var slides = [];
+var logo = require("../../../img/logo22.png");
+
+var Intro = function (_Component) {
+	babelHelpers.inherits(Intro, _Component);
+
+	function Intro(props) {
+		babelHelpers.classCallCheck(this, Intro);
+
+		var _this = babelHelpers.possibleConstructorReturn(this, (Intro.__proto__ || Object.getPrototypeOf(Intro)).call(this, props));
+
+		_this.props;
+		_this.state = {
+			position: 1,
+			interval: null,
+			loader: true,
+			sliderArray: [],
+			slidFlag: false
+		};
+		return _this;
+	}
+
+	babelHelpers.createClass(Intro, [{
+		key: "componentWillMount",
+		value: function componentWillMount() {
+			var _this2 = this;
+
+			this.setState({
+				interval: setInterval(function () {
+					_this2.setState({ position: _this2.state.position === 2 ? 0 : _this2.state.position + 1 });
+				}, 2000)
+			});
+			_api2.default.post('IntroSliders/getSliders', { type: 'Worker' }).then(function (res) {
+				_this2.setState({
+					sliderArray: res.response,
+					slidFlag: true
+				});
+				console.log('hi', res.response);
+			}).catch(function (err) {
+				_this2.setState({ loader: false });
+
+				Alert.alert('Wrong OTP.');
+			});
+			this.setState({ loader: false });
+		}
+	}, {
+		key: "componentWillUnmount",
+		value: function componentWillUnmount() {
+			clearInterval(this.state.interval);
+		}
+	}, {
+		key: "renderSlides",
+		value: function renderSlides() {
+			var slides = this.state.slides;
+
+
+			return _react2.default.createElement(
+				_reactNativeSwiper2.default,
+				{
+					showsButtons: false,
+					loop: true,
+					autoplay: true,
+					autoplayTimeout: 2.5,
+					index: 0,
+					__source: {
+						fileName: _jsxFileName,
+						lineNumber: 80
+					}
+				},
+				this.state.sliderArray.map(function (slide, index) {
+					return _react2.default.createElement(
+						_reactNative.View,
+						{ key: slide.id, __source: {
+								fileName: _jsxFileName,
+								lineNumber: 89
+							}
+						},
+						_react2.default.createElement(_reactNative.Image, { source: logo, style: _styles2.default.imageLogo, __source: {
+								fileName: _jsxFileName,
+								lineNumber: 90
+							}
+						}),
+						_react2.default.createElement(
+							_nativeBase.Text,
+							{ style: _styles2.default.title, __source: {
+									fileName: _jsxFileName,
+									lineNumber: 91
+								}
+							},
+							"data"
+						),
+						_react2.default.createElement(
+							_nativeBase.Text,
+							{ style: _styles2.default.text, __source: {
+									fileName: _jsxFileName,
+									lineNumber: 92
+								}
+							},
+							"data"
+						)
+					);
+				})
+			);
+		}
+	}, {
+		key: "render",
+		value: function render() {
+			var _this3 = this;
+
+			if (this.state.sliderArray.length == 0) {
+
+				return _react2.default.createElement(
+					_nativeBase.Container,
+					{
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 127
+						}
+					},
+					_react2.default.createElement(
+						_nativeBase.Text,
+						{
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 127
+							}
+						},
+						"Loading..."
+					)
+				);
+			} else {
+				return _react2.default.createElement(
+					_nativeBase.Container,
+					{
+						__source: {
+							fileName: _jsxFileName,
+							lineNumber: 132
+						}
+					},
+					_react2.default.createElement(
+						_reactNativeSwiper2.default,
+						{
+							style: _styles2.default.wrapper,
+							loop: true,
+							autoplay: true,
+							autoplayTimeout: 5,
+							dotColor: '#81cdc7',
+							activeDotColor: '#1e3768',
+
+							__source: {
+								fileName: _jsxFileName,
+								lineNumber: 133
+							}
+						},
+						this.state.sliderArray.map(function (item, key) {
+							return _react2.default.createElement(
+								_reactNative.Image,
+								{ key: key, source: { uri: item.image_url }, style: _styles2.default.slide, __source: {
+										fileName: _jsxFileName,
+										lineNumber: 145
+									}
+								},
+								_react2.default.createElement(_reactNative.Image, { source: logo, style: _styles2.default.imageLogo, __source: {
+										fileName: _jsxFileName,
+										lineNumber: 146
+									}
+								}),
+								_react2.default.createElement(
+									_nativeBase.Text,
+									{ style: _styles2.default.title, __source: {
+											fileName: _jsxFileName,
+											lineNumber: 147
+										}
+									},
+									item.name
+								),
+								_react2.default.createElement(
+									_nativeBase.Text,
+									{ style: _styles2.default.text, __source: {
+											fileName: _jsxFileName,
+											lineNumber: 148
+										}
+									},
+									item.description
+								)
+							);
+						})
+					),
+					_react2.default.createElement(
+						_reactNative.View,
+						{ style: {
+								paddingLeft: 10, paddingRight: 10, paddingTop: 10,
+								paddingBottom: 10
+							}, __source: {
+								fileName: _jsxFileName,
+								lineNumber: 155
+							}
+						},
+						_react2.default.createElement(
+							_nativeBase.Button,
+							{ full: true, style: { backgroundColor: '#81cdc7', marginTop: 0 }, onPress: function onPress() {
+									return _this3.props.navigation.navigate('Login');
+								}, __source: {
+									fileName: _jsxFileName,
+									lineNumber: 159
+								}
+							},
+							_react2.default.createElement(
+								_nativeBase.Text,
+								{
+									__source: {
+										fileName: _jsxFileName,
+										lineNumber: 159
+									}
+								},
+								"LOGIN"
+							)
+						)
+					)
+				);
+			}
+		}
+	}]);
+	return Intro;
+}(_react.Component);
+
+exports.default = Intro;
