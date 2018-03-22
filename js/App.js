@@ -21,6 +21,7 @@ import MyTiming from "./components/location/myTiming";
 import UnavailableDate from "./components/location/unavailableDate";
 import WeekCalendar from './components/calendar/WeekCalendar';
 import myTiming from './components/location/myTiming';
+import TestLocation from "./components/location/TestLocation";
 
 const AppNavigator = StackNavigator(
     {
@@ -39,6 +40,7 @@ const AppNavigator = StackNavigator(
         UnavailableDate: { screen: UnavailableDate },
         WeekCalendar: { screen: WeekCalendar },
         myTiming: { screen: myTiming },
+        TestLocation: { screen: TestLocation },
     },
     {
         initialRouteName: "Drawer",
