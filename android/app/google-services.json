@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "395038932360",
+    "firebase_url": "https://krew-worker-app.firebaseio.com",
+    "project_id": "krew-worker-app",
+    "storage_bucket": "krew-worker-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:395038932360:android:adb5d5923ad5818d",
+        "android_client_info": {
+          "package_name": "com.KrewWorkerApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "395038932360-6lqmfcfni5nr6t7l10pns57h02ntk7nb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqcNVD59-Rse5fim2lnJ8rwLKZ_Q-MY0E"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

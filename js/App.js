@@ -21,7 +21,8 @@ import MyTiming from "./components/location/myTiming";
 import UnavailableDate from "./components/location/unavailableDate";
 import WeekCalendar from './components/calendar/WeekCalendar';
 import myTiming from './components/location/myTiming';
-import MyPaymentList from './components/payment/payment-list'; 
+import TestLocation from "./components/location/TestLocation";
+import MyPaymentList from './components/payment/payment-list';
 import AvailableJobs from './components/jobList/availableJobs';
 import SliderCheck from './components/jobList/sliderCheck';
 import ImageSlider from 'react-native-image-slider';
@@ -43,6 +44,7 @@ const AppNavigator = StackNavigator(
         UnavailableDate: { screen: UnavailableDate },
         WeekCalendar: { screen: WeekCalendar },
         myTiming: { screen: myTiming },
+        TestLocation: { screen: TestLocation },
         MyPaymentList: { screen: MyPaymentList },
         AvailableJobs: { screen: AvailableJobs },
         SliderCheck: { screen: SliderCheck}

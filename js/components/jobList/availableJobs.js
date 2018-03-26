@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import moment from 'moment';
+import 'moment-timezone';
+import DeviceInfo from 'react-native-device-info';
 import { NavigationActions } from "react-navigation";
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ListView } from "react-native";
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, List, ListItem, Icon, Tab, Tabs, ScrollableTab, Body } from "native-base";
@@ -27,6 +30,44 @@ class availableJobs extends Component {
         };
     }
 
+    getTimeDiffLocal(gmtTime){
+        const gmtToDeiveTimeObj = moment.tz(gmtTime, "Europe/London");
+        const timezoneDevice = DeviceInfo.getTimezone();
+        const gmtToDeiveTime = gmtToDeiveTimeObj.clone().tz(timezoneDevice).format();
+        const timeDiffNow = moment(gmtToDeiveTime, "YYYY-MM-DD hh:mm:ss a").fromNow();
+        const now = new Date();
+        const timeDur = moment.duration({ from: now, to: gmtToDeiveTime });
+        if(Math.sign(timeDur._data.hours) === 1){
+            //positive
+            const hourDiff = Math.abs(timeDur._data.hours);
+            return hourDiff;
+        }else{
+            //negative
+            const checkHour = Math.abs(timeDur._data.hours);
+            if( checkHour === 1){
+                const hourDiff = Math.abs(timeDur._data.hours) + " hour";
+                return hourDiff;
+            }else{
+                const hourDiff = Math.abs(timeDur._data.hours) + " hours";
+                return hourDiff;
+            }
+            
+        }
+        console.log('timeDur', timeDur, );
+
+        
+    }
+
+    componentDidMount(){
+        const postedTime = "2018-03-23 11:00:00 am";
+        const timeDiffNowRet = this.getTimeDiffLocal(postedTime)
+
+        
+
+        console.log('gmtToDeiveTime', timeDiffNowRet );
+        
+   
+    }
 
     render() {
 

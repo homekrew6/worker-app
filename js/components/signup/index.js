@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image, View, StatusBar,Dimensions } from "react-native";
+import { Image, View, StatusBar,Dimensions, ImageBackground } from "react-native";
 
 import { Container,Text } from "native-base";
 import styles from "./styles";
@@ -17,11 +17,11 @@ class Signup extends Component {
 	render() {
 		return (
 			<Container >
-				<Image source={launchscreenBg} style={styles.imageContainer}>
+				<ImageBackground source={launchscreenBg} style={styles.imageContainer}>
 					<View style={styles.logoContainer}>
 						<Text> shdgf </Text>
 						</View>
-				</Image>
+				</ImageBackground>
 			</Container>
 		);
 	}

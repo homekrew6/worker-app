@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { signup } from './elements/authActions'
-import { Image, View, ScrollView, StatusBar, Dimensions, Alert, TouchableOpacity } from "react-native";
+import { Image, ImageBackground, View, ScrollView, StatusBar, Dimensions, Alert, TouchableOpacity } from "react-native";
 
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, CheckBox } from "native-base";
 import styles from "./styles";
@@ -85,7 +85,7 @@ class Signup extends Component {
                 <StatusBar
                     backgroundColor="#81cdc7"
                 />
-                <Image source={launchscreenBg} style={styles.imageContainer}>
+                <ImageBackground source={launchscreenBg} style={styles.imageContainer}>
                     <Content>
                         <FSpinner visible={this.props.auth.busy} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
                         <View style={styles.logoContainer}>
@@ -135,9 +135,9 @@ class Signup extends Component {
                             </View>
 
                             <TouchableOpacity style={{ flex: 1, flexDirection: 'row', marginTop: 15 }} onPress={() => this.pressSignup()} >
-                                <Image source={buttonImage} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 55 }} >
+                                <ImageBackground source={buttonImage} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 55 }} >
                                     <Text style={{ color: '#fff', fontSize: 20, marginTop: -10, height: 30 }}>{I18n.t('signup')}</Text>
-                                </Image>
+                                </ImageBackground>
                             </TouchableOpacity>
 
                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
@@ -149,7 +149,7 @@ class Signup extends Component {
 
                         </View>
                     </Content>
-                </Image>
+                </ImageBackground>
             </Container>
         );
     }

@@ -20,7 +20,7 @@ class myTiming extends Component {
     state = {timimgData: '', weekOffStatus: true, unavailableTiming: '', tableRowId: ''};
     componentDidMount(){
       const workerId = this.props.auth.data.id;
-      const WorkerAvailabilitiesUrl = `worker-available-timings?{"where":{"workerId":"${workerId}"}}`;
+      const WorkerAvailabilitiesUrl = `Workeravailabletimings?{"where":{"workerId":"${workerId}"}}`;
       api.get(WorkerAvailabilitiesUrl).then(res => {
           console.log('timimgData', res);
           this.setState({ timimgData: res[0].timings, tableRowId: res[0].id });
@@ -174,7 +174,7 @@ renderUnavalData(UnAvData, key){
                              })}>
                               <View style={{ flexDirection: 'row' }}>
                                   <Ico name='edit' style={styles.listHdrEdtIcn} />
-                                  <Text style={styles.listHdrEdt}>Edit</Text>
+                                  <Text style={styles.listHdrEdt}>Add/Edit</Text>
                               </View>
                             </TouchableOpacity>
                         </View>

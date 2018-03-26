@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import { login,getUserDetail } from './elements/authActions';
 import { NavigationActions } from "react-navigation";
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from "react-native";
+import { Image, ImageBackground, View, StatusBar, Dimensions, Alert, TouchableOpacity } from "react-native";
 
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text } from "native-base";
 import FSpinner from 'react-native-loading-spinner-overlay';
@@ -28,7 +28,8 @@ class Login extends Component {
 				email: '',
 				password: ''
 	      }
-    }
+	}
+	
 
 		pressForgotPassword() {
 			this.props.navigation.navigate("ForgotPassword");
@@ -70,6 +71,10 @@ class Login extends Component {
 				Alert.alert('Please enter a valied email ID');
 			})
 			
+
+
+
+
 		}
 
 	render() {
@@ -78,7 +83,7 @@ class Login extends Component {
 				<StatusBar
 					backgroundColor="#81cdc7"
 				/>
-				<Image source={launchscreenBg} style={styles.imageContainer}>
+				<ImageBackground source={launchscreenBg} style={styles.imageContainer}>
 					<Content>
 						<FSpinner visible={this.props.auth.busy} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
 						<View style={styles.logoContainer}>
@@ -95,9 +100,9 @@ class Login extends Component {
 						</View>
 
 						<TouchableOpacity transparent style={{ flex: 1, flexDirection: 'row', marginTop: 15, paddingLeft: 15, paddingRight: 15 }} onPress={() => this.pressLogin()} >
-							<Image source={buttonImage} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 55 }} >
+							<ImageBackground source={buttonImage} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 55 }} >
 								<Text style={{ color: '#fff', fontSize: 20, marginTop: -10, height: 30 }}>{I18n.t('login')}</Text>
-							</Image>
+							</ImageBackground>
 						</TouchableOpacity>
 						<TouchableOpacity onPress={() => this.pressForgotPassword()}>
 							<View>
@@ -113,7 +118,7 @@ class Login extends Component {
 						</View>
 						
 					</Content>
-				</Image>
+				</ImageBackground>
 			</Container>
 		);
 	}
