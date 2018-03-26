@@ -28,7 +28,8 @@ class Login extends Component {
 				email: '',
 				password: ''
 	      }
-    }
+	}
+	
 
 		pressForgotPassword() {
 			this.props.navigation.navigate("ForgotPassword");
@@ -70,6 +71,10 @@ class Login extends Component {
 				Alert.alert('Please enter a valied email ID');
 			})
 			
+
+
+
+
 		}
 
 	render() {

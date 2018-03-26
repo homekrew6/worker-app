@@ -337,29 +337,33 @@ class WeekCalendar extends Component {
       AsyncStorage.getItem("StoreData").then((value) => {
         const JSONdata = JSON.parse(value);
 
-        if (timimgDataCheck === 0) {
+        if (timimgDataCheck === '') {
           //api to hit adding Timing
-          api.post('worker-available-timings',{"timings": JSONdata, "workerId": workerId}).then(res => {
-              console.log(res);
+          api.post('Workeravailabletimings',{"timings": JSONdata, "workerId": workerId}).then(res => {
+			  console.log(res);
+			  this.props.navigation.navigate('myTiming');
+			  
           }).catch((err) => {
               console.log(err);
           });
         }else {
           //API hiting editiing
-          const patchUrl = `worker-available-timings/${tableRowId}`;
+          const patchUrl = `Workeravailabletimings/${tableRowId}`;
           api.put(patchUrl, {"timings": JSONdata,"id": tableRowId,"workerId": workerId}).then(res => {
-              console.log('patch Promise', res);
+			  console.log('patch Promise', res);
+			  this.props.navigation.navigate('myTiming');
           }).catch((err) => {
-              console.log(err);
+			  console.log(err);
+			  
           });
         }
 
 
 
-      }).then(res => {
+      }).catch(res => {
           AsyncStorage.setItem('StoreData', dataRemoteString);
       });
-      this.props.navigation.goBack();
+     
     }
 
     render() {
