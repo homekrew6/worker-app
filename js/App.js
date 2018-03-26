@@ -21,8 +21,10 @@ import MyTiming from "./components/location/myTiming";
 import UnavailableDate from "./components/location/unavailableDate";
 import WeekCalendar from './components/calendar/WeekCalendar';
 import myTiming from './components/location/myTiming';
-import MyPaymentList from './components/payment/payment-list';
+import MyPaymentList from './components/payment/payment-list'; 
 import AvailableJobs from './components/jobList/availableJobs';
+import SliderCheck from './components/jobList/sliderCheck';
+import ImageSlider from 'react-native-image-slider';
 
 const AppNavigator = StackNavigator(
     {
@@ -42,7 +44,8 @@ const AppNavigator = StackNavigator(
         WeekCalendar: { screen: WeekCalendar },
         myTiming: { screen: myTiming },
         MyPaymentList: { screen: MyPaymentList },
-        AvailableJobs: { screen: AvailableJobs}
+        AvailableJobs: { screen: AvailableJobs },
+        SliderCheck: { screen: SliderCheck}
     },
     {
         initialRouteName: "Drawer",
