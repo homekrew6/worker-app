@@ -84,7 +84,7 @@ class availableJobs extends Component {
                         <MaterialIcons name="notifications" style={styles.headIcon} />
                     </Button>
                     <Body style={styles.headBody}>
-                        <Image source={require('../../../img/logo2.png')} style={{ height: 25, width: 144 }}/>
+                        <Image source={require('../../../img/logo2.png')} style={{ height: 20, width: 115 }}/>
                     </Body>
                     <Button transparent />
                     <Button transparent>
@@ -116,8 +116,8 @@ class availableJobs extends Component {
                                                     <Text>Home</Text>
                                                 </View>
                                                 <View style={styles.flexDirectionRow}>
-                                                    <Text style={styles.fontWeight700}>Tuesday </Text>
-                                                    <Text> 10:00 AM</Text>
+                                                    <Text style={[styles.fontWeight700, {fontSize: 14}]}>Tuesday </Text>
+                                                    <Text style={{ fontSize: 14 }}> 10:00 AM</Text>
                                                 </View>
                                                 <View style={styles.flexDirectionRow}>
                                                     <Text>Deira, Dubai</Text>
