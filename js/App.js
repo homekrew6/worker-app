@@ -24,8 +24,7 @@ import myTiming from './components/location/myTiming';
 import TestLocation from "./components/location/TestLocation";
 import MyPaymentList from './components/payment/payment-list';
 import AvailableJobs from './components/jobList/availableJobs';
-import SliderCheck from './components/jobList/sliderCheck';
-import ImageSlider from 'react-native-image-slider';
+import JobDetails from './components/jobList/jobDetails';
 
 const AppNavigator = StackNavigator(
     {
@@ -47,7 +46,7 @@ const AppNavigator = StackNavigator(
         TestLocation: { screen: TestLocation },
         MyPaymentList: { screen: MyPaymentList },
         AvailableJobs: { screen: AvailableJobs },
-        SliderCheck: { screen: SliderCheck}
+        JobDetails: { screen: JobDetails }
     },
     {
         initialRouteName: "Drawer",
