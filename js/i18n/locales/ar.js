@@ -26,5 +26,6 @@ export default {
   i_agree_to_the_term_and_conditions: '',
   terms_and_conditions: '',
   resetpassword: '',
-  forgot_password: ''
+  forgot_password: '',
+  cancel:'إلغاء'
 };

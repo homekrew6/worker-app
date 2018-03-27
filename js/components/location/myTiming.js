@@ -17,7 +17,7 @@ const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 
 class myTiming extends Component {
-    state = {timimgData: '', weekOffStatus: true, unavailableTiming: '', tableRowId: ''};
+    state = {timimgData: '', weekOffStatus: true, unavailableTiming: '', tableRowId: '', unAvailId:''};
     componentDidMount(){
       const workerId = this.props.auth.data.id;
       const WorkerAvailabilitiesUrl = `Workeravailabletimings?{"where":{"workerId":"${workerId}"}}`;
@@ -31,7 +31,10 @@ class myTiming extends Component {
       const WorkerUnavailabilitiesUrl = `WorkerUnavailabilities?{"where":{"workerId":"${workerId}"}}`;
       api.get(WorkerUnavailabilitiesUrl).then(res => {
         this.setState({ unavailableTiming: res });
-        console.log('unavailableTiming', this.state.unavailableTiming);
+        if(res.length && res.length>0)
+        {
+            this.setState({unAvailId:this.state.unavailableTiming[0].id});
+        }
 
       }).catch((err) => {
           console.log(err);
@@ -63,7 +66,6 @@ getTimeAmPm(day, DataWeek, key){
     }
 
     const timing = DataWeek.time + CommaValue;
-    console.log('CommaValue', CommaValue, timing);
     if(day_status === true){
       return(
         <Text key={DataWeek.id} style={{ color: '#828282', fontSize: 13, paddingLeft: 5, paddingRight: 5}}>
@@ -275,9 +277,13 @@ renderUnavalData(UnAvData, key){
                             <View style={styles.flexOne}>
                                 <Text style={styles.listHdr}>Unavailable Timing</Text>
                             </View>
-                            <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => this.props.navigation.navigate('UnavailableDate')}>
+                            <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => this.props.navigation.navigate('UnavailableDate', {
+                               unAvailId: this.state.unAvailId,
+                               unAvailTiming:this.state.unavailableTiming
+
+                             })}>
                                 <Ico name='add-circle' style={styles.listHdrEdtIcn} />
-                                <Text style={styles.listHdrEdt}>Add</Text>
+                                <Text style={styles.listHdrEdt}>Add/ Edit</Text>
                             </TouchableOpacity>
                         </View>
                           {
