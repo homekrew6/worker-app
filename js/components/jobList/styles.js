@@ -37,5 +37,20 @@ export default {
     leftAction: { backgroundColor: 'red', flex: 1, alignItems: 'center', justifyContent: 'center' },
     leftActionIcon: { color: '#fff', fontSize: 20 },
     leftActionText: { color: '#fff', fontSize: 14 },
-    rightAction: { backgroundColor: '#81cdc7', flex: 1, alignItems: 'center', justifyContent: 'center' }
+    rightAction: { backgroundColor: '#81cdc7', flex: 1, alignItems: 'center', justifyContent: 'center' },
+
+
+
+    headIcon2: { fontSize: 22, color: '#fff' },
+    headBody: { alignItems: 'center' },
+    headCenter: { color: '#1e3768', textAlign: 'center' },
+    headerWarp: { backgroundColor: '#81cdc7' },
+    container: { flex: 1 },
+
+    jobItemWarp: { backgroundColor: '#fff', paddingTop: 15, paddingLeft: 10, paddingRight: 10,paddingBottom: 15,flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: '#ccc' },
+    jobItemIconIonicons: { color: '#81cdc7', fontSize: 30 },
+    jobItemIcon: { color: '#81cdc7', fontSize: 20 },
+    jobItemName: { flex: 1, fontSize: 14, paddingLeft: 10 },
+    jobItemValue: { fontSize: 14, color: '#ccc', paddingLeft: 10 },
+    jobItemValueDateandTime: { fontSize: 12 }
 };
