@@ -28,5 +28,6 @@ export default {
   i_agree_to_the_term_and_conditions: 'I agree to the ',
   terms_and_conditions: 'Terms and Conditions',
   resetpassword: 'Reset Password',
-  forgot_password: 'Forgot password'
+  forgot_password: 'Forgot password',
+  cancel:'Cancel'
 };
