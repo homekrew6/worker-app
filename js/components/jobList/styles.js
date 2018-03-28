@@ -26,8 +26,8 @@ export default {
     dayHeading: { padding: 15, backgroundColor: '#f2f2f2' },
 
     //Job Listing style
-    jobList: { backgroundColor: '#f2f2f2', padding: 0 },
-    jobListItem: { marginBottom: 0 },
+    jobList: { backgroundColor: '#f2f2f2', padding: 0, margin: 0 },
+    jobListItem: { marginBottom: 0, backgroundColor: '#fff', marginLeft: 0 },
     listWarp: { flexDirection: 'row', paddingLeft: 10, paddingRight: 10, alignItems: 'center' },
     listWarpImageWarp: { height: 65, width: 65, borderRadius: 10, alignItems: 'center', justifyContent: 'center', backgroundColor: '#81cdc7', borderRadius: 60 },
     listWarpImage: { height: 30, width: 30 },
