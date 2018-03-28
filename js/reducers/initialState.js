@@ -12,5 +12,9 @@ export default {
 	payment:{
 		busy:false,
 		data:''
+	},
+	availableJobs: {
+		busy: false,
+		data: ''
 	}
 }

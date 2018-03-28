@@ -16,7 +16,7 @@ import Modal from "react-native-modal";
 const win = Dimensions.get('window').width;
 
 import styles from "./styles";
-class JObDetails extends Component {
+class JobDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -171,4 +171,4 @@ class JObDetails extends Component {
     }
 }
 
-export default JObDetails;
+export default JobDetails;

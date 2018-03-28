@@ -99,7 +99,6 @@ class Menu extends Component {
                         </CardItem>
 
                         <CardItem style={styles.menuCarditem}>
-                            <View style={styles.menuCardView}>
                             <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate("AvailableJobs")} >
                                 <Image source={icon2} style={styles.menuCardIcon} />
                                 <Text style={styles.menuCardTxt}>My Jobs</Text>
@@ -107,7 +106,6 @@ class Menu extends Component {
                                     <Image source={back_arow} style={styles.arw_lft_img} />
                                 </View>
                             </TouchableOpacity>
-                            </View>
                         </CardItem>
 
                         <CardItem style={styles.menuCarditem}>
