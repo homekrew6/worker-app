@@ -10,7 +10,6 @@ const imageht = (deviceHeight - 88);
 export default class DefaultSlide extends React.PureComponent {
   constructor(props){
     super(props);
-    console.log('logo');
   }
   render() {
     return (

@@ -17,7 +17,6 @@ const buttonImage = require("../../../img/bg-button.png");
 class ForgotPassword extends Component {
     constructor(props) {
         super(props);
-        console.log(props);
         this.state = {
             email: '',
             visible: false
@@ -31,17 +30,14 @@ class ForgotPassword extends Component {
         }
         this.setState({ visible: true });
         api.post('Workers/emailChecking',{email:this.state.email}).then(res => {
-            console.log(res);
             api.post('Workers/reset',{email:this.state.email}).then(resReset => {
                 this.setState({ visible: false });
                 this.props.navigation.navigate('ResetPassword');
             }).catch((errReset) => {
-                console.log(errReset)
                 this.setState({ visible: false });
                 Alert.alert('Please try again')
             })
         }).catch((err) => {
-            console.log(err);
             this.setState({ visible: false });
             Alert.alert('Email does not exist.')
         })

@@ -6,7 +6,6 @@ class paymentApi {
     static myPaymentList(workerId) {
         return new Promise((resolve, reject) => {
             AsyncStorage.getItem('userToken', (err, result) => {
-                console.log(result);
                 if (!err){
                     const filter='{"where":{"workerId":'+workerId+'}}';
                     api.get('worker-payments?filter='+filter+"&access_token="+JSON.parse(result).id).then((res) => {
@@ -27,7 +26,6 @@ class paymentApi {
         return new Promise((resolve, reject) => {
             AsyncStorage.getItem('userToken', (err, result) => {
                 let workerInclude = '{"include":["zone"]}';
-                console.log(workerID);
                 if (!err) {
                     api.get('Workers/' + workerID + '/workerLocations?filter=' + workerInclude +'&'+ 'Zones?access_token=' + JSON.parse(result).id).then((res) => {
                     // api.get('Zones?access_token=' + JSON.parse(result).id).then((res) => {  

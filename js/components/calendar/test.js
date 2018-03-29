@@ -115,7 +115,6 @@ function getOffDay(day, data){
   for(var i = 0; i < data.length; i++){
     var day_status = data[i][day];
     var timing = data[i].time;
-    console.log(timing);
 
   }
 }

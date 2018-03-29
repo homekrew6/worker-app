@@ -38,8 +38,6 @@ class selectLocation extends Component {
     componentWillMount() {
         
         this.props.allLocation().then((allLst) => {            
-            console.log(this.props.location.data);
-            console.log(allLst); 
             this.setState({
                 locationFlag: true
             })

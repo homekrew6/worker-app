@@ -288,10 +288,8 @@ class WeekCalendar extends Component {
     if (timimgData.length === 0) {
       this.setState({ dataRemote: data.data });
       const dataRemoteString = JSON.stringify(data.data);
-      console.log('dataRemoteString', dataRemoteString);
 
       AsyncStorage.setItem('StoreData', dataRemoteString, (res) => {
-           console.log('====FirstPage====setItem==async==='+res)
        })
 
     }else {
@@ -314,7 +312,6 @@ class WeekCalendar extends Component {
        this.flatList.scrollToOffset({ offset: EffectWidth });
    }
     renderWeekData(item) {
-      console.log('item', item);
         return(
             <View style={{ flex: 5 }}>
                 <View style={{ justifyContent: 'center', alignSelf: 'center', width: 50, height: 28, alignItems: 'center' }} >
@@ -340,20 +337,16 @@ class WeekCalendar extends Component {
         if (timimgDataCheck === '') {
           //api to hit adding Timing
           api.post('Workeravailabletimings',{"timings": JSONdata, "workerId": workerId}).then(res => {
-			  console.log(res);
 			  this.props.navigation.navigate('myTiming');
 			  
           }).catch((err) => {
-              console.log(err);
           });
         }else {
           //API hiting editiing
           const patchUrl = `Workeravailabletimings/${tableRowId}`;
           api.put(patchUrl, {"timings": JSONdata,"id": tableRowId,"workerId": workerId}).then(res => {
-			  console.log('patch Promise', res);
 			  this.props.navigation.navigate('myTiming');
           }).catch((err) => {
-			  console.log(err);
 			  
           });
         }
@@ -472,7 +465,6 @@ styleSelf = {
 }
 
 function mapStateToProps(state) {
-  console.log('WeekCalendar', state); // state
   return {
     loading: state.CheckBox.loading,
     workerId: state.auth.data.id

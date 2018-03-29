@@ -22,7 +22,6 @@ class myTiming extends Component {
       const workerId = this.props.auth.data.id;
       const WorkerAvailabilitiesUrl = `Workeravailabletimings?{"where":{"workerId":"${workerId}"}}`;
       api.get(WorkerAvailabilitiesUrl).then(res => {
-          console.log('timimgData', res);
           this.setState({ timimgData: res[0].timings, tableRowId: res[0].id });
       }).catch((err) => {
           //console.log(err);
@@ -37,7 +36,6 @@ class myTiming extends Component {
         }
 
       }).catch((err) => {
-          console.log(err);
       })
 
     }
@@ -78,7 +76,6 @@ getTimeAmPm(day, DataWeek, key){
 render
 
 renderUnavalData(UnAvData, key){
-  console.log('UnAvData', UnAvData, key);
   Moment.locale('en');
   const start_date = UnAvData.start_date;
   const end_date = UnAvData.end_date;

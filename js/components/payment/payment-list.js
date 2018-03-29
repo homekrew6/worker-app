@@ -27,7 +27,6 @@ const resetAction = NavigationActions.reset({
 class MyPaymentList extends Component {
     constructor(props) {
         super(props);
-        console.log(props);
         this.state = {
             paymentList: [],
             loader: false,
@@ -53,7 +52,6 @@ class MyPaymentList extends Component {
     }
 
     chkbox_check(e) {
-        console.log(this.props.payment.data, "props data");
         this.props.checkUncheck(e, this.state.paymentList);
     }
     render() {

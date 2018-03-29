@@ -28,10 +28,8 @@ class Home extends Component {
 	componentWillMount() {
 		this.props.checkAuth(res => {
 			setTimeout(() => {
-				console.log(res);
 				if (res) {
 					this.props.getUserDetail(res.userId, res.id).then(userRes => {
-						console.log(userRes)
 						//this.props.navigation.navigate("Menu");
 						this.props.navigation.dispatch(resetAction);
 					}).catch(err => {
