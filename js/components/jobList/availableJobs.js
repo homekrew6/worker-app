@@ -10,7 +10,7 @@ import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Te
 import FSpinner from 'react-native-loading-spinner-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './styles';
-import { availablejobs } from './elements/jobActions'
+import { availablejobs, setNewData } from './elements/jobActions'
 const imageIcon1 = require('../../../img/icon/home.png');
 
 
@@ -74,6 +74,15 @@ class AvailableJobs extends Component {
         }
         return hourDiff;
     }
+    goDetails(item){
+        // console.log(this.props.availableJobs.data);
+        // let data = this.props.availableJobs.data
+        // data.detailsShow = item.data; 
+        // setNewData(data);
+        // console.log(this.props.availableJobs.data);
+
+        this.props.navigation.navigate('JobDetails',{jobDetails:item});
+    }
 
     // getStartTime(){
     //     if(Math.sign(timeDur._data.hours) === 1){
@@ -106,7 +115,8 @@ class AvailableJobs extends Component {
             this.setState({ listItemFlag: true });
         }).catch(err => {
             console.log(err);
-        })  
+        }) 
+         
     }
 
     onlyUnique(value, index, self) { 
@@ -313,30 +323,30 @@ class AvailableJobs extends Component {
                             dataArray={this.props.availableJobs.data.response.message.acceptedJobs}
                             style={styles.jobList}
                             renderRow={(item) =>
-                                <ListItem style={styles.jobListItem}>
-                                    <View style={styles.listWarp}>
-                                        <View style={styles.listWarpImageWarp}>
-                                            <Image source={imageIcon1} style={styles.listWarpImage} />
+                            <ListItem style={styles.jobListItem}>
+                                <TouchableOpacity style={styles.listWarp} onPress={() => this.goDetails(item)}>
+                                    <View style={styles.listWarpImageWarp}>
+                                        <Image source={imageIcon1} style={styles.listWarpImage} />
+                                    </View>
+                                    <View style={styles.listWarpTextWarp}>
+                                        <View style={styles.flexDirectionRow}>
+                                            <Text>{item.service.name}</Text>
                                         </View>
-                                        <View style={styles.listWarpTextWarp}>
-                                            <View style={styles.flexDirectionRow}>
-                                                <Text>{item.service.name}</Text>
-                                            </View>
-                                            <View style={styles.flexDirectionRow}>
-                                                <Text style={[styles.fontWeight700, { fontSize: 14 }]}>Tuesday </Text>
-                                                <Text style={{ fontSize: 14 }}> 10:00 AM</Text>
-                                            </View>
-                                            <View style={styles.flexDirectionRow}>
-                                                <Text>Deira, Dubai</Text>
-                                            </View>
+                                        <View style={styles.flexDirectionRow}>
+                                            <Text style={[styles.fontWeight700, { fontSize: 14 }]}>Tuesday </Text>
+                                            <Text style={{ fontSize: 14 }}> 10:00 AM</Text>
                                         </View>
-                                        <View>
-                                            <Text style={{ color: '#81cdc7', fontSize: 10 }}>Starts in 6 hours</Text>
-                                            <Text style={styles.listWarpPriceUp}>AED 100</Text>
-                                            <Text style={styles.listWarpPriceDown}>4 hours</Text>
+                                        <View style={styles.flexDirectionRow}>
+                                            <Text>Deira, Dubai</Text>
                                         </View>
                                     </View>
-                                </ListItem>}
+                                    <View>
+                                        <Text style={{ color: '#81cdc7', fontSize: 10 }}>Starts in 6 hours</Text>
+                                        <Text style={styles.listWarpPriceUp}>AED 100</Text>
+                                        <Text style={styles.listWarpPriceDown}>4 hours</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </ListItem>}
                         />
                     </Tab>
                     <Tab heading="DECLINEDJOBS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
@@ -400,7 +410,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        availablejobs: (id) => dispatch(availablejobs(id))
+        availablejobs: (id) => dispatch(availablejobs(id)),
+        setNewData: (data) => dispatch(setNewData(data))
     }
 }
 
