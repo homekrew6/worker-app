@@ -68,7 +68,6 @@ class Signup extends Component {
                 Alert.alert('Please check all fields and try again');
             }
         }).catch(err => {
-            console.log(err);
             Alert.alert('Please check all fields and try again');
 
         })

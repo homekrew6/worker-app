@@ -26,6 +26,8 @@ import MyPaymentList from './components/payment/payment-list';
 import AvailableJobs from './components/jobList/availableJobs';
 import JobDetails from './components/jobList/jobDetails';
 import Settings from './components/settings/settings';
+import LanguageList from './components/settings/languageList';
+import CurrencyList from './components/settings/currencyList';
 
 const AppNavigator = StackNavigator(
     {
@@ -48,7 +50,9 @@ const AppNavigator = StackNavigator(
         MyPaymentList: { screen: MyPaymentList },
         AvailableJobs: { screen: AvailableJobs },
         JobDetails: { screen: JobDetails },
-        Settings: { screen: Settings}
+        Settings: { screen: Settings},
+        LanguageList:{screen:LanguageList},
+        CurrencyList:{screen:CurrencyList}
     },
     {
         initialRouteName: "Drawer",

@@ -14,26 +14,21 @@ state = {isReady: false};
 componentDidMount(){
   FCM.requestPermissions();
   FCM.getFCMToken().then(token => {
-    console.log("TOKEN (getFCMToken)", token);
     this.props.checkAuth((res) => {
-      console.log(res);
       if (res) {
       api.put(`Workers/editWorker/${res.userId}?access_token=${res.id}`, { deviceToken: token}).then((resEdit) => {
       }).catch((err) => {
         });
       }
     },(err)=>{
-      console.log(err);
     });
   });
   
   // This method get all notification from server side.
   FCM.getInitialNotification().then(notif => {
-    console.log("INITIAL NOTIFICATION", notif)
   });
   
   this.notificationUnsubscribe = FCM.on(FCMEvent.Notification, notif => {
-    console.log("a", notif);
     if (notif && notif.local_notification) {
       return;
     }
@@ -42,18 +37,14 @@ componentDidMount(){
   
   // this method call when FCM token is update(FCM token update any time so will get updated token from this method)
   this.refreshUnsubscribe = FCM.on(FCMEvent.Notification, token => {
-    console.log("TOKEN (refreshUnsubscribe)", token);
      FCM.getFCMToken().then(token => {
-       console.log("TOKEN (getFCMToken)", token);
        this.props.checkAuth((res) => {
-         console.log(res);
          if (res) {
          api.put(`Workers/editWorker/${res.userId}?access_token=${res.id}`, { deviceToken: token}).then((resEdit) => {
          }).catch((err) => {
            });
          }
        },(err)=>{
-         console.log(err);
        });
      });
   });
@@ -61,7 +52,6 @@ componentDidMount(){
 }
 
 sendRemote(notif) {
-  console.log('notify sent', notif);
   FCM.presentLocalNotification({
     id: new Date().valueOf().toString(),
     title: notif.fcm.body,

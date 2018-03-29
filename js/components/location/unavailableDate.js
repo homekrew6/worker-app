@@ -19,7 +19,6 @@ class MyListItem extends React.PureComponent {
 
 
     render() {
-        console.log(this.props.unAvailId)
         const textColor = this.props.selected ? "red" : "black";
         return (
             <TouchableOpacity onPress={this._onPress}>
@@ -121,7 +120,6 @@ class UnavailableDate extends Component {
         }
     }
     onDaySelect(day) {
-        console.log
         let d = new Date(day.dateString);
         let weekday = new Array(7);
         weekday[0] = "Sun";
@@ -152,7 +150,6 @@ class UnavailableDate extends Component {
         weekday[6] = "Sat";
 
         let n = weekday[d.getDay()];
-        console.log(n);
         this.setState({
             daYSelected2: day.dateString,
             satEndDate: day.day + '-' + this.state.months[day.month - 1] + '-' + day.year,
@@ -198,7 +195,6 @@ class UnavailableDate extends Component {
     componentDidMount() {
         if (this.props.navigation.state.params.unAvailTiming) {
             this.setState({ visible: true });
-            console.log(this.props.navigation.state.params.unAvailTiming);
 
             this.state.colectionData.map((item) => {
                 if (item.time == this.props.navigation.state.params.unAvailTiming[0].start_time) {
@@ -243,7 +239,6 @@ class UnavailableDate extends Component {
 
     doneDateAndTime() {
         this.setState({ visible: true });
-        console.log(this.props.auth);
         if (this.state.satStartDate == '') {
             this.setState({ visible: false });
             Alert.alert('please enter Start Date');

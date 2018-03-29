@@ -24,8 +24,6 @@ class CheckBox extends Component {
 
         AsyncStorage.getItem("StoreData").then((value) => {
           const JSONdata = JSON.parse(value);
-          console.log(day, id, status,);
-          console.log('JSONdata E', JSONdata);
           var index;
           for(var i = 0; i < JSONdata.length; i++ ){
             if (id === JSONdata[i].id){
@@ -35,7 +33,6 @@ class CheckBox extends Component {
           }
 
           if(index !== null){
-            console.log('index', index);
             if (status === true) {
               JSONdata[index][day] = false;
             }else {
@@ -43,7 +40,6 @@ class CheckBox extends Component {
             }
             dataRemoteString = JSON.stringify(JSONdata);
             AsyncStorage.setItem('StoreData', dataRemoteString);
-            console.log('JSONdata changed', JSONdata, dataRemoteString);
           }else{}
 
         }).then(res => {
@@ -75,7 +71,6 @@ const styles = {
     }
 }
 function mapStateToProps(state) {
-  console.log('CheckBox', state); // state
   return {
     dataRemote: state.WeekData.dataManu
   }

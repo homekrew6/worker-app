@@ -27,5 +27,6 @@ export default {
   terms_and_conditions: '',
   resetpassword: '',
   forgot_password: '',
-  cancel:'إلغاء'
+  cancel:'إلغاء',
+  done:'فعله'
 };

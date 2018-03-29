@@ -1,5 +1,6 @@
 export default {
   greeting: 'Bonjour!',
   username: 'Username',
-  password: 'Password'
+  password: 'Password',
+  done:'Terminé'
 };

@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import { login,getUserDetail } from './elements/authActions';
+import { connect } from 'react-redux';
+import { login, getUserDetail, checkAuth } from './elements/authActions';
 import { NavigationActions } from "react-navigation";
 import { Image, ImageBackground, View, StatusBar, Dimensions, Alert, TouchableOpacity } from "react-native";
-
+import FCM, { FCMEvent, NotificationType } from "react-native-fcm";
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text } from "native-base";
 import FSpinner from 'react-native-loading-spinner-overlay';
 import api from '../../api';
@@ -23,63 +23,75 @@ const resetAction = NavigationActions.reset({
 
 class Login extends Component {
 	constructor(props) {
-        super(props);
-				this.state = {
-				email: '',
-				password: ''
-	      }
+		super(props);
+		this.state = {
+			email: '',
+			password: '',
+			deviceToken: ''
+		}
 	}
-	
 
-		pressForgotPassword() {
-			this.props.navigation.navigate("ForgotPassword");
+	componentDidMount() {
+		FCM.getFCMToken().then(token => {
+			this.setState({ deviceToken: token });
+		});
+	}
+
+	pressForgotPassword() {
+		this.props.navigation.navigate("ForgotPassword");
+	}
+	pressLogin() {
+		if (!this.state.email) {
+			Alert.alert('Please enter email');
+			return false;
 		}
-		pressLogin(){
-			if (!this.state.email) {
-				Alert.alert('Please enter email');
-				return false;
-			}
-			if (!this.state.password) {
-				Alert.alert('Please enter password');
-				return false;
-			}
-			const email = this.state.email;
-			const password = this.state.password;
-			api.post('Workers/approveChecking', { email: this.state.email }).then(resEdit => {
-				if (resEdit.response.is_active){
+		if (!this.state.password) {
+			Alert.alert('Please enter password');
+			return false;
+		}
+		const email = this.state.email;
+		const password = this.state.password;
+		api.post('Workers/approveChecking', { email: this.state.email }).then(resEdit => {
+			if (resEdit.response.is_active) {
 
-					this.props.login(email, password).then(res => {
-						console.log(res);
-						if (res.type == 'success') {
-							this.props.getUserDetail(res.userId).then(userRes => {
-								console.log(userRes)
-								this.props.navigation.dispatch(resetAction);
-							}).catch(err => {
-								Alert.alert('Login failed, please try again');
-							})
-						} else {
+				this.props.login(email, password).then(res => {
+					if (res.type == 'success') {
+						this.props.getUserDetail(res.userId).then(userRes => {
+							this.props.checkAuth((res) => {
+								if (res) {
+									api.put(`Workers/editWorker/${res.userId}?access_token=${res.id}`, { deviceToken: this.state.deviceToken }).then((resEdit) => {
+										this.props.navigation.dispatch(resetAction);
+									}).catch((err) => {
+									});
+								}
+							}, (err) => {
+							});
+							//this.props.navigation.dispatch(resetAction);
+						}).catch(err => {
 							Alert.alert('Login failed, please try again');
-						}
-					}).catch(err => {
-						console.log(err);
-						Alert.alert('Login failed,please try again');
-					})
-				}else{
-					Alert.alert('Your account is not activated yet, Please contact admin.');
-				}
-			}).catch(err => {
-				Alert.alert('Please enter a valied email ID');
-			})
-			
+						})
+					} else {
+						Alert.alert('Login failed, please try again');
+					}
+				}).catch(err => {
+					Alert.alert('Login failed,please try again');
+				})
+			} else {
+				Alert.alert('Your account is not activated yet, Please contact admin.');
+			}
+		}).catch(err => {
+			Alert.alert('Please enter a valied email ID');
+		})
 
 
 
 
-		}
+
+	}
 
 	render() {
 		return (
-			<Container > 
+			<Container >
 				<StatusBar
 					backgroundColor="#81cdc7"
 				/>
@@ -95,7 +107,7 @@ class Login extends Component {
 								<Input onChangeText={(text) => this.setState({ email: text })} placeholder={I18n.t('email')} keyboardType={'email-address'} value={this.state.email} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} />
 							</Item>
 							<Item regular style={{ borderColor: '#29416f', marginTop: 10, borderWidth: 1, borderRadius: 2, height: 45 }}>
-								<Input placeholder={I18n.t('password')} secureTextEntry={true} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} onChangeText={(text) => this.setState({ password: text })} value={this.state.password}/>
+								<Input placeholder={I18n.t('password')} secureTextEntry={true} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} onChangeText={(text) => this.setState({ password: text })} value={this.state.password} />
 							</Item>
 						</View>
 
@@ -116,7 +128,7 @@ class Login extends Component {
 								<Text style={{ color: '#29416f' }}>{I18n.t('signup')}</Text>
 							</TouchableOpacity>
 						</View>
-						
+
 					</Content>
 				</ImageBackground>
 			</Container>
@@ -125,19 +137,20 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-	auth : PropTypes.object.isRequired
+	auth: PropTypes.object.isRequired
 }
-const mapStateToProps = (state)=>{
+const mapStateToProps = (state) => {
 	return {
-		auth:state.auth
+		auth: state.auth
 	}
 }
 
-const mapDispatchToProps = (dispatch)=>{
+const mapDispatchToProps = (dispatch) => {
 	return {
-		login:(email,password)=>dispatch(login(email,password)),
-		getUserDetail: (id) => dispatch(getUserDetail(id))
+		login: (email, password) => dispatch(login(email, password)),
+		getUserDetail: (id) => dispatch(getUserDetail(id)),
+		checkAuth: (id) => dispatch(checkAuth(id))
 	}
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

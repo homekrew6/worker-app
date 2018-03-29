@@ -27,7 +27,6 @@ const resetAction = NavigationActions.reset({
 class myLocation extends Component {
     constructor(props) {
         super(props);
-        console.log(props);
         this.state = {
             locationFlag: false,
             loader: false,
@@ -40,8 +39,6 @@ class myLocation extends Component {
         })
         
         this.props.selectedLocation(this.props.auth.data.id).then((allLst) => {
-            console.log(this.props.location);
-            console.log(this.props.auth.data.name);
             this.setState({
                 locationFlag: true,
                 loader: false,
@@ -50,7 +47,6 @@ class myLocation extends Component {
 
             //console.log(locationListState)
         }).catch(err => {
-            console.log(err);
         })
     }
     

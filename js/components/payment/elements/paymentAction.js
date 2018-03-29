@@ -3,7 +3,6 @@ import * as TYPES from '../../../actions/actionTypes'
 import { AsyncStorage } from 'react-native'
 export function myPaymentList(workerId) {
     return function (dispatch) {
-        console.log('test');
         dispatch(paymentStateBusy())
         return paymentApi.myPaymentList(workerId).then(res => {
             dispatch(paymentStateSuccess(res));
@@ -13,7 +12,6 @@ export function myPaymentList(workerId) {
 
         }).catch(err => {
             err.type = 'error';
-            console.log(err);
             dispatch(paymentStateFailed());
             return err;
         })
@@ -23,10 +21,8 @@ export function myPaymentList(workerId) {
 
 export function selectedLocation(workerID) {
     return function (dispatch) {
-        console.log(workerID);
         dispatch(paymentStateBusy())
         return paymentApi.myLoaction(workerID).then(res => {
-            console.log(res);
             dispatch(paymentStateSuccess(res));
             res.type = 'success';
 
@@ -34,7 +30,6 @@ export function selectedLocation(workerID) {
 
         }).catch(err => {
             err.type = 'error';
-            console.log(err);
             dispatch(paymentStateFailed());
             return err;
         })
@@ -42,7 +37,6 @@ export function selectedLocation(workerID) {
 }
 
 export function checkUncheck(id, data) {
-    console.log(data);
     return function (dispatch) {
         dispatch(paymentStateBusy())
         let newData = data.map((data, key) => {
@@ -52,7 +46,6 @@ export function checkUncheck(id, data) {
             return data
         });
 
-        debugger;
         dispatch(paymentStateSuccess(newData));
 
         //dispatch(checkUncheckStateSuccess(newData));
@@ -64,13 +57,11 @@ export function clearMyLocation(id) {
     return function (dispatch) {
         dispatch(clearMyLocationStateBusy());
         return paymentApi.clearMyLocation(id).then(res => {
-            console.log(res);
             dispatch(clearMyLocationStateSuccess());
             return res;
 
         }).catch(err => {
             err.type = 'error';
-            console.log('error2');
             //console.log(err);
             dispatch(clearMyLocationStateFailed());
             return err;
