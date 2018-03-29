@@ -89,7 +89,8 @@ class AvailableJobs extends Component {
             this.setState({ listItemFlag: true });
         }).catch(err => {
             console.log(err);
-        })  
+        }) 
+         
     }
 
     render() {

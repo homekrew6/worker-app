@@ -42,6 +42,8 @@ class JobDetails extends Component {
         setTimeout(() => {
             this.refs.ScrollViewEnd.scrollToEnd();
         }, 50);
+
+        
         
     }
     componentWillMount(){

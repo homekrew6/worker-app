@@ -9,6 +9,7 @@ export function setNewData(data) {
     console.log('setNewData', data);
     dispatch(serviceStateSuccess(data));
   };
+  
 }
 
 
