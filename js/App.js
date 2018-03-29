@@ -25,6 +25,7 @@ import TestLocation from "./components/location/TestLocation";
 import MyPaymentList from './components/payment/payment-list';
 import AvailableJobs from './components/jobList/availableJobs';
 import JobDetails from './components/jobList/jobDetails';
+import Settings from './components/settings/settings';
 
 const AppNavigator = StackNavigator(
     {
@@ -46,7 +47,8 @@ const AppNavigator = StackNavigator(
         TestLocation: { screen: TestLocation },
         MyPaymentList: { screen: MyPaymentList },
         AvailableJobs: { screen: AvailableJobs },
-        JobDetails: { screen: JobDetails }
+        JobDetails: { screen: JobDetails },
+        Settings: { screen: Settings}
     },
     {
         initialRouteName: "Drawer",
