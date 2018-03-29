@@ -27,8 +27,22 @@ export default {
 
     //Job Listing style
     jobList: { backgroundColor: '#f2f2f2', padding: 0, margin: 0 },
-    jobListItem: { marginBottom: 0, backgroundColor: '#fff', marginLeft: 0 },
-    listWarp: { flexDirection: 'row', paddingLeft: 10, paddingRight: 10, alignItems: 'center' },
+    jobListItem: { 
+        marginBottom: 0, 
+        backgroundColor: '#fff', 
+        marginLeft: 0 
+    },
+    jobListItemDisable: {
+        marginBottom: 0, 
+        backgroundColor: '#FF0000', 
+        marginLeft: 0 
+    },
+    listWarp: { 
+        flexDirection: 'row', 
+        paddingLeft: 10, 
+        paddingRight: 10, 
+        alignItems: 'center' 
+    },
     listWarpImageWarp: { height: 65, width: 65, borderRadius: 10, alignItems: 'center', justifyContent: 'center', backgroundColor: '#81cdc7', borderRadius: 60 },
     listWarpImage: { height: 30, width: 30 },
     listWarpTextWarp: { flex: 1, paddingLeft: 15 },
