@@ -3,6 +3,15 @@ import * as TYPES from '../../../actions/actionTypes'
 import { AsyncStorage } from 'react-native'
 
 
+
+export function setNewData(data) {
+  return function (dispatch) {
+    console.log('setNewData', data);
+    dispatch(serviceStateSuccess(data));
+  };
+}
+
+
 export function availablejobs(id) {
   return function (dispatch) {
       dispatch(availableJobStateBusy())
