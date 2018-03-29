@@ -10,7 +10,7 @@ import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Te
 import FSpinner from 'react-native-loading-spinner-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './styles';
-import { availablejobs, setNewData } from './elements/jobActions'
+import { availablejobs, setNewData, acceptJob, declineJob } from './elements/jobActions'
 const imageIcon1 = require('../../../img/icon/home.png');
 
 
@@ -29,6 +29,7 @@ class AvailableJobs extends Component {
             basic: true,
             finalJobData: [],
             listItemFlag: false,
+            loader: false,
             listViewData: [
                 { name: '12345' },
                 { name: '1254' },
@@ -38,18 +39,18 @@ class AvailableJobs extends Component {
     }
 
     getTimeDiffLocal(gmtTime){
+        
         const gmtToDeiveTimeObj = moment.tz(gmtTime, "Europe/London");
         const timezoneDevice = DeviceInfo.getTimezone();
         const gmtToDeiveTime = gmtToDeiveTimeObj.clone().tz(timezoneDevice).format();
+        console.log(gmtToDeiveTime);
         //const timeDiffNow = moment(gmtToDeiveTime, "YYYY-MM-DD hh:mm:ss a").fromNow();
-        
-        
         const now = new Date();
         const timeDur = moment.duration({ from: now, to: gmtToDeiveTime });
         console.log('getTimeDiffLocal', gmtTime, 'timDur', timeDur);
         let hourDiff = {  };
         let intValueText = 'Starts in ';
-        if(Math.sign(timeDur._data.hours) === 1){
+        if (Math.sign(timeDur._data.hours) === 1 || Math.sign(timeDur._data.hours) === 0){
             //positive
             //hourDiff.startTime = Math.abs(timeDur._data.hours);
             hourDiff.timeInt = true;
@@ -75,12 +76,6 @@ class AvailableJobs extends Component {
         return hourDiff;
     }
     goDetails(item){
-        // console.log(this.props.availableJobs.data);
-        // let data = this.props.availableJobs.data
-        // data.detailsShow = item.data; 
-        // setNewData(data);
-        // console.log(this.props.availableJobs.data);
-
         this.props.navigation.navigate('JobDetails',{jobDetails:item});
     }
 
@@ -110,34 +105,78 @@ class AvailableJobs extends Component {
     }
 
     componentWillMount(){
-        let id = this.props.auth.id;
+        this.jobdata(); 
+    }
+
+    jobdata(){
+        let id = this.props.auth.data.id;
         this.props.availablejobs(id).then(res => {
-            this.setState({ listItemFlag: true });
+            this.setState({ 
+                listItemFlag: true,
+                loader: false 
+            });
         }).catch(err => {
             console.log(err);
+            this.setState({
+                loader: false
+            })
         }) 
-         
     }
 
     onlyUnique(value, index, self) { 
         return self.indexOf(value) === index;
     }
+
+    declineJob(data){
+        this.setState({
+            loader: true
+        })
+        let jobId = data.id;
+        let workerId = this.props.auth.data.id;
+        console.log(jobId, workerId);
+        this.props.declineJob(jobId, workerId).then(res => {
+            this.jobdata();
+        }).catch(err => {
+            console.log(err);
+            this.setState({
+                loader: false
+            })
+        })
+    }
+    acceptJob(data) {
+        this.setState({
+            loader: true
+        })
+        let jobId = data.id;        
+        let workerId = this.props.auth.data.id;
+        console.log(jobId, workerId );
+        this.props.acceptJob( jobId , workerId ).then(res => {
+            this.jobdata();
+        }).catch(err => {
+            console.log(err);
+            this.setState({
+                loader: false
+            })
+        })
+    }
     
 
-    render() {
+    render() {     
         let items;
         if (this.props.availableJobs.data) {
             items = this.props.availableJobs.data.response.message.upcomingJobs
-        }
+        } 
         if (this.props.availableJobs.data){
-            console.log('availableJobs.data', this.props.availableJobs.data);
+            console.log(this.props.availableJobs.data.response.message.declinedJobs)
+
             const dateList = [];
             this.props.availableJobs.data.response.message.upcomingJobs.map((data, key) => {
                 dateList.push(data.postedDate);
                 let dataCheck = new Date(data.postedDate);
-            })
-            
-            const uniqueList = dateList.filter( this.onlyUnique ); 
+            }) 
+            console.log('dateList' + dateList); 
+            const uniqueList = dateList.filter( this.onlyUnique );    
+            console.log('uniqueList');                   
             const sortedList = uniqueList.sort(function(a,b){
                 const retValue = new Date(a) - new Date(b);
                 return retValue;
@@ -171,7 +210,45 @@ class AvailableJobs extends Component {
             finalArray.push(finalObject);
         })
 
-        console.log('finalArray', finalArray);
+        // upcoming jobs
+
+            const dateList2 = [];
+            this.props.availableJobs.data.response.message.acceptedJobs.map((data, key) => {
+                dateList2.push(data.postedDate);
+                let dataCheck = new Date(data.postedDate);
+            })
+            const uniqueList2 = dateList2.filter(this.onlyUnique);
+            const sortedList2 = uniqueList2.sort(function (a, b) {
+                const retValue = new Date(a) - new Date(b);
+                return retValue;
+            });
+            let finalArray2 = [];
+            sortedList2.map((dateOne, key) => {
+
+                let dateNow = new Date();
+                let nowDateFormat = moment(dateNow).format('DD MMM YYYY');
+                let convertedDate = new Date(dateOne);
+                let dateNew = moment(convertedDate).format('DD MMM YYYY');
+
+                var tomorrow = new Date();
+                tomorrow.setDate(dateNow.getDate() + 1);
+                let tomorrowFormat = moment(tomorrow).format('DD MMM YYYY');
+
+                if (nowDateFormat === dateNew) {
+                    dateNew = 'Today';
+                } else if (tomorrowFormat === dateNew) {
+                    dateNew = 'Tomorrow';
+                }
+                let finalObject = { date: dateNew, data: [] };
+                this.props.availableJobs.data.response.message.acceptedJobs.map((dataNew, key) => {
+                    let timeDiffNowRet = this.getTimeDiffLocal(dataNew.postedDate);
+                    if (dateOne === dataNew.postedDate) {
+                        dataNew.startTime = timeDiffNowRet;
+                        finalObject.data.push(dataNew);
+                    }
+                })
+                finalArray2.push(finalObject);
+            })
 
         return (
             
@@ -244,110 +321,71 @@ class AvailableJobs extends Component {
                                         }
                                         renderLeftHiddenRow={data =>
                                             data.startTime.timeInt === true ?
-                                            <TouchableOpacity style={styles.leftAction} onPress={() => console.log(data)}>
+                                            <TouchableOpacity style={styles.leftAction} onPress={() => this.declineJob(data)}>
                                                 <MaterialIcons name="close" style={styles.leftActionIcon} />
-                                                <Text style={styles.leftActionText}>DELETE</Text>
+                                                <Text style={styles.leftActionText}>DECLINE</Text>
                                             </TouchableOpacity>
-                                            : console.log()}
+                                                : <View style={styles.leftAction}>
+                                                </View>}
 
                                         renderRightHiddenRow={(data, secId, rowId, rowMap) =>
                                             data.startTime.timeInt === true ?
-                                            <TouchableOpacity style={styles.rightAction} onPress={() => console.log(data)}>
+                                                <TouchableOpacity style={styles.rightAction} onPress={() => this.acceptJob(data)}>
                                                 <MaterialIcons name="done" style={styles.leftActionIcon} />
                                                 <Text style={styles.leftActionText}>ACCEPT</Text>
                                             </TouchableOpacity>
-                                            : console.log()}
+                                                : <View style={styles.leftAction}>
+                                                </View>}
                                         leftOpenValue={75}
                                         rightOpenValue={-75}
                                         
                                     />
                                 </View>
                                 )
-                            console.log('dataQ', dataQ)
                             })}
-                            
-                            {/* <View style={styles.dayHeading}>
-                                <Text>Tomorrow</Text>
-                            </View>
-                            <List
-                                dataSource={this.ds.cloneWithRows(this.state.listViewData)}
-                                style={styles.jobList}
-                                renderRow={data =>
-                                    <ListItem style={styles.jobListItem}>
-                                        <View style={styles.listWarp}>
-                                            <View style={styles.listWarpImageWarp}>
-                                                <Image source={imageIcon1} style={styles.listWarpImage} />
-                                            </View>
-                                            <View style={styles.listWarpTextWarp}>
-                                                <View style={styles.flexDirectionRow}>
-                                                    <Text>name</Text>
-                                                </View>
-                                                <View style={styles.flexDirectionRow}>
-                                                    <Text style={styles.fontWeight700}>Tuesday </Text>
-                                                    <Text> 10:00 AM</Text>
-                                                </View>
-                                                <View style={styles.flexDirectionRow}>
-                                                    <Text>Deira, Dubai</Text>
-                                                </View>
-                                            </View>
-                                        </View>
-                                    </ListItem>}
-
-
-                                renderLeftHiddenRow={data =>
-                                    <TouchableOpacity style={styles.leftAction} >
-                                        <MaterialIcons name="close" style={styles.leftActionIcon} />
-                                        <Text style={styles.leftActionText}>DELETE</Text>
-                                    </TouchableOpacity>}
-
-
-                                renderRightHiddenRow={(data, secId, rowId, rowMap) =>
-                                    <TouchableOpacity style={styles.rightAction} >
-                                        <MaterialIcons name="done" style={styles.leftActionIcon} />
-                                        <Text style={styles.leftActionText}>ACCEPT</Text>
-                                    </TouchableOpacity>}
-                                leftOpenValue={75}
-                                rightOpenValue={-75}
-                            />
-                            <List dataArray={items}
-                                renderRow={(item) =>
-                                    <ListItem>
-                                        <Text>{item.price}</Text>
-                                    </ListItem>
-                                }>
-                            </List> */}
                         </Content>
                     </Tab>
                     <Tab heading="UPCOMING JOBS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
-                        <List
-                            dataArray={this.props.availableJobs.data.response.message.acceptedJobs}
-                            style={styles.jobList}
-                            renderRow={(item) =>
-                            <ListItem style={styles.jobListItem}>
-                                <TouchableOpacity style={styles.listWarp} onPress={() => this.goDetails(item)}>
-                                    <View style={styles.listWarpImageWarp}>
-                                        <Image source={imageIcon1} style={styles.listWarpImage} />
-                                    </View>
-                                    <View style={styles.listWarpTextWarp}>
-                                        <View style={styles.flexDirectionRow}>
-                                            <Text>{item.service.name}</Text>
+                        <Content>
+                            {finalArray2.map((dataQ, key) => {
+                                return (
+                                    <View key={key}>
+                                        <View style={styles.dayHeading}>
+                                            <Text>{dataQ.date}</Text>
                                         </View>
-                                        <View style={styles.flexDirectionRow}>
-                                            <Text style={[styles.fontWeight700, { fontSize: 14 }]}>Tuesday </Text>
-                                            <Text style={{ fontSize: 14 }}> 10:00 AM</Text>
-                                        </View>
-                                        <View style={styles.flexDirectionRow}>
-                                            <Text>Deira, Dubai</Text>
-                                        </View>
+                                        <List
+                                            dataArray={dataQ.data}
+                                            style={styles.jobList}
+                                            renderRow={(item) =>
+                                            <ListItem style={styles.jobListItem}>
+                                                <TouchableOpacity style={styles.listWarp} onPress={() => this.goDetails(item)}>
+                                                    <View style={styles.listWarpImageWarp}>
+                                                        <Image source={imageIcon1} style={styles.listWarpImage} />
+                                                    </View>
+                                                    <View style={styles.listWarpTextWarp}>
+                                                        <View style={styles.flexDirectionRow}>
+                                                            <Text>{item.service.name}</Text>
+                                                        </View>
+                                                        <View style={styles.flexDirectionRow}>
+                                                            <Text style={[styles.fontWeight700, { fontSize: 14 }]}>Tuesday </Text>
+                                                            <Text style={{ fontSize: 14 }}> 10:00 AM</Text>
+                                                        </View>
+                                                        <View style={styles.flexDirectionRow}>
+                                                            <Text>Deira, Dubai</Text>
+                                                        </View>
+                                                    </View>
+                                                    <View>
+                                                        <Text style={{ color: '#81cdc7', fontSize: 10 }}>Starts in 6 hours</Text>
+                                                        <Text style={styles.listWarpPriceUp}>AED 100</Text>
+                                                        <Text style={styles.listWarpPriceDown}>4 hours</Text>
+                                                    </View>
+                                                </TouchableOpacity>
+                                            </ListItem>}
+                                        />
                                     </View>
-                                    <View>
-                                        <Text style={{ color: '#81cdc7', fontSize: 10 }}>Starts in 6 hours</Text>
-                                        <Text style={styles.listWarpPriceUp}>AED 100</Text>
-                                        <Text style={styles.listWarpPriceDown}>4 hours</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </ListItem>}
-                        />
+                                )
+                            })}
+                        </Content>
                     </Tab>
                     <Tab heading="DECLINEDJOBS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
                         <List
@@ -384,6 +422,7 @@ class AvailableJobs extends Component {
                         <Text>Tab1</Text>
                     </Tab>
                 </Tabs>
+                <FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
             </Container>
         );
         }
@@ -410,8 +449,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        availablejobs: (id) => dispatch(availablejobs(id)),
-        setNewData: (data) => dispatch(setNewData(data))
+        availablejobs: (id) => dispatch(availablejobs(id)), 
+        setNewData: (data) => dispatch(setNewData(data)),
+        acceptJob: (jobId, workerId) => dispatch(acceptJob(jobId, workerId)),
+        declineJob: (jobId, workerId) => dispatch(declineJob(jobId, workerId )),
+       
     }
 }
 

@@ -13,6 +13,26 @@ export function setNewData(data) {
 }
 
 
+export function declineJob(jobId, workerId) {
+  return function (dispatch) {
+    return jobApi.declineJob(jobId, workerId).then(res => {
+      return res
+    }).catch(err => {
+      return err
+    })
+  }
+}
+
+export function acceptJob(jobId, workerId) {
+  return function (dispatch) {
+    return jobApi.acceptJob(jobId, workerId).then(res => {
+      return res
+    }).catch(err => {
+      return err
+    })
+  }
+}
+
 export function availablejobs(id) {
   return function (dispatch) {
       dispatch(availableJobStateBusy())
