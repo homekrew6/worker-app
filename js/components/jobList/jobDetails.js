@@ -19,6 +19,8 @@ import FSpinner from 'react-native-loading-spinner-overlay';
 import Modal from "react-native-modal";
 
 const win = Dimensions.get('window').width;
+const { width } = Dimensions.get('window');
+const height = parseInt(Dimensions.get('window').height / 20);
 
 import styles from "./styles";
 class JobDetails extends Component {
@@ -36,6 +38,11 @@ class JobDetails extends Component {
             errorLocationUser: '',
             markerStatus: true,
             scrollStatus : 0,
+            waypointStart: { latitude: '', longitude: ''},
+            waypointEnd: { latitude: '', longitude: ''},
+            waypointMid: { latitude: '', longitude: '' },
+            trDistance: '',
+            trTime: '',
             jobTracker: this.props.navigation.state.params.jobDetails ? this.props.navigation.state.params.jobDetails.status =='ACCEPTED'?'Assigned Job':'On My Way':''
         }
     }
@@ -59,7 +66,6 @@ class JobDetails extends Component {
             this.refs.ScrollViewEnd.scrollToEnd();
         }, 50);
     }
-
     // jobdata() {
     //     let id = this.props.auth.data.id;
     //     this.props.availablejobs(id).then(res => {
@@ -168,35 +174,105 @@ class JobDetails extends Component {
                 <Content style={{ backgroundColor: '#ccc' }}>
 
                     <View>
-                        <MapView
+                       <MapView
+                            ref={c => this.mapView = c}
                             style={{ width: win, height: 250 }}
                             zoomEnabled
                             zoomControlEnabled
                             maxZoomLevel={20}
-                            minZoomLevel={14}
+                            //minZoomLevel={14}
                             region={ region }
                             onRegionChangeComplete={this.onRegionChange}
                             onRegionChange={this.onLocationChange}
                         >   
                         {
-                            this.state.longitudeUser !== '' ? <MapViewDirections
+                            this.state.longitudeUser !== '' ? 
+                            <MapViewDirections
                                 origin={origin}
                                 destination={destination}
                                 apikey={GOOGLE_MAPS_APIKEY}
                                 mode={'driving'}
                                 strokeWidth={3}
                                 strokeColor="hotpink"
-                            /> : console.log()
+                                onReady={(result) => {
+                                    console.log('onready', result, result.coordinates[0].latitude);
+                                    let lastCount = result.coordinates.length - 1;
+                                    let midCount = parseInt(result.coordinates.length / 2 );
+                                    let trDistance = parseFloat(result.distance).toFixed(1);
+                                    let trDuration = parseInt(result.duration);
+                                    if( trDuration > 60){
+                                        trHour = parseInt(trDuration / 60);
+                                        trMinute = parseInt(trDuration % 60);
+                                        trDuration = trHour + "Hour" + trMinute + "min";
+                                    }
+                                    this.setState({ 
+                                        waypointStart: { 
+                                            latitude: result.coordinates[0].latitude,
+                                            longitude: result.coordinates[0].longitude
+                                        },
+                                        waypointEnd: { 
+                                            latitude: result.coordinates[lastCount].latitude,
+                                            longitude: result.coordinates[lastCount].longitude
+                                        },
+                                        waypointMid: { 
+                                            latitude: result.coordinates[midCount].latitude,
+                                            longitude: result.coordinates[midCount].longitude
+                                        },
+                                        trDistance: trDistance,
+                                        trTime: trDuration,
+                                     })
+                                     console.log('onready end', this.state, lastCount)
+                                    this.mapView.fitToCoordinates(result.coordinates, {
+                                      edgePadding: { 
+                                        right: (width / 20),
+                                        bottom: height,
+                                        left: (width / 20),
+                                        top: height,
+                                      }
+                                    });
+                                }}
+                            /> : console.log('onready end', this.state)
+                        
                         }
                         {
-                            this.state.markerStatus === true ?
+                        this.state.markerStatus === true ? 
+                            //worker location
                             <Marker
                                 coordinate={{ latitude: region.latitude, longitude: region.longitude }}
                                 title={this.props.navigation.state.params.jobDetails.userLocation.name}
-                            />: console.log()
+                            />
+                        :
+                        this.state.waypointEnd.latitude !== '' ? 
+                            //customer location
+                            <Marker
+                                coordinate={this.state.waypointEnd}
+                                title={this.props.navigation.state.params.jobDetails.userLocation.name}
+                            />
+                            : console.log('waypointEnd', this.state.waypointEnd)
                         }
-                            
-                            
+                        {
+                             this.state.markerStatus === false ?
+                             <Marker
+                                 coordinate={{ latitude: region.latitude, longitude: region.longitude }}
+                                 title={this.props.navigation.state.params.jobDetails.userLocation.name}
+                             />
+                             : console.log()
+                        }
+                        {
+                            this.state.markerStatus === true ? console.log()
+                             : this.state.waypointMid.latitude !== '' ? 
+                             <MapView.Marker  coordinate={this.state.waypointMid}>
+                             <View style={{
+                                    width: 50,
+                                    height: 50,
+                                    backgroundColor: 'white',
+                                    }}>
+                                 <Text style={{fontSize: 12}} >{this.state.trDistance} km</Text>
+                                 <Text style={{fontSize: 12}} >{this.state.trTime}</Text>
+                             </View>
+                            </MapView.Marker>      
+                            : console.log()               
+                        }
                         </MapView>
                     </View>
                     <View style={styles.jobItemWarp}>
