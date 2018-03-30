@@ -5,7 +5,7 @@ import moment from 'moment';
 import 'moment-timezone';
 import DeviceInfo from 'react-native-device-info';
 import { NavigationActions } from "react-navigation";
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ListView, } from "react-native";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ListView, Geolocation } from "react-native";
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, List, ListItem, Icon, Tab, Tabs, ScrollableTab, Body } from "native-base";
 import FSpinner from 'react-native-loading-spinner-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -43,11 +43,9 @@ class AvailableJobs extends Component {
         const gmtToDeiveTimeObj = moment.tz(gmtTime, "Europe/London");
         const timezoneDevice = DeviceInfo.getTimezone();
         const gmtToDeiveTime = gmtToDeiveTimeObj.clone().tz(timezoneDevice).format();
-        console.log(gmtToDeiveTime);
         //const timeDiffNow = moment(gmtToDeiveTime, "YYYY-MM-DD hh:mm:ss a").fromNow();
         const now = new Date();
         const timeDur = moment.duration({ from: now, to: gmtToDeiveTime });
-        console.log('getTimeDiffLocal', gmtTime, 'timDur', timeDur);
         let hourDiff = {  };
         let intValueText = 'Starts in ';
         if (Math.sign(timeDur._data.hours) === 1 || Math.sign(timeDur._data.hours) === 0){
@@ -97,11 +95,11 @@ class AvailableJobs extends Component {
     //     }
     // }
 
-
+  
     componentDidMount(){
-        const postedTime = "2018-03-23 11:00:00 am";
-        const timeDiffNowRet = this.getTimeDiffLocal(postedTime)
-        console.log('gmtToDeiveTime', timeDiffNowRet );
+      //  const postedTime = "2018-03-23 11:00:00 am";
+       // const timeDiffNowRet = this.getTimeDiffLocal(postedTime)   
+
     }
 
     componentWillMount(){
@@ -174,9 +172,7 @@ class AvailableJobs extends Component {
                 dateList.push(data.postedDate);
                 let dataCheck = new Date(data.postedDate);
             }) 
-            console.log('dateList' + dateList); 
-            const uniqueList = dateList.filter( this.onlyUnique );    
-            console.log('uniqueList');                   
+            const uniqueList = dateList.filter( this.onlyUnique );                    
             const sortedList = uniqueList.sort(function(a,b){
                 const retValue = new Date(a) - new Date(b);
                 return retValue;
@@ -453,7 +449,6 @@ const mapDispatchToProps = (dispatch) => {
         setNewData: (data) => dispatch(setNewData(data)),
         acceptJob: (jobId, workerId) => dispatch(acceptJob(jobId, workerId)),
         declineJob: (jobId, workerId) => dispatch(declineJob(jobId, workerId )),
-       
     }
 }
 
