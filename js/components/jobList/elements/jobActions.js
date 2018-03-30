@@ -13,9 +13,9 @@ export function setNewData(data) {
 }
 
 
-export function declineJob(jobId, workerId) {
+export function declineJob(jobId, workerId, serviceId) {
   return function (dispatch) {
-    return jobApi.declineJob(jobId, workerId).then(res => {
+    return jobApi.declineJob(jobId, workerId, serviceId).then(res => {
       return res
     }).catch(err => {
       return err

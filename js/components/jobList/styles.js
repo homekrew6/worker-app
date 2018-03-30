@@ -22,7 +22,7 @@ export default {
 
 
     //  tabstyle
-    Tabs:{ backgroundColor: '#1e3768', height: 2 },
+    Tabs:{ backgroundColor: '#1e3768', height: 2, borderBottomWidth: 0 },
     dayHeading: { padding: 15, backgroundColor: '#f2f2f2' },
 
     //Job Listing style
@@ -43,8 +43,8 @@ export default {
         paddingRight: 10, 
         alignItems: 'center' 
     },
-    listWarpImageWarp: { height: 65, width: 65, borderRadius: 10, alignItems: 'center', justifyContent: 'center', backgroundColor: '#81cdc7', borderRadius: 60 },
-    listWarpImage: { height: 30, width: 30 },
+    listWarpImageWarp: { height: 65, width: 65, borderRadius: 10, alignItems: 'center', justifyContent: 'center', borderRadius: 60, borderWidth: 1, borderColor: '#81cdc7' },
+    listWarpImage: { height: 40, width: 40 },
     listWarpTextWarp: { flex: 1, paddingLeft: 15 },
     listWarpPriceUp: { fontSize: 14 },
     listWarpPriceDown:  { fontSize: 12 } ,

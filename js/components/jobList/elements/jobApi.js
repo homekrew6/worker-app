@@ -12,9 +12,9 @@ class jobApi {
 		})
 	}
 
-	static declineJob(jobId, workerId) {
+	static declineJob(jobId, workerId, serviceId) {
 		return new Promise((resolve, reject) => {
-			api.post('Jobs/acceptJob', { "id": jobId, "status": "DECLINED", "workerId": workerId }).then(responseJson => {
+			api.post('Jobs/declineJob', { "jobId": jobId, "serviceId": serviceId, "workerId": workerId }).then(responseJson => {
 				resolve(responseJson)
 			}).catch(err => {
 				reject(err)

@@ -13,6 +13,8 @@ import Feather from 'react-native-vector-icons/Feather';
 import Entypo from 'react-native-vector-icons/Entypo';
 import StarRating from 'react-native-star-rating';
 import MapView, { Marker } from 'react-native-maps';
+import { availablejobs, setNewData, acceptJob, declineJob } from './elements/jobActions'
+import FSpinner from 'react-native-loading-spinner-overlay';
 
 import Modal from "react-native-modal";
 
@@ -23,8 +25,10 @@ const height = parseInt(Dimensions.get('window').height / 20);
 import styles from "./styles";
 class JobDetails extends Component {
     constructor(props) {
+       
         super(props);
         this.state = {
+            loader: false,
             detailsData: 'abc',
             starCount: 0,
             isModalVisible: false,
@@ -52,17 +56,79 @@ class JobDetails extends Component {
     }
 
     componentDidMount() {
+        if (this.refs && this.refs.ScrollViewEnd) {
+                this.swipeButtonReady();
+        }
+    }
+    swipeButtonReady(){
         setTimeout(() => {
             this.setState({ scrollStatus: 1 });
             this.refs.ScrollViewEnd.scrollToEnd();
         }, 50);
+    }
+    // jobdata() {
+    //     let id = this.props.auth.data.id;
+    //     this.props.availablejobs(id).then(res => {
+    //         this.setState({
+    //             listItemFlag: true,
+    //             loader: false
+    //         });
+    //     }).catch(err => {
+    //         console.log(err);
+    //         this.setState({
+    //             loader: false
+    //         })
+    //     })
+    // }
 
+    declineJob() {
+        this.setState({
+            loader: true
+        })
+        let jobId = this.props.navigation.state.params.jobDetails.id;
+        let workerId = this.props.auth.data.id;
+        let serviceId = this.props.navigation.state.params.jobDetails.serviceId;
+        this.props.declineJob(jobId, workerId, serviceId).then(res => {
+            //this.jobdata();
+            this.setState({
+                loader: false
+            })
+        }).catch(err => {
+            console.log(err);
+            this.setState({
+                loader: false
+            })
+        })
+        let newJobDetails = this.props.navigation.state.params.jobDetails;
+        newJobDetails.status = "DECLINED"
+        this.props.navigation.setParams({ jobDetails: newJobDetails });
+    }
+    acceptJob() {
+        this.setState({
+            loader: true
+        })
+        let jobId = this.props.navigation.state.params.jobDetails.id;
+        let workerId = this.props.auth.data.id;
+        this.props.acceptJob(jobId, workerId).then(res => {
+            //this.jobdata();
+            this.setState({
+                loader: false
+            })
+        }).catch(err => {
+            console.log(err);
+            this.setState({
+                loader: false
+            })
+        })
+        let newJobDetails = this.props.navigation.state.params.jobDetails;
+        newJobDetails.status = "ACCEPTED"
+        this.props.navigation.setParams({ jobDetails: newJobDetails });
+        this.swipeButtonReady();
     }
 
     renderTracking(){
         this.setState({ markerStatus: false });
         navigator.geolocation.getCurrentPosition((position) => {
-            console.log('position', position);
             this.setState({
                 latitudeUser: position.coords.latitude,
                 longitudeUser: position.coords.longitude,
@@ -75,9 +141,7 @@ class JobDetails extends Component {
        
     }
     componentWillMount(){
-        // let JobDetails = this.props.navigation.state.params.jobDetails;
-        // console.log(newJobDetails);
-        // console.log(this.state.detailsData);
+        // console.log(this.props.navigation.state.params.jobDetails);
     }
 
     render() {
@@ -92,26 +156,25 @@ class JobDetails extends Component {
         let origin = {latitude: region.latitude, longitude: region.longitude};
         let destination = {latitude: this.state.latitudeUser, longitude: this.state.longitudeUser};
         let GOOGLE_MAPS_APIKEY = 'AIzaSyCya136InrAdTM3EkhM9hryzbCcfTUu7UU';
-
-        console.log(JobDetailsData);
+        console.log(JobDetailsData)
         return (
             <Container style={{ backgroundColor: '#fff' }}>
                 <StatusBar
                     backgroundColor="#81cdc7"
                 />
-                <Header style={styles.headerWarp} noShadow androidStatusBarColor="#81cdc7">
-                    <Button transparent onPress={() => this.props.navigation.goBack()}>
+                <Header style={styles.headerWarp} noShadow androidStatusBarColor="#81cdc7" >
+                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }}>
                         <Ionicons name="ios-arrow-back" style={styles.headIcon2} />
                     </Button>
                     <Body style={styles.headBody}>
                         <Title>Job Details</Title>
                     </Body>
-                    <Button transparent />
+                    <Button transparent style={{ width: 30 }}/>
                 </Header>
                 <Content style={{ backgroundColor: '#ccc' }}>
 
                     <View>
-                        <MapView
+                       <MapView
                             ref={c => this.mapView = c}
                             style={{ width: win, height: 250 }}
                             zoomEnabled
@@ -223,7 +286,7 @@ class JobDetails extends Component {
                         <View style={{ width: 30, alignItems: 'center'  }}>
                             <EvilIcons name="location" style={{ color: '#81cdc7', fontSize: 24 }} />
                         </View>
-                        <Text style={styles.jobItemName}>304, 3rd Flr, sultan Group Investment Building Deira, Dubai(near nissan showroom)</Text>
+                        <Text style={styles.jobItemName}>{JobDetailsData.userLocation.buildingName}, {JobDetailsData.userLocation.name}, {JobDetailsData.userLocation.villa}</Text>
                     </View>
                     <View style={styles.jobItemWarp}>
                         <View>
@@ -260,15 +323,14 @@ class JobDetails extends Component {
                             <MaterialIcons name="date-range" style={styles.jobItemIcon} />
                         </View>
                         <Text style={styles.jobItemName}>Date & Time</Text>
-                        <Text style={[styles.jobItemValue, styles.jobItemValueDateandTime]}>Monday, 08 May 2017, 2:00pm</Text>
+                        <Text style={[styles.jobItemValue, styles.jobItemValueDateandTime]}>{JobDetailsData.postedDate}</Text>
                     </View>
                     <View style={styles.jobItemWarp}>
                         <View style={{ width: 30, alignItems: 'center'  }}>
                             <MaterialIcons name="location-on" style={styles.jobItemIcon} />
                         </View>
                         <Text style={styles.jobItemName}>Location</Text>
-                        <Text style={styles.jobItemValue}>{
-                            JobDetailsData.userLocation.name }</Text>
+                        <Text style={styles.jobItemValue}>{ JobDetailsData.userLocation.name }</Text>
                     </View>
                     <View style={styles.jobItemWarp}>
                         <View style={{ width: 30, alignItems: 'center'  }}>
@@ -291,42 +353,57 @@ class JobDetails extends Component {
                         <Text style={styles.jobItemName}>Payment</Text>
                         <Text style={styles.jobItemValue}>{JobDetailsData.payment}</Text>
                     </View>
-                    <View>
-                        <ScrollView
-                        ref= 'ScrollViewEnd'
-                        pagingEnabled = {true}
-                        horizontal = {true}
-                        showsHorizontalScrollIndicator = {false}
-                        scrollEventThrottle={400}
-                        onScrollEndDrag={() => this.renderTracking()}
-                        style={{ width: '100%' }}>
-                            <View style={{ width: win, backgroundColor: 'white', paddingLeft: 10, paddingRight: 10 }}>
-                                <TouchableOpacity 
-                                style={{ flex: 1, alignItems: 'center', backgroundColor: '#81cdc7', justifyContent: 'center', marginTop: 3, borderRadius: 5 }}
-                                activeOpacity={1}
-                                >
-                                    <Text style={{ color: '#fff' }}>On My Way</Text>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={{ width: win, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderBottomColor: '#ccc', borderBottomWidth: 1 }}>
-                                <View style={{ backgroundColor: '#81cdc7', paddingLeft: 10, paddingRight: 10 }}>
-                                    <FontAwesome name="angle-right" style={{ color: '#fff', fontSize: 40 }}/>
-                                </View>
-                                <View style={{ flex: 1, paddingLeft: 15 }}>
-                                    <Text>Slide To Click On My Way</Text>
-                                </View>
-                            </View>
-                        </ScrollView>
-                    </View>
+                    {/* bala  : start*/}
                     {
-                        JobDetailsData.status=='ACCEPTED' ? (
+                        JobDetailsData.status == 'STARTED' ? (
+                            <View style={{ flexDirection: 'row', flex: 1 }}>
+                                <TouchableOpacity style={{ flex: 1, backgroundColor: 'red', alignItems: 'center', height: 50, justifyContent: 'center' }} onPress={() => this.declineJob()}><Text style={{ color: '#fff' }}>DECLINE</Text></TouchableOpacity>
+                                <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', alignItems: 'center', height: 50, justifyContent: 'center' }} onPress={() => this.acceptJob()}><Text style={{ color: '#fff' }}>ACCEPT</Text></TouchableOpacity>
+                            </View>
+                        ) : (<View></View>)
+                    }
+                    
+                    {
+                        JobDetailsData.status=='ACCEPTED' ? 
+                            (<View>
+                                <View>
+                                    <ScrollView
+                                        ref='ScrollViewEnd'
+                                        pagingEnabled={true}
+                                        horizontal={true}
+                                        showsHorizontalScrollIndicator={false}
+                                        scrollEventThrottle={400}
+                                        onScrollEndDrag={() => this.renderTracking()}
+                                        style={{ width: '100%' }}>
+                                        <View style={{ width: win, backgroundColor: 'white', paddingLeft: 10, paddingRight: 10 }}>
+                                            <TouchableOpacity
+                                                style={{ flex: 1, alignItems: 'center', backgroundColor: '#81cdc7', justifyContent: 'center', marginTop: 3, borderRadius: 5 }}
+                                                activeOpacity={1}
+                                            >
+                                                <Text style={{ color: '#fff' }}>On My Way</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                        <View style={{ width: win, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderBottomColor: '#ccc', borderBottomWidth: 1 }}>
+                                            <View style={{ backgroundColor: '#81cdc7', paddingLeft: 10, paddingRight: 10 }}>
+                                                <FontAwesome name="angle-right" style={{ color: '#fff', fontSize: 40 }} />
+                                            </View>
+                                            <View style={{ flex: 1, paddingLeft: 15 }}>
+                                                <Text>Slide To Click On My Way</Text>
+                                            </View>
+                                        </View>
+                                    </ScrollView>
+                                </View>
+                            
                         <View style={styles.jobItemWarp}>
                                 <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', alignItems: 'center', paddingTop: 10, paddingBottom: 10, borderRadius: 4 }} onPress={() => this.setState({ jobCancelModal: true })} >
                                 <Text style={{ color: '#fff' }}>CANCEL JOB</Text>
                             </TouchableOpacity>
                         </View>
+                        </View>
                         ): (<View></View>)
-                    }
+                       
+                }
+                    {/* bala  : end*/}
                 </Content>
 
 
@@ -395,10 +472,29 @@ class JobDetails extends Component {
                         </View>
                     </View>
                 </Modal>
-
+                <FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
             </Container>
         );
     }
 }
 
-export default JobDetails;
+JobDetails.propTypes = {
+    auth: PropTypes.object.isRequired,
+    availableJobs: PropTypes.object.isRequired
+}
+const mapStateToProps = (state) => {
+    return {
+        auth: state.auth,
+        availableJobs: state.availableJobs,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        availablejobs: (id) => dispatch(availablejobs(id)), 
+        acceptJob: (jobId, workerId) => dispatch(acceptJob(jobId, workerId)),
+        declineJob: (jobId, workerId, serviceId) => dispatch(declineJob(jobId, workerId, serviceId)),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(JobDetails);
