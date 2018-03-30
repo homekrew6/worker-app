@@ -5,21 +5,13 @@ import moment from 'moment';
 import 'moment-timezone';
 import DeviceInfo from 'react-native-device-info';
 import { NavigationActions } from "react-navigation";
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ListView, Geolocation } from "react-native";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ListView, Geolocation, platform } from "react-native";
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, List, ListItem, Icon, Tab, Tabs, ScrollableTab, Body } from "native-base";
 import FSpinner from 'react-native-loading-spinner-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './styles';
 import { availablejobs, setNewData, acceptJob, declineJob } from './elements/jobActions'
 const imageIcon1 = require('../../../img/icon/home.png');
-
-
-
-const datas = [
-    { name: '12345', email: 'abc' },
-    { name: '1254', email: 'abc' },
-    { name: '1254', email: 'abc' }
-];
 
 class AvailableJobs extends Component {
     constructor(props) {
@@ -30,11 +22,6 @@ class AvailableJobs extends Component {
             finalJobData: [],
             listItemFlag: false,
             loader: false,
-            listViewData: [
-                { name: '12345' },
-                { name: '1254' },
-                { name: '1254' }
-            ]
         };
     }
 
@@ -124,15 +111,15 @@ class AvailableJobs extends Component {
     onlyUnique(value, index, self) { 
         return self.indexOf(value) === index;
     }
-
+//bala: Start
     declineJob(data){
         this.setState({
             loader: true
         })
         let jobId = data.id;
         let workerId = this.props.auth.data.id;
-        console.log(jobId, workerId);
-        this.props.declineJob(jobId, workerId).then(res => {
+        let serviceId = data.serviceId;
+        this.props.declineJob(jobId, workerId, serviceId).then(res => {
             this.jobdata();
         }).catch(err => {
             console.log(err);
@@ -141,6 +128,7 @@ class AvailableJobs extends Component {
             })
         })
     }
+//bala: End
     acceptJob(data) {
         this.setState({
             loader: true
@@ -271,9 +259,9 @@ class AvailableJobs extends Component {
                     tabBarUnderlineStyle={styles.Tabs}
                     locked={true}
                     initialPage={0}
-                    renderTabBar={() => <ScrollableTab />}
+                    renderTabBar={() => <ScrollableTab tabsContainerStyle={{ backgroundColor: '#81cdc7' }} />}
                 >
-                    <Tab heading="AVAILABLE JOBS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
+                    <Tab heading="AVAILABLE JOBS" tabStyle={{ backgroundColor: '#81cdc7', }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
                         <Content>
                             {finalArray.map((dataQ, key) => {
                                 return(
@@ -286,33 +274,35 @@ class AvailableJobs extends Component {
                                         //dataArray={dataQ.data}
                                         renderRow={( item, data ) =>
                                             <ListItem style={item.startTime.timeInt === false ? styles.jobListItemDisable : styles.jobListItem}>
-                                                <View style={styles.listWarp}>
-                                                    <View style={styles.listWarpImageWarp}>
-                                                        <Image source={imageIcon1} style={styles.listWarpImage} />
+                                                <TouchableOpacity style={styles.listWarp} onPress={() => this.goDetails(item)}>
+                                                    <View style={styles.listWarp}>
+                                                        <View style={styles.listWarpImageWarp}>
+                                                            <Image source={{ uri: item.service.banner_image }} style={styles.listWarpImage} />
+                                                        </View>
+                                                        <View style={styles.listWarpTextWarp}>
+                                                            <View style={styles.flexDirectionRow}>
+                                                                <Text>{item.service.name}</Text>
+                                                            </View>
+                                                            <View style={styles.flexDirectionRow}>
+                                                                {/* <Text style={[styles.fontWeight700, { fontSize: 14 }]}> 
+                                                                    Tuesday
+                                                                </Text>
+                                                                <Text style={{ fontSize: 14 }}> 10:00 AM</Text> */}
+                                                                <Text style={{ fontSize: 14 }}>{item.postedDate}</Text>
+                                                            </View>
+                                                            <View style={styles.flexDirectionRow}>
+                                                                <Text>{item.userLocation.name}</Text>
+                                                            </View>
+                                                            <View style={styles.flexDirectionRow}>
+                                                                <Text style={{ color: '#81cdc7' }}>{item.startTime.startTime}</Text>
+                                                            </View>
+                                                        </View>
+                                                        <View>
+                                                            <Text style={styles.listWarpPriceUp}>AED {item.price}</Text>
+                                                            <Text style={styles.listWarpPriceDown}>4 hours</Text>
+                                                        </View>
                                                     </View>
-                                                    <View style={styles.listWarpTextWarp}>
-                                                        <View style={styles.flexDirectionRow}>
-                                                            <Text>{item.service.name}</Text>
-                                                        </View>
-                                                        <View style={styles.flexDirectionRow}>
-                                                            <Text style={[styles.fontWeight700, { fontSize: 14 }]}> 
-                                                                {/* {item.postedDate}  */}
-                                                                Tuesday
-                                                            </Text>
-                                                            <Text style={{ fontSize: 14 }}> 10:00 AM</Text>
-                                                        </View>
-                                                        <View style={styles.flexDirectionRow}>
-                                                            <Text>Deira, Dubai</Text>
-                                                        </View>
-                                                        <View style={styles.flexDirectionRow}>
-                                                            <Text style={{ color: '#81cdc7' }}>{item.startTime.startTime}</Text>
-                                                        </View>
-                                                    </View>
-                                                    <View>
-                                                        <Text style={styles.listWarpPriceUp}>AED {item.price}</Text>
-                                                        <Text style={styles.listWarpPriceDown}>4 hours</Text>
-                                                    </View>
-                                                </View>
+                                                </TouchableOpacity>
                                             </ListItem>
                                         }
                                         renderLeftHiddenRow={data =>
@@ -356,23 +346,26 @@ class AvailableJobs extends Component {
                                             <ListItem style={styles.jobListItem}>
                                                 <TouchableOpacity style={styles.listWarp} onPress={() => this.goDetails(item)}>
                                                     <View style={styles.listWarpImageWarp}>
-                                                        <Image source={imageIcon1} style={styles.listWarpImage} />
+                                                            <Image source={{uri: item.service.banner_image}} style={styles.listWarpImage} />
                                                     </View>
                                                     <View style={styles.listWarpTextWarp}>
                                                         <View style={styles.flexDirectionRow}>
                                                             <Text>{item.service.name}</Text>
                                                         </View>
                                                         <View style={styles.flexDirectionRow}>
-                                                            <Text style={[styles.fontWeight700, { fontSize: 14 }]}>Tuesday </Text>
-                                                            <Text style={{ fontSize: 14 }}> 10:00 AM</Text>
+                                                            {/* <Text style={[styles.fontWeight700, { fontSize: 14 }]}>Tuesday </Text>
+                                                            <Text style={{ fontSize: 14 }}> 10:00 AM</Text> */}
+                                                                <Text style={{ fontSize: 12 }}>{item.postedDate}</Text>
                                                         </View>
                                                         <View style={styles.flexDirectionRow}>
-                                                            <Text>Deira, Dubai</Text>
+                                                            <Text>{item.userLocation.name}</Text>
+                                                        </View>
+                                                        <View style={styles.flexDirectionRow}>
+                                                                <Text style={{ color: '#81cdc7', fontSize: 16 }}>{item.startTime.startTime}</Text>
                                                         </View>
                                                     </View>
                                                     <View>
-                                                        <Text style={{ color: '#81cdc7', fontSize: 10 }}>Starts in 6 hours</Text>
-                                                        <Text style={styles.listWarpPriceUp}>AED 100</Text>
+                                                        <Text style={styles.listWarpPriceUp}>AED {item.price}</Text>
                                                         <Text style={styles.listWarpPriceDown}>4 hours</Text>
                                                     </View>
                                                 </TouchableOpacity>
@@ -384,35 +377,43 @@ class AvailableJobs extends Component {
                         </Content>
                     </Tab>
                     <Tab heading="DECLINEDJOBS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
-                        <List
-                            dataArray={this.props.availableJobs.data.response.message.declinedJobs}
+                        {this.props.availableJobs.data.response.message.declinedJobs? (
+                            <List
+                                dataArray={this.props.availableJobs.data.response.message.declinedJobs}
                             style={styles.jobList}
                             renderRow={(item) =>
-                                    <ListItem style={styles.jobListItem}>
-                                        <View style={styles.listWarp}>
-                                            <View style={styles.listWarpImageWarp}>
-                                                <Image source={imageIcon1} style={styles.listWarpImage} />
-                                            </View>
-                                            <View style={styles.listWarpTextWarp}>
-                                                <View style={styles.flexDirectionRow}>
-                                                    <Text>{item.service.name}</Text>
-                                                </View>
-                                                <View style={styles.flexDirectionRow}>
-                                                    <Text style={[styles.fontWeight700, { fontSize: 14 }]}>Tuesday </Text>
-                                                    <Text style={{ fontSize: 14 }}> 10:00 AM</Text>
-                                                </View>
-                                                <View style={styles.flexDirectionRow}>
-                                                    <Text>Deira, Dubai</Text>
-                                                </View>
-                                            </View>
-                                            <View>
-                                                <Text style={styles.listWarpPriceUp}>AED 100</Text>
-                                                <Text style={styles.listWarpPriceDown}>4 hours</Text>
-                                            </View>
+                                <ListItem style={styles.jobListItem}>
+                                    <View style={styles.listWarp}>
+                                        <View style={styles.listWarpImageWarp}>
+                                            <Image source={{ uri: item.service.banner_image }} style={styles.listWarpImage} />
                                         </View>
-                                    </ListItem>
+                                        <View style={styles.listWarpTextWarp}>
+                                            <View style={styles.flexDirectionRow}>
+                                                <Text>{item.service.name}</Text>
+                                            </View>
+                                            <View style={styles.flexDirectionRow}>
+                                                {/* <Text style={[styles.fontWeight700, { fontSize: 14 }]}>Tuesday </Text>
+                                                    <Text style={{ fontSize: 14 }}> 10:00 AM</Text> */}
+                                                <Text style={{ fontSize: 14 }}> {item.job.postedDate } </Text>
+                                            </View>
+                                            {/* <View style={styles.flexDirectionRow}>
+                                                    <Text>location</Text>
+                                                </View> */}
+                                        </View>
+                                        <View>
+                                            <Text style={styles.listWarpPriceUp}>AED {item.job.price}</Text>
+                                            <Text style={styles.listWarpPriceDown}>4 hours</Text>
+                                        </View>
+                                    </View>
+                                </ListItem>
                             }
                         />
+                        ):(
+                            <View>
+                                <Text>No data found</Text>
+                            </View>
+                        )
+                        }
                     </Tab>
                     <Tab heading="STATS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
                         <Text>Tab1</Text>
@@ -448,7 +449,7 @@ const mapDispatchToProps = (dispatch) => {
         availablejobs: (id) => dispatch(availablejobs(id)), 
         setNewData: (data) => dispatch(setNewData(data)),
         acceptJob: (jobId, workerId) => dispatch(acceptJob(jobId, workerId)),
-        declineJob: (jobId, workerId) => dispatch(declineJob(jobId, workerId )),
+        declineJob: (jobId, workerId, serviceId) => dispatch(declineJob(jobId, workerId, serviceId )),
     }
 }
 
