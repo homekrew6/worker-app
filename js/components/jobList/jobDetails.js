@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, TouchableHighlight, ScrollView } from "react-native";
 import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Icon, Frame, Input, Label, Text } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons'; 
+import MapViewDirections from 'react-native-maps-directions';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'; 
 import FontAwesome from 'react-native-vector-icons/FontAwesome'; 
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -26,6 +27,11 @@ class JobDetails extends Component {
             starCount: 0,
             isModalVisible: false,
             jobCancelModal: false,
+            latitudeUser: '',
+            longitudeUser: '',
+            errorLocationUser: '',
+            markerStatus: true,
+            scrollStatus : 0,
             jobTracker: this.props.navigation.state.params.jobDetails ? this.props.navigation.state.params.jobDetails.status =='ACCEPTED'?'Assigned Job':'On My Way':''
         }
     }
@@ -40,11 +46,28 @@ class JobDetails extends Component {
 
     componentDidMount() {
         setTimeout(() => {
+            this.setState({ scrollStatus: 1 });
             this.refs.ScrollViewEnd.scrollToEnd();
         }, 50);
 
+       
         
-        
+    }
+
+    renderTracking(){
+        this.setState({ markerStatus: false });
+        navigator.geolocation.getCurrentPosition((position) => {
+            console.log('position', position);
+            this.setState({
+                latitudeUser: position.coords.latitude,
+                longitudeUser: position.coords.longitude,
+                errorLocationUser: null,
+            });
+            },
+            (error) => this.setState({ errorLocation: error.message }),
+            //{ enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 },
+        );
+       
     }
     componentWillMount(){
         // let JobDetails = this.props.navigation.state.params.jobDetails;
@@ -61,7 +84,9 @@ class JobDetails extends Component {
             longitudeDelta: 0.0421,
         }
 
-        
+        let origin = {latitude: region.latitude, longitude: region.longitude};
+        let destination = {latitude: this.state.latitudeUser, longitude: this.state.longitudeUser};
+        let GOOGLE_MAPS_APIKEY = 'AIzaSyCya136InrAdTM3EkhM9hryzbCcfTUu7UU';
 
         console.log(JobDetailsData);
         return (
@@ -90,11 +115,25 @@ class JobDetails extends Component {
                             region={ region }
                             onRegionChangeComplete={this.onRegionChange}
                             onRegionChange={this.onLocationChange}
-                        >
+                        >   
+                        {
+                            this.state.longitudeUser !== '' ? <MapViewDirections
+                                origin={origin}
+                                destination={destination}
+                                apikey={GOOGLE_MAPS_APIKEY}
+                                mode={'driving'}
+                                strokeWidth={3}
+                                strokeColor="hotpink"
+                            /> : console.log(this.state, region)
+                        }
+                        {
+                            this.state.markerStatus === true ?
                             <Marker
                                 coordinate={{ latitude: region.latitude, longitude: region.longitude }}
                                 title={this.props.navigation.state.params.jobDetails.userLocation.name}
-                            />
+                            />: console.log()
+                        }
+                            
                             
                         </MapView>
                     </View>
@@ -184,6 +223,7 @@ class JobDetails extends Component {
                         horizontal = {true}
                         showsHorizontalScrollIndicator = {false}
                         scrollEventThrottle={400}
+                        onScrollEndDrag={() => this.renderTracking()}
                         style={{ width: '100%' }}>
                             <View style={{ width: win, backgroundColor: 'white', paddingLeft: 10, paddingRight: 10 }}>
                                 <TouchableOpacity 
