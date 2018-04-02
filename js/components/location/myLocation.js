@@ -93,13 +93,13 @@ class myLocation extends Component {
                             <Ionicons name="ios-arrow-back" style={styles.backBt} />
                         </Button>
                         <Body style={styles.tac}>
-                            <Text style={styles.hdClr}>My Location</Text>
+                            <Text style={styles.hdClr}>{I18n.t('my_location')}</Text>
                         </Body>
                         <Button transparent 
                             onPress={() => this.props.navigation.navigate('SelectLocation')}
                             >
                             <Ico name='edit' style={styles.editIcon} />
-                            <Text style={styles.editIconTxt}>Edit</Text>
+                            <Text style={styles.editIconTxt}>{I18n.t('edit')}</Text>
                         </Button>
                     </Header>
                     

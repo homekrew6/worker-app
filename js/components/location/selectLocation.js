@@ -167,7 +167,7 @@ class selectLocation extends Component {
                             <Ionicons name="ios-arrow-back" style={styles.backBt} />
                         </Button>
                         <Body style={styles.tac}>
-                            <Text style={styles.hdClr}>My Locations</Text>
+                            <Text style={styles.hdClr}>{I18n.t('my_location')}</Text>
                         </Body>
                         <Button transparent onPress={() => this.save_select_location()}>
                             <Text>Save</Text>

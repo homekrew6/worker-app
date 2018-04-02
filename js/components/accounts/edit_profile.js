@@ -51,7 +51,7 @@ class EditProfile extends Component {
             if (res.zone.length > 0) {
                 this.setState({ zoneList: res.zone, selectedZoneDetails: res.zone[0], selected1: res.zone[0].id })
 
-                api.post('serviceZones/getZoneRelatedService', { id: res.zone[0].id }).then((resService) => {
+                api.post('serviceZones/getZoneRelatedService', { zone: res.zone[0].id }).then((resService) => {
                     //console.log(res);
                     if (resService.response.length > 0) {
                         this.setState({ serviceList: resService.response })
@@ -68,9 +68,12 @@ class EditProfile extends Component {
                                         serviceIds.push(item.serviceId);
                                     });
                                     resService.response.map((data1) => {
-                                        if (serviceIds.includes(data1.id)) {
-                                            data1.selected = true;
+                                        if(data1.service){
+                                            if (serviceIds.includes(data1.service.id)) {
+                                                data1.selected = true;
+                                            }
                                         }
+                                        
                                     });
                                     this.setState({ serviceList: resService.response });
 
@@ -218,8 +221,8 @@ class EditProfile extends Component {
                     let data = {};
                     let serviceIds = [];
                     this.state.serviceList.map((item) => {
-                        if (item.selected) {
-                            serviceIds.push(item.id);
+                        if (item.selected && item.service) {
+                            serviceIds.push(item.service.id);
                         }
                     });
                     if (serviceIds.length > 0) {
@@ -316,7 +319,7 @@ class EditProfile extends Component {
                             <Icon name="chevron-left" style={{ fontSize: 18, color: '#71beb8' }} />
                         </Button>
                         <Body style={styles.appHdrtitleWarp}>
-                            <Text style={{ color: '#1e3768' }}>Edit My Profile</Text>
+                            <Text style={{ color: '#1e3768' }}> {I18n.t('edit_my_profile')}</Text>
                         </Body>
                         <Button transparent />
                     </Header>
@@ -349,7 +352,7 @@ class EditProfile extends Component {
                                         }
                                     )}
                             >
-                                <Text> Change Photo </Text>
+                                <Text> {I18n.t('change_photo')} </Text>
                             </Button>
                         </View>
                     </View>
@@ -361,7 +364,7 @@ class EditProfile extends Component {
                     <View>
                         <View style={styles.editprofileLst}>
                             <View style={styles.editprofileWarp}>
-                                <Text>Name</Text>
+                                <Text>{I18n.t('name')}</Text>
                                 <Text style={styles.starRed}>*</Text>
                             </View>
                             <View style={styles.editprofileInputwrap}>
@@ -370,7 +373,7 @@ class EditProfile extends Component {
                         </View>
                         <View style={styles.editprofileLst}>
                             <View style={styles.editprofileWarp}>
-                                <Text>Email Id</Text>
+                                <Text>{I18n.t('email_id')}</Text>
                                 <Text style={styles.starRed}>*</Text>
                             </View>
                             <View style={styles.editprofileInputwrap}>
@@ -380,7 +383,7 @@ class EditProfile extends Component {
 
                         <View style={styles.editprofileLst}>
                             <View style={styles.editprofileWarp}>
-                                <Text>Phone No</Text>
+                                <Text>{I18n.t('phone_no')}</Text>
                                 <Text style={styles.starRed}>*</Text>
                             </View>
                             <View style={styles.editprofileInputwrap}>
@@ -390,16 +393,16 @@ class EditProfile extends Component {
 
                         <View style={styles.editprofileLst}>
                             <View style={styles.editprofileWarp}>
-                                <Text>Password</Text>
+                                <Text>{I18n.t('password_small_case')}</Text>
                                 <Text style={styles.starRed}>*</Text>
                             </View>
                             <View style={styles.editprofileInputwrap}>
-                                <Input style={styles.editprofileInput} value={'password'} secureTextEntry />
+                                <Input style={styles.editprofileInput} value={I18n.t('password_small_case')} secureTextEntry />
                             </View>
                         </View>
                         <View style={{ padding: 10 }}>
                             <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-                                <Text style={{ paddingBottom: 5, paddingLeft: 5 }}>Skills</Text>
+                                <Text style={{ paddingBottom: 5, paddingLeft: 5 }}>{I18n.t('skills')}</Text>
                                 <Text style={styles.starRedSkill}>*</Text>
                             </View>
                             
@@ -410,7 +413,7 @@ class EditProfile extends Component {
                     <Footer>
                         <FooterTab>
                             <TouchableOpacity full style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#81cdc7' }} onPress={() => this.pressSave()}>
-                                <Text style={{ color: '#fff', fontSize: 16 }}>Save</Text>
+                                <Text style={{ color: '#fff', fontSize: 16 }}>{I18n.t('save')}</Text>
                             </TouchableOpacity>
                         </FooterTab>
                     </Footer>

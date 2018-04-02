@@ -139,7 +139,7 @@ class LanguageList extends Component {
 
                 <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
                     <Body style={{ alignItems: 'center' }}>
-                        <Title style={styles.appHdr2Txt}>My Language</Title>
+                        <Title style={styles.appHdr2Txt}>{I18n.t('my_language')}</Title>
                     </Body>
                     <Button transparent onPress={() => this.languageDone()}><Text>{I18n.t('done')}</Text></Button>
                 </Header>

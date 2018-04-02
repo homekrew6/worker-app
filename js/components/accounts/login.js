@@ -118,14 +118,16 @@ class Login extends Component {
 						</TouchableOpacity>
 						<TouchableOpacity onPress={() => this.pressForgotPassword()}>
 							<View>
-								<Text style={{ textAlign: 'right', color: '#1e3768', fontSize: 12, paddingBottom: 20, textDecorationStyle: 'solid', paddingLeft: 15, paddingRight: 15, textDecorationLine: 'underline', textDecorationColor: '#1e3768' }}>Forgot password?</Text>
+								<Text style={{ textAlign: 'right', color: '#1e3768', fontSize: 12, paddingBottom: 20, textDecorationStyle: 'solid', paddingLeft: 15, paddingRight: 15, textDecorationLine: 'underline', textDecorationColor: '#1e3768' }}>
+									{I18n.t('forgot_password_q_mark')} 
+								</Text>
 							</View>
 						</TouchableOpacity>
 
 						<View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 20 }}>
 							<Text style={{ color: '#252525' }}>{I18n.t('not_a_register_member')} </Text>
 							<TouchableOpacity onPress={() => this.props.navigation.navigate("Signup")}>
-								<Text style={{ color: '#29416f' }}>{I18n.t('signup')}</Text>
+								<Text style={{ color: '#29416f' }}>{I18n.t('accept_button')}</Text>
 							</TouchableOpacity>
 						</View>
 

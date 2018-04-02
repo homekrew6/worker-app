@@ -10,6 +10,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Calendar } from 'react-native-calendars';
 import { setAvilableDate } from './elements/locationAction';
 import FSpinner from 'react-native-loading-spinner-overlay';
+import I18n from '../../i18n/i18n';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 class MyListItem extends React.PureComponent {
@@ -355,13 +356,13 @@ class UnavailableDate extends Component {
 
                 <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed">
                     <Button transparent onPress={() => this.props.navigation.goBack()}>
-                        <Text>Cancel</Text>
+                        <Text>{I18n.t('cancel')}</Text>
                     </Button>
                     <Body style={styles.tac}>
-                        <Text style={styles.hdClr}>My Timings</Text>
+                        <Text style={styles.hdClr}>{I18n.t('my_timing')}</Text>
                     </Body>
                     <Button transparent onPress={() => this.doneDateAndTime()}>
-                        <Text>Done</Text>
+                        <Text>{I18n.t('done')}</Text>
                     </Button>
                 </Header>
 
@@ -371,7 +372,7 @@ class UnavailableDate extends Component {
                         <Card style={{ backgroundColor: 'transparent', marginBottom: 20 }}>
                             <CardItem style={{ marginBottom: 2, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
                                 <FontAwesome name='calendar' style={{ color: '#81cdc7', fontSize: 20, marginRight: 5 }} />
-                                <Text>Start Day</Text>
+                                <Text>{I18n.t('start_day')}</Text>
                             </CardItem>
                             <CardItem>
                                 <Calendar
@@ -404,7 +405,7 @@ class UnavailableDate extends Component {
 
                             <CardItem style={{ marginTop: 2, marginBottom: 2, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
                                 <FontAwesome name='clock-o' style={{ color: '#81cdc7', fontSize: 20, marginRight: 5 }} />
-                                <Text>Start Time</Text>
+                                <Text>{I18n.t('start_time')}</Text>
                             </CardItem>
                             <CardItem>
                                 <View style={{ flex: 1, flexDirection: 'row', }}>
@@ -429,7 +430,7 @@ class UnavailableDate extends Component {
                         <Card style={{ backgroundColor: 'transparent' }}>
                             <CardItem style={{ marginBottom: 2, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
                                 <FontAwesome name='calendar' style={{ color: '#81cdc7', fontSize: 20, marginRight: 5 }} />
-                                <Text>End Day</Text>
+                                <Text>{I18n.t('end_day')}</Text>
                             </CardItem>
                             <CardItem>
                                 <Calendar
@@ -461,7 +462,7 @@ class UnavailableDate extends Component {
                             </CardItem>
                             <CardItem style={{ marginBottom: 2, marginTop: 2, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
                                 <FontAwesome name='clock-o' style={{ color: '#81cdc7', fontSize: 20, marginRight: 5 }} />
-                                <Text>End Time</Text>
+                                <Text>{I18n.t('end_time')}</Text>
                             </CardItem>
                             <CardItem>
                                 <View style={{ flex: 1, flexDirection: 'row', }}>

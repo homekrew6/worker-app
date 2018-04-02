@@ -4,6 +4,7 @@ import { Container, Button, H3, Text, Header, Title, Body, Left, Right, Content,
 import FSpinner from 'react-native-loading-spinner-overlay';
 import styles from './styles';
 import Entypo from 'react-native-vector-icons/Entypo';
+import I18n from '../../i18n/i18n';
 const carve = require("../../../img/icon17.png");
 class Settings extends Component {
 
@@ -85,7 +86,7 @@ class Settings extends Component {
                             <View style={styles.confirmationIconView}>
                                 <Entypo name='language' style={{ fontSize: 20, marginRight: 8, color: '#1e3768' }} />
                             </View>
-                            <Text style={styles.confirmationMainTxt}>Language</Text>
+                            <Text style={styles.confirmationMainTxt}>{I18n.t('language')}</Text>
                             <Text style={styles.confirmationDateTime}>{this.state.language}</Text>
                             <View style={styles.confirmationArwNxt}>
 
@@ -96,7 +97,7 @@ class Settings extends Component {
                             <View style={styles.confirmationIconView}>
 
                             </View>
-                            <Text style={styles.confirmationMainTxt}>Currency</Text>
+                            <Text style={styles.confirmationMainTxt}>{I18n.t('currency')}</Text>
                             <Text style={styles.confirmationDateTime}>{this.state.currency}</Text>
                             <View style={styles.confirmationArwNxt}>
 
@@ -110,8 +111,12 @@ class Settings extends Component {
                 </Content>
                 <Footer>
                     <FooterTab>
-                        <TouchableOpacity style={styles.confirmationServicefooterItem} onPress={() => this.confirmationContinue()} ><Text style={styles.confirmationServicefooterItmTxt}>CONTINUE</Text></TouchableOpacity>
-
+                        {/* <TouchableOpacity style={styles.confirmationServicefooterItem} onPress={() => this.confirmationContinue()} >
+                        <Text style={styles.confirmationServicefooterItmTxt}>CONTINUE</Text>
+                        </TouchableOpacity> */}
+                        <TouchableOpacity style={styles.confirmationServicefooterItem} onPress={() => this.props.navigation.navigate('Menu')} >
+                            <Text style={styles.confirmationServicefooterItmTxt}>{I18n.t('continue')}</Text>
+                        </TouchableOpacity>
                     </FooterTab>
                 </Footer>
 

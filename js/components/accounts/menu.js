@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from "react-native";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, AsyncStorage } from "react-native";
 import { Container, Header, Button, Content, Form, Item, Icon, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title, Thumbnail } from "native-base";
 import { logout } from './elements/authActions'
 import I18n from '../../i18n/i18n';
@@ -28,6 +28,15 @@ const resetAction = NavigationActions.reset({
 class Menu extends Component {
     constructor(props) {
         super(props);
+        this.state={ visible:'' };
+        AsyncStorage.getItem("language").then((value)=>{
+        if(value)
+        {
+            const value1=JSON.parse(value);
+            I18n.locale = value1.Code;
+            this.setState({visible:'fhfh'});
+        }
+        })
     };
 
     logout() {
@@ -101,7 +110,7 @@ class Menu extends Component {
                         <CardItem style={styles.menuCarditem}>
                             <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate("AvailableJobs")} >
                                 <Image source={icon2} style={styles.menuCardIcon} />
-                                <Text style={styles.menuCardTxt}>My Jobs</Text>
+                                <Text style={styles.menuCardTxt}>{I18n.t('my_job')}</Text>
                                 <View style={styles.arw_lft}>
                                     <Image source={back_arow} style={styles.arw_lft_img} />
                                 </View>
@@ -111,7 +120,7 @@ class Menu extends Component {
                         <CardItem style={styles.menuCarditem}>
                             <TouchableOpacity style={styles.menuCardView} onPress={() => console.log('')} >
                                 <Image source={icon3} style={styles.menuCardIcon} />
-                                <Text style={styles.menuCardTxt}>My Location</Text>
+                                <Text style={styles.menuCardTxt}>{I18n.t('my_location')}</Text>
                                 <View style={styles.arw_lft}>
                                     <Image source={back_arow} style={styles.arw_lft_img} />
                                 </View>
@@ -121,7 +130,7 @@ class Menu extends Component {
                         <CardItem style={styles.menuCarditem}>
                             <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate("MyPaymentList")}>
                                 <Image source={icon4} style={styles.menuCardIcon} />
-                                <Text style={styles.menuCardTxt}>My Card</Text>
+                                <Text style={styles.menuCardTxt}>{I18n.t('my_card')}</Text>
                                 <View style={styles.arw_lft}>
                                     <Image source={back_arow} style={styles.arw_lft_img} />
                                 </View>
@@ -131,7 +140,7 @@ class Menu extends Component {
                         <CardItem style={styles.menuCarditem}>
                             <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate("myTiming")} >
                                 <Image source={icon4} style={styles.menuCardIcon} />
-                                <Text style={styles.menuCardTxt}>My Timing</Text>
+                                <Text style={styles.menuCardTxt}>{I18n.t('my_timing')}</Text>
                                 <View style={styles.arw_lft}>
                                     <Image source={back_arow} style={styles.arw_lft_img} />
                                 </View>
@@ -141,7 +150,7 @@ class Menu extends Component {
                         <CardItem style={styles.menuCarditem}>
                             <View style={styles.menuCardView}>
                                 <Image source={icon5} style={styles.menuCardIcon} />
-                                <Text style={styles.menuCardTxt}>My promo Code</Text>
+                                <Text style={styles.menuCardTxt}>{I18n.t('my_promo_code')}</Text>
                                 <View style={styles.arw_lft}>
                                     <Image source={back_arow} style={styles.arw_lft_img} />
                                 </View>
@@ -151,7 +160,7 @@ class Menu extends Component {
                         <CardItem style={styles.menuCarditem}>
                             <View style={styles.menuCardView}>
                                 <Image source={icon6} style={styles.menuCardIcon} />
-                                <Text style={styles.menuCardTxt}>Support</Text>
+                                <Text style={styles.menuCardTxt}>{I18n.t('support')}</Text>
                                 <View style={styles.arw_lft}>
                                     <Image source={back_arow} style={styles.arw_lft_img} />
                                 </View>
@@ -161,7 +170,7 @@ class Menu extends Component {
                         <CardItem style={styles.menuCarditem}>
                             <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate("Settings")} >
                                 <Image source={icon7} style={styles.menuCardIcon} />
-                                <Text style={styles.menuCardTxt}>Settings</Text>
+                                <Text style={styles.menuCardTxt}>{I18n.t('setting')}</Text>
                                 <View style={styles.arw_lft}>
                                     <Image source={back_arow} style={styles.arw_lft_img} />
                                 </View>
@@ -171,7 +180,7 @@ class Menu extends Component {
                         <CardItem style={styles.menuCarditem}>
                             <TouchableOpacity style={styles.menuCardView} onPress={() => this.logout()}>
                                 <Image source={icon8} style={styles.menuCardIcon} />
-                                <Text style={styles.menuCardTxt}>Logout</Text>
+                                <Text style={styles.menuCardTxt}>{I18n.t('logout')}</Text>
                                 <View style={styles.arw_lft}>
                                     <Image source={back_arow} style={styles.arw_lft_img} />
                                 </View>
