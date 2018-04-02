@@ -50,7 +50,7 @@ getWeekOff(day, data){
     })
     if (VarAr.length === 0) {
       return(
-        <Text key={1} style={{ color: '#828282', fontSize: 13, paddingLeft: 5, paddingRight: 5}}>Week Off</Text>
+        <Text key={1} style={{ color: '#828282', fontSize: 13, paddingLeft: 5, paddingRight: 5}}>{I18n.t('week_off')} </Text>
       );
     }
 }
@@ -85,7 +85,7 @@ renderUnavalData(UnAvData, key){
         <View style={styles.flexOne}>
             <View style={styles.startTime}>
                 <View style={styles.wkDay}>
-                    <Text style={styles.wkDayd}> Start Date </Text>
+                    <Text style={styles.wkDayd}> {I18n.t('start_date')} </Text>
                 </View>
                 <View>
                     <Text style={styles.timedata}> {Moment(start_date).format('ddd, D MMM YYYY')} {UnAvData.start_time} </Text>
@@ -93,7 +93,7 @@ renderUnavalData(UnAvData, key){
             </View>
             <View style={styles.endTime}>
                 <View style={styles.wkDay}>
-                    <Text style={styles.wkDayd}> End Date </Text>
+                    <Text style={styles.wkDayd}> {I18n.t('end_date')} </Text>
                 </View>
                 <View>
                     <Text style={styles.timedata}> {Moment(end_date).format('ddd, D MMM YYYY')} {UnAvData.end_time} </Text>
@@ -157,7 +157,7 @@ renderUnavalData(UnAvData, key){
                           </Button>
                         </TouchableOpacity>
                         <Body style={styles.tac}>
-                            <Text style={styles.hdClr}>My Timings</Text>
+                            <Text style={styles.hdClr}>{I18n.t('my_timing')} </Text>
                         </Body>
                         <Button transparent />
                     </Header>
@@ -165,7 +165,7 @@ renderUnavalData(UnAvData, key){
 
                         <View style={styles.mainItemSec}>
                             <View style={styles.flexOne}>
-                                <Text style={styles.listHdr}>Available Timing</Text>
+                                <Text style={styles.listHdr}>{I18n.t('available_timing')}</Text>
                             </View>
                             <TouchableOpacity onPress={() => this.props.navigation.navigate("WeekCalendar", {
                                timimgData: this.state.timimgData,
@@ -173,7 +173,7 @@ renderUnavalData(UnAvData, key){
                              })}>
                               <View style={{ flexDirection: 'row' }}>
                                   <Ico name='edit' style={styles.listHdrEdtIcn} />
-                                  <Text style={styles.listHdrEdt}>Add/Edit</Text>
+                                  <Text style={styles.listHdrEdt}>{I18n.t('add_edit')}</Text>
                               </View>
                             </TouchableOpacity>
                         </View>
@@ -272,7 +272,7 @@ renderUnavalData(UnAvData, key){
 
                         <View style={styles.mainItemSec}>
                             <View style={styles.flexOne}>
-                                <Text style={styles.listHdr}>Unavailable Timing</Text>
+                                <Text style={styles.listHdr}>{I18n.t('unavailable_timing')}</Text>
                             </View>
                             <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => this.props.navigation.navigate('UnavailableDate', {
                                unAvailId: this.state.unAvailId,
@@ -280,7 +280,7 @@ renderUnavalData(UnAvData, key){
 
                              })}>
                                 <Ico name='add-circle' style={styles.listHdrEdtIcn} />
-                                <Text style={styles.listHdrEdt}>Add/ Edit</Text>
+                                <Text style={styles.listHdrEdt}>{I18n.t('add_edit')}</Text>
                             </TouchableOpacity>
                         </View>
                           {

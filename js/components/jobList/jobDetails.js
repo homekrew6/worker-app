@@ -5,7 +5,7 @@ import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackg
 import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Icon, Frame, Input, Label, Text } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons'; 
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
-import CircularSlider from 'react-native-circular-slider';
+//import CircularSlider from 'react-native-circular-slider';
 import MapViewDirections from 'react-native-maps-directions';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'; 
 import FontAwesome from 'react-native-vector-icons/FontAwesome'; 
@@ -18,6 +18,7 @@ import MapView, { Marker } from 'react-native-maps';
 import { availablejobs, setNewData, acceptJob, declineJob } from './elements/jobActions'
 import FSpinner from 'react-native-loading-spinner-overlay';
 import Svg, { G, Path } from 'react-native-svg';
+import I18n from  '../../i18n/i18n';
 
 import Modal from "react-native-modal";
 
@@ -147,6 +148,7 @@ class JobDetails extends Component {
     renderTracking(){
         this.setState({ markerStatus: false });
         navigator.geolocation.getCurrentPosition((position) => {
+            console.log('position', position);
             this.setState({
                 latitudeUser: position.coords.latitude,
                 longitudeUser: position.coords.longitude,
@@ -174,7 +176,7 @@ class JobDetails extends Component {
         let origin = {latitude: region.latitude, longitude: region.longitude};
         let destination = {latitude: this.state.latitudeUser, longitude: this.state.longitudeUser};
         let GOOGLE_MAPS_APIKEY = 'AIzaSyCya136InrAdTM3EkhM9hryzbCcfTUu7UU';
-        console.log(JobDetailsData)
+        console.log('before return', origin, destination,);
         return (
             <Container style={{ backgroundColor: '#fff' }}>
                 <StatusBar
@@ -195,10 +197,10 @@ class JobDetails extends Component {
                     <View style={{ flex: 1, flexDirection: 'row', padding: 30 }}>
                         <View style={{ flex: 2, flexDirection: 'column' }}>
                             <View style={{ flex: 2 }}>
-                                <Text>start time</Text>
+                                <Text>{I18n.t('start_time')}</Text>
                             </View>
                             <View style={{ flex: 2 }} >
-                                <Text>end time</Text>
+                                <Text>{I18n.t('end_time')}</Text>
                             </View>
                         </View>
                         <View style={{ flex: 4 }}>
@@ -242,6 +244,9 @@ class JobDetails extends Component {
                             onRegionChange={this.onLocationChange}
                         >   
                         {
+                            console.log('this state', this.state)
+                        }
+                        {
                             this.state.longitudeUser !== '' ? 
                             <MapViewDirections
                                 origin={origin}
@@ -251,7 +256,7 @@ class JobDetails extends Component {
                                 strokeWidth={3}
                                 strokeColor="hotpink"
                                 onReady={(result) => {
-                                    console.log('onready', result, result.coordinates[0].latitude);
+                                    console.log('onready start', result, result.coordinates[0].latitude);
                                     let lastCount = result.coordinates.length - 1;
                                     let midCount = parseInt(result.coordinates.length / 2 );
                                     let trDistance = parseFloat(result.distance).toFixed(1);
@@ -277,7 +282,7 @@ class JobDetails extends Component {
                                         trDistance: trDistance,
                                         trTime: trDuration,
                                      })
-                                     console.log('onready end', this.state, lastCount)
+                                     console.log('onready end 1', this.state, lastCount)
                                     this.mapView.fitToCoordinates(result.coordinates, {
                                       edgePadding: { 
                                         right: (width / 20),
@@ -338,7 +343,7 @@ class JobDetails extends Component {
                         <View style={{ width: 30, alignItems: 'center' }}>
                             <Ionicons name="ios-man-outline" style={styles.jobItemIconIonicons} />
                         </View>
-                        <Text style={styles.jobItemName}>Job Tracker</Text>
+                        <Text style={styles.jobItemName}>{I18n.t('job_tracker')}</Text>
                         <Text style={styles.jobItemValue}>{this.state.jobTracker}</Text>
                     </View>
                     <View style={styles.jobItemWarp}>
@@ -374,50 +379,57 @@ class JobDetails extends Component {
                         </View>
                         <TouchableOpacity style={{ alignItems: 'center' }}>
                             <Image source={require('../../../img/icon/chat-support.png')} style={{ height: 25, width: 25 }} />
-                            <Text style={{ fontSize: 12 }}>Chat/Call</Text>
+                            <Text style={{ fontSize: 12 }}>{I18n.t('chat_call')}</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.jobItemWarp}>
                         <View style={{ width: 30, alignItems: 'center'  }}>
                             <MaterialIcons name="date-range" style={styles.jobItemIcon} />
                         </View>
-                        <Text style={styles.jobItemName}>Date & Time</Text>
+                        <Text style={styles.jobItemName}>{I18n.t('date_timing')}</Text>
                         <Text style={[styles.jobItemValue, styles.jobItemValueDateandTime]}>{JobDetailsData.postedDate}</Text>
                     </View>
                     <View style={styles.jobItemWarp}>
                         <View style={{ width: 30, alignItems: 'center'  }}>
                             <MaterialIcons name="location-on" style={styles.jobItemIcon} />
                         </View>
-                        <Text style={styles.jobItemName}>Location</Text>
+                        <Text style={styles.jobItemName}>{I18n.t('location')}</Text>
                         <Text style={styles.jobItemValue}>{ JobDetailsData.userLocation.name }</Text>
                     </View>
                     <View style={styles.jobItemWarp}>
                         <View style={{ width: 30, alignItems: 'center'  }}>
                             <SimpleLineIcons name="docs" style={styles.jobItemIcon} />
                         </View>
-                        <Text style={styles.jobItemName}>Job Summary</Text>
+                        <Text style={styles.jobItemName}>{I18n.t('job_summary')}</Text>
                         <Text style={styles.jobItemValue}>AED {JobDetailsData.price}</Text>
                     </View>
                     <View style={styles.jobItemWarp}>
                         <View style={{ width: 30, alignItems: 'center'  }}>
                             <Ionicons name="ios-flag-outline" style={styles.jobItemIconIonicons} />
                         </View>
-                        <Text style={styles.jobItemName}>Quote/Follow</Text>
+                        <Text style={styles.jobItemName}>{I18n.t('quote_follow')}</Text>
                         <Text style={styles.jobItemValue}>Yes</Text>
                     </View>
                     <View style={styles.jobItemWarp}>
                         <View style={{ width: 30, alignItems: 'center' }}>
                             <MaterialIcons name="payment" style={styles.jobItemIcon} />
                         </View>
-                        <Text style={styles.jobItemName}>Payment</Text>
+                        <Text style={styles.jobItemName}>{I18n.t('payment')}</Text>
                         <Text style={styles.jobItemValue}>{JobDetailsData.payment}</Text>
                     </View>
                     {/* bala  : start*/}
                     {
                         JobDetailsData.status == 'STARTED' ? (
                             <View style={{ flexDirection: 'row', flex: 1 }}>
-                                <TouchableOpacity style={{ flex: 1, backgroundColor: 'red', alignItems: 'center', height: 50, justifyContent: 'center' }} onPress={() => this.declineJob()}><Text style={{ color: '#fff' }}>DECLINE</Text></TouchableOpacity>
-                                <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', alignItems: 'center', height: 50, justifyContent: 'center' }} onPress={() => this.acceptJob()}><Text style={{ color: '#fff' }}>ACCEPT</Text></TouchableOpacity>
+                                <TouchableOpacity style={{ flex: 1, backgroundColor: 'red', alignItems: 'center', height: 50, justifyContent: 'center' }} onPress={() => this.declineJob()}>
+                                    <Text style={{ color: '#fff' }}>
+                                        {I18n.t('decline_button')}
+                                    </Text></TouchableOpacity>
+                                <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', alignItems: 'center', height: 50, justifyContent: 'center' }} onPress={() => this.acceptJob()}>
+                                    <Text style={{ color: '#fff' }}>
+                                        {I18n.t('accept_button')}
+                                    </Text>
+                                </TouchableOpacity>
                             </View>
                         ) : (<View></View>)
                     }
@@ -439,7 +451,7 @@ class JobDetails extends Component {
                                                 style={{ flex: 1, alignItems: 'center', backgroundColor: '#81cdc7', justifyContent: 'center', marginTop: 3, borderRadius: 5 }}
                                                 activeOpacity={1}
                                             >
-                                                <Text style={{ color: '#fff' }}>On My Way</Text>
+                                                <Text style={{ color: '#fff' }}>{I18n.t('on_my_way')}</Text>
                                             </TouchableOpacity>
                                         </View>
                                         <View style={{ width: win, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderBottomColor: '#ccc', borderBottomWidth: 1 }}>
@@ -447,7 +459,7 @@ class JobDetails extends Component {
                                                 <FontAwesome name="angle-right" style={{ color: '#fff', fontSize: 40 }} />
                                             </View>
                                             <View style={{ flex: 1, paddingLeft: 15 }}>
-                                                <Text>Slide To Click On My Way</Text>
+                                                <Text>{I18n.t('slide_to_click_on_my_way')}</Text>
                                             </View>
                                         </View>
                                     </ScrollView>
@@ -455,7 +467,7 @@ class JobDetails extends Component {
                             
                         <View style={styles.jobItemWarp}>
                                 <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', alignItems: 'center', paddingTop: 10, paddingBottom: 10, borderRadius: 4 }} onPress={() => this.setState({ jobCancelModal: true })} >
-                                <Text style={{ color: '#fff' }}>CANCEL JOB</Text>
+                                <Text style={{ color: '#fff' }}>{I18n.t('cancel_job_button')}</Text>
                             </TouchableOpacity>
                         </View>
                         </View>
@@ -498,10 +510,10 @@ class JobDetails extends Component {
                             </View>
                             <View style={{ width: '100%', flexDirection: 'row', padding: 15 }}>
                                 <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', height: 40, borderTopLeftRadius: 10, borderBottomLeftRadius: 10, alignItems: 'center', justifyContent: 'center' }} onPress={() => this.setState({ jobCancelModal: false })}>
-                                    <Text style={{ fontSize: 14, color: '#fff' }}>Go Back</Text>
+                                    <Text style={{ fontSize: 14, color: '#fff' }}>{I18n.t('go_back')}</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={{ flex: 1, backgroundColor: 'red', height: 40, borderBottomRightRadius: 10, borderTopRightRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
-                                    <Text style={{ fontSize: 14, color: '#fff' }}>Yes, Cancel</Text>                                    
+                                    <Text style={{ fontSize: 14, color: '#fff' }}>{I18n.t('yes_cancel')}</Text>                                    
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -516,7 +528,7 @@ class JobDetails extends Component {
                         </TouchableOpacity>
                         <View style={{ backgroundColor: '#fff', padding: 15, borderRadius: 10, alignItems: 'center', position: 'relative' }}>
                             <Ionicons name='md-person' style={{ fontSize: 50, color: '#81cdc7'}}/>
-                            <Text style={{ paddingTop: 5, paddingBottom: 10, fontSize: 18 }}>Give me a Rate</Text>
+                            <Text style={{ paddingTop: 5, paddingBottom: 10, fontSize: 18 }}>{I18n.t('give_me_a_rate')}</Text>
                             <View style={{width: 200}}>
                                 <StarRating
                                     disabled={false}

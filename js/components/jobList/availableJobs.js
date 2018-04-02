@@ -10,6 +10,7 @@ import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Te
 import FSpinner from 'react-native-loading-spinner-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './styles';
+import I18n from '../../i18n/i18n';
 import { availablejobs, setNewData, acceptJob, declineJob } from './elements/jobActions'
 const imageIcon1 = require('../../../img/icon/home.png');
 
@@ -290,7 +291,7 @@ class AvailableJobs extends Component {
                                             data.startTime.timeInt === true ?
                                             <TouchableOpacity style={styles.leftAction} onPress={() => this.declineJob(data)}>
                                                 <MaterialIcons name="close" style={styles.leftActionIcon} />
-                                                <Text style={styles.leftActionText}>DECLINE</Text>
+                                                <Text style={styles.leftActionText}>{I18n.t('decline_button')}</Text>
                                             </TouchableOpacity>
                                                 : <View style={styles.leftAction}>
                                                 </View>}
@@ -299,7 +300,7 @@ class AvailableJobs extends Component {
                                             data.startTime.timeInt === true ?
                                                 <TouchableOpacity style={styles.rightAction} onPress={() => this.acceptJob(data)}>
                                                 <MaterialIcons name="done" style={styles.leftActionIcon} />
-                                                <Text style={styles.leftActionText}>ACCEPT</Text>
+                                                <Text style={styles.leftActionText}>{I18n.t('accept_button')}</Text>
                                             </TouchableOpacity>
                                                 : <View style={styles.leftAction}>
                                                 </View>}

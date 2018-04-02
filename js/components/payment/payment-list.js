@@ -88,16 +88,16 @@ class MyPaymentList extends Component {
                         </Button>
 
                         <Body style={styles.tac}>
-                            <Text style={styles.hdClr}>My Payment Method</Text>
+                            <Text style={styles.hdClr}>{I18n.t('my_payment_method')}</Text>
                         </Body>
                         <Button transparent onPress={() => this.save_select_location()}>
-                            <Text>Add</Text>
+                            <Text>{I18n.t('add')}</Text>
                         </Button>
 
                     </Header>
 
                     <View>
-                        <Text style={{ backgroundColor: 'lightgray', textAlign: 'center' }}>Payment method cannt be edited, you can only add.</Text>
+                        <Text style={{ backgroundColor: 'lightgray', textAlign: 'center' }}>Payment method cannot be edited, you can only add.</Text>
                         {myPaymentList}
                     </View>
 

@@ -7,6 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import CheckBox from './CheckBox';
 import { ChangeData } from '../../actions/ActionWeek';
 import api from '../../api';
+import I18n from '../../i18n/i18n';
 
 class WeekCalendar extends Component {
   state = { dataRemote: '', ScrollWidth: 10 }
@@ -370,15 +371,15 @@ class WeekCalendar extends Component {
                     <Header style={styleSelf.appHdr2} androidStatusBarColor= "#cbf0ed">
                         <Button transparent >
                             <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                                <Text style={styleSelf.backBt} >Cancel</Text>
+                                <Text style={styleSelf.backBt} >{I18n.t('cancel')}</Text>
                             </TouchableOpacity>
                         </Button>
                         <Body style={styleSelf.tac}>
-                            <Text style={styleSelf.hdClr}>Add Timing</Text>
+                            <Text style={styleSelf.hdClr}>{I18n.t('add_timing')}</Text>
                         </Body>
                         <Button transparent >
                             <TouchableOpacity onPress={this.onDonePress.bind(this)}>
-                              <Text style={styleSelf.backBt} >Done</Text>
+                              <Text style={styleSelf.backBt} >{I18n.t('done')}</Text>
                             </TouchableOpacity>
                         </Button>
                     </Header>
