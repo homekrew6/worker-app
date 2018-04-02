@@ -66,20 +66,6 @@ class JobDetails extends Component {
             this.refs.ScrollViewEnd.scrollToEnd();
         }, 50);
     }
-    // jobdata() {
-    //     let id = this.props.auth.data.id;
-    //     this.props.availablejobs(id).then(res => {
-    //         this.setState({
-    //             listItemFlag: true,
-    //             loader: false
-    //         });
-    //     }).catch(err => {
-    //         console.log(err);
-    //         this.setState({
-    //             loader: false
-    //         })
-    //     })
-    // }
 
     declineJob() {
         this.setState({
@@ -203,7 +189,7 @@ class JobDetails extends Component {
                                     if( trDuration > 60){
                                         trHour = parseInt(trDuration / 60);
                                         trMinute = parseInt(trDuration % 60);
-                                        trDuration = trHour + "Hour" + trMinute + "min";
+                                        trDuration = trHour + "Hour " + trMinute + "min";
                                     }
                                     this.setState({ 
                                         waypointStart: { 
@@ -263,12 +249,15 @@ class JobDetails extends Component {
                              : this.state.waypointMid.latitude !== '' ? 
                              <MapView.Marker  coordinate={this.state.waypointMid}>
                              <View style={{
-                                    width: 50,
-                                    height: 50,
-                                    backgroundColor: 'white',
+                                    backgroundColor: 'transparent'
                                     }}>
-                                 <Text style={{fontSize: 12}} >{this.state.trDistance} km</Text>
-                                 <Text style={{fontSize: 12}} >{this.state.trTime}</Text>
+                                 <View style={{ backgroundColor: 'white', padding: 5, alignItems: 'center' }}>
+                                    <Text style={{ fontSize: 12 }} >{this.state.trDistance} km</Text>
+                                    <Text style={{ fontSize: 12 }} >{this.state.trTime}</Text>
+                                 </View>
+                                 <View style={{ width: 100, alignItems: 'center', justifyContent: 'center', backgroundColor: 'transparent', marginTop: -5 }}>
+                                    <Image source={require("../../../img/icon/arrowDown.png")} style={{ height: 20, width: 20 }} />
+                                </View>
                              </View>
                             </MapView.Marker>      
                             : console.log()               
