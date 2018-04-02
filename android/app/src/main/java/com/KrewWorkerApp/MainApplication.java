@@ -9,6 +9,7 @@ import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.evollu.react.fcm.FIRMessagingPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.horcrux.svg.SvgPackage;
 //import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 //import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -40,7 +41,8 @@ public class MainApplication extends Application implements ReactApplication {
             new VectorIconsPackage(),
             new MapsPackage(),
             new FIRMessagingPackage(),
-            new RNDeviceInfo()
+            new RNDeviceInfo(),
+            new SvgPackage()
       );
     }
   };
