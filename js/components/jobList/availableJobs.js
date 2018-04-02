@@ -64,28 +64,8 @@ class AvailableJobs extends Component {
         this.props.navigation.navigate('JobDetails',{jobDetails:item});
     }
 
-    // getStartTime(){
-    //     if(Math.sign(timeDur._data.hours) === 1){
-    //         //positive
-    //         const hourDiff = Math.abs(timeDur._data.hours);
-    //         return hourDiff;
-    //     }else{
-    //         //negative
-    //         const checkHour = Math.abs(timeDur._data.hours);
-    //         if( checkHour === 1){
-    //             const hourDiff = Math.abs(timeDur._data.hours) + " hour";
-    //             return hourDiff;
-    //         }else{
-    //             const hourDiff = Math.abs(timeDur._data.hours) + " hours";
-    //             return hourDiff;
-    //         } 
-    //     }
-    // }
-
   
     componentDidMount(){
-      //  const postedTime = "2018-03-23 11:00:00 am";
-       // const timeDiffNowRet = this.getTimeDiffLocal(postedTime)   
 
     }
 
@@ -167,7 +147,6 @@ class AvailableJobs extends Component {
             });
             let finalArray = [];
             sortedList.map((dateOne, key) => {
-            
             let dateNow = new Date();
             let nowDateFormat = moment(dateNow).format('DD MMM YYYY');
             let convertedDate = new Date(dateOne);
@@ -231,7 +210,9 @@ class AvailableJobs extends Component {
                         finalObject.data.push(dataNew);
                     }
                 })
+
                 finalArray2.push(finalObject);
+                
             })
 
         return (
@@ -241,7 +222,7 @@ class AvailableJobs extends Component {
                     backgroundColor="#f3f3f3"
                 />
                 <Header style={styles.headerWarp} noShadow androidStatusBarColor="#f3f3f3">
-                    <Button transparent onPress={() => this.getTimeDiffLocal("2018-03-28 03:00:00")}>
+                    <Button transparent >
                         <MaterialIcons name="menu" style={styles.headIcon2} />
                     </Button>
                     <Button transparent>
