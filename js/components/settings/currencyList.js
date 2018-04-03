@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, AsyncStorage } from "react-native";
-import Ico from 'react-native-vector-icons/MaterialIcons';
+import Ico from 'react-native-vector-icons/MaterialIcons'; 
 import Entypo from 'react-native-vector-icons/Entypo';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Footer, FooterTab } from "native-base";
@@ -123,7 +124,7 @@ class CurrencyList extends Component {
                     data.status == true ?
                         { backgroundColor: '#ccc' } : { backgroundColor: 'white' }
                 ]]} onPress={() => this.selectActive(data)}>
-                    <Entypo name='language' style={{ fontSize: 20, marginRight: 8, color: '#1e3768' }} />
+                    {/* <MaterialCommunityIcons name='currency-usd' style={{ fontSize: 20, marginRight: 8, color: '#1e3768' }} /> */}
                     <View style={{ flex: 1 }}>
                         <Text>{data.name}</Text>
                     </View>
@@ -138,10 +139,11 @@ class CurrencyList extends Component {
                 />
 
                 <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
+                    <Button transparent onPress={() => this.languageDone()} style={{ width: 50, backgroundColor: 'transparent' }} disabled={true}></Button>
                     <Body style={{ alignItems: 'center' }}>
-                        <Title style={styles.appHdr2Txt}>My Language</Title>
+                        <Title style={styles.appHdr2Txt}>My Currency</Title>
                     </Body>
-                    <Button transparent onPress={() => this.languageDone()}><Text>{I18n.t('done')}</Text></Button>
+                    <Button transparent onPress={() => this.languageDone()} style={{ width: 50 }}><Text>{I18n.t('done')}</Text></Button>
                 </Header>
 
                 <Content style={styles.bgWhite} >

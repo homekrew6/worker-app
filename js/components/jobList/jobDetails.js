@@ -81,11 +81,6 @@ class JobDetails extends Component {
             job_end_time: '',
             currency:'USD',
         }
-        //const progressSpeed = ((this.state.workHourDB * 60) / 100) * 60000;
-        // const progressSpeed = (this.props.navigation.state.params.jobDetails.service.time_interval / 100) * 60000;
-        // const progressInterval = setInterval(() => {
-        //     this.setState({ workProgressTime: this.state.workProgressTime + 1 });
-        // }, progressSpeed);
     }
  
     _toggleModal = () =>

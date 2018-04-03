@@ -68,15 +68,7 @@ sendRemote(notif) {
     group: "group",
     icon: "ic_launcher", 
     large_icon: "ic_launcher",
-    data: { screenType: 'cleaner' },
-    //picture: "https://image.freepik.com/free-icon/small-boy-cartoon_318-38077.jpg", 
-    // android_actions: JSON.stringify([{
-    //   id: "view",
-    //   title: 'view'
-    // },{
-    //   id: "dismiss",
-    //   title: 'dismiss'
-    // }])
+    data: { screenType: 'cleaner' }
   });
 }
 

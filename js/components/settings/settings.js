@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import { Image, View, StatusBar, ImageBackground, TouchableOpacity, AsyncStorage } from "react-native";
 import { Container, Button, H3, Text, Header, Title, Body, Left, Right, Content, Item, Footer, FooterTab } from "native-base";
 import FSpinner from 'react-native-loading-spinner-overlay';
-import styles from './styles';
+import styles from './styles'; 
 import Entypo from 'react-native-vector-icons/Entypo';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import I18n from '../../i18n/i18n';
 const carve = require("../../../img/icon17.png");
 class Settings extends Component {
@@ -11,9 +12,9 @@ class Settings extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            language: '',
+            language: 'English',
             visible: false,
-            currency: ''
+            currency: 'USD'
         }
 
     }
@@ -82,26 +83,20 @@ class Settings extends Component {
                     </View>
                     <View>
 
-                        <TouchableOpacity style={[styles.confirmationItem]} onPress={() => this.props.navigation.navigate('LanguageList')}>
+                        <TouchableOpacity style={styles.confirmationItem} onPress={() => this.props.navigation.navigate('LanguageList')}>
                             <View style={styles.confirmationIconView}>
-                                <Entypo name='language' style={{ fontSize: 20, marginRight: 8, color: '#1e3768' }} />
+                                <Entypo name='language' style={{ fontSize: 20, color: '#1e3768' }} />
                             </View>
                             <Text style={styles.confirmationMainTxt}>{I18n.t('language')}</Text>
                             <Text style={styles.confirmationDateTime}>{this.state.language}</Text>
-                            <View style={styles.confirmationArwNxt}>
-
-                            </View>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.confirmationItem} onPress={() => this.props.navigation.navigate('CurrencyList')}>
                             <View style={styles.confirmationIconView}>
-
+                                <MaterialCommunityIcons name='currency-usd' style={{ fontSize: 20, color: '#1e3768' }} />
                             </View>
                             <Text style={styles.confirmationMainTxt}>{I18n.t('currency')}</Text>
                             <Text style={styles.confirmationDateTime}>{this.state.currency}</Text>
-                            <View style={styles.confirmationArwNxt}>
-
-                            </View>
                         </TouchableOpacity>
 
 

@@ -28,6 +28,7 @@ import JobDetails from './components/jobList/jobDetails';
 import Settings from './components/settings/settings';
 import LanguageList from './components/settings/languageList';
 import CurrencyList from './components/settings/currencyList';
+import TotalBill from './components/jobList/totalBill';
 
 const AppNavigator = StackNavigator(
     {
@@ -52,7 +53,8 @@ const AppNavigator = StackNavigator(
         JobDetails: { screen: JobDetails },
         Settings: { screen: Settings},
         LanguageList:{screen:LanguageList},
-        CurrencyList:{screen:CurrencyList}
+        CurrencyList:{screen:CurrencyList},
+        TotalBill:{screen:TotalBill}
     },
     {
         initialRouteName: "Drawer",
