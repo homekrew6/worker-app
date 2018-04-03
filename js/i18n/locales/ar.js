@@ -76,4 +76,9 @@ export default {
   language: 'لغة',
   currency: 'دقة',
   my_language: 'لغتي',
+  slide_to_click_start_job: 'الانزلاق إلى النقر فوق بدء المهمة',
+  start_job: 'بدء العمل',
+  slide_to_click_compelte_job: 'الانزلاق إلى انقر فوق مهمة كاملة',
+  job_completed: 'أنجزت المهمة',
+  no_job_found: 'لا يوجد وظيفة',
 };

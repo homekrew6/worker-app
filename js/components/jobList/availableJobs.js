@@ -138,8 +138,10 @@ class AvailableJobs extends Component {
 
             const dateList = [];
             this.props.availableJobs.data.response.message.upcomingJobs.map((data, key) => {
-                dateList.push(data.postedDate);
-                let dataCheck = new Date(data.postedDate);
+                let dateConvertAva = new Date(data.postedDate);
+                let dataFormatAva = moment(dateConvertAva).format('DD MMM YYYY');
+                dateList.push(dataFormatAva);
+                
             }) 
             const uniqueList = dateList.filter( this.onlyUnique );                    
             const sortedList = uniqueList.sort(function(a,b){
@@ -165,7 +167,8 @@ class AvailableJobs extends Component {
             let finalObject = {date: dateNew, data: []};
             this.props.availableJobs.data.response.message.upcomingJobs.map((dataNew, key) => {
                 let timeDiffNowRet = this.getTimeDiffLocal(dataNew.postedDate);
-                if(dateOne === dataNew.postedDate){
+                let postDateCompare = new Date(dataNew.postedDate);
+                if(dateOne === moment(postDateCompare).format('DD MMM YYYY')){
                     dataNew.startTime = timeDiffNowRet;
                     finalObject.data.push(dataNew);
                     
@@ -178,8 +181,9 @@ class AvailableJobs extends Component {
 
             const dateList2 = [];
             this.props.availableJobs.data.response.message.acceptedJobs.map((data, key) => {
-                dateList2.push(data.postedDate);
-                let dataCheck = new Date(data.postedDate);
+                let dateConvertUpa = new Date(data.postedDate);
+                let dataFormatUpa = moment(dateConvertUpa).format('DD MMM YYYY');
+                dateList2.push(dataFormatUpa);
             })
             const uniqueList2 = dateList2.filter(this.onlyUnique);
             const sortedList2 = uniqueList2.sort(function (a, b) {
@@ -206,7 +210,8 @@ class AvailableJobs extends Component {
                 let finalObject = { date: dateNew, data: [] };
                 this.props.availableJobs.data.response.message.acceptedJobs.map((dataNew, key) => {
                     let timeDiffNowRet = this.getTimeDiffLocal(dataNew.postedDate);
-                    if (dateOne === dataNew.postedDate) {
+                    let postDateCompare = new Date(dataNew.postedDate);
+                    if (dateOne === moment(postDateCompare).format('DD MMM YYYY')) {
                         dataNew.startTime = timeDiffNowRet;
                         finalObject.data.push(dataNew);
                     }
@@ -245,7 +250,14 @@ class AvailableJobs extends Component {
                 >
                     <Tab heading="AVAILABLE JOBS" tabStyle={{ backgroundColor: '#81cdc7', }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
                         <Content>
-                            {finalArray.map((dataQ, key) => {
+                            {
+                                finalArray.length === 0 ?
+                                <View style={{ alignSelf: 'center', padding: 20 }}>
+                                    <Text>{I18n.t('no_job_found')}</Text>
+                                </View>
+                                :
+                            
+                            finalArray.map((dataQ, key) => {
                                 return(
                                 <View key={key}>
                                     <View style={styles.dayHeading}>
@@ -256,7 +268,11 @@ class AvailableJobs extends Component {
                                         //dataArray={dataQ.data}
                                         renderRow={( item, data ) =>
                                             <ListItem style={item.startTime.timeInt === false ? styles.jobListItemDisable : styles.jobListItem}>
-                                                <TouchableOpacity style={styles.listWarp} onPress={() => this.goDetails(item)}>
+                                                <TouchableOpacity 
+                                                    style={styles.listWarp} 
+                                                    onPress={() => item.startTime.timeInt === true ? this.goDetails(item) : console.log()}
+                                                    activeOpacity={item.startTime.timeInt === true ? 0 : 1}
+                                                >
                                                     <View style={styles.listWarp}>
                                                         <View style={styles.listWarpImageWarp}>
                                                             <Image source={{ uri: item.service.banner_image }} style={styles.listWarpImage} />
@@ -315,7 +331,14 @@ class AvailableJobs extends Component {
                     </Tab>
                     <Tab heading="UPCOMING JOBS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
                         <Content>
-                            {finalArray2.map((dataQ, key) => {
+                            {
+                                finalArray2.length === 0 ?
+                                    <View style={{ alignSelf: 'center', padding: 20 }}>
+                                        <Text>{I18n.t('no_job_found')}</Text>
+                                    </View>
+                                :
+                            
+                            finalArray2.map((dataQ, key) => {
                                 return (
                                     <View key={key}>
                                         <View style={styles.dayHeading}>

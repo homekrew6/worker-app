@@ -80,4 +80,9 @@ export default {
   language: 'Language',
   currency: 'Currency',
   my_language: 'My Language',
+  slide_to_click_start_job: 'Slide to Click Start Job',
+  start_job: 'Start Job',
+  slide_to_click_compelte_job: 'Slide to Click Complete Job',
+  job_completed: 'Job Completed',
+  no_job_found: 'No Job Found',
 };
