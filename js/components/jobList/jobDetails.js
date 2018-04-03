@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, TouchableHighlight, ScrollView } from "react-native";
 import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Icon, Frame, Input, Label, Text } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons'; 
+import moment from 'moment';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 //import CircularSlider from 'react-native-circular-slider';
 import MapViewDirections from 'react-native-maps-directions';
@@ -19,6 +20,7 @@ import { availablejobs, setNewData, acceptJob, declineJob } from './elements/job
 import FSpinner from 'react-native-loading-spinner-overlay';
 import Svg, { G, Path } from 'react-native-svg';
 import I18n from  '../../i18n/i18n';
+import api from '../../api/index';
 
 import Modal from "react-native-modal";
 
@@ -56,7 +58,11 @@ class JobDetails extends Component {
             detailsData: 'abc',
             starCount: 0,
             isModalVisible: false,
+            bottomButtonStatus: 'way',
             jobCancelModal: false,
+            jobCancelbuttonStatus: true,
+            jobCompletedbuttonStatus: false,
+            mapTrackingStatus: 'map',
             latitudeUser: '',
             longitudeUser: '',
             errorLocationUser: '',
@@ -71,12 +77,15 @@ class JobDetails extends Component {
             angleLength: Math.PI * 7/6,
             workProgressTime: 0,
             workHourDB: 2,
+            job_start_time: '',
+            job_end_time: '',
             jobTracker: this.props.navigation.state.params.jobDetails ? this.props.navigation.state.params.jobDetails.status =='ACCEPTED'?'Assigned Job':'On My Way':''
         }
-        const progressSpeed = ((this.state.workHourDB * 60) / 100) * 60000;
-        const progressInterval = setInterval(() => {
-            this.setState({ workProgressTime: this.state.workProgressTime + 1 });
-        }, progressSpeed);
+        //const progressSpeed = ((this.state.workHourDB * 60) / 100) * 60000;
+        // const progressSpeed = (this.props.navigation.state.params.jobDetails.service.time_interval / 100) * 60000;
+        // const progressInterval = setInterval(() => {
+        //     this.setState({ workProgressTime: this.state.workProgressTime + 1 });
+        // }, progressSpeed);
     }
     _toggleModal = () =>
         this.setState({ isModalVisible: !this.state.isModalVisible });
@@ -86,11 +95,51 @@ class JobDetails extends Component {
             starCount: rating
         });
     }
+    onMyWayPress(){
+        this.setState({ bottomButtonStatus: 'start' });
+        setTimeout(() => {
+            this.refs.ScrollViewStart.scrollToEnd();
+        }, 50);
+    }
+    StartJobSlide(){
+        this.setState({ jobCompletedbuttonStatus: true });
+    }
+    onStartPress(){
+        this.setState({ mapTrackingStatus: 'timing', bottomButtonStatus: 'complete' });
+        setTimeout(() => {
+            this.refs.ScrollViewComplete.scrollToEnd();
+        }, 50);
+        const time_interval = this.props.navigation.state.params.jobDetails.service.time_interval;
+        const progressSpeed = (time_interval / 100) * 60000;
+        const progressInterval = setInterval(() => {
+            this.setState({ workProgressTime: this.state.workProgressTime + 1 });
+        }, progressSpeed);
 
+        let timeNowWork = new Date();
+        let timeNowConvert = moment(timeNowWork).format('LT');
+        let momentConvert = moment(timeNowWork).add(time_interval, 'minutes').format('LT');
+        console.log('start time', timeNowConvert, momentConvert);
+        this.setState({ job_start_time: timeNowConvert, job_end_time: momentConvert });
+    }
+    CompleteJobSlide(){
+        this.setState({ bottomButtonStatus: 'complete' });
+    }
+    onCompletePress(){
+        console.log('onCompletePress', this.props);
+        const jobId = this.props.navigation.state.params.jobDetails.id;
+        const customerId = this.props.navigation.state.params.jobDetails.customerId;
+        api.post('Jobs/completeJob', { "id": jobId, "status": "COMPLETED", "customerId": customerId }).then(responseJson => {
+            console.log(responseJson);
+            this.setState({ mapTrackingStatus: 'rating' });
+        }).catch(err => {
+            console.log(err)
+        })
+    }
     componentDidMount() {
         if (this.refs && this.refs.ScrollViewEnd) {
                 this.swipeButtonReady();
         }
+        
         //this.updateProgressTime();
     }
     swipeButtonReady(){
@@ -146,7 +195,7 @@ class JobDetails extends Component {
     }
 
     renderTracking(){
-        this.setState({ markerStatus: false });
+        this.setState({ markerStatus: false, jobCancelbuttonStatus: false });
         navigator.geolocation.getCurrentPosition((position) => {
             console.log('position', position);
             this.setState({
@@ -192,153 +241,157 @@ class JobDetails extends Component {
                     <Button transparent style={{ width: 30 }}/>
                 </Header>
                 <Content style={{ backgroundColor: '#ccc' }}>
-                    {/* Time tracking start */}
-                    
-                    <View style={{ flex: 1, flexDirection: 'row', padding: 30 }}>
-                        <View style={{ flex: 2, flexDirection: 'column' }}>
-                            <View style={{ flex: 2 }}>
-                                <Text>{I18n.t('start_time')}</Text>
-                            </View>
-                            <View style={{ flex: 2 }} >
-                                <Text>{I18n.t('end_time')}</Text>
-                            </View>
-                        </View>
-                        <View style={{ flex: 4 }}>
-                            <AnimatedCircularProgress
-                                size={120}
-                                width={15}
-                                fill={this.state.workProgressTime}
-                                tintColor="#00e0ff"
-                                onAnimationComplete={() => console.log('none')}
-                                backgroundColor="#3d5875" 
-                            />
-                        </View>
-                    </View>
-                    {/* <CircularSlider
-                        startAngle={this.state.startAngle}
-                        angleLength={this.state.angleLength}
-                        onUpdate={({ startAngle, angleLength }) => this.setState({ startAngle, angleLength })}
-                        segments={5}
-                        strokeWidth={40}
-                        radius={145}
-                        gradientColorFrom="#ff9800"
-                        gradientColorTo="#ffcf00"
-                        showClockFace
-                        clockFaceColor="#9d9d9d"
-                        bgCircleColor="#171717"
-                        stopIcon={WAKE_ICON}
-                        startIcon={BEDTIME_ICON}
-                    /> */}
-                    
-                    {/* Time tracking end */}
-                    <View>
-                       <MapView
-                            ref={c => this.mapView = c}
-                            style={{ width: win, height: 250 }}
-                            zoomEnabled
-                            zoomControlEnabled
-                            maxZoomLevel={20}
-                            //minZoomLevel={14}
-                            region={ region }
-                            onRegionChangeComplete={this.onRegionChange}
-                            onRegionChange={this.onLocationChange}
-                        >   
-                        {
-                            console.log('this state', this.state)
-                        }
-                        {
-                            this.state.longitudeUser !== '' ? 
-                            <MapViewDirections
-                                origin={origin}
-                                destination={destination}
-                                apikey={GOOGLE_MAPS_APIKEY}
-                                mode={'driving'}
-                                strokeWidth={3}
-                                strokeColor="hotpink"
-                                onReady={(result) => {
-                                    console.log('onready start', result, result.coordinates[0].latitude);
-                                    let lastCount = result.coordinates.length - 1;
-                                    let midCount = parseInt(result.coordinates.length / 2 );
-                                    let trDistance = parseFloat(result.distance).toFixed(1);
-                                    let trDuration = parseInt(result.duration);
-                                    if( trDuration > 60){
-                                        trHour = parseInt(trDuration / 60);
-                                        trMinute = parseInt(trDuration % 60);
-                                        trDuration = trHour + "Hour " + trMinute + "min";
-                                    }
-                                    this.setState({ 
-                                        waypointStart: { 
-                                            latitude: result.coordinates[0].latitude,
-                                            longitude: result.coordinates[0].longitude
-                                        },
-                                        waypointEnd: { 
-                                            latitude: result.coordinates[lastCount].latitude,
-                                            longitude: result.coordinates[lastCount].longitude
-                                        },
-                                        waypointMid: { 
-                                            latitude: result.coordinates[midCount].latitude,
-                                            longitude: result.coordinates[midCount].longitude
-                                        },
-                                        trDistance: trDistance,
-                                        trTime: trDuration,
-                                     })
-                                     console.log('onready end 1', this.state, lastCount)
-                                    this.mapView.fitToCoordinates(result.coordinates, {
-                                      edgePadding: { 
-                                        right: (width / 20),
-                                        bottom: height,
-                                        left: (width / 20),
-                                        top: height,
-                                      }
-                                    });
-                                }}
-                            /> : console.log('onready end', this.state)
+                    {/* 
+                        Time tracking start 
+                        time tracking commented to test other feature
                         
-                        }
-                        {
-                        this.state.markerStatus === true ? 
-                            //worker location
-                            <Marker
-                                coordinate={{ latitude: region.latitude, longitude: region.longitude }}
-                                title={this.props.navigation.state.params.jobDetails.userLocation.name}
-                            />
-                        :
-                        this.state.waypointEnd.latitude !== '' ? 
-                            //customer location
-                            <Marker
-                                coordinate={this.state.waypointEnd}
-                                title={this.props.navigation.state.params.jobDetails.userLocation.name}
-                            />
-                            : console.log('waypointEnd', this.state.waypointEnd)
-                        }
-                        {
-                             this.state.markerStatus === false ?
-                             <Marker
-                                 coordinate={{ latitude: region.latitude, longitude: region.longitude }}
-                                 title={this.props.navigation.state.params.jobDetails.userLocation.name}
-                             />
-                             : console.log()
-                        }
-                        {
-                            this.state.markerStatus === true ? console.log()
-                             : this.state.waypointMid.latitude !== '' ? 
-                             <MapView.Marker  coordinate={this.state.waypointMid}>
-                             <View style={{
-                                    backgroundColor: 'transparent'
-                                    }}>
-                                 <View style={{ backgroundColor: 'white', padding: 5, alignItems: 'center' }}>
-                                    <Text style={{ fontSize: 12 }} >{this.state.trDistance} km</Text>
-                                    <Text style={{ fontSize: 12 }} >{this.state.trTime}</Text>
-                                 </View>
-                                 <View style={{ width: 100, alignItems: 'center', justifyContent: 'center', backgroundColor: 'transparent', marginTop: -5 }}>
-                                    <Image source={require("../../../img/icon/arrowDown.png")} style={{ height: 20, width: 20 }} />
+                    */}
+                    {
+                        this.state.mapTrackingStatus === 'map' ?
+                        /* Time tracking end */
+                        <View>
+                            <MapView
+                                ref={c => this.mapView = c}
+                                style={{ width: win, height: 250 }}
+                                zoomEnabled
+                                zoomControlEnabled
+                                maxZoomLevel={20}
+                                //minZoomLevel={14}
+                                region={ region }
+                                onRegionChangeComplete={this.onRegionChange}
+                                onRegionChange={this.onLocationChange}
+                            >   
+                            {
+                                console.log('this state', this.state)
+                            }
+                            {
+                                this.state.longitudeUser !== '' ? 
+                                <MapViewDirections
+                                    origin={origin}
+                                    destination={destination}
+                                    apikey={GOOGLE_MAPS_APIKEY}
+                                    mode={'driving'}
+                                    strokeWidth={3}
+                                    strokeColor="hotpink"
+                                    onReady={(result) => {
+                                        console.log('onready start', result, result.coordinates[0].latitude);
+                                        let lastCount = result.coordinates.length - 1;
+                                        let midCount = parseInt(result.coordinates.length / 2 );
+                                        let trDistance = parseFloat(result.distance).toFixed(1);
+                                        let trDuration = parseInt(result.duration);
+                                        if( trDuration > 60){
+                                            trHour = parseInt(trDuration / 60);
+                                            trMinute = parseInt(trDuration % 60);
+                                            trDuration = trHour + "Hour " + trMinute + "min";
+                                        }
+                                        this.setState({ 
+                                            waypointStart: { 
+                                                latitude: result.coordinates[0].latitude,
+                                                longitude: result.coordinates[0].longitude
+                                            },
+                                            waypointEnd: { 
+                                                latitude: result.coordinates[lastCount].latitude,
+                                                longitude: result.coordinates[lastCount].longitude
+                                            },
+                                            waypointMid: { 
+                                                latitude: result.coordinates[midCount].latitude,
+                                                longitude: result.coordinates[midCount].longitude
+                                            },
+                                            trDistance: trDistance,
+                                            trTime: trDuration,
+                                        })
+                                        console.log('onready end 1', this.state, lastCount)
+                                        this.mapView.fitToCoordinates(result.coordinates, {
+                                        edgePadding: { 
+                                            right: (width / 20),
+                                            bottom: height,
+                                            left: (width / 20),
+                                            top: height,
+                                        }
+                                        });
+                                    }}
+                                /> : console.log('onready end outside', this.state)
+                            
+                            }
+                            {
+                            this.state.markerStatus === true ? 
+                                //worker location
+                                <Marker
+                                    coordinate={{ latitude: region.latitude, longitude: region.longitude }}
+                                    title={this.props.navigation.state.params.jobDetails.userLocation.name}
+                                />
+                            :
+                            this.state.waypointEnd.latitude !== '' ? 
+                                //customer location
+                                <Marker
+                                    coordinate={this.state.waypointEnd}
+                                    title={this.props.navigation.state.params.jobDetails.userLocation.name}
+                                />
+                                : console.log('waypointEnd', this.state.waypointEnd)
+                            }
+                            {
+                                this.state.markerStatus === false ?
+                                <Marker
+                                    coordinate={{ latitude: region.latitude, longitude: region.longitude }}
+                                    title={this.props.navigation.state.params.jobDetails.userLocation.name}
+                                />
+                                : console.log()
+                            }
+                            {
+                                this.state.markerStatus === true ? console.log()
+                                : this.state.waypointMid.latitude !== '' ? 
+                                <MapView.Marker  coordinate={this.state.waypointMid}>
+                                <View style={{
+                                        backgroundColor: 'transparent'
+                                        }}>
+                                    <View style={{ backgroundColor: 'white', padding: 5, alignItems: 'center' }}>
+                                        <Text style={{ fontSize: 12 }} >{this.state.trDistance} km</Text>
+                                        <Text style={{ fontSize: 12 }} >{this.state.trTime}</Text>
+                                    </View>
+                                    <View style={{ width: 100, alignItems: 'center', justifyContent: 'center', backgroundColor: 'transparent', marginTop: -5 }}>
+                                        <Image source={require("../../../img/icon/arrowDown.png")} style={{ height: 20, width: 20 }} />
+                                    </View>
                                 </View>
-                             </View>
-                            </MapView.Marker>      
-                            : console.log()               
-                        }
-                        </MapView>
-                    </View>
+                                </MapView.Marker>      
+                                : console.log()               
+                            }
+                            </MapView>
+                        </View>
+                        /* Time tracking map end */
+                        : 
+                        this.state.mapTrackingStatus === 'timing' ?
+                            <View style={{ flex: 1, flexDirection: 'row', padding: 30 }}>
+                                <View style={{ flex: 2, flexDirection: 'column' }}>
+                                    <View style={{ flex: 2 }}>
+                                        <Text>{I18n.t('start_time')}</Text>
+                                        <Text>{this.state.job_start_time}</Text>
+                                    </View>
+                                    <View style={{ flex: 2 }} >
+                                        <Text>{I18n.t('end_time')}</Text>
+                                        <Text>{this.state.job_end_time}</Text>
+                                    </View>
+                                </View>
+                                <View style={{ flex: 4 }}>
+                                    <AnimatedCircularProgress
+                                        size={120}
+                                        width={15}
+                                        fill={this.state.workProgressTime}
+                                        tintColor="#00e0ff"
+                                        onAnimationComplete={() => console.log('none')}
+                                        backgroundColor="#3d5875" 
+                                    />
+                                </View>
+                            </View>
+                        : 
+                        this.state.mapTrackingStatus === 'rating' ?
+                            <View style={{ flex: 1, flexDirection: 'row', padding: 100 }}>
+
+                            </View>
+                        : console.log()
+                    }
+                    
+                    
+                   
                     <View style={styles.jobItemWarp}>
                         <View style={{ width: 30, alignItems: 'center' }}>
                             <Ionicons name="ios-man-outline" style={styles.jobItemIconIonicons} />
@@ -431,53 +484,142 @@ class JobDetails extends Component {
                                     </Text>
                                 </TouchableOpacity>
                             </View>
-                        ) : (<View></View>)
+                        ) : (<View>
+                            
+                        </View>)
                     }
                     
                     {
                         JobDetailsData.status=='ACCEPTED' ? 
-                            (<View>
-                                <View>
-                                    <ScrollView
-                                        ref='ScrollViewEnd'
-                                        pagingEnabled={true}
-                                        horizontal={true}
-                                        showsHorizontalScrollIndicator={false}
-                                        scrollEventThrottle={400}
-                                        onScrollEndDrag={() => this.renderTracking()}
-                                        style={{ width: '100%' }}>
-                                        <View style={{ width: win, backgroundColor: 'white', paddingLeft: 10, paddingRight: 10 }}>
-                                            <TouchableOpacity
-                                                style={{ flex: 1, alignItems: 'center', backgroundColor: '#81cdc7', justifyContent: 'center', marginTop: 3, borderRadius: 5 }}
-                                                activeOpacity={1}
+                            (
+                            <View>
+                                {
+                                    this.state.bottomButtonStatus === 'way' ?
+                                    <View>
+                                        <View>
+                                            {/* on my way slider start */}
+                                            <ScrollView
+                                                ref='ScrollViewEnd'
+                                                pagingEnabled={true}
+                                                horizontal={true}
+                                                showsHorizontalScrollIndicator={false}
+                                                scrollEventThrottle={400}
+                                                onScrollEndDrag={() => this.renderTracking()}
+                                                style={{ width: '100%' }}>
+                                                <View style={{ width: win, backgroundColor: 'white', paddingLeft: 10, paddingRight: 10 }}>
+                                                    <TouchableOpacity
+                                                        style={{ flex: 1, alignItems: 'center', backgroundColor: '#81cdc7', justifyContent: 'center', marginTop: 3, borderRadius: 5 }}
+                                                        activeOpacity={1}
+                                                        onPress={() => this.onMyWayPress()}
+                                                    >
+                                                        <Text style={{ color: '#fff' }}>{I18n.t('on_my_way')}</Text>
+                                                    </TouchableOpacity>
+                                                </View>
+                                                <View style={{ width: win, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderBottomColor: '#ccc', borderBottomWidth: 1 }}>
+                                                    <View style={{ backgroundColor: '#81cdc7', paddingLeft: 10, paddingRight: 10 }}>
+                                                        <FontAwesome name="angle-right" style={{ color: '#fff', fontSize: 40 }} />
+                                                    </View>
+                                                    <View style={{ flex: 1, paddingLeft: 15 }}>
+                                                        <Text>{I18n.t('slide_to_click_on_my_way')}</Text>
+                                                    </View>
+                                                </View>
+                                            
+                                            </ScrollView>
+                                            {/* on my way slider end */}
+                                        </View>
+                                    {/* cancel button start */}
+                                    <View style={styles.jobItemWarp}>
+                                        { this.state.jobCancelbuttonStatus === true ?
+                                            <TouchableOpacity 
+                                                style={{ flex: 1, backgroundColor: '#81cdc7', alignItems: 'center', paddingTop: 10, paddingBottom: 10, borderRadius: 4 }} 
+                                                onPress={() => this.setState({ jobCancelModal: true })}
                                             >
-                                                <Text style={{ color: '#fff' }}>{I18n.t('on_my_way')}</Text>
+                                                <Text style={{ color: '#fff' }}>{I18n.t('cancel_job_button')}</Text>
                                             </TouchableOpacity>
-                                        </View>
-                                        <View style={{ width: win, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderBottomColor: '#ccc', borderBottomWidth: 1 }}>
-                                            <View style={{ backgroundColor: '#81cdc7', paddingLeft: 10, paddingRight: 10 }}>
-                                                <FontAwesome name="angle-right" style={{ color: '#fff', fontSize: 40 }} />
-                                            </View>
-                                            <View style={{ flex: 1, paddingLeft: 15 }}>
-                                                <Text>{I18n.t('slide_to_click_on_my_way')}</Text>
-                                            </View>
-                                        </View>
-                                    </ScrollView>
-                                </View>
+                                        : console.log() }
+                                    </View>
+                                    {/* cancel button end */}
+                                    </View>
+                                    : this.state.bottomButtonStatus === 'start' ?
+                                        <View>
+                                            <View>
+                                                {/* on click to start */}
+                                                <ScrollView
+                                                    ref='ScrollViewStart'
+                                                    pagingEnabled={true}
+                                                    horizontal={true}
+                                                    showsHorizontalScrollIndicator={false}
+                                                    scrollEventThrottle={400}
+                                                    onScrollEndDrag={() => this.StartJobSlide()}
+                                                    style={{ width: '100%' }}>
+                                                    <View style={{ width: win, backgroundColor: 'white', paddingLeft: 10, paddingRight: 10 }}>
+                                                        <TouchableOpacity
+                                                            style={{ flex: 1, alignItems: 'center', backgroundColor: '#81cdc7', justifyContent: 'center', marginTop: 3, borderRadius: 5 }}
+                                                            activeOpacity={1}
+                                                            onPress={() => this.onStartPress()}
+                                                        >
+                                                            <Text style={{ color: '#fff' }}>{I18n.t('start_job')}</Text>
+                                                        </TouchableOpacity>
+                                                    </View>
+                                                    <View style={{ width: win, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderBottomColor: '#ccc', borderBottomWidth: 1 }}>
+                                                        <View style={{ backgroundColor: '#81cdc7', paddingLeft: 10, paddingRight: 10 }}>
+                                                            <FontAwesome name="angle-right" style={{ color: '#fff', fontSize: 40 }} />
+                                                        </View>
+                                                        <View style={{ flex: 1, paddingLeft: 15 }}>
+                                                            <Text>{I18n.t('slide_to_click_start_job')}</Text>
+                                                        </View>
+                                                    </View>
+                                                
+                                                </ScrollView>
+                                                {/* on click to end */}
+                                            </View> 
+                                        </View>    
+                                    :
+                                    <View>
+                                        <View>
+                                            {/* on click to start */}
+                                            <ScrollView
+                                                ref='ScrollViewComplete'
+                                                pagingEnabled={true}
+                                                horizontal={true}
+                                                showsHorizontalScrollIndicator={false}
+                                                scrollEventThrottle={400}
+                                                onScrollEndDrag={() => this.CompleteJobSlide()}
+                                                style={{ width: '100%' }}>
+                                                <View style={{ width: win, backgroundColor: 'white', paddingLeft: 10, paddingRight: 10 }}>
+                                                    <TouchableOpacity
+                                                        style={{ flex: 1, alignItems: 'center', backgroundColor: '#81cdc7', justifyContent: 'center', marginTop: 3, borderRadius: 5 }}
+                                                        activeOpacity={1}
+                                                        onPress={() => this.onCompletePress()}
+                                                    >
+                                                        <Text style={{ color: '#fff' }}>{I18n.t('job_completed')}</Text>
+                                                    </TouchableOpacity>
+                                                </View>
+                                                <View style={{ width: win, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderBottomColor: '#ccc', borderBottomWidth: 1 }}>
+                                                    <View style={{ backgroundColor: '#81cdc7', paddingLeft: 10, paddingRight: 10 }}>
+                                                        <FontAwesome name="angle-right" style={{ color: '#fff', fontSize: 40 }} />
+                                                    </View>
+                                                    <View style={{ flex: 1, paddingLeft: 15 }}>
+                                                        <Text>{I18n.t('slide_to_click_compelte_job')}</Text>
+                                                    </View>
+                                                </View>
+                                            
+                                            </ScrollView>
+                                            {/* on click to end */}
+                                        </View> 
+                                    </View>    
+                                }
+                                
+                            </View>
+                        ): (<View>
                             
-                        <View style={styles.jobItemWarp}>
-                                <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', alignItems: 'center', paddingTop: 10, paddingBottom: 10, borderRadius: 4 }} onPress={() => this.setState({ jobCancelModal: true })} >
-                                <Text style={{ color: '#fff' }}>{I18n.t('cancel_job_button')}</Text>
-                            </TouchableOpacity>
-                        </View>
-                        </View>
-                        ): (<View></View>)
+                        </View>)
                        
                 }
                     {/* bala  : end*/}
                 </Content>
 
-
+                {/* Modal Job Cancel start */}
                 <Modal isVisible={this.state.jobCancelModal}>
                     <TouchableOpacity 
                         transparent style={{ flex: 1, justifyContent: 'center', display: 'flex', width: '100%' }} 
@@ -520,7 +662,8 @@ class JobDetails extends Component {
 
                     </TouchableOpacity>
                 </Modal>
-
+                {/* Modal Job Cancel end */}
+                {/* Modal rating start */}
                 <Modal isVisible={this.state.isModalVisible}>
                     <View  style={{ flex: 1 , justifyContent: 'center'}}>
                         <TouchableOpacity style={{ position: 'absolute', top: 0, right: 0, zIndex: 99999, }} onPress={this._toggleModal}>
@@ -534,7 +677,7 @@ class JobDetails extends Component {
                                     disabled={false}
                                     maxStars={5}
                                     starSize={30}
-                                    halfStarEnabled ={true}
+                                    halfStarEnabled={true}
                                     rating={this.state.starCount}
                                     fullStarColor='#81cdc7'
                                     selectedStar={(rating) => this.onStarRatingPress(rating)}
@@ -543,6 +686,7 @@ class JobDetails extends Component {
                         </View>
                     </View>
                 </Modal>
+                {/* Modal rating end */}
                 <FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
             </Container>
         );
