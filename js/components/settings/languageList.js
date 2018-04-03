@@ -100,7 +100,8 @@ class LanguageList extends Component {
             }
         })
         if (loc) {
-            const data = { langId: loc.id, language: loc.name };
+            //const data = { langId: loc.id, language: loc.name };
+            const data = { langId: loc.id, language: loc.name, Code:loc.Code };
             AsyncStorage.setItem("language", JSON.stringify(data)).then((res) => {
                 this.setState({ visible: false });
                 this.props.navigation.navigate('Settings');

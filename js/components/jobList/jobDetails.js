@@ -80,7 +80,6 @@ class JobDetails extends Component {
             job_start_time: '',
             job_end_time: '',
             currency:'USD',
-            jobTracker: this.props.navigation.state.params.jobDetails ? this.props.navigation.state.params.jobDetails.status =='ACCEPTED'?'Assigned Job':'On My Way':''
         }
         //const progressSpeed = ((this.state.workHourDB * 60) / 100) * 60000;
         // const progressSpeed = (this.props.navigation.state.params.jobDetails.service.time_interval / 100) * 60000;
@@ -121,16 +120,24 @@ class JobDetails extends Component {
         let timeNowConvert = moment(timeNowWork).format('LT');
         let momentConvert = moment(timeNowWork).add(time_interval, 'minutes').format('LT');
         console.log('start time', timeNowConvert, momentConvert);
-        this.setState({ job_start_time: timeNowConvert, job_end_time: momentConvert });
+        this.setState({ job_start_time: timeNowConvert, job_end_time: momentConvert, start_time_full: timeNowWork });
     }
     CompleteJobSlide(){
         this.setState({ bottomButtonStatus: 'complete' });
     }
     onCompletePress(){
         console.log('onCompletePress', this.props);
+        let start_time = moment(new Date(this.state.start_time_full));
+        let end_time = moment(new Date());
+        let minuteDiff = end_time.diff(start_time, 'minute');
+
         const jobId = this.props.navigation.state.params.jobDetails.id;
         const customerId = this.props.navigation.state.params.jobDetails.customerId;
-        api.post('Jobs/completeJob', { "id": jobId, "status": "COMPLETED", "customerId": customerId }).then(responseJson => {
+        let price = this.props.navigation.state.params.jobDetails.price;
+        api.post('Jobs/completeJob', { 
+            "id": jobId, "status": "COMPLETED", "customerId": customerId, "actualTime": minuteDiff,
+            price: price
+        }).then(responseJson => {
             console.log(responseJson);
             this.setState({ mapTrackingStatus: 'rating' });
         }).catch(err => {
