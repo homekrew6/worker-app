@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, TouchableHighlight, ScrollView } from "react-native";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, TouchableHighlight, ScrollView, AsyncStorage } from "react-native";
 import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Icon, Frame, Input, Label, Text } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons'; 
 import moment from 'moment';
@@ -79,6 +79,7 @@ class JobDetails extends Component {
             workHourDB: 2,
             job_start_time: '',
             job_end_time: '',
+            currency:'USD',
             jobTracker: this.props.navigation.state.params.jobDetails ? this.props.navigation.state.params.jobDetails.status =='ACCEPTED'?'Assigned Job':'On My Way':''
         }
         //const progressSpeed = ((this.state.workHourDB * 60) / 100) * 60000;
@@ -87,6 +88,7 @@ class JobDetails extends Component {
         //     this.setState({ workProgressTime: this.state.workProgressTime + 1 });
         // }, progressSpeed);
     }
+ 
     _toggleModal = () =>
         this.setState({ isModalVisible: !this.state.isModalVisible });
 
@@ -139,7 +141,12 @@ class JobDetails extends Component {
         if (this.refs && this.refs.ScrollViewEnd) {
                 this.swipeButtonReady();
         }
-        
+        AsyncStorage.getItem("currency").then((value) => {
+            if (value) {
+                const value1 = JSON.parse(value);
+                this.setState({ currency: value1.language })
+            }
+        })
         //this.updateProgressTime();
     }
     swipeButtonReady(){
@@ -454,7 +461,7 @@ class JobDetails extends Component {
                             <SimpleLineIcons name="docs" style={styles.jobItemIcon} />
                         </View>
                         <Text style={styles.jobItemName}>{I18n.t('job_summary')}</Text>
-                        <Text style={styles.jobItemValue}>AED {JobDetailsData.price}</Text>
+                        <Text style={styles.jobItemValue}>{this.state.currency} {JobDetailsData.price}</Text>
                     </View>
                     <View style={styles.jobItemWarp}>
                         <View style={{ width: 30, alignItems: 'center'  }}>
