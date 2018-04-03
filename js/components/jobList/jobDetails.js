@@ -82,11 +82,6 @@ class JobDetails extends Component {
             currency:'USD',
             jobTracker: this.props.navigation.state.params.jobDetails ? this.props.navigation.state.params.jobDetails.status =='ACCEPTED'?'Assigned Job':'On My Way':''
         }
-        //const progressSpeed = ((this.state.workHourDB * 60) / 100) * 60000;
-        // const progressSpeed = (this.props.navigation.state.params.jobDetails.service.time_interval / 100) * 60000;
-        // const progressInterval = setInterval(() => {
-        //     this.setState({ workProgressTime: this.state.workProgressTime + 1 });
-        // }, progressSpeed);
     }
  
     _toggleModal = () =>
