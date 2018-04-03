@@ -5,7 +5,7 @@ import moment from 'moment';
 import 'moment-timezone';
 import DeviceInfo from 'react-native-device-info';
 import { NavigationActions } from "react-navigation";
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ListView, Geolocation, platform } from "react-native";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ListView, Geolocation, platform, AsyncStorage } from "react-native";
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, List, ListItem, Icon, Tab, Tabs, ScrollableTab, Body } from "native-base";
 import FSpinner from 'react-native-loading-spinner-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -23,6 +23,7 @@ class AvailableJobs extends Component {
             finalJobData: [],
             listItemFlag: false,
             loader: false,
+            currency:'USD',
         };
     }
 
@@ -67,7 +68,12 @@ class AvailableJobs extends Component {
 
   
     componentDidMount(){
-
+        AsyncStorage.getItem("currency").then((value) => {
+            if (value) {
+                const value1 = JSON.parse(value);
+                this.setState({ currency: value1.language })
+            }
+        })
     }
 
     componentWillMount(){
@@ -296,7 +302,7 @@ class AvailableJobs extends Component {
                                                             </View>
                                                         </View>
                                                         <View>
-                                                            <Text style={styles.listWarpPriceUp}>AED {item.price}</Text>
+                                                            <Text style={styles.listWarpPriceUp}>{this.state.currency} {item.price}</Text>
                                                             <Text style={styles.listWarpPriceDown}>4 hours</Text>
                                                         </View>
                                                     </View>
@@ -370,7 +376,7 @@ class AvailableJobs extends Component {
                                                         </View>
                                                     </View>
                                                     <View>
-                                                        <Text style={styles.listWarpPriceUp}>AED {item.price}</Text>
+                                                        <Text style={styles.listWarpPriceUp}>{this.state.currency} {item.price}</Text>
                                                         <Text style={styles.listWarpPriceDown}>4 hours</Text>
                                                     </View>
                                                 </TouchableOpacity>
@@ -406,7 +412,7 @@ class AvailableJobs extends Component {
                                                 </View> */}
                                         </View>
                                         <View>
-                                            <Text style={styles.listWarpPriceUp}>AED {item.job.price}</Text>
+                                            <Text style={styles.listWarpPriceUp}>{this.state.currency} {item.job.price}</Text>
                                             <Text style={styles.listWarpPriceDown}>4 hours</Text>
                                         </View>
                                     </View>
