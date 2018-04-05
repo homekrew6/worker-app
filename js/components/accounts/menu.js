@@ -50,6 +50,10 @@ class Menu extends Component {
         })
     }
 
+componentWillMount(){
+    console.log('this is saikat bala');    
+    console.log(this.props.auth.data);
+}
 
     render() {
         return (

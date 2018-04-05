@@ -113,7 +113,8 @@ class LanguageList extends Component {
 
         }
         else {
-            Alert.alert('Please select a location first.');
+            this.setState({ visible: false });
+            this.props.navigation.navigate('Settings');
         }
 
     }
@@ -127,24 +128,27 @@ class LanguageList extends Component {
                 ]]} onPress={() => this.selectActive(data)}>
                     <Entypo name='language' style={{ fontSize: 20, marginRight: 8, color: '#1e3768' }} />
                     <View style={{ flex: 1 }}>
-                        <Text>{data.name}</Text>
+                        <Text style={data.status == true ?
+                            { color: '#fff' } : {}}>{data.name}</Text>
                     </View>
                 </TouchableOpacity>
             ))
         )
         return (
             <Container >
+
                 <FSpinner visible={this.state.visible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
+
                 <StatusBar
-                    backgroundColor="#cbf0ed"
+                    backgroundColor="#81cdc7"
                 />
 
-                <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
-                    <Button transparent onPress={() => this.languageDone()} style={{ width: 50, backgroundColor: 'transparent' }} disabled={true}></Button>
+                <Header style={styles.appHdr2} androidStatusBarColor="#81cdc7" noShadow>
+                    <Button transparent onPress={() => this.languageDone()} style={{ width: 70 }}><Text>{I18n.t('cancel')}</Text></Button>
                     <Body style={{ alignItems: 'center' }}>
                         <Title style={styles.appHdr2Txt}>{I18n.t('my_language')}</Title>
                     </Body>
-                    <Button transparent onPress={() => this.languageDone()} style={{ width: 50 }}><Text>{I18n.t('done')}</Text></Button>
+                    <Button transparent onPress={() => this.languageDone()} style={{ width: 70 }}><Text>{I18n.t('done')}</Text></Button>
                 </Header>
 
                 <Content style={styles.bgWhite} >

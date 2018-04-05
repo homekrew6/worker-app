@@ -81,4 +81,5 @@ export default {
   slide_to_click_compelte_job: 'الانزلاق إلى انقر فوق مهمة كاملة',
   job_completed: 'أنجزت المهمة',
   no_job_found: 'لا يوجد وظيفة',
+  myCurrency: 'عملتي'
 };

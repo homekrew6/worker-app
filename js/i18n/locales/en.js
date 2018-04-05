@@ -85,4 +85,5 @@ export default {
   slide_to_click_compelte_job: 'Slide to Click Complete Job',
   job_completed: 'Job Completed',
   no_job_found: 'No Job Found',
+  myCurrency: 'My Currency'
 };

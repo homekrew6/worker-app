@@ -352,7 +352,7 @@ class EditProfile extends Component {
                                         }
                                     )}
                             >
-                                <Text> {I18n.t('change_photo')} </Text>
+                                <Text>{I18n.t('change_photo')}</Text>
                             </Button>
                         </View>
                     </View>
