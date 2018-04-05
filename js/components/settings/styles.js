@@ -10,7 +10,7 @@ export default {
         backgroundColor: '#fff',
     },
     appHdr2: {
-        backgroundColor: '#cbf0ed',
+        backgroundColor: '#81cdc7',
     },
     appHdr2Bdy: {
         alignItems: 'center',

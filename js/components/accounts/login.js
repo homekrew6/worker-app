@@ -57,10 +57,13 @@ class Login extends Component {
 				this.props.login(email, password).then(res => {
 					if (res.type == 'success') {
 						this.props.getUserDetail(res.userId).then(userRes => {
+
 							this.props.checkAuth((res) => {
 								if (res) {
 									api.put(`Workers/editWorker/${res.userId}?access_token=${res.id}`, { deviceToken: this.state.deviceToken }).then((resEdit) => {
 										this.props.navigation.dispatch(resetAction);
+										console.log('hi');
+										console.log(resEdit);
 									}).catch((err) => {
 									});
 								}

@@ -403,13 +403,8 @@ class AvailableJobs extends Component {
                                                 <Text>{item.service.name}</Text>
                                             </View>
                                             <View style={styles.flexDirectionRow}>
-                                                {/* <Text style={[styles.fontWeight700, { fontSize: 14 }]}>Tuesday </Text>
-                                                    <Text style={{ fontSize: 14 }}> 10:00 AM</Text> */}
                                                 <Text style={{ fontSize: 14 }}> {item.job.postedDate } </Text>
                                             </View>
-                                            {/* <View style={styles.flexDirectionRow}>
-                                                    <Text>location</Text>
-                                                </View> */}
                                         </View>
                                         <View>
                                             <Text style={styles.listWarpPriceUp}>{this.state.currency} {item.job.price}</Text>

@@ -80,6 +80,8 @@ class JobDetails extends Component {
             job_start_time: '',
             job_end_time: '',
             currency:'USD',
+            jobTracker: this.props.navigation.state.params.jobDetails.status ? this.props.navigation.state.params.jobDetails.status : ''
+            
         }
     }
  
@@ -168,7 +170,7 @@ class JobDetails extends Component {
         this.props.declineJob(jobId, workerId, serviceId).then(res => {
             //this.jobdata();
             this.setState({
-                loader: false
+                loader: false              
             })
         }).catch(err => {
             console.log(err);
@@ -218,8 +220,10 @@ class JobDetails extends Component {
         );
        
     }
+
     componentWillMount(){
-        // console.log(this.props.navigation.state.params.jobDetails);
+        console.log('avable jobs');
+        console.log(this.props.availableJobs.data.response);
     }
 
     render() {
@@ -265,7 +269,6 @@ class JobDetails extends Component {
                                 zoomEnabled
                                 zoomControlEnabled
                                 maxZoomLevel={20}
-                                //minZoomLevel={14}
                                 region={ region }
                                 onRegionChangeComplete={this.onRegionChange}
                                 onRegionChange={this.onLocationChange}
@@ -479,7 +482,6 @@ class JobDetails extends Component {
                         <Text style={styles.jobItemName}>{I18n.t('payment')}</Text>
                         <Text style={styles.jobItemValue}>{JobDetailsData.payment}</Text>
                     </View>
-                    {/* bala  : start*/}
                     {
                         JobDetailsData.status == 'STARTED' ? (
                             <View style={{ flexDirection: 'row', flex: 1 }}>
@@ -506,7 +508,9 @@ class JobDetails extends Component {
                                     this.state.bottomButtonStatus === 'way' ?
                                     <View>
                                         <View>
+
                                             {/* on my way slider start */}
+
                                             <ScrollView
                                                 ref='ScrollViewEnd'
                                                 pagingEnabled={true}
@@ -534,9 +538,13 @@ class JobDetails extends Component {
                                                 </View>
                                             
                                             </ScrollView>
+
                                             {/* on my way slider end */}
+
                                         </View>
+
                                     {/* cancel button start */}
+
                                     <View style={styles.jobItemWarp}>
                                         { this.state.jobCancelbuttonStatus === true ?
                                             <TouchableOpacity 
@@ -547,12 +555,16 @@ class JobDetails extends Component {
                                             </TouchableOpacity>
                                         : console.log() }
                                     </View>
+
                                     {/* cancel button end */}
+
                                     </View>
                                     : this.state.bottomButtonStatus === 'start' ?
                                         <View>
                                             <View>
+
                                                 {/* on click to start */}
+
                                                 <ScrollView
                                                     ref='ScrollViewStart'
                                                     pagingEnabled={true}
@@ -580,13 +592,17 @@ class JobDetails extends Component {
                                                     </View>
                                                 
                                                 </ScrollView>
+
                                                 {/* on click to end */}
+
                                             </View> 
                                         </View>    
                                     :
                                     <View>
                                         <View>
+
                                             {/* on click to start */}
+
                                             <ScrollView
                                                 ref='ScrollViewComplete'
                                                 pagingEnabled={true}
@@ -614,7 +630,9 @@ class JobDetails extends Component {
                                                 </View>
                                             
                                             </ScrollView>
+
                                             {/* on click to end */}
+
                                         </View> 
                                     </View>    
                                 }
@@ -625,10 +643,10 @@ class JobDetails extends Component {
                         </View>)
                        
                 }
-                    {/* bala  : end*/}
                 </Content>
 
                 {/* Modal Job Cancel start */}
+
                 <Modal isVisible={this.state.jobCancelModal}>
                     <TouchableOpacity 
                         transparent style={{ flex: 1, justifyContent: 'center', display: 'flex', width: '100%' }} 
@@ -671,8 +689,13 @@ class JobDetails extends Component {
 
                     </TouchableOpacity>
                 </Modal>
+
+
                 {/* Modal Job Cancel end */}
+
                 {/* Modal rating start */}
+
+
                 <Modal isVisible={this.state.isModalVisible}>
                     <View  style={{ flex: 1 , justifyContent: 'center'}}>
                         <TouchableOpacity style={{ position: 'absolute', top: 0, right: 0, zIndex: 99999, }} onPress={this._toggleModal}>
@@ -695,6 +718,8 @@ class JobDetails extends Component {
                         </View>
                     </View>
                 </Modal>
+
+                
                 {/* Modal rating end */}
                 <FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
             </Container>

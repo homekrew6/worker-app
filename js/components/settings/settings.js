@@ -4,6 +4,7 @@ import { Container, Button, H3, Text, Header, Title, Body, Left, Right, Content,
 import FSpinner from 'react-native-loading-spinner-overlay';
 import styles from './styles'; 
 import Entypo from 'react-native-vector-icons/Entypo';
+import Ionicons from 'react-native-vector-icons/Ionicons'; 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import I18n from '../../i18n/i18n';
 const carve = require("../../../img/icon17.png");
@@ -64,15 +65,22 @@ class Settings extends Component {
     render() {
         return (
             <Container >
-                <FSpinner visible={this.state.visible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
-                <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
-                    <Button transparent onPress={() => this.props.navigation.goBack()}>
 
+
+                <FSpinner visible={this.state.visible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
+
+                <StatusBar
+                    backgroundColor="#81cdc7"
+                />
+
+                <Header style={styles.appHdr2} androidStatusBarColor="#81cdc7" noShadow>
+                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }}>
+                        <Ionicons name="ios-arrow-back" style={{ fontSize: 26, color: '#fff' }} />
                     </Button>
                     <Body style={{ alignItems: 'center' }}>
                         <Title>Settings</Title>
                     </Body>
-                    <Button transparent />
+                    <Button transparent style={{ width: 30, backgroundColor: 'transparent' }} disabled/>
                 </Header>
 
                 <Content style={styles.bgWhite} >
