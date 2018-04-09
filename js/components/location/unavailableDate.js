@@ -62,6 +62,7 @@ class UnavailableDate extends Component {
             startDay: '',
             visible: false,
             endDay: '',
+            minDate: [today],
             colectionData: [
                 { key: '1', time: '00:00 AM', isActive: false },
                 { key: '2', time: '01:00 AM', isActive: false },
@@ -196,17 +197,25 @@ class UnavailableDate extends Component {
     componentDidMount() {
         if (this.props.navigation.state.params.unAvailTiming) {
             this.setState({ visible: true });
-
+           if(this.props.navigation.state.params.unAvailTiming[0])
+           {
             this.state.colectionData.map((item) => {
                 if (item.time == this.props.navigation.state.params.unAvailTiming[0].start_time) {
                     item.isActive = true;
                 }
             });
+           }
+
+           if(this.props.navigation.state.params.unAvailTiming[0])
+           {
             this.state.colectionData2.map((item) => {
                 if (item.time == this.props.navigation.state.params.unAvailTiming[0].end_time) {
                     item.isActive = true;
                 }
             });
+           }
+           if(this.props.navigation.state.params.unAvailTiming[0])
+           {
             var startDate = new Date(this.props.navigation.state.params.unAvailTiming[0].start_date);
             var dy = parseInt(startDate.getMonth() + 1);
             var dm = startDate.getDate();
@@ -232,6 +241,8 @@ class UnavailableDate extends Component {
 
             var enddate = endtDate.getFullYear() + "-" + dy + "-" + dm;
             this.setState({ daYSelected2: enddate });
+           }
+            
             //this.state.daYSelected2=new Date(this.props.navigation.state.params.unAvailTiming[0].end_date);
             this.setState({ visible: false });
 
@@ -381,6 +392,7 @@ class UnavailableDate extends Component {
                                     hideArrows={false}
                                     hideExtraDays={true}
                                     disableMonthChange={false}
+                                    minDate={this.state.minDate}
                                     markedDates={{
                                         [this.state.daYSelected]: { selected: true, selectedColor: '#81cdc7' }
                                     }}

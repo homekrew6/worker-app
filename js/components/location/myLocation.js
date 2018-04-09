@@ -59,26 +59,35 @@ class myLocation extends Component {
     //     })
     // }
 
-    render() {
-
-        let myLocationlist
-        if (this.state.locationFlag && this.props.location.selectedData != "") {
-            myLocationlist = (
-                this.props.location.selectedData.map((data, key) => (
-                    <View style={styles.mainItem} key={data.id}>
-                        <View style={styles.mainItemIcon}>
-                            <View>
-                                <Entypo name='location-pin' style={styles.mainItemIconIcon} />
-                            </View>
-                        </View>
-                        <View style={styles.mainItemText}>
-                            <Text style={styles.locName}>{data.zone.name}</Text>
-                            <Text style={styles.locName2}>{data.zone.description}</Text>
-                        </View>
+    myLocationlist(){
+        if (this.state.locationFlag) {
+                if(this.props.location.selectedData.length === 0 ){
+                    return(
+                    <View style={{ alignSelf: 'center', padding: 20 }}>
+                        <Text>{I18n.t('no_location_found')}</Text>
                     </View>
-                ))
-            )
+                    )
+                }else{
+                    return(
+                        this.props.location.selectedData.map((data, key) => (
+                            <View style={styles.mainItem} key={data.id}>
+                                <View style={styles.mainItemIcon}>
+                                    <View>
+                                        <Entypo name='location-pin' style={styles.mainItemIconIcon} />
+                                    </View>
+                                </View>
+                                <View style={styles.mainItemText}>
+                                    <Text style={styles.locName}>{data.zone.name}</Text>
+                                    <Text style={styles.locName2}>{data.zone.description}</Text>
+                                </View>
+                            </View>
+                        ))    
+                    )
+            }
         }
+    }
+
+    render() {
 
         return (
             <Container >
@@ -104,7 +113,7 @@ class myLocation extends Component {
                     </Header>
                     
                     <View>
-                        {myLocationlist}
+                        {this.myLocationlist()}
                         {/* <View style={styles.mainItem}>
                             <View style={styles.mainItemIcon}>
                                 <View>

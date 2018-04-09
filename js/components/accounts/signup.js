@@ -62,7 +62,7 @@ class Signup extends Component {
 
         this.props.signup(name, email, password, phone).then(res => {
             if (res.type == 'success') {
-                Alert.alert('Successfully saved.');
+                Alert.alert('Successfully Registered.');
                 this.props.navigation.navigate("Login");
             } else {
                 Alert.alert('Please check all fields and try again');

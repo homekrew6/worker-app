@@ -44,13 +44,29 @@ class AvailableJobs extends Component {
             if(timeDur._data.years > 0){
                 hourDiff.startTime = intValueText + Math.abs(timeDur._data.years) + " Year";
             } else if(timeDur._data.months > 0){
-                hourDiff.startTime = intValueText + Math.abs(timeDur._data.months) + " Month";
+                if(timeDur._data.months === 1){
+                    hourDiff.startTime = intValueText + Math.abs(timeDur._data.months) + " Month";
+                }else{
+                    hourDiff.startTime = intValueText + Math.abs(timeDur._data.months) + " Months";
+                }
             } else if(timeDur._data.days > 0){
-                hourDiff.startTime = intValueText + Math.abs(timeDur._data.days) + " day";
+                if(timeDur._data.days === 1){
+                    hourDiff.startTime = intValueText + Math.abs(timeDur._data.days) + " day";
+                }else{
+                    hourDiff.startTime = intValueText + Math.abs(timeDur._data.days) + " days";
+                }   
             } else if(timeDur._data.hours > 0){
-                hourDiff.startTime = intValueText + Math.abs(timeDur._data.hours) + " hour";
+                if(timeDur._data.hours === 1){
+                    hourDiff.startTime = intValueText + Math.abs(timeDur._data.hours) + " hour";
+                }else{
+                    hourDiff.startTime = intValueText + Math.abs(timeDur._data.hours) + " hours";
+                }  
             } else if(timeDur._data.minutes > 0){
-                hourDiff.startTime = intValueText + Math.abs(timeDur._data.minutes) + " hour";
+                if(timeDur._data.minutes === 1){
+                    hourDiff.startTime = intValueText + Math.abs(timeDur._data.minutes) + " minute";
+                }else{
+                    hourDiff.startTime = intValueText + Math.abs(timeDur._data.minutes) + " minutes";
+                }    
             } else{
                 hourDiff.startTime = intValueText + Math.abs(timeDur._data.seconds) + " second";
             }
@@ -122,8 +138,9 @@ class AvailableJobs extends Component {
         })
         let jobId = data.id;        
         let workerId = this.props.auth.data.id;
+        let customerId=data.customer.id;
         console.log(jobId, workerId );
-        this.props.acceptJob( jobId , workerId ).then(res => {
+        this.props.acceptJob( jobId , workerId,customerId ).then(res => {
             this.jobdata();
         }).catch(err => {
             console.log(err);
@@ -182,7 +199,7 @@ class AvailableJobs extends Component {
             })
             finalArray.push(finalObject);
         })
-
+        console.log('final Array', finalArray);
         // upcoming jobs
 
             const dateList2 = [];
@@ -226,6 +243,7 @@ class AvailableJobs extends Component {
                 finalArray2.push(finalObject);
                 
             })
+            console.log('final Array2', finalArray2);
 
         return (
             
@@ -298,12 +316,12 @@ class AvailableJobs extends Component {
                                                                 <Text>{item.userLocation.name}</Text>
                                                             </View>
                                                             <View style={styles.flexDirectionRow}>
-                                                                <Text style={{ color: '#81cdc7' }}>{item.startTime.startTime}</Text>
+                                                                <Text style={ item.startTime.timeInt === true ? {color: '#81cdc7'} : {color: '#FF0000'} }>{item.startTime.startTime}</Text>
                                                             </View>
                                                         </View>
                                                         <View>
                                                             <Text style={styles.listWarpPriceUp}>{this.state.currency} {item.price}</Text>
-                                                            <Text style={styles.listWarpPriceDown}>4 hours</Text>
+                                                            <Text style={styles.listWarpPriceDown}>{parseInt(item.service.time_interval / 60) + "."}{item.service.time_interval % 60 < 10 ? "0" + item.service.time_interval % 60 : item.service.time_interval % 60} hour</Text>
                                                         </View>
                                                     </View>
                                                 </TouchableOpacity>

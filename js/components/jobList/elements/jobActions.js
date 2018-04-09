@@ -23,9 +23,9 @@ export function declineJob(jobId, workerId, serviceId) {
   }
 }
 
-export function acceptJob(jobId, workerId) {
+export function acceptJob(jobId, workerId, customerId) {
   return function (dispatch) {
-    return jobApi.acceptJob(jobId, workerId).then(res => {
+    return jobApi.acceptJob(jobId, workerId, customerId).then(res => {
       return res
     }).catch(err => {
       return err

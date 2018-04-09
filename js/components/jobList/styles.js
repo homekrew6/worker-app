@@ -34,7 +34,7 @@ export default {
     },
     jobListItemDisable: {
         marginBottom: 0, 
-        backgroundColor: '#FF0000', 
+        backgroundColor: '#fff', 
         marginLeft: 0 
     },
     listWarp: { 

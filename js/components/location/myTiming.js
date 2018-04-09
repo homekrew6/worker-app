@@ -20,14 +20,14 @@ class myTiming extends Component {
     state = {timimgData: '', weekOffStatus: true, unavailableTiming: '', tableRowId: '', unAvailId:''};
     componentDidMount(){
       const workerId = this.props.auth.data.id;
-      const WorkerAvailabilitiesUrl = `Workeravailabletimings?{"where":{"workerId":"${workerId}"}}`;
+      const WorkerAvailabilitiesUrl = `Workeravailabletimings?filter={"where":{"workerId":"${workerId}"}}`;
       api.get(WorkerAvailabilitiesUrl).then(res => {
           this.setState({ timimgData: res[0].timings, tableRowId: res[0].id });
       }).catch((err) => {
           //console.log(err);
       });
 
-      const WorkerUnavailabilitiesUrl = `WorkerUnavailabilities?{"where":{"workerId":"${workerId}"}}`;
+      const WorkerUnavailabilitiesUrl = `WorkerUnavailabilities?filter={"where":{"workerId":"${workerId}"}}`;
       api.get(WorkerUnavailabilitiesUrl).then(res => {
         this.setState({ unavailableTiming: res });
         if(res.length && res.length>0)
