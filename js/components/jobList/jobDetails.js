@@ -85,90 +85,6 @@ class JobDetails extends Component {
             jobTrackingStatus: ''
         }
 
-        
-        // this.state.itemsRef.once('value').then((snapshot)=>{ 
-        //     debugger;
-        //     if (snapshot && snapshot.val()) { 
-                
-        //         const key = Object.keys(snapshot.val())[0];
-        //         const ref = this.state.itemsRef.child(key); 
-        //         const data = { 
-        //             "jobId": "1", 
-        //             "customerId": "2", 
-        //             "workerId": '8', 
-        //             "lat": 34534, 
-        //             "lng": 435345, 
-        //             "status": "ONMYWAY"
-        //         } 
-        //         ref.update(data);
-        //      } else { 
-        //          this.state.itemsRef.push({ 
-        //              "jobId": "1", 
-        //              "customerId": "2", 
-        //              "workerId": '8', 
-        //              "lat": 34534, 
-        //              "lng": 34534, 
-        //              "status": "ONMYWAY"
-        //             });
-        //      } 
-        //     }).catch((err) => {
-        //         console.log('eer', err);
-        //     })
-
-
-
-        // navigator.geolocation.watchPosition((position) => {
-        //     console.log('watchPosition', position);
-        //     this.setState({
-        //         latitudeUser: position.coords.latitude,
-        //         longitudeUser: position.coords.longitude,
-        //         errorLocationUser: null,
-        //     });
-        //     let workerId = this.props.auth.data.id;
-        //     this.state.itemsRef = firebaseApp.database().ref().child('tracking'); 
-        //     console.log(this.state.itemsRef);
-        //     debugger;
-        //     this.state.itemsRef.once('value').then((snapshot)=>{ 
-        //         debugger;
-        //         if (snapshot && snapshot.val()) { 
-                    
-        //             const key = Object.keys(snapshot.val())[0];
-        //             const ref = this.state.itemsRef.child(key); 
-        //             const data = { 
-        //                 "jobId": "1", 
-        //                 "customerId": "2", 
-        //                 "workerId": workerId, 
-        //                 "lat": position.coords.latitude, 
-        //                 "lng": position.coords.longitude, 
-        //                 "status": "ONMYWAY"
-        //             } 
-        //             ref.update(data);
-        //          } else { 
-        //              this.state.itemsRef.push({ 
-        //                  "jobId": "1", 
-        //                  "customerId": "2", 
-        //                  "workerId": workerId, 
-        //                  "lat": position.coords.latitude, 
-        //                  "lng": position.coords.longitude, 
-        //                  "status": "ONMYWAY"
-        //                 });
-        //          } 
-        //         }).catch((err) => {
-        //             console.log('eer', err);
-        //         })
-
-        //     },
-        //     (error) => this.setState({ errorLocation: error.message }),
-        //     //{ enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 },
-        // );
-
-
-        
-        //const progressSpeed = ((this.state.workHourDB * 60) / 100) * 60000;
-        // const progressSpeed = (this.props.navigation.state.params.jobDetails.service.time_interval / 100) * 60000;
-        // const progressInterval = setInterval(() => {
-        //     this.setState({ workProgressTime: this.state.workProgressTime + 1 });
-        // }, progressSpeed);
     }
  
     _toggleModal = () =>
@@ -192,79 +108,162 @@ class JobDetails extends Component {
     }
     onMyWayPress(){
         this.setState({ bottomButtonStatus: 'start', loader: true });
-        api.post('Jobs/changeJobStatusByWorker', {
-            "id": this.props.navigation.state.params.jobDetails.id,
-            "status": 'ONMYWAY',
-            "customerId": this.props.navigation.state.params.jobDetails.customerId
-        }).then((response) => {
-            api.post('Jobs/getJobDetailsById', {
-                "id": this.props.navigation.state.params.jobDetails.id,
-                "workerId": this.props.auth.data.id
-            }).then((response) => {
-                this.setState({ remoteJobDetails: response.response.message[0], loader: false });
-                setTimeout(() => {
-                    this.refs.ScrollViewStart.scrollToEnd();
-                }, 50);
 
-                navigator.geolocation.watchPosition((position) => {
-                    console.log('watchPosition', position);
-                    this.setState({
-                        latitudeUser: position.coords.latitude,
-                        longitudeUser: position.coords.longitude,
-                        errorLocationUser: null,
-                        jobTrackingStatus: 'Krew On The Way',
-                        loader: false
-                    });
-                    let workerId = this.props.auth.data.id;
-                    let jobIdTr = this.props.navigation.state.params.jobDetails.id;
-                    this.state.itemsRef = firebase.database().ref().child('tracking'); 
-                    this.state.itemsRef.orderByChild('jobId').equalTo(jobIdTr).once('value').then((snapshot)=>{ 
-                        if (snapshot && snapshot.val()) { 
-                            const key = Object.keys(snapshot.val())[0];
-                            const ref = this.state.itemsRef.child(key); 
-                            const data = { 
-                                "jobId": this.props.navigation.state.params.jobDetails.id, 
-                                "customerId": this.props.navigation.state.params.jobDetails.customerId, 
-                                "workerId": workerId, 
-                                "lat": position.coords.latitude, 
-                                "lng": position.coords.longitude, 
-                                "status": "ONMYWAY"
-                            } 
-                            ref.update(data).then((err) => {
-                                Alert.alert('in then');
-                            });
-                         } else { 
-                             this.state.itemsRef.push({ 
-                                 "jobId": this.props.navigation.state.params.jobDetails.id, 
-                                 "customerId": this.props.navigation.state.params.jobDetails.customerId, 
-                                 "workerId": workerId, 
-                                 "lat": position.coords.latitude, 
-                                 "lng": position.coords.longitude, 
-                                 "status": "ONMYWAY"
-                                });
-                         } 
+        //navigator watch location start
+        navigator.geolocation.watchPosition((position) => {
+            console.log('watchPosition', position);
+            this.setState({
+                latitudeUser: position.coords.latitude,
+                longitudeUser: position.coords.longitude,
+                errorLocationUser: null,
+                jobTrackingStatus: 'Krew On The Way',
+                loader: false
+            });
+            let workerId = this.props.auth.data.id;
+            let jobIdTr = this.props.navigation.state.params.jobDetails.id;
+            this.state.itemsRef = firebase.database().ref().child('tracking'); 
+
+            this.state.itemsRef.orderByChild('jobId').equalTo(jobIdTr).once('value').then((snapshot)=>{
+                console.warn(snapshot); 
+                if (snapshot && snapshot.val()) { 
+                    const key = Object.keys(snapshot.val())[0];
+                    const ref = this.state.itemsRef.child(key); 
+                    const data = { 
+                        "jobId": this.props.navigation.state.params.jobDetails.id, 
+                        "customerId": this.props.navigation.state.params.jobDetails.customerId, 
+                        "workerId": workerId, 
+                        "lat": position.coords.latitude, 
+                        "lng": position.coords.longitude, 
+                        "status": "ONMYWAY"
+                    } 
+                    ref.update(data).then((err) => { 
+                        //Alert.alert('in then update onmyway');
+                        //Change job status in DB
+                        api.post('Jobs/changeJobStatusByWorker', {
+                            "id": this.props.navigation.state.params.jobDetails.id,
+                            "status": 'ONMYWAY',
+                            "customerId": this.props.navigation.state.params.jobDetails.customerId
+                        }).then((response) => {
+                            //get job latest details and update state
+                            api.post('Jobs/getJobDetailsById', {
+                                "id": this.props.navigation.state.params.jobDetails.id,
+                                "workerId": this.props.auth.data.id
+                            }).then((response) => {
+                                this.setState({ remoteJobDetails: response.response.message[0], loader: false });
+                                setTimeout(() => {
+                                    this.refs.ScrollViewStart.scrollToEnd();
+                                }, 50);
+                            }).catch((err) => {
+                    
+                            })
+                            //update lastest job details end
                         }).catch((err) => {
-                            console.log('eer', err);
+                            console.log('err on press', err);
                         })
-        
-                    },
-                    (error) => this.setState({ errorLocation: error.message }),
-                    //{ enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 },
-                );
+                        //Change job status in DB end
+                    });
+                 } else { 
+                     this.state.itemsRef.push({ 
+                         "jobId": this.props.navigation.state.params.jobDetails.id, 
+                         "customerId": this.props.navigation.state.params.jobDetails.customerId, 
+                         "workerId": workerId, 
+                         "lat": position.coords.latitude, 
+                         "lng": position.coords.longitude, 
+                         "status": "ONMYWAY"
+                        }).then((theRes) => {
+                            //Alert.alert('in then push onmyway')
+                                //Change job status in DB
+                                api.post('Jobs/changeJobStatusByWorker', {
+                                    "id": this.props.navigation.state.params.jobDetails.id,
+                                    "status": 'ONMYWAY',
+                                    "customerId": this.props.navigation.state.params.jobDetails.customerId
+                                }).then((response) => {
+                                    //get job latest details and update state
+                                    api.post('Jobs/getJobDetailsById', {
+                                        "id": this.props.navigation.state.params.jobDetails.id,
+                                        "workerId": this.props.auth.data.id
+                                    }).then((response) => {
+                                        this.setState({ remoteJobDetails: response.response.message[0], loader: false });
+                                        setTimeout(() => {
+                                            this.refs.ScrollViewStart.scrollToEnd();
+                                        }, 50);
+                                    }).catch((err) => {
+                            
+                                    })
+                                    //update lastest job details end
+                                }).catch((err) => {
+                                    console.log('err on press', err);
+                                })
+                                //Change job status in DB end
+                        })
+                 } 
+                 
+                    setTimeout(() => {
+                        if(this.state.loader === true){
+                            this.state.itemsRef.off();
+                            Alert.alert('Internal Error Please Try Again');
+                            this.setState({ loader: false });
+                        }
+                    }, 5000);
 
+                }).catch((err) => {
+                    console.log('eer', err);
+                })
 
-            }).catch((err) => {
-    
-            })
-        }).catch((err) => {
-            console.log('err on press', err);
-        })
+            },
+            (error) => this.setState({ errorLocation: error.message }),
+            //{ enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 },
+        );
+        //navigator end
+
+      
     }
 
     StartJobSlide(){
         this.setState({ jobCompletedbuttonStatus: true });
     }
 
+    onStartFirebaseCall(saveEndTime, newNowTime, snapshot){
+        if (snapshot && snapshot.val()) { 
+            const key = Object.keys(snapshot.val())[0];
+            const ref = firebase.database().ref().child('tracking').child(key); 
+            const data = { 
+                "jobId": `${this.props.navigation.state.params.jobDetails.id}`, 
+                "customerId": `${this.props.navigation.state.params.jobDetails.customerId}`, 
+                "workerId": `${this.props.auth.data.id}`, 
+                "lat": snapshot.val()[key].lat, 
+                "lng": snapshot.val()[key].lng, 
+                "status": "JOBSTARTED",
+                "endTime": saveEndTime,
+                "startTime": newNowTime,
+            } 
+            ref.update(data).then((thenRes) => {
+                //change job status for job started
+                api.post('Jobs/changeJobStatusByWorker', {
+                    "id": this.props.navigation.state.params.jobDetails.id,
+                    "status": 'JOBSTARTED',
+                    "customerId": this.props.navigation.state.params.jobDetails.customerId,
+                    "endTime": saveEndTime,
+                    "startTime": newNowTime,
+                }).then((response) => {
+                    api.post('Jobs/getJobDetailsById', {
+                        "id": this.props.navigation.state.params.jobDetails.id,
+                        "workerId": this.props.auth.data.id
+                    }).then((response) => {
+                        this.setState({ remoteJobDetails: response.response.message[0], loader: false, jobTrackingStatus: 'Job Started' });
+                        setTimeout(() => {
+                            this.refs.ScrollViewComplete.scrollToEnd();
+                        }, 50);
+                    }).catch((err) => {
+            
+                    })
+                }).catch((err) => {
+
+                })
+                //job status change end //
+            })
+        }
+    }
     onStartPress(){
         this.setState({ mapTrackingStatus: 'timing', bottomButtonStatus: 'complete', loader: true });
         const time_interval = this.props.navigation.state.params.jobDetails.service.time_interval;
@@ -280,134 +279,97 @@ class JobDetails extends Component {
             this.setState({ workProgressTime: this.state.workProgressTime + 1 });
         }, progressSpeed);
 
-        api.post('Jobs/changeJobStatusByWorker', {
-            "id": this.props.navigation.state.params.jobDetails.id,
-            "status": 'JOBSTARTED',
-            "customerId": this.props.navigation.state.params.jobDetails.customerId,
-            "endTime": saveEndTime,
-            "startTime": newNowTime,
-        }).then((response) => {
-            api.post('Jobs/getJobDetailsById', {
-                "id": this.props.navigation.state.params.jobDetails.id,
-                "workerId": this.props.auth.data.id
-            }).then((response) => {
-                this.setState({ remoteJobDetails: response.response.message[0], loader: false, jobTrackingStatus: 'Job Started' });
-                
-                setTimeout(() => {
-                    this.refs.ScrollViewComplete.scrollToEnd();
-                }, 50);
-                let jobIdTr = this.props.navigation.state.params.jobDetails.id;
-                setTimeout(() => {
-                    firebase.database().ref().child('tracking').orderByChild('jobId').equalTo(jobIdTr).once('value').then((snapshot)=>{ 
-                    if (snapshot && snapshot.val()) { 
-                        const key = Object.keys(snapshot.val())[0];
-                        
-                        const ref = firebase.database().ref().child('tracking').child(key); 
-                        const data = { 
-                            "jobId": `${this.props.navigation.state.params.jobDetails.id}`, 
-                            "customerId": `${this.props.navigation.state.params.jobDetails.customerId}`, 
-                            "workerId": `${this.props.auth.data.id}`, 
-                            "lat": snapshot.val()[key].lat, 
-                            "lng": snapshot.val()[key].lng, 
-                            "status": "JOBSTARTED",
-                            "endTime": saveEndTime,
-                            "startTime": newNowTime,
-                        } 
-                        
-                        ref.update(data);
-                    }
-                })
-                }, 2000);
-            }).catch((err) => {
-    
-            })
-            //this.setState({ remoteJobDetails: response.response.message[0] });
-        }).catch((err) => {
-
+        //update firebase database on job start
+        
+        let jobIdTr = this.props.navigation.state.params.jobDetails.id;
+        let refStartFirebase = firebase.database().ref().child('tracking').orderByChild('jobId');
+        refStartFirebase.equalTo(jobIdTr).once('value').then((snapshot)=>{ 
+            this.onStartFirebaseCall(saveEndTime, newNowTime, snapshot);
+            setTimeout(() => {
+                if(this.state.loader === true){
+                    this.onStartFirebaseCall(saveEndTime, newNowTime, snapshot);
+                    setTimeout(() => {
+                        refStartFirebase.off();
+                        Alert.alert('Internal Error Please Try Again');
+                        this.setState({ loader: false });
+                    }, 5000);
+                }
+            }, 5000);
         })
 
-        // const progressInterval = setInterval(() => {
-            //     this.setState({ workProgressTime: this.state.workProgressTime + 1 });
-                
-            //     //AsyncStorage.setItem('StoreData', dataRemoteString);
-            //     // const jobIdDump = `key@${this.props.navigation.state.params.jobDetails.id}`;
-            //     //AsyncStorage.getItem(jobIdDump).then((value) => {
-            //         // let job_start_time = this.state.job_start_time;
-            //         // let start_time_full = this.state.start_time_full;
-            //         // let dateToSave = new Date();
+        setTimeout(() => {
+           if(this.state.loader === true){
+            refStartFirebase.off();
+           }
+        }, 5000);
+        //update firebase on job start ** //
 
-            //         // let dateToDump = JSON.stringify({
-            //         //     job_start_time: job_start_time,
-            //         //     start_time_full: start_time_full,
-            //         //     dateToSave: dateToSave,
-            //         //     buttonStatus: 'timing'
-            //         // });
-            //         // if (value) {
-            //         //     AsyncStorage.removeItem(jobIdDump, (err) => 
-            //         //         AsyncStorage.setItem(jobIdDump, dateToDump)
-            //         //     );
-            //         // }else{
-            //         //     AsyncStorage.setItem(jobIdDump, dateToDump);
-            //         // }
-            //     // }).catch((err) => {
-            //     //     console.log('in catch', err);
-            //     // })
-        // }, progressSpeed);
-
-       
         this.setState({ job_start_time: timeNowConvert, job_end_time: momentConvert, start_time_full: timeNowWork });
     }
     CompleteJobSlide(){
         this.setState({ bottomButtonStatus: 'complete' });
     }
+    onCompleteFirebaseCall(snapshot){
+        if (snapshot && snapshot.val()) { 
+            const key = Object.keys(snapshot.val())[0];
+            const ref = firebase.database().ref().child('tracking').child(key); 
+            console.warn(key);
+            
+            const data = { 
+                "jobId": `${this.props.navigation.state.params.jobDetails.id}`, 
+                "customerId": `${this.props.navigation.state.params.jobDetails.customerId}`, 
+                "workerId": `${this.props.auth.data.id}`, 
+                "lat": snapshot.val()[key].lat, 
+                "lng": snapshot.val()[key].lng, 
+                "status": "COMPLETED",
+            } 
+            ref.update(data).then((thenRes) => {
+                //complete job DB update
+                let start_time = moment(new Date(this.state.start_time_full));
+                let end_time = moment(new Date());
+                let minuteDiff = end_time.diff(start_time, 'minute');
+                let price = this.props.navigation.state.params.jobDetails.price;
+                const jobId = this.props.navigation.state.params.jobDetails.id;
+                const customerId = this.props.navigation.state.params.jobDetails.customerId;
+                api.post('Jobs/completeJob', { 
+                    "id": jobId, "status": "COMPLETED", "customerId": customerId, "actualTime": minuteDiff,
+                    price: price
+                }).then(responseJson => {
+                    api.post('Jobs/getJobDetailsById', {
+                        "id": this.props.navigation.state.params.jobDetails.id,
+                        "workerId": this.props.auth.data.id
+                    }).then((response) => {
+                        this.setState({ remoteJobDetails: response.response.message[0], loader: false, jobTrackingStatus: 'Job Completed' });
+                    }).catch((err) => {
+            
+                    })
+                }).catch(err => {
+                    console.log(err)
+                })
+                //end complete job DB update //
+            })
+        }
+    }
     onCompletePress(){
         this.setState({ loader: true });
-        let start_time = moment(new Date(this.state.start_time_full));
-        let end_time = moment(new Date());
-        let minuteDiff = end_time.diff(start_time, 'minute');
-
-        const jobId = this.props.navigation.state.params.jobDetails.id;
-        const customerId = this.props.navigation.state.params.jobDetails.customerId;
-        let price = this.props.navigation.state.params.jobDetails.price;
-        api.post('Jobs/completeJob', { 
-            "id": jobId, "status": "COMPLETED", "customerId": customerId, "actualTime": minuteDiff,
-            price: price
-        }).then(responseJson => {
-            //this.setState({ mapTrackingStatus: 'rating' });
-            api.post('Jobs/getJobDetailsById', {
-                "id": this.props.navigation.state.params.jobDetails.id,
-                "workerId": this.props.auth.data.id
-            }).then((response) => {
-                this.setState({ remoteJobDetails: response.response.message[0], loader: false, jobTrackingStatus: 'Job Completed' });
+        //update firebase on complete job
+            let jobIdTr = `${this.props.navigation.state.params.jobDetails.id}`;
+            let refCompleteFirebase = firebase.database().ref().child('tracking'); 
+            refCompleteFirebase.orderByChild('jobId').equalTo(jobIdTr).once('value').then((snapshot)=>{ 
+                this.onCompleteFirebaseCall(snapshot);
                 setTimeout(() => {
-
-                    let jobIdTr = `${this.props.navigation.state.params.jobDetails.id}`;
-                    firebase.database().ref().child('tracking').orderByChild('jobId').equalTo(jobIdTr).once('value').then((snapshot)=>{ 
-                        if (snapshot && snapshot.val()) { 
-                        const key = Object.keys(snapshot.val())[0];
-                        console.warn(key);
-                        const ref = firebase.database().ref().child('tracking').child(key); 
-                        const data = { 
-                            "jobId": `${this.props.navigation.state.params.jobDetails.id}`, 
-                            "customerId": `${this.props.navigation.state.params.jobDetails.customerId}`, 
-                            "workerId": `${this.props.auth.data.id}`, 
-                            "lat": snapshot.val()[key].lat, 
-                            "lng": snapshot.val()[key].lng, 
-                            "status": "COMPLETED",
-                        } 
-                        ref.update(data);
+                    if(this.state.loader === true){
+                        this.onCompleteFirebaseCall(snapshot);
+                        setTimeout(() => {
+                            refCompleteFirebase.off();
+                            Alert.alert('Internal Error Please Try Again');
+                            this.setState({ loader: false });
+                        }, 5000);
                     }
-                })
                 }, 5000);
-            }).catch((err) => {
-    
             })
-        }).catch(err => {
-            console.log(err)
-        })
+        //end firebase status on complete job // 
     }
-
-
 
     componentDidMount() {
         
