@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { login } from './elements/authActions';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from "react-native";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground  } from "react-native";
 import api from '../../api';
 import FSpinner from 'react-native-loading-spinner-overlay';
 
@@ -123,9 +123,9 @@ class ForgotPassword extends Component {
 
                     <TouchableOpacity transparent style={{ height: 70, marginTop: 20, flexDirection: 'row', paddingLeft: 15, paddingRight:15 }} onPress={() => this.pressSend()} >
 
-                        <Image source={buttonImage} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: deviceWidth / 1.3, height: 55 }} >
+                        <ImageBackground source={buttonImage} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: deviceWidth / 1.3, height: 55 }} >
                             <Text style={{ color: '#fff', fontSize: 20, marginTop: -10, height: 30 }}>{I18n.t('send_otp')}</Text>
-                        </Image>
+                        </ImageBackground>
 
                     </TouchableOpacity>
 

@@ -81,5 +81,9 @@ export default {
   slide_to_click_compelte_job: 'الانزلاق إلى انقر فوق مهمة كاملة',
   job_completed: 'أنجزت المهمة',
   no_job_found: 'لا يوجد وظيفة',
+  no_location_found: 'لم يتم العثور على موقع',
+  add_timing:'إضافة / تحرير التوقيت',
+  total_bill: 'إجمالي الفاتورة',
+  rate_your_customer: 'يرجى تقييم عميلك',
   myCurrency: 'عملتي'
 };

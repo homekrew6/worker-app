@@ -21,6 +21,7 @@ const resetAction = NavigationActions.reset({
 	actions: [NavigationActions.navigate({ routeName: 'Menu' })],
 });
 
+
 class Login extends Component {
 	constructor(props) {
 		super(props);
@@ -56,23 +57,24 @@ class Login extends Component {
 
 				this.props.login(email, password).then(res => {
 					if (res.type == 'success') {
-						this.props.getUserDetail(res.userId).then(userRes => {
+						this.props.getUserDetail(res.userId);
+						
+						//.then(userRes => {
+							//this.props.checkAuth((res) => {
 
-							this.props.checkAuth((res) => {
-								if (res) {
+								// if (userRes) {
 									api.put(`Workers/editWorker/${res.userId}?access_token=${res.id}`, { deviceToken: this.state.deviceToken }).then((resEdit) => {
 										this.props.navigation.dispatch(resetAction);
-										console.log('hi');
-										console.log(resEdit);
 									}).catch((err) => {
 									});
-								}
-							}, (err) => {
-							});
+								// }
+
+							//}, (err) => {
+							//});
 							//this.props.navigation.dispatch(resetAction);
-						}).catch(err => {
-							Alert.alert('Login failed, please try again');
-						})
+						// }).catch(err => {
+						// 	Alert.alert('Login failed, please try again');
+						// })
 					} else {
 						Alert.alert('Login failed, please try again');
 					}

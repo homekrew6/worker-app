@@ -39,7 +39,7 @@ export default {
   save: 'Save',
   edit_my_profile: 'Edit My Profile',
   forgot_password_q_mark: 'Forgot password?',
-  add_timing: 'Add Timing',
+  add_timing: 'Add/Edit Timing',
   decline_button: 'DECLINE',
   accept_button: 'ACCEPT',
   start_time: 'Start time',
@@ -85,5 +85,8 @@ export default {
   slide_to_click_compelte_job: 'Slide to Click Complete Job',
   job_completed: 'Job Completed',
   no_job_found: 'No Job Found',
+  no_location_found: 'No location found',
+  total_bill: 'Total Bill',
+  rate_your_customer: 'Please rate your customer',
   myCurrency: 'My Currency'
 };

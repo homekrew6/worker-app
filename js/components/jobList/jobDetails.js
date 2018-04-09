@@ -5,9 +5,11 @@ import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackg
 import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Icon, Frame, Input, Label, Text } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons'; 
 import moment from 'moment';
+import * as firebase from 'firebase';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 //import CircularSlider from 'react-native-circular-slider';
 import MapViewDirections from 'react-native-maps-directions';
+import MapView, { Marker } from 'react-native-maps';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'; 
 import FontAwesome from 'react-native-vector-icons/FontAwesome'; 
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -15,13 +17,11 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import Entypo from 'react-native-vector-icons/Entypo';
 import StarRating from 'react-native-star-rating';
-import MapView, { Marker } from 'react-native-maps';
 import { availablejobs, setNewData, acceptJob, declineJob } from './elements/jobActions'
 import FSpinner from 'react-native-loading-spinner-overlay';
 import Svg, { G, Path } from 'react-native-svg';
 import I18n from  '../../i18n/i18n';
 import api from '../../api/index';
-
 import Modal from "react-native-modal";
 
 const win = Dimensions.get('window').width;
@@ -79,51 +79,289 @@ class JobDetails extends Component {
             workHourDB: 2,
             job_start_time: '',
             job_end_time: '',
+            remoteJobDetails: '',
             currency:'USD',
-            jobTracker: this.props.navigation.state.params.jobDetails.status ? this.props.navigation.state.params.jobDetails.status : ''
-            
+            itemsRef: '',
+            jobTrackingStatus: ''
         }
+
+        
+        // this.state.itemsRef.once('value').then((snapshot)=>{ 
+        //     debugger;
+        //     if (snapshot && snapshot.val()) { 
+                
+        //         const key = Object.keys(snapshot.val())[0];
+        //         const ref = this.state.itemsRef.child(key); 
+        //         const data = { 
+        //             "jobId": "1", 
+        //             "customerId": "2", 
+        //             "workerId": '8', 
+        //             "lat": 34534, 
+        //             "lng": 435345, 
+        //             "status": "ONMYWAY"
+        //         } 
+        //         ref.update(data);
+        //      } else { 
+        //          this.state.itemsRef.push({ 
+        //              "jobId": "1", 
+        //              "customerId": "2", 
+        //              "workerId": '8', 
+        //              "lat": 34534, 
+        //              "lng": 34534, 
+        //              "status": "ONMYWAY"
+        //             });
+        //      } 
+        //     }).catch((err) => {
+        //         console.log('eer', err);
+        //     })
+
+
+
+        // navigator.geolocation.watchPosition((position) => {
+        //     console.log('watchPosition', position);
+        //     this.setState({
+        //         latitudeUser: position.coords.latitude,
+        //         longitudeUser: position.coords.longitude,
+        //         errorLocationUser: null,
+        //     });
+        //     let workerId = this.props.auth.data.id;
+        //     this.state.itemsRef = firebaseApp.database().ref().child('tracking'); 
+        //     console.log(this.state.itemsRef);
+        //     debugger;
+        //     this.state.itemsRef.once('value').then((snapshot)=>{ 
+        //         debugger;
+        //         if (snapshot && snapshot.val()) { 
+                    
+        //             const key = Object.keys(snapshot.val())[0];
+        //             const ref = this.state.itemsRef.child(key); 
+        //             const data = { 
+        //                 "jobId": "1", 
+        //                 "customerId": "2", 
+        //                 "workerId": workerId, 
+        //                 "lat": position.coords.latitude, 
+        //                 "lng": position.coords.longitude, 
+        //                 "status": "ONMYWAY"
+        //             } 
+        //             ref.update(data);
+        //          } else { 
+        //              this.state.itemsRef.push({ 
+        //                  "jobId": "1", 
+        //                  "customerId": "2", 
+        //                  "workerId": workerId, 
+        //                  "lat": position.coords.latitude, 
+        //                  "lng": position.coords.longitude, 
+        //                  "status": "ONMYWAY"
+        //                 });
+        //          } 
+        //         }).catch((err) => {
+        //             console.log('eer', err);
+        //         })
+
+        //     },
+        //     (error) => this.setState({ errorLocation: error.message }),
+        //     //{ enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 },
+        // );
+
+
+        
+        //const progressSpeed = ((this.state.workHourDB * 60) / 100) * 60000;
+        // const progressSpeed = (this.props.navigation.state.params.jobDetails.service.time_interval / 100) * 60000;
+        // const progressInterval = setInterval(() => {
+        //     this.setState({ workProgressTime: this.state.workProgressTime + 1 });
+        // }, progressSpeed);
     }
  
     _toggleModal = () =>
         this.setState({ isModalVisible: !this.state.isModalVisible });
 
     onStarRatingPress(rating) {
-        this.setState({
-            starCount: rating
-        });
+        debugger;
+        this.setState({ starCount: rating });
+        let dateToday_1 = new Date();
+        api.post('ratings', {
+            "IsWorkerSender": true,
+            "ratingDate": dateToday_1,
+            "rating": `${rating}`,
+            "customerId": this.props.navigation.state.params.jobDetails.customerId,
+            "workerId": this.props.auth.data.id
+        }).then((response) => {
+            Alert.alert("Rating has given Successfully");
+        }).catch((err) => {
+        
+        })
     }
     onMyWayPress(){
-        this.setState({ bottomButtonStatus: 'start' });
-        setTimeout(() => {
-            this.refs.ScrollViewStart.scrollToEnd();
-        }, 50);
+        this.setState({ bottomButtonStatus: 'start', loader: true });
+        api.post('Jobs/changeJobStatusByWorker', {
+            "id": this.props.navigation.state.params.jobDetails.id,
+            "status": 'ONMYWAY',
+            "customerId": this.props.navigation.state.params.jobDetails.customerId
+        }).then((response) => {
+            api.post('Jobs/getJobDetailsById', {
+                "id": this.props.navigation.state.params.jobDetails.id,
+                "workerId": this.props.auth.data.id
+            }).then((response) => {
+                this.setState({ remoteJobDetails: response.response.message[0], loader: false });
+                setTimeout(() => {
+                    this.refs.ScrollViewStart.scrollToEnd();
+                }, 50);
+
+                navigator.geolocation.watchPosition((position) => {
+                    console.log('watchPosition', position);
+                    this.setState({
+                        latitudeUser: position.coords.latitude,
+                        longitudeUser: position.coords.longitude,
+                        errorLocationUser: null,
+                        jobTrackingStatus: 'Krew On The Way',
+                        loader: false
+                    });
+                    let workerId = this.props.auth.data.id;
+                    let jobIdTr = this.props.navigation.state.params.jobDetails.id;
+                    this.state.itemsRef = firebase.database().ref().child('tracking'); 
+                    this.state.itemsRef.orderByChild('jobId').equalTo(jobIdTr).once('value').then((snapshot)=>{ 
+                        if (snapshot && snapshot.val()) { 
+                            const key = Object.keys(snapshot.val())[0];
+                            const ref = this.state.itemsRef.child(key); 
+                            const data = { 
+                                "jobId": this.props.navigation.state.params.jobDetails.id, 
+                                "customerId": this.props.navigation.state.params.jobDetails.customerId, 
+                                "workerId": workerId, 
+                                "lat": position.coords.latitude, 
+                                "lng": position.coords.longitude, 
+                                "status": "ONMYWAY"
+                            } 
+                            ref.update(data).then((err) => {
+                                Alert.alert('in then');
+                            });
+                         } else { 
+                             this.state.itemsRef.push({ 
+                                 "jobId": this.props.navigation.state.params.jobDetails.id, 
+                                 "customerId": this.props.navigation.state.params.jobDetails.customerId, 
+                                 "workerId": workerId, 
+                                 "lat": position.coords.latitude, 
+                                 "lng": position.coords.longitude, 
+                                 "status": "ONMYWAY"
+                                });
+                         } 
+                        }).catch((err) => {
+                            console.log('eer', err);
+                        })
+        
+                    },
+                    (error) => this.setState({ errorLocation: error.message }),
+                    //{ enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 },
+                );
+
+
+            }).catch((err) => {
+    
+            })
+        }).catch((err) => {
+            console.log('err on press', err);
+        })
     }
+
     StartJobSlide(){
         this.setState({ jobCompletedbuttonStatus: true });
     }
+
     onStartPress(){
-        this.setState({ mapTrackingStatus: 'timing', bottomButtonStatus: 'complete' });
-        setTimeout(() => {
-            this.refs.ScrollViewComplete.scrollToEnd();
-        }, 50);
+        this.setState({ mapTrackingStatus: 'timing', bottomButtonStatus: 'complete', loader: true });
         const time_interval = this.props.navigation.state.params.jobDetails.service.time_interval;
+        let timeNowWork = new Date();
+        let timeNowConvert = moment(timeNowWork).format('LT');
+        let momentConvert = moment(timeNowWork).add(time_interval, 'minutes').format('LT');
         const progressSpeed = (time_interval / 100) * 60000;
+
+        let saveEndTime = moment(timeNowWork).add(time_interval, 'minute').format();
+        let newNowTime = moment(timeNowWork).format();
+        this.setState({ workProgressTime: 0.2 });
         const progressInterval = setInterval(() => {
             this.setState({ workProgressTime: this.state.workProgressTime + 1 });
         }, progressSpeed);
 
-        let timeNowWork = new Date();
-        let timeNowConvert = moment(timeNowWork).format('LT');
-        let momentConvert = moment(timeNowWork).add(time_interval, 'minutes').format('LT');
-        console.log('start time', timeNowConvert, momentConvert);
+        api.post('Jobs/changeJobStatusByWorker', {
+            "id": this.props.navigation.state.params.jobDetails.id,
+            "status": 'JOBSTARTED',
+            "customerId": this.props.navigation.state.params.jobDetails.customerId,
+            "endTime": saveEndTime,
+            "startTime": newNowTime,
+        }).then((response) => {
+            api.post('Jobs/getJobDetailsById', {
+                "id": this.props.navigation.state.params.jobDetails.id,
+                "workerId": this.props.auth.data.id
+            }).then((response) => {
+                this.setState({ remoteJobDetails: response.response.message[0], loader: false, jobTrackingStatus: 'Job Started' });
+                
+                setTimeout(() => {
+                    this.refs.ScrollViewComplete.scrollToEnd();
+                }, 50);
+                let jobIdTr = this.props.navigation.state.params.jobDetails.id;
+                setTimeout(() => {
+                    firebase.database().ref().child('tracking').orderByChild('jobId').equalTo(jobIdTr).once('value').then((snapshot)=>{ 
+                    if (snapshot && snapshot.val()) { 
+                        const key = Object.keys(snapshot.val())[0];
+                        
+                        const ref = firebase.database().ref().child('tracking').child(key); 
+                        const data = { 
+                            "jobId": `${this.props.navigation.state.params.jobDetails.id}`, 
+                            "customerId": `${this.props.navigation.state.params.jobDetails.customerId}`, 
+                            "workerId": `${this.props.auth.data.id}`, 
+                            "lat": snapshot.val()[key].lat, 
+                            "lng": snapshot.val()[key].lng, 
+                            "status": "JOBSTARTED",
+                            "endTime": saveEndTime,
+                            "startTime": newNowTime,
+                        } 
+                        
+                        ref.update(data);
+                    }
+                })
+                }, 2000);
+            }).catch((err) => {
+    
+            })
+            //this.setState({ remoteJobDetails: response.response.message[0] });
+        }).catch((err) => {
+
+        })
+
+        // const progressInterval = setInterval(() => {
+            //     this.setState({ workProgressTime: this.state.workProgressTime + 1 });
+                
+            //     //AsyncStorage.setItem('StoreData', dataRemoteString);
+            //     // const jobIdDump = `key@${this.props.navigation.state.params.jobDetails.id}`;
+            //     //AsyncStorage.getItem(jobIdDump).then((value) => {
+            //         // let job_start_time = this.state.job_start_time;
+            //         // let start_time_full = this.state.start_time_full;
+            //         // let dateToSave = new Date();
+
+            //         // let dateToDump = JSON.stringify({
+            //         //     job_start_time: job_start_time,
+            //         //     start_time_full: start_time_full,
+            //         //     dateToSave: dateToSave,
+            //         //     buttonStatus: 'timing'
+            //         // });
+            //         // if (value) {
+            //         //     AsyncStorage.removeItem(jobIdDump, (err) => 
+            //         //         AsyncStorage.setItem(jobIdDump, dateToDump)
+            //         //     );
+            //         // }else{
+            //         //     AsyncStorage.setItem(jobIdDump, dateToDump);
+            //         // }
+            //     // }).catch((err) => {
+            //     //     console.log('in catch', err);
+            //     // })
+        // }, progressSpeed);
+
+       
         this.setState({ job_start_time: timeNowConvert, job_end_time: momentConvert, start_time_full: timeNowWork });
     }
     CompleteJobSlide(){
         this.setState({ bottomButtonStatus: 'complete' });
     }
     onCompletePress(){
-        console.log('onCompletePress', this.props);
+        this.setState({ loader: true });
         let start_time = moment(new Date(this.state.start_time_full));
         let end_time = moment(new Date());
         let minuteDiff = end_time.diff(start_time, 'minute');
@@ -135,22 +373,188 @@ class JobDetails extends Component {
             "id": jobId, "status": "COMPLETED", "customerId": customerId, "actualTime": minuteDiff,
             price: price
         }).then(responseJson => {
-            console.log(responseJson);
-            this.setState({ mapTrackingStatus: 'rating' });
+            //this.setState({ mapTrackingStatus: 'rating' });
+            api.post('Jobs/getJobDetailsById', {
+                "id": this.props.navigation.state.params.jobDetails.id,
+                "workerId": this.props.auth.data.id
+            }).then((response) => {
+                this.setState({ remoteJobDetails: response.response.message[0], loader: false, jobTrackingStatus: 'Job Completed' });
+                setTimeout(() => {
+
+                    let jobIdTr = `${this.props.navigation.state.params.jobDetails.id}`;
+                    firebase.database().ref().child('tracking').orderByChild('jobId').equalTo(jobIdTr).once('value').then((snapshot)=>{ 
+                        if (snapshot && snapshot.val()) { 
+                        const key = Object.keys(snapshot.val())[0];
+                        console.warn(key);
+                        const ref = firebase.database().ref().child('tracking').child(key); 
+                        const data = { 
+                            "jobId": `${this.props.navigation.state.params.jobDetails.id}`, 
+                            "customerId": `${this.props.navigation.state.params.jobDetails.customerId}`, 
+                            "workerId": `${this.props.auth.data.id}`, 
+                            "lat": snapshot.val()[key].lat, 
+                            "lng": snapshot.val()[key].lng, 
+                            "status": "COMPLETED",
+                        } 
+                        ref.update(data);
+                    }
+                })
+                }, 5000);
+            }).catch((err) => {
+    
+            })
         }).catch(err => {
             console.log(err)
         })
     }
+
+
+
     componentDidMount() {
-        if (this.refs && this.refs.ScrollViewEnd) {
-                this.swipeButtonReady();
-        }
+        
+
+        // setInterval(() => {
+        //     firebase.database().ref().child('making').push({ "test": "jd", "gdg": "5632tf" });
+        
+        //     firebase.database().ref().child('tracking').push(
+        //         { "jobId": "6", "customerId": "3", "workerId": "9", "lat": 22.52, "lng": 48.254, "status": "ONMYWAY" }
+        //     ).then(() => {
+        //         Alert.alert('new data');
+        //     }).catch((error)=>{
+        //         console.log(error);
+        //         debugger;
+        //     });
+        //   }, 10000);
+
+        // setTimeout(() => {
+        //     firebase.database().ref().child('making').push({ "test": "jd", "gdg": "5632tf" });
+        
+        //     firebase.database().ref().child('tracking').push(
+        //         { "jobId": "6", "customerId": "3", "workerId": "9", "lat": 22.52, "lng": 48.254, "status": "ONMYWAY" }
+        //     ).then(() => {
+        //         Alert.alert('new data');
+        //     }).catch((error)=>{
+        //         console.log(error);
+        //         debugger;
+        //     });
+        //   }, 5000);
+        
+      
+       navigator.geolocation.getCurrentPosition((position) => {
+            this.setState({
+                latitudeUser: position.coords.latitude,
+                longitudeUser: position.coords.longitude,
+                errorLocationUser: null,
+            });
+            },
+            (error) => this.setState({ errorLocation: error.message }),
+            //{ enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 },
+        );
+
         AsyncStorage.getItem("currency").then((value) => {
             if (value) {
                 const value1 = JSON.parse(value);
                 this.setState({ currency: value1.language })
             }
         })
+        
+        let jobIdDump = `key@${this.props.navigation.state.params.jobDetails.id}`;
+        AsyncStorage.removeItem(jobIdDump, (err) => console.log('finished', err));
+        AsyncStorage.getItem(jobIdDump).then((value) => {
+            
+            if (value) {
+                const value1 = JSON.parse(value);
+                this.setState({ 
+                    mapTrackingStatus: value1.buttonStatus,
+                    bottomButtonStatus: 'timing',
+                    job_start_time: value1.job_start_time,
+                    start_time_full: value1.start_time_full,
+                })
+
+                let start_time = moment(new Date(value1.start_time_full));
+                let end_time = moment(new Date());
+                let minuteDiff = end_time.diff(start_time, 'millisecond');
+                
+                const progressSpeed = (this.props.navigation.state.params.jobDetails.service.time_interval / 100) * 60000;
+                let earlierPercent = Number(minuteDiff / progressSpeed) - 1;
+                this.setState({ workProgressTime: earlierPercent })
+                const progressInterval = setInterval(() => {;
+                    this.setState({ workProgressTime: this.state.workProgressTime + 1 });
+                }, progressSpeed);
+                this.refs.ScrollViewComplete.scrollToEnd();
+            }else{
+                if(this.props.navigation.state.params.jobDetails.status === 'ACCEPTED'){
+                    this.refs.ScrollViewEnd.scrollToEnd();
+                }else if(this.props.navigation.state.params.jobDetails.status === 'ONMYWAY'){
+                    this.refs.ScrollViewStart.scrollToEnd();
+                    this.setState({ markerStatus: false });
+                }else if(this.props.navigation.state.params.jobDetails.status === 'JOBSTARTED'){
+                    this.refs.ScrollViewComplete.scrollToEnd();
+
+                    api.post('Jobs/getJobDetailsById', {
+                        "id": this.props.navigation.state.params.jobDetails.id,
+                        "workerId": this.props.auth.data.id
+                    }).then((response) => {
+                        this.setState({ remoteJobDetails: response.response.message[0] });
+                        
+                        let start_time1 = moment(this.state.remoteJobDetails.jobStartTime);
+                        let start_time_full1 = moment(this.state.remoteJobDetails.jobEndTime).format('LT');
+                        let job_start_time1 = moment(this.state.remoteJobDetails.jobStartTime).format('LT');
+                        let end_time1 = moment(new Date());
+                        let minuteDiff = end_time1.diff(start_time1, 'millisecond');
+                        
+                        const progressSpeed = (this.props.navigation.state.params.jobDetails.service.time_interval / 100) * 60000;
+                        let earlierPercent = Number(minuteDiff / progressSpeed) - 1;
+                        this.setState({ 
+                            workProgressTime: earlierPercent,
+                            job_start_time: job_start_time1,
+                            job_end_time: start_time_full1,
+                        });
+                        const progressInterval = setInterval(() => {;
+                            this.setState({ workProgressTime: this.state.workProgressTime + 1 });
+                        }, progressSpeed);
+
+                    }).catch((err) => {
+            
+                    })
+                }
+                // if (this.refs && this.refs.ScrollViewEnd) {
+                //     this.swipeButtonReady();
+                // }
+            }
+        }).catch((err) => {
+            console.log('did catch', err)
+        })
+
+        if(this.state.bottomButtonStatus === 'way'){
+            if (this.refs && this.refs.ScrollViewEnd) {
+                // this.swipeButtonReady();
+                // //this.refs.ScrollViewEnd.scrollToEnd();
+                // setTimeout(() => {
+                //     this.refs.ScrollViewComplete.scrollToEnd();
+                //     //this.refs.ScrollViewEnd.scrollToEnd();
+                // }, 10);
+            }
+        }
+
+        api.post('Jobs/getJobDetailsById', {
+            "id": this.props.navigation.state.params.jobDetails.id,
+            "workerId": this.props.auth.data.id
+        }).then((response) => {
+            this.setState({ remoteJobDetails: response.response.message[0] });
+            console.log('did job de', response);
+            if(this.state.remoteJobDetails.status === 'ONMYWAY'){
+                this.refs.ScrollViewStart.scrollToEnd();
+            }else if(this.state.remoteJobDetails.status === 'JOBSTARTED'){
+                this.refs.ScrollViewComplete.scrollToEnd();
+            }else if(this.state.remoteJobDetails.status === 'ACCEPTED'){
+                this.setState({ jobTrackingStatus:'Krew Assigned'});
+            }else if(this.state.remoteJobDetails.status === 'STARTED'){
+                this.setState({ jobTrackingStatus:'Job Requested'});
+            }
+        }).catch((err) => {
+
+        })
+        
         //this.updateProgressTime();
     }
     swipeButtonReady(){
@@ -169,8 +573,13 @@ class JobDetails extends Component {
         let serviceId = this.props.navigation.state.params.jobDetails.serviceId;
         this.props.declineJob(jobId, workerId, serviceId).then(res => {
             //this.jobdata();
-            this.setState({
-                loader: false              
+            api.post('Jobs/getJobDetailsById', {
+                "id": this.props.navigation.state.params.jobDetails.id,
+                "workerId": this.props.auth.data.id
+            }).then((response) => {
+                this.setState({ remoteJobDetails: response.response.message[0], loader: false });
+            }).catch((err) => {
+    
             })
         }).catch(err => {
             console.log(err);
@@ -184,14 +593,21 @@ class JobDetails extends Component {
     }
     acceptJob() {
         this.setState({
-            loader: true
+            loader: true,
+            bottomButtonStatus: 'way'
         })
         let jobId = this.props.navigation.state.params.jobDetails.id;
         let workerId = this.props.auth.data.id;
-        this.props.acceptJob(jobId, workerId).then(res => {
-            //this.jobdata();
-            this.setState({
-                loader: false
+        let customerId=this.state.remoteJobDetails.customerId;
+        this.props.acceptJob(jobId, workerId, customerId).then(res => {
+            api.post('Jobs/getJobDetailsById', {
+                "id": this.props.navigation.state.params.jobDetails.id,
+                "workerId": this.props.auth.data.id
+            }).then((response) => {
+                this.setState({ remoteJobDetails: response.response.message[0], loader: false, jobTrackingStatus: 'Krew Assigned' });
+                this.swipeButtonReady();
+            }).catch((err) => {
+    
             })
         }).catch(err => {
             console.log(err);
@@ -202,32 +618,36 @@ class JobDetails extends Component {
         let newJobDetails = this.props.navigation.state.params.jobDetails;
         newJobDetails.status = "ACCEPTED"
         this.props.navigation.setParams({ jobDetails: newJobDetails });
-        this.swipeButtonReady();
     }
 
     renderTracking(){
         this.setState({ markerStatus: false, jobCancelbuttonStatus: false });
-        navigator.geolocation.getCurrentPosition((position) => {
-            console.log('position', position);
-            this.setState({
-                latitudeUser: position.coords.latitude,
-                longitudeUser: position.coords.longitude,
-                errorLocationUser: null,
-            });
-            },
-            (error) => this.setState({ errorLocation: error.message }),
-            //{ enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 },
-        );
+        // navigator.geolocation.getCurrentPosition((position) => {
+        //     this.setState({
+        //         latitudeUser: position.coords.latitude,
+        //         longitudeUser: position.coords.longitude,
+        //         errorLocationUser: null,
+        //     });
+        //     },
+        //     (error) => this.setState({ errorLocation: error.message }),
+        //     //{ enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 },
+        // );
        
     }
-
     componentWillMount(){
-        console.log('avable jobs');
-        console.log(this.props.availableJobs.data.response);
+        // console.log(this.props.navigation.state.params.jobDetails);
+
     }
 
     render() {
-        let JobDetailsData = this.props.navigation.state.params.jobDetails;
+        let JobDetailsData;
+        if(this.state.remoteJobDetails !== ''){
+            JobDetailsData = this.state.remoteJobDetails;
+        }else{
+            JobDetailsData = this.props.navigation.state.params.jobDetails;
+        }
+
+        
         let region = {
             latitude: this.props.navigation.state.params.jobDetails.userLocation.latitude ? Number(this.props.navigation.state.params.jobDetails.userLocation.latitude) : 37.78825,
             longitude: this.props.navigation.state.params.jobDetails.userLocation.longitude ? Number(this.props.navigation.state.params.jobDetails.userLocation.longitude) : -122.4324,
@@ -238,7 +658,6 @@ class JobDetails extends Component {
         let origin = {latitude: region.latitude, longitude: region.longitude};
         let destination = {latitude: this.state.latitudeUser, longitude: this.state.longitudeUser};
         let GOOGLE_MAPS_APIKEY = 'AIzaSyCya136InrAdTM3EkhM9hryzbCcfTUu7UU';
-        console.log('before return', origin, destination,);
         return (
             <Container style={{ backgroundColor: '#fff' }}>
                 <StatusBar
@@ -260,7 +679,8 @@ class JobDetails extends Component {
                         
                     */}
                     {
-                        this.state.mapTrackingStatus === 'map' ?
+                        (JobDetailsData.status === 'ACCEPTED' || JobDetailsData.status === 'ONMYWAY') ?
+                        
                         /* Time tracking end */
                         <View>
                             <MapView
@@ -269,15 +689,14 @@ class JobDetails extends Component {
                                 zoomEnabled
                                 zoomControlEnabled
                                 maxZoomLevel={20}
+                                //minZoomLevel={14}
                                 region={ region }
                                 onRegionChangeComplete={this.onRegionChange}
                                 onRegionChange={this.onLocationChange}
                             >   
+                          
                             {
-                                console.log('this state', this.state)
-                            }
-                            {
-                                this.state.longitudeUser !== '' ? 
+                                (this.state.longitudeUser !== '' && JobDetailsData.status === 'ONMYWAY') ? 
                                 <MapViewDirections
                                     origin={origin}
                                     destination={destination}
@@ -371,7 +790,7 @@ class JobDetails extends Component {
                         </View>
                         /* Time tracking map end */
                         : 
-                        this.state.mapTrackingStatus === 'timing' ?
+                        JobDetailsData.status === 'JOBSTARTED' ?
                             <View style={{ flex: 1, flexDirection: 'row', padding: 30 }}>
                                 <View style={{ flex: 2, flexDirection: 'column' }}>
                                     <View style={{ flex: 2 }}>
@@ -395,21 +814,47 @@ class JobDetails extends Component {
                                 </View>
                             </View>
                         : 
-                        this.state.mapTrackingStatus === 'rating' ?
-                            <View style={{ flex: 1, flexDirection: 'row', padding: 100 }}>
-
+                        JobDetailsData.status === 'COMPLETED' ?
+                            <View>
+                                <ImageBackground source={{ uri: JobDetailsData.service.cover_image }} style={{ alignItems: 'center', justifyContent: 'flex-start', width: win, height: (win * 0.62), paddingTop: 25 }}>
+                                    <View style={{ alignItems: 'center' }}> 
+                                        <Text>{I18n.t('rate_your_customer')}</Text>
+                                    </View> 
+                                </ImageBackground> 
+                                <Image source={require('../../../img/icon17.png')} style={{ width: win, height: (win* 0.1), marginTop: -(win* 0.1) }} />
                             </View>
-                        : console.log()
+                        : 
+                        JobDetailsData.status==='STARTED' ?
+                            
+                        JobDetailsData.service.banner_image ?  
+                        <View>
+                            <ImageBackground source={{ uri: JobDetailsData.service.cover_image }} style={{ alignItems: 'center', justifyContent: 'flex-start', width: win, height: (win * 0.62), paddingTop: 25 }}>
+                                <View style={{ alignItems: 'center' }}> 
+                                    <Text style={{ fontWeight: '700', fontSize: 18 }}>{JobDetailsData.service.name}</Text> 
+                                    <Text>{this.state.currency} {JobDetailsData.price}</Text> 
+                                </View> 
+                            </ImageBackground> 
+                            <Image source={require('../../../img/icon17.png')} style={{ width: win, height: (win* 0.1), marginTop: -(win* 0.1) }} />
+                         </View>
+                        :  
+                            <View>
+                                <ImageBackground source={require('../../../img/bg-6.png')} style={{ alignItems: 'center', justifyContent: 'flex-start', width: win, height: (win * 0.62), paddingTop: 25 }}> 
+                                    <View style={{ alignItems: 'center' }}> 
+                                        <Text style={{ fontWeight: '700', fontSize: 18 }}>{JobDetailsData.service.name}</Text> 
+                                        <Text>{this.state.currency} {JobDetailsData.price}</Text> 
+                                    </View> 
+                                </ImageBackground> 
+                                <Image source={require('../../../img/icon17.png')} style={{ width: win, height: (win* 0.1), marginTop: -(win* 0.1) }} />
+                            </View>
+                        :console.log()
                     }
-                    
-                    
-                   
+
                     <View style={styles.jobItemWarp}>
                         <View style={{ width: 30, alignItems: 'center' }}>
                             <Ionicons name="ios-man-outline" style={styles.jobItemIconIonicons} />
                         </View>
                         <Text style={styles.jobItemName}>{I18n.t('job_tracker')}</Text>
-                        <Text style={styles.jobItemValue}>{this.state.jobTracker}</Text>
+                        <Text style={styles.jobItemValue}>{this.state.jobTrackingStatus}</Text>
                     </View>
                     <View style={styles.jobItemWarp}>
                         <View style={{ width: 30, alignItems: 'center'  }}>
@@ -420,23 +865,23 @@ class JobDetails extends Component {
                     <View style={styles.jobItemWarp}>
                         <View>
                         {
-                            JobDetailsData.customer.image == "" ? (
-                                    <Image source={require('../../../img/avatar.png')} style={{ height: 50, width: 50, borderRadius: 45, }} />
-                                ) : (<Image source={{ uri: JobDetailsData.customer.image}} style={{ height: 50, width: 50, borderRadius: 45, }} />)
-
-                        }
-                        
-                           
+                            JobDetailsData.customer ?
+                                JobDetailsData.customer.image == "" ? (
+                                        <Image source={require('../../../img/avatar.png')} style={{ height: 50, width: 50, borderRadius: 45, }} />
+                                    ) : (<Image source={{ uri: JobDetailsData.customer.image}} style={{ height: 50, width: 50, borderRadius: 45, }} />)
+                            : console.log()
+                            }
+                      
                         </View>
                         <View style={{ paddingLeft: 10, flex: 1 }}>
-                            <Text style={{ fontSize: 16, fontWeight: '700' }}>{JobDetailsData.customer.name}</Text>
+                            <Text style={{ fontSize: 16, fontWeight: '700' }}>{JobDetailsData.customer ? JobDetailsData.customer.name : console.log()}</Text>
                             <TouchableOpacity style={{ width: 90 }} onPress={this._toggleModal}>
                                 <StarRating
                                     disabled={false}
                                     maxStars={5}
                                     starSize ={14}
                                     halfStarEnabled ={true}
-                                    rating={this.state.starCount}
+                                    rating={Number(JobDetailsData.customerRating) === 0 ? this.state.starCount : Number(JobDetailsData.customerRating) }
                                     fullStarColor='#81cdc7'
                                     selectedStar={this._toggleModal}
                                 />
@@ -483,6 +928,19 @@ class JobDetails extends Component {
                         <Text style={styles.jobItemValue}>{JobDetailsData.payment}</Text>
                     </View>
                     {
+                        JobDetailsData.status === 'COMPLETED' ?
+                            <View style={styles.jobItemWarp}>
+                                <View style={{ width: 30, alignItems: 'center' }}>
+                                    <FontAwesome name="money" style={styles.jobItemIcon} />
+                                </View>
+                                <Text style={styles.jobItemName}>{I18n.t('total_bill')}</Text>
+                                <Text style={styles.jobItemValue}>{this.state.currency} {JobDetailsData.price}</Text>
+                            </View>
+                        : console.log()
+                    }
+                    
+                    {/* bala  : start*/}
+                    {
                         JobDetailsData.status == 'STARTED' ? (
                             <View style={{ flexDirection: 'row', flex: 1 }}>
                                 <TouchableOpacity style={{ flex: 1, backgroundColor: 'red', alignItems: 'center', height: 50, justifyContent: 'center' }} onPress={() => this.declineJob()}>
@@ -499,87 +957,118 @@ class JobDetails extends Component {
                             
                         </View>)
                     }
-                    
+                    {
+                        JobDetailsData.status=='DECLINED' ?
+                            <View style={{ alignSelf: 'center', flex: 1 }}>
+                                <Button style={{ backgroundColor: '#E86F49', flex: 1 }} >
+                                    <Text>You have declined this job</Text>
+                                </Button>
+                            </View>
+                        : console.log()
+                    }
+                    {
+                        JobDetailsData.status === 'ONMYWAY' ?
+                        <View>
+                            <View>
+                                {/* on click to start job */}
+                                <ScrollView
+                                    ref='ScrollViewStart'
+                                    pagingEnabled={true}
+                                    horizontal={true}
+                                    showsHorizontalScrollIndicator={false}
+                                    scrollEventThrottle={400}
+                                    onScrollEndDrag={() => this.StartJobSlide()}
+                                    style={{ width: '100%' }}>
+                                    <View style={{ width: win, backgroundColor: 'white', paddingLeft: 10, paddingRight: 10 }}>
+                                        <TouchableOpacity
+                                            style={{ flex: 1, alignItems: 'center', backgroundColor: '#81cdc7', justifyContent: 'center', marginTop: 3, borderRadius: 5 }}
+                                            activeOpacity={1}
+                                            onPress={() => this.onStartPress()}
+                                        >
+                                            <Text style={{ color: '#fff' }}>{I18n.t('start_job')}</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View style={{ width: win, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderBottomColor: '#ccc', borderBottomWidth: 1 }}>
+                                        <View style={{ backgroundColor: '#81cdc7', paddingLeft: 10, paddingRight: 10 }}>
+                                            <FontAwesome name="angle-right" style={{ color: '#fff', fontSize: 40 }} />
+                                        </View>
+                                        <View style={{ flex: 1, paddingLeft: 15 }}>
+                                            <Text>{I18n.t('slide_to_click_start_job')}</Text>
+                                        </View>
+                                    </View>
+                                
+                                </ScrollView>
+                                {/* on click to start job end */}
+                            </View> 
+                        </View>   
+                        : console.log()
+                    }
+                     {
+                        JobDetailsData.status === 'JOBSTARTED' ?
+                            <View>
+                                <View>
+                                    {/* on click to start */}
+                                    <ScrollView
+                                        ref='ScrollViewComplete'
+                                        pagingEnabled={true}
+                                        horizontal={true}
+                                        showsHorizontalScrollIndicator={false}
+                                        scrollEventThrottle={400}
+                                        onScrollEndDrag={() => this.CompleteJobSlide()}
+                                        style={{ width: '100%' }}>
+                                        <View style={{ width: win, backgroundColor: 'white', paddingLeft: 10, paddingRight: 10 }}>
+                                            <TouchableOpacity
+                                                style={{ flex: 1, alignItems: 'center', backgroundColor: '#81cdc7', justifyContent: 'center', marginTop: 3, borderRadius: 5 }}
+                                                activeOpacity={1}
+                                                onPress={() => this.onCompletePress()}
+                                            >
+                                                <Text style={{ color: '#fff' }}>{I18n.t('job_completed')}</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                        <View style={{ width: win, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderBottomColor: '#ccc', borderBottomWidth: 1 }}>
+                                            <View style={{ backgroundColor: '#81cdc7', paddingLeft: 10, paddingRight: 10 }}>
+                                                <FontAwesome name="angle-right" style={{ color: '#fff', fontSize: 40 }} />
+                                            </View>
+                                            <View style={{ flex: 1, paddingLeft: 15 }}>
+                                                <Text>{I18n.t('slide_to_click_compelte_job')}</Text>
+                                            </View>
+                                        </View>
+                                    
+                                    </ScrollView>
+                                    {/* on click to end */}
+                                </View> 
+                            </View>  
+                        : console.log()
+                    }
                     {
                         JobDetailsData.status=='ACCEPTED' ? 
-                            (
-                            <View>
-                                {
-                                    this.state.bottomButtonStatus === 'way' ?
-                                    <View>
+                        
+                            this.props.auth.data.id === JobDetailsData.workerId ?
+                                (
+                                <View>
+                                    {
+                                        //this.state.bottomButtonStatus === 'way' ?
                                         <View>
-
-                                            {/* on my way slider start */}
-
-                                            <ScrollView
-                                                ref='ScrollViewEnd'
-                                                pagingEnabled={true}
-                                                horizontal={true}
-                                                showsHorizontalScrollIndicator={false}
-                                                scrollEventThrottle={400}
-                                                onScrollEndDrag={() => this.renderTracking()}
-                                                style={{ width: '100%' }}>
-                                                <View style={{ width: win, backgroundColor: 'white', paddingLeft: 10, paddingRight: 10 }}>
-                                                    <TouchableOpacity
-                                                        style={{ flex: 1, alignItems: 'center', backgroundColor: '#81cdc7', justifyContent: 'center', marginTop: 3, borderRadius: 5 }}
-                                                        activeOpacity={1}
-                                                        onPress={() => this.onMyWayPress()}
-                                                    >
-                                                        <Text style={{ color: '#fff' }}>{I18n.t('on_my_way')}</Text>
-                                                    </TouchableOpacity>
-                                                </View>
-                                                <View style={{ width: win, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderBottomColor: '#ccc', borderBottomWidth: 1 }}>
-                                                    <View style={{ backgroundColor: '#81cdc7', paddingLeft: 10, paddingRight: 10 }}>
-                                                        <FontAwesome name="angle-right" style={{ color: '#fff', fontSize: 40 }} />
-                                                    </View>
-                                                    <View style={{ flex: 1, paddingLeft: 15 }}>
-                                                        <Text>{I18n.t('slide_to_click_on_my_way')}</Text>
-                                                    </View>
-                                                </View>
-                                            
-                                            </ScrollView>
-
-                                            {/* on my way slider end */}
-
-                                        </View>
-
-                                    {/* cancel button start */}
-
-                                    <View style={styles.jobItemWarp}>
-                                        { this.state.jobCancelbuttonStatus === true ?
-                                            <TouchableOpacity 
-                                                style={{ flex: 1, backgroundColor: '#81cdc7', alignItems: 'center', paddingTop: 10, paddingBottom: 10, borderRadius: 4 }} 
-                                                onPress={() => this.setState({ jobCancelModal: true })}
-                                            >
-                                                <Text style={{ color: '#fff' }}>{I18n.t('cancel_job_button')}</Text>
-                                            </TouchableOpacity>
-                                        : console.log() }
-                                    </View>
-
-                                    {/* cancel button end */}
-
-                                    </View>
-                                    : this.state.bottomButtonStatus === 'start' ?
-                                        <View>
+                                            {
+                                                console.log('re rendered call', this.state)
+                                            }
                                             <View>
-
-                                                {/* on click to start */}
-
+                                                {/* on my way slider start */}
                                                 <ScrollView
-                                                    ref='ScrollViewStart'
+                                                    ref='ScrollViewEnd'
                                                     pagingEnabled={true}
                                                     horizontal={true}
                                                     showsHorizontalScrollIndicator={false}
                                                     scrollEventThrottle={400}
-                                                    onScrollEndDrag={() => this.StartJobSlide()}
+                                                    onScrollEndDrag={() => this.renderTracking()}
                                                     style={{ width: '100%' }}>
                                                     <View style={{ width: win, backgroundColor: 'white', paddingLeft: 10, paddingRight: 10 }}>
                                                         <TouchableOpacity
                                                             style={{ flex: 1, alignItems: 'center', backgroundColor: '#81cdc7', justifyContent: 'center', marginTop: 3, borderRadius: 5 }}
                                                             activeOpacity={1}
-                                                            onPress={() => this.onStartPress()}
+                                                            onPress={() => this.onMyWayPress()}
                                                         >
-                                                            <Text style={{ color: '#fff' }}>{I18n.t('start_job')}</Text>
+                                                            <Text style={{ color: '#fff' }}>{I18n.t('on_my_way')}</Text>
                                                         </TouchableOpacity>
                                                     </View>
                                                     <View style={{ width: win, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderBottomColor: '#ccc', borderBottomWidth: 1 }}>
@@ -587,66 +1076,43 @@ class JobDetails extends Component {
                                                             <FontAwesome name="angle-right" style={{ color: '#fff', fontSize: 40 }} />
                                                         </View>
                                                         <View style={{ flex: 1, paddingLeft: 15 }}>
-                                                            <Text>{I18n.t('slide_to_click_start_job')}</Text>
+                                                            <Text>{I18n.t('slide_to_click_on_my_way')}</Text>
                                                         </View>
                                                     </View>
                                                 
                                                 </ScrollView>
-
-                                                {/* on click to end */}
-
-                                            </View> 
-                                        </View>    
-                                    :
-                                    <View>
-                                        <View>
-
-                                            {/* on click to start */}
-
-                                            <ScrollView
-                                                ref='ScrollViewComplete'
-                                                pagingEnabled={true}
-                                                horizontal={true}
-                                                showsHorizontalScrollIndicator={false}
-                                                scrollEventThrottle={400}
-                                                onScrollEndDrag={() => this.CompleteJobSlide()}
-                                                style={{ width: '100%' }}>
-                                                <View style={{ width: win, backgroundColor: 'white', paddingLeft: 10, paddingRight: 10 }}>
-                                                    <TouchableOpacity
-                                                        style={{ flex: 1, alignItems: 'center', backgroundColor: '#81cdc7', justifyContent: 'center', marginTop: 3, borderRadius: 5 }}
-                                                        activeOpacity={1}
-                                                        onPress={() => this.onCompletePress()}
-                                                    >
-                                                        <Text style={{ color: '#fff' }}>{I18n.t('job_completed')}</Text>
-                                                    </TouchableOpacity>
-                                                </View>
-                                                <View style={{ width: win, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderBottomColor: '#ccc', borderBottomWidth: 1 }}>
-                                                    <View style={{ backgroundColor: '#81cdc7', paddingLeft: 10, paddingRight: 10 }}>
-                                                        <FontAwesome name="angle-right" style={{ color: '#fff', fontSize: 40 }} />
-                                                    </View>
-                                                    <View style={{ flex: 1, paddingLeft: 15 }}>
-                                                        <Text>{I18n.t('slide_to_click_compelte_job')}</Text>
-                                                    </View>
-                                                </View>
-                                            
-                                            </ScrollView>
-
-                                            {/* on click to end */}
-
-                                        </View> 
-                                    </View>    
-                                }
-                                
-                            </View>
-                        ): (<View>
-                            
-                        </View>)
+                                                {/* on my way slider end */}
+                                            </View>
+                                        {/* cancel button start */}
+                                        <View style={styles.jobItemWarp}>
+                                            { this.state.jobCancelbuttonStatus === true ?
+                                                <TouchableOpacity 
+                                                    style={{ flex: 1, backgroundColor: '#81cdc7', alignItems: 'center', paddingTop: 10, paddingBottom: 10, borderRadius: 4 }} 
+                                                    onPress={() => this.setState({ jobCancelModal: true })}
+                                                >
+                                                    <Text style={{ color: '#fff' }}>{I18n.t('cancel_job_button')}</Text>
+                                                </TouchableOpacity>
+                                            : console.log() }
+                                        </View>
+                                        {/* cancel button end */}
+                                        </View>
+  
+                                    }
+                                    
+                                </View>
+                                ) 
+                            : (<View style={{ alignSelf: 'center', flex: 1 }}>
+                                    <Button style={{ backgroundColor: '#E86F49', flex: 1 }} >
+                                        <Text>This job is accepted</Text>
+                                    </Button>
+                                </View>)
+                        : console.log()
                        
                 }
+                    {/* bala  : end*/}
                 </Content>
 
                 {/* Modal Job Cancel start */}
-
                 <Modal isVisible={this.state.jobCancelModal}>
                     <TouchableOpacity 
                         transparent style={{ flex: 1, justifyContent: 'center', display: 'flex', width: '100%' }} 
@@ -689,13 +1155,8 @@ class JobDetails extends Component {
 
                     </TouchableOpacity>
                 </Modal>
-
-
                 {/* Modal Job Cancel end */}
-
                 {/* Modal rating start */}
-
-
                 <Modal isVisible={this.state.isModalVisible}>
                     <View  style={{ flex: 1 , justifyContent: 'center'}}>
                         <TouchableOpacity style={{ position: 'absolute', top: 0, right: 0, zIndex: 99999, }} onPress={this._toggleModal}>
@@ -710,7 +1171,7 @@ class JobDetails extends Component {
                                     maxStars={5}
                                     starSize={30}
                                     halfStarEnabled={true}
-                                    rating={this.state.starCount}
+                                    rating={Number(JobDetailsData.customerRating) === 0 ? this.state.starCount : Number(JobDetailsData.customerRating) }
                                     fullStarColor='#81cdc7'
                                     selectedStar={(rating) => this.onStarRatingPress(rating)}
                                 />
@@ -718,9 +1179,8 @@ class JobDetails extends Component {
                         </View>
                     </View>
                 </Modal>
-
-                
                 {/* Modal rating end */}
+                
                 <FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
             </Container>
         );
@@ -741,7 +1201,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         availablejobs: (id) => dispatch(availablejobs(id)), 
-        acceptJob: (jobId, workerId) => dispatch(acceptJob(jobId, workerId)),
+        acceptJob: (jobId, workerId, customerId) => dispatch(acceptJob(jobId, workerId, customerId)),
         declineJob: (jobId, workerId, serviceId) => dispatch(declineJob(jobId, workerId, serviceId)),
     }
 }

@@ -22,9 +22,9 @@ class jobApi {
 		})
 	}
 
-	static acceptJob(jobId, workerId) {
+	static acceptJob(jobId, workerId,customerId) {
 		return new Promise((resolve, reject) => {
-			api.post('Jobs/acceptJob', { "id": jobId, "status": "ACCEPTED", "workerId": workerId }).then(responseJson => {
+			api.post('Jobs/acceptJob', { "id": jobId, "status": "ACCEPTED", "workerId": workerId , "customerId":customerId}).then(responseJson => {
 				resolve(responseJson)
 			}).catch(err => {
 				reject(err)
