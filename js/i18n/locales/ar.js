@@ -85,4 +85,5 @@ export default {
   add_timing:'إضافة / تحرير التوقيت',
   total_bill: 'إجمالي الفاتورة',
   rate_your_customer: 'يرجى تقييم عميلك',
+  myCurrency: 'عملتي'
 };

@@ -55,6 +55,7 @@ componentDidMount(){
 
 }
 
+
 // sendRemote(notif) {
 //   FCM.presentLocalNotification({
 //     id: new Date().valueOf().toString(),
@@ -83,6 +84,7 @@ componentDidMount(){
 //     // }])
 //   });
 // }
+
 
   render() {
     return <App />;

@@ -66,5 +66,15 @@ export default {
     jobItemIcon: { color: '#81cdc7', fontSize: 20 },
     jobItemName: { flex: 1, fontSize: 14, paddingLeft: 10 },
     jobItemValue: { fontSize: 14, color: '#ccc', paddingLeft: 10 },
-    jobItemValueDateandTime: { fontSize: 12 }
+    jobItemValueDateandTime: { fontSize: 12 },
+
+    // total bill item
+    totalBillitem: { flexDirection: 'row', paddingTop: 15, paddingBottom: 15, paddingLeft: 10, paddingRight: 10,  alignItems: 'center',  borderBottomColor: '#ccc',  borderBottomWidth: 1, backgroundColor: '#fff'  },
+    totalImage: { width: 20, height: 20 },
+    text1: { paddingLeft: 8 },
+    text2: { width: '100%', textAlign: 'right', paddingRight: 10 },
+    price: { width: 70 },
+    priceText: { fontSize: 14 }
+
+
 };

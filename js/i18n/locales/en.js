@@ -88,4 +88,5 @@ export default {
   no_location_found: 'No location found',
   total_bill: 'Total Bill',
   rate_your_customer: 'Please rate your customer',
+  myCurrency: 'My Currency'
 };
