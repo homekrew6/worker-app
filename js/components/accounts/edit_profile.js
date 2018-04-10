@@ -133,8 +133,8 @@ class EditProfile extends Component {
                 if (response.status == 201) {
                     this.setState({ uploadButton: true });
                     this.setState({ uploaded: true });
-
-                    // this.props.setProfilePic(response.body.postResponse.location);
+                     //this.props.setProfilePic(response.body.postResponse.location);
+                    
                     this.setState({ image: response.body.postResponse.location })
                     this.setState({ visible: false });
                 }
@@ -327,10 +327,10 @@ class EditProfile extends Component {
                     <View style={styles.editPflHdr}>
                         <View style={styles.editPflHdrWrap}>
                             {
-                                this.props.auth.data.image ? (
+                                this.state.image ? (
                                     <Thumbnail source={{ uri: this.state.image }} style={styles.editPflHdrThumbnail} />
                                 ) : (
-                                        <Thumbnail source={profileImage} style={styles.editPflHdrThumbnail} />
+                                    <Thumbnail source={profileImage} style={styles.editPflHdrThumbnail} />
                                     )
                             }
 

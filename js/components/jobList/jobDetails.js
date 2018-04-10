@@ -6,6 +6,8 @@ import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Ite
 import Ionicons from 'react-native-vector-icons/Ionicons'; 
 import moment from 'moment';
 import * as firebase from 'firebase';
+import 'moment-timezone';
+import DeviceInfo from 'react-native-device-info';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 //import CircularSlider from 'react-native-circular-slider';
 import MapViewDirections from 'react-native-maps-directions';
@@ -86,7 +88,12 @@ class JobDetails extends Component {
         }
 
     }
- 
+    getLocalTimeFormat(gmtTime){
+        const gmtToDeiveTimeObj = moment.tz(gmtTime, "Europe/London");
+        const timezoneDevice = DeviceInfo.getTimezone();
+        const gmtToDeiveTime = gmtToDeiveTimeObj.clone().tz(timezoneDevice).format('ddd DD-MMM-YYYY hh:mm A');
+        return gmtToDeiveTime;
+    }
     _toggleModal = () =>
         this.setState({ isModalVisible: !this.state.isModalVisible });
 
@@ -859,7 +866,7 @@ class JobDetails extends Component {
                             <MaterialIcons name="date-range" style={styles.jobItemIcon} />
                         </View>
                         <Text style={styles.jobItemName}>{I18n.t('date_timing')}</Text>
-                        <Text style={[styles.jobItemValue, styles.jobItemValueDateandTime]}>{JobDetailsData.postedDate}</Text>
+                        <Text style={[styles.jobItemValue, styles.jobItemValueDateandTime]}>{this.getLocalTimeFormat(JobDetailsData.postedDate)}</Text>
                     </View>
                     <View style={styles.jobItemWarp}>
                         <View style={{ width: 30, alignItems: 'center'  }}>
