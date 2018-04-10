@@ -12,10 +12,12 @@ export default {
 
     // header
 
-    headIcon: { fontSize: 22, color: '#71beb8', color: '#81cdc7' },
+    headIcon: { fontSize: 22, color: '#81cdc7' },
     headBody:{ alignItems: 'center' },
     headCenter:{ color: '#1e3768', textAlign: 'center' },
     headerWarp: { backgroundColor: '#f3f3f3' },
+    appHdr2: { backgroundColor: '#81cdc7' },
+    headIcon2: { fontSize: 22, color: '#fff' },
 
 
     container: { flex: 1 },

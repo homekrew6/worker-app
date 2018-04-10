@@ -82,7 +82,8 @@ class JobDetails extends Component {
             remoteJobDetails: '',
             currency:'USD',
             itemsRef: '',
-            jobTrackingStatus: ''
+            jobTrackingStatus: '',
+            callChat: true,
         }
 
         
@@ -407,36 +408,14 @@ class JobDetails extends Component {
         })
     }
 
-
+    MyChat(JobDetailsData){
+        this.props.navigation.navigate('Chat', { workerDetails: JobDetailsData });
+        this.setState({ callChat: true })
+        console.log(JobDetailsData);
+    }
 
     componentDidMount() {
-        
-
-        // setInterval(() => {
-        //     firebase.database().ref().child('making').push({ "test": "jd", "gdg": "5632tf" });
-        
-        //     firebase.database().ref().child('tracking').push(
-        //         { "jobId": "6", "customerId": "3", "workerId": "9", "lat": 22.52, "lng": 48.254, "status": "ONMYWAY" }
-        //     ).then(() => {
-        //         Alert.alert('new data');
-        //     }).catch((error)=>{
-        //         console.log(error);
-        //         debugger;
-        //     });
-        //   }, 10000);
-
-        // setTimeout(() => {
-        //     firebase.database().ref().child('making').push({ "test": "jd", "gdg": "5632tf" });
-        
-        //     firebase.database().ref().child('tracking').push(
-        //         { "jobId": "6", "customerId": "3", "workerId": "9", "lat": 22.52, "lng": 48.254, "status": "ONMYWAY" }
-        //     ).then(() => {
-        //         Alert.alert('new data');
-        //     }).catch((error)=>{
-        //         console.log(error);
-        //         debugger;
-        //     });
-        //   }, 5000);
+    
         
       
        navigator.geolocation.getCurrentPosition((position) => {
@@ -446,8 +425,7 @@ class JobDetails extends Component {
                 errorLocationUser: null,
             });
             },
-            (error) => this.setState({ errorLocation: error.message }),
-            //{ enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 },
+            (error) => this.setState({ errorLocation: error.message })
         );
 
         AsyncStorage.getItem("currency").then((value) => {
@@ -862,36 +840,51 @@ class JobDetails extends Component {
                         </View>
                         <Text style={styles.jobItemName}>{JobDetailsData.userLocation.buildingName}, {JobDetailsData.userLocation.name}, {JobDetailsData.userLocation.villa}</Text>
                     </View>
-                    <View style={styles.jobItemWarp}>
-                        <View>
-                        {
-                            JobDetailsData.customer ?
-                                JobDetailsData.customer.image == "" ? (
-                                        <Image source={require('../../../img/avatar.png')} style={{ height: 50, width: 50, borderRadius: 45, }} />
-                                    ) : (<Image source={{ uri: JobDetailsData.customer.image}} style={{ height: 50, width: 50, borderRadius: 45, }} />)
-                            : console.log()
-                            }
-                      
-                        </View>
-                        <View style={{ paddingLeft: 10, flex: 1 }}>
-                            <Text style={{ fontSize: 16, fontWeight: '700' }}>{JobDetailsData.customer ? JobDetailsData.customer.name : console.log()}</Text>
-                            <TouchableOpacity style={{ width: 90 }} onPress={this._toggleModal}>
-                                <StarRating
-                                    disabled={false}
-                                    maxStars={5}
-                                    starSize ={14}
-                                    halfStarEnabled ={true}
-                                    rating={Number(JobDetailsData.customerRating) === 0 ? this.state.starCount : Number(JobDetailsData.customerRating) }
-                                    fullStarColor='#81cdc7'
-                                    selectedStar={this._toggleModal}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                        <TouchableOpacity style={{ alignItems: 'center' }}>
-                            <Image source={require('../../../img/icon/chat-support.png')} style={{ height: 25, width: 25 }} />
-                            <Text style={{ fontSize: 12 }}>{I18n.t('chat_call')}</Text>
-                        </TouchableOpacity>
-                    </View>
+                    {
+                        this.state.callChat ? (
+                            <View style={styles.jobItemWarp}>
+                                <View>
+                                    {
+                                        JobDetailsData.customer ?
+                                            JobDetailsData.customer.image == "" ? (
+                                                <Image source={require('../../../img/avatar.png')} style={{ height: 50, width: 50, borderRadius: 45, }} />
+                                            ) : (<Image source={{ uri: JobDetailsData.customer.image }} style={{ height: 50, width: 50, borderRadius: 45, }} />)
+                                            : console.log()
+                                    }
+
+                                </View>
+                                <View style={{ paddingLeft: 10, flex: 1 }}>
+                                    <Text style={{ fontSize: 16, fontWeight: '700' }}>{JobDetailsData.customer ? JobDetailsData.customer.name : console.log()}</Text>
+                                    <TouchableOpacity style={{ width: 90 }} onPress={this._toggleModal}>
+                                        <StarRating
+                                            disabled={false}
+                                            maxStars={5}
+                                            starSize={14}
+                                            halfStarEnabled={true}
+                                            rating={Number(JobDetailsData.customerRating) === 0 ? this.state.starCount : Number(JobDetailsData.customerRating)}
+                                            fullStarColor='#81cdc7'
+                                            selectedStar={this._toggleModal}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                                <TouchableOpacity style={{ alignItems: 'center' }} onPress={()=> this.setState({ callChat: false })}>
+                                    <Image source={require('../../../img/icon/chat-support.png')} style={{ height: 25, width: 25 }} />
+                                    <Text style={{ fontSize: 12 }}>{I18n.t('chat_call')}</Text>
+                                </TouchableOpacity>
+                            </View>
+                        ): (
+                                <View style={[styles.jobItemWarp, { paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 0 }]}>
+                                    <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', height: 50, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }} onPress={() => this.MyChat(JobDetailsData)}>
+                                        <MaterialIcons name="chat" style={{ fontSize: 18, color: '#fff' }} />
+                                        <Text style={{ color: '#fff' }}>  Chat</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={{ flex: 1, backgroundColor: '#1e3768', height: 50, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+                                        <MaterialIcons name="call" style={{ fontSize: 18, color: '#fff' }} />
+                                        <Text style={{ color: '#fff' }}>Call</Text>
+                                    </TouchableOpacity>
+                                </View>
+                        )
+                    }
                     <View style={styles.jobItemWarp}>
                         <View style={{ width: 30, alignItems: 'center'  }}>
                             <MaterialIcons name="date-range" style={styles.jobItemIcon} />
