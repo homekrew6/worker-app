@@ -2,55 +2,46 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import api from '../../api/index';
-import { NavigationActions } from "react-navigation";
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, FlatList, ScrollView } from "react-native";
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Card, CardItem } from "native-base";
+//import { NavigationActions } from "react-navigation";
+import { View, StatusBar, Dimensions, Alert, TouchableOpacity, FlatList, } from "react-native";
+import { Container, Header, Button, Content, Form, Item, Text, Body, Card, CardItem } from "native-base";
 import styles from './styles';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Calendar } from 'react-native-calendars';
-import { setAvilableDate } from './elements/locationAction';
+//import { setAvilableDate } from './elements/locationAction';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import I18n from '../../i18n/i18n';
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
-class MyListItem extends React.PureComponent {
-    _onPress = () => {
-        this.props.onPressItem(this.props.id);
-    };
+//const deviceHeight = Dimensions.get('window').height;
+//const deviceWidth = Dimensions.get('window').width;
+
+// class MyListItem extends React.PureComponent {
+//     _onPress = () => {
+//         this.props.onPressItem(this.props.id);
+//     };
 
 
-    render() {
-        const textColor = this.props.selected ? "red" : "black";
-        return (
-            <TouchableOpacity onPress={this._onPress}>
-                <View>
-                    <Text style={{ color: textColor }}>
-                        {this.props.title}
-                    </Text>
-                </View>
-            </TouchableOpacity>
-        );
-    }
-}
+//     render() {
+//         const textColor = this.props.selected ? "red" : "black";
+//         return (
+//             <TouchableOpacity onPress={this._onPress}>
+//                 <View>
+//                     <Text style={{ color: textColor }}>
+//                         {this.props.title}
+//                     </Text>
+//                 </View>
+//             </TouchableOpacity>
+//         );
+//     }
+// }
 
 
 class UnavailableDate extends Component {
     constructor(props) {
         super(props);
-        var today = new Date();
-        var dy = parseInt(today.getMonth() + 1);
-        var dm = today.getDate();
-        if (dy < 10) {
-            dy = '0' + dy;
-        }
-        if (dm < 10) {
-            dm = '0' + dm;
-        }
 
-        date = today.getFullYear() + "-" + dy + "-" + dm;
         this.state = {
-            daYSelected: [date],
-            daYSelected2: [date],
+            daYSelected: '',
+            daYSelected2: '',
             satStartDate: '',
             setStartWeek: '',
             satEndDate: '',
@@ -62,63 +53,11 @@ class UnavailableDate extends Component {
             startDay: '',
             visible: false,
             endDay: '',
-            minDate: [today],
-            colectionData: [
-                { key: '1', time: '00:00 AM', isActive: false },
-                { key: '2', time: '01:00 AM', isActive: false },
-                { key: '3', time: '02:00 AM', isActive: false },
-                { key: '4', time: '03:00 AM', isActive: false },
-                { key: '5', time: '04:00 AM', isActive: false },
-                { key: '6', time: '05:00 AM', isActive: false },
-                { key: '7', time: '06:00 AM', isActive: false },
-                { key: '8', time: '07:00 AM', isActive: false },
-                { key: '9', time: '08:00 AM', isActive: false },
-                { key: '10', time: '09:00 AM', isActive: false },
-                { key: '11', time: '10:00 AM', isActive: false },
-                { key: '12', time: '11:00 AM', isActive: false },
-                { key: '13', time: '12:00 AM', isActive: false },
-                { key: '14', time: '01:00 PM', isActive: false },
-                { key: '15', time: '02:00 PM', isActive: false },
-                { key: '16', time: '03:00 PM', isActive: false },
-                { key: '17', time: '04:00 PM', isActive: false },
-                { key: '18', time: '05:00 PM', isActive: false },
-                { key: '19', time: '06:00 PM', isActive: false },
-                { key: '20', time: '07:00 PM', isActive: false },
-                { key: '21', time: '08:00 PM', isActive: false },
-                { key: '22', time: '09:00 PM', isActive: false },
-                { key: '23', time: '10:00 PM', isActive: false },
-                { key: '24', time: '11:00 PM', isActive: false }
-            ],
-
-
-            colectionData2: [
-                { key: '1', time: '00:00 AM', isActive: false },
-                { key: '2', time: '01:00 AM', isActive: false },
-                { key: '3', time: '02:00 AM', isActive: false },
-                { key: '4', time: '03:00 AM', isActive: false },
-                { key: '5', time: '04:00 AM', isActive: false },
-                { key: '6', time: '05:00 AM', isActive: false },
-                { key: '7', time: '06:00 AM', isActive: false },
-                { key: '8', time: '07:00 AM', isActive: false },
-                { key: '9', time: '08:00 AM', isActive: false },
-                { key: '10', time: '09:00 AM', isActive: false },
-                { key: '11', time: '10:00 AM', isActive: false },
-                { key: '12', time: '11:00 AM', isActive: false },
-                { key: '13', time: '12:00 AM', isActive: false },
-                { key: '14', time: '01:00 PM', isActive: false },
-                { key: '15', time: '02:00 PM', isActive: false },
-                { key: '16', time: '03:00 PM', isActive: false },
-                { key: '17', time: '04:00 PM', isActive: false },
-                { key: '18', time: '05:00 PM', isActive: false },
-                { key: '19', time: '06:00 PM', isActive: false },
-                { key: '20', time: '07:00 PM', isActive: false },
-                { key: '21', time: '08:00 PM', isActive: false },
-                { key: '22', time: '09:00 PM', isActive: false },
-                { key: '23', time: '10:00 PM', isActive: false },
-                { key: '24', time: '11:00 PM', isActive: false },
-            ],
-            weekday: ['Sun', 'Mon', 'Tues', 'Wed', 'Thu', 'Fri', 'Sat'],
-            months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+            minDate: '',
+            colectionData: '',
+            colectionData2: '',
+            weekday: '',
+            months: '',
         }
     }
     onDaySelect(day) {
@@ -195,9 +134,82 @@ class UnavailableDate extends Component {
     }
 
     componentDidMount() {
+        //debugger;
+        this.setState({ visible: true });
+        var today = new Date();
+        var dy = parseInt(today.getMonth() + 1);
+        var dm = today.getDate();
+        if (dy < 10) {
+            dy = '0' + dy;
+        }
+        if (dm < 10) {
+            dm = '0' + dm;
+        }
+
+        date = today.getFullYear() + "-" + dy + "-" + dm;
+
+        this.setState({ 
+            weekday: ['Sun', 'Mon', 'Tues', 'Wed', 'Thu', 'Fri', 'Sat'],
+            months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+            minDate: [today],
+            daYSelected: [date],
+            daYSelected2: [date],
+            colectionData: [
+                { key: '1', time: '00:00 AM', isActive: false },
+                { key: '2', time: '01:00 AM', isActive: false },
+                { key: '3', time: '02:00 AM', isActive: false },
+                { key: '4', time: '03:00 AM', isActive: false },
+                { key: '5', time: '04:00 AM', isActive: false },
+                { key: '6', time: '05:00 AM', isActive: false },
+                { key: '7', time: '06:00 AM', isActive: false },
+                { key: '8', time: '07:00 AM', isActive: false },
+                { key: '9', time: '08:00 AM', isActive: false },
+                { key: '10', time: '09:00 AM', isActive: false },
+                { key: '11', time: '10:00 AM', isActive: false },
+                { key: '12', time: '11:00 AM', isActive: false },
+                { key: '13', time: '12:00 AM', isActive: false },
+                { key: '14', time: '01:00 PM', isActive: false },
+                { key: '15', time: '02:00 PM', isActive: false },
+                { key: '16', time: '03:00 PM', isActive: false },
+                { key: '17', time: '04:00 PM', isActive: false },
+                { key: '18', time: '05:00 PM', isActive: false },
+                { key: '19', time: '06:00 PM', isActive: false },
+                { key: '20', time: '07:00 PM', isActive: false },
+                { key: '21', time: '08:00 PM', isActive: false },
+                { key: '22', time: '09:00 PM', isActive: false },
+                { key: '23', time: '10:00 PM', isActive: false },
+                { key: '24', time: '11:00 PM', isActive: false }
+            ],
+            colectionData2: [
+                { key: '1', time: '00:00 AM', isActive: false },
+                { key: '2', time: '01:00 AM', isActive: false },
+                { key: '3', time: '02:00 AM', isActive: false },
+                { key: '4', time: '03:00 AM', isActive: false },
+                { key: '5', time: '04:00 AM', isActive: false },
+                { key: '6', time: '05:00 AM', isActive: false },
+                { key: '7', time: '06:00 AM', isActive: false },
+                { key: '8', time: '07:00 AM', isActive: false },
+                { key: '9', time: '08:00 AM', isActive: false },
+                { key: '10', time: '09:00 AM', isActive: false },
+                { key: '11', time: '10:00 AM', isActive: false },
+                { key: '12', time: '11:00 AM', isActive: false },
+                { key: '13', time: '12:00 AM', isActive: false },
+                { key: '14', time: '01:00 PM', isActive: false },
+                { key: '15', time: '02:00 PM', isActive: false },
+                { key: '16', time: '03:00 PM', isActive: false },
+                { key: '17', time: '04:00 PM', isActive: false },
+                { key: '18', time: '05:00 PM', isActive: false },
+                { key: '19', time: '06:00 PM', isActive: false },
+                { key: '20', time: '07:00 PM', isActive: false },
+                { key: '21', time: '08:00 PM', isActive: false },
+                { key: '22', time: '09:00 PM', isActive: false },
+                { key: '23', time: '10:00 PM', isActive: false },
+                { key: '24', time: '11:00 PM', isActive: false },
+            ],
+         });
         if (this.props.navigation.state.params.unAvailTiming) {
-            this.setState({ visible: true });
-           if(this.props.navigation.state.params.unAvailTiming[0])
+            
+           if(this.props.navigation.state.params.unAvailTiming[0] && this.state.colectionData !== '')
            {
             this.state.colectionData.map((item) => {
                 if (item.time == this.props.navigation.state.params.unAvailTiming[0].start_time) {
@@ -206,7 +218,7 @@ class UnavailableDate extends Component {
             });
            }
 
-           if(this.props.navigation.state.params.unAvailTiming[0])
+           if(this.props.navigation.state.params.unAvailTiming[0] && this.state.colectionData !== '')
            {
             this.state.colectionData2.map((item) => {
                 if (item.time == this.props.navigation.state.params.unAvailTiming[0].end_time) {
@@ -242,10 +254,8 @@ class UnavailableDate extends Component {
             var enddate = endtDate.getFullYear() + "-" + dy + "-" + dm;
             this.setState({ daYSelected2: enddate });
            }
-            
             //this.state.daYSelected2=new Date(this.props.navigation.state.params.unAvailTiming[0].end_date);
             this.setState({ visible: false });
-
         }
     }
 
@@ -253,16 +263,16 @@ class UnavailableDate extends Component {
         this.setState({ visible: true });
         if (this.state.satStartDate == '') {
             this.setState({ visible: false });
-            Alert.alert('please enter Start Date');
+            Alert.alert('Please enter Start Date');
         } else if (this.state.setStartTime == '') {
             this.setState({ visible: false });
-            Alert.alert('please enter Start Time');
+            Alert.alert('Please enter Start Time');
         } else if (this.state.satEndDate == '') {
             this.setState({ visible: false });
-            Alert.alert('please enter End Date');
+            Alert.alert('Please enter End Date');
         } else if (this.state.setEndTime == '') {
             this.setState({ visible: false });
-            Alert.alert('please enter End Time');
+            Alert.alert('Please enter End Time');
         } //else if (this.state.setStartTime < this.state.setEndTime) {
         //      Alert.alert('End time will be getter than start time');
         //  } else if (this.state.setStartTime < this.state.setEndTime){
@@ -275,7 +285,7 @@ class UnavailableDate extends Component {
             if (d1 <= d2) {
                 if (!(d1 < d2)) {
                     if (this.state.setStartTimeKey > this.state.setEndTimeKey) {
-                        Alert.alert('End time will be getter than start time');
+                        Alert.alert('End time will be greater than start time');
                     } else {
                         if (this.props.navigation.state.params.unAvailId) {
                             const patchUrl = `WorkerUnavailabilities/${this.props.navigation.state.params.unAvailId}`;
@@ -451,6 +461,7 @@ class UnavailableDate extends Component {
                                     hideArrows={false}
                                     hideExtraDays={true}
                                     disableMonthChange={false}
+                                    minDate={this.state.minDate}
                                     markedDates={{
                                         [this.state.daYSelected2]: { selected: true, selectedColor: '#81cdc7' }
                                     }}
@@ -521,4 +532,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UnavailableDate);
+export default connect(mapStateToProps, {})(UnavailableDate);

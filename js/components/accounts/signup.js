@@ -34,8 +34,14 @@ class Signup extends Component {
             Alert.alert('Please enter name');
             return false;
         }
+        
         if (!this.state.email) {
             Alert.alert('Please enter email');
+            return false;
+        }
+        let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if(!regEmail.test(this.state.email)){
+            Alert.alert('Please enter a valid email');
             return false;
         }
         if (!this.state.password) {
@@ -61,12 +67,19 @@ class Signup extends Component {
         const phone = this.state.phone;
 
         this.props.signup(name, email, password, phone).then(res => {
-            if (res.type == 'success') {
-                Alert.alert('Successfully Registered.');
-                this.props.navigation.navigate("Login");
-            } else {
-                Alert.alert('Please check all fields and try again');
+            if(res.worker && res.worker.Error){
+                if(res.worker.Error === true){
+                    Alert.alert(res.worker.message);
+                }
+            }else{
+                if (res.type == 'success') {
+                    Alert.alert('Successfully Registered.');
+                    this.props.navigation.navigate("Login");
+                } else {
+                    Alert.alert('Please check all fields and try again');
+                }
             }
+            
         }).catch(err => {
             Alert.alert('Please check all fields and try again');
 

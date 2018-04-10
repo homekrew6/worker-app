@@ -79,13 +79,13 @@ class Login extends Component {
 						Alert.alert('Login failed, please try again');
 					}
 				}).catch(err => {
-					Alert.alert('Login failed,please try again');
+					Alert.alert('Login failed, please try again');
 				})
 			} else {
-				Alert.alert('Your account is not activated yet, Please contact admin.');
+				Alert.alert('Your account is not activated.Please contact Admin.');
 			}
 		}).catch(err => {
-			Alert.alert('Please enter a valied email ID');
+			Alert.alert('User Not Found');
 		})
 
 

@@ -135,11 +135,10 @@ class Intro extends Component {
 					<Swiper
 						style={styles.wrapper}
 						loop={true}
-						autoplay={true}
-						autoplayTimeout={5}
+						//autoplay={true}
+						//autoplayTimeout={5}
 						dotColor={'#81cdc7'}
-						activeDotColor = {'#1e3768'}
-
+						activeDotColor={'#1e3768'}
 					>
 						{
 							this.state.sliderArray.map((item, key) => {
