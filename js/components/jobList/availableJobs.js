@@ -27,6 +27,12 @@ class AvailableJobs extends Component {
         };
     }
 
+    getLocalTimeFormat(gmtTime){
+        const gmtToDeiveTimeObj = moment.tz(gmtTime, "Europe/London");
+        const timezoneDevice = DeviceInfo.getTimezone();
+        const gmtToDeiveTime = gmtToDeiveTimeObj.clone().tz(timezoneDevice).format('ddd DD-MMM-YYYY hh:mm A');
+        return gmtToDeiveTime;
+    }
     getTimeDiffLocal(gmtTime){
         
         const gmtToDeiveTimeObj = moment.tz(gmtTime, "Europe/London");
@@ -310,7 +316,7 @@ class AvailableJobs extends Component {
                                                                     Tuesday
                                                                 </Text>
                                                                 <Text style={{ fontSize: 14 }}> 10:00 AM</Text> */}
-                                                                <Text style={{ fontSize: 14 }}>{item.postedDate}</Text>
+                                                                <Text style={{ fontSize: 14 }}>{this.getLocalTimeFormat(item.postedDate)}</Text>
                                                             </View>
                                                             <View style={styles.flexDirectionRow}>
                                                                 <Text>{item.userLocation.name}</Text>
@@ -384,7 +390,7 @@ class AvailableJobs extends Component {
                                                         <View style={styles.flexDirectionRow}>
                                                             {/* <Text style={[styles.fontWeight700, { fontSize: 14 }]}>Tuesday </Text>
                                                             <Text style={{ fontSize: 14 }}> 10:00 AM</Text> */}
-                                                                <Text style={{ fontSize: 12 }}>{item.postedDate}</Text>
+                                                                <Text style={{ fontSize: 12 }}>{this.getLocalTimeFormat(item.postedDate)}</Text>
                                                         </View>
                                                         <View style={styles.flexDirectionRow}>
                                                             <Text>{item.userLocation.name}</Text>
