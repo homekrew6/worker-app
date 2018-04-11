@@ -29,6 +29,7 @@ import Settings from './components/settings/settings';
 import LanguageList from './components/settings/languageList';
 import CurrencyList from './components/settings/currencyList';
 import TotalBill from './components/jobList/totalBill';
+import Chat from './components/jobList/chat';
 
 const AppNavigator = StackNavigator(
     {
@@ -54,7 +55,8 @@ const AppNavigator = StackNavigator(
         Settings: { screen: Settings},
         LanguageList:{screen:LanguageList},
         CurrencyList:{screen:CurrencyList},
-        TotalBill:{screen:TotalBill}
+        TotalBill: { screen: TotalBill },
+        Chat: { screen: Chat}
     },
     {
         initialRouteName: "Drawer",
