@@ -56,6 +56,10 @@ class FollowUpList extends Component {
             }
             else {
                 this.setState({ IsVisible: false });
+                AsyncStorage.removeItem("jobDetails");
+                AsyncStorage.removeItem("totalPrice");
+                AsyncStorage.removeItem("saveDateDB");
+                AsyncStorage.removeItem("materialsId");
                 this.props.navigation.navigate('AvailableJobs');
             }
         })
