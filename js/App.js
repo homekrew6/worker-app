@@ -29,7 +29,9 @@ import Settings from './components/settings/settings';
 import LanguageList from './components/settings/languageList';
 import CurrencyList from './components/settings/currencyList';
 import TotalBill from './components/jobList/totalBill';
-
+import FollowUpList from './components/followUp/followUpList';
+import AddMaterial from './components/followUp/addMaterals';
+import FollowUpDate from './components/followUp/followUpDate';
 const AppNavigator = StackNavigator(
     {
         Drawer: { screen: Drawer },
@@ -54,7 +56,10 @@ const AppNavigator = StackNavigator(
         Settings: { screen: Settings},
         LanguageList:{screen:LanguageList},
         CurrencyList:{screen:CurrencyList},
-        TotalBill:{screen:TotalBill}
+        TotalBill:{screen:TotalBill},
+        FollowUpList: { screen: FollowUpList},
+        AddMaterial: { screen: AddMaterial},
+        FollowUpDate: { screen: FollowUpDate}
     },
     {
         initialRouteName: "Drawer",

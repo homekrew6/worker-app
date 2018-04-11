@@ -84,7 +84,8 @@ class JobDetails extends Component {
             remoteJobDetails: '',
             currency:'USD',
             itemsRef: '',
-            jobTrackingStatus: ''
+            jobTrackingStatus: '',
+            progressInterval:''
         }
 
     }
@@ -112,6 +113,10 @@ class JobDetails extends Component {
         }).catch((err) => {
         
         })
+    }
+    renewJob()
+    {
+        
     }
     onMyWayPress(){
         this.setState({ bottomButtonStatus: 'start', loader: true });
@@ -285,6 +290,7 @@ class JobDetails extends Component {
         const progressInterval = setInterval(() => {
             this.setState({ workProgressTime: this.state.workProgressTime + 1 });
         }, progressSpeed);
+        this.setState({ progressInterval:progressInterval});
 
         //update firebase database on job start
         
@@ -449,6 +455,7 @@ class JobDetails extends Component {
                 const progressInterval = setInterval(() => {;
                     this.setState({ workProgressTime: this.state.workProgressTime + 1 });
                 }, progressSpeed);
+                this.setState({ progressInterval: progressInterval });
                 this.refs.ScrollViewComplete.scrollToEnd();
             }else{
                 if(this.props.navigation.state.params.jobDetails.status === 'ACCEPTED'){
@@ -481,7 +488,7 @@ class JobDetails extends Component {
                         const progressInterval = setInterval(() => {;
                             this.setState({ workProgressTime: this.state.workProgressTime + 1 });
                         }, progressSpeed);
-
+                        this.setState({ progressInterval: progressInterval });
                     }).catch((err) => {
             
                     })
@@ -513,12 +520,18 @@ class JobDetails extends Component {
             console.log('did job de', response);
             if(this.state.remoteJobDetails.status === 'ONMYWAY'){
                 this.refs.ScrollViewStart.scrollToEnd();
+                this.setState({ jobTrackingStatus: 'Krew On The Way' });
             }else if(this.state.remoteJobDetails.status === 'JOBSTARTED'){
                 this.refs.ScrollViewComplete.scrollToEnd();
+                this.setState({ jobTrackingStatus: 'Job Started' });
             }else if(this.state.remoteJobDetails.status === 'ACCEPTED'){
                 this.setState({ jobTrackingStatus:'Krew Assigned'});
             }else if(this.state.remoteJobDetails.status === 'STARTED'){
                 this.setState({ jobTrackingStatus:'Job Requested'});
+            }
+            else if (this.state.remoteJobDetails.status === 'FOLLOWEDUP') {
+                this.refs.ScrollViewRenew.scrollToEnd();
+                this.setState({ jobTrackingStatus: 'Job Followed Up' });
             }
         }).catch((err) => {
 
@@ -603,6 +616,12 @@ class JobDetails extends Component {
         // );
        
     }
+    startFollowUp()
+    {
+        clearInterval(this.state.progressInterval);
+        this.props.navigation.navigate('FollowUpList', { jobDetails: this.state.remoteJobDetails });
+
+    }
     componentWillMount(){
         // console.log(this.props.navigation.state.params.jobDetails);
 
@@ -637,9 +656,15 @@ class JobDetails extends Component {
                         <Ionicons name="ios-arrow-back" style={styles.headIcon2} />
                     </Button>
                     <Body style={styles.headBody}>
-                        <Title>Job Details</Title>
+                        <Title>{I18n.t('jobDetails')}</Title>
                     </Body>
-                    <Button transparent style={{ width: 30 }}/>
+                    
+                    {
+                        
+                        JobDetailsData.status=='JOBSTARTED'?(
+                            <View><Button transparent onPress={() => this.startFollowUp()} ><Text>{I18n.t('followUp')}</Text></Button></View>
+                        ):(<View></View>)
+                    }
                 </Header>
                 <Content style={{ backgroundColor: '#ccc' }}>
                     {/* 
@@ -793,7 +818,7 @@ class JobDetails extends Component {
                                 <Image source={require('../../../img/icon17.png')} style={{ width: win, height: (win* 0.1), marginTop: -(win* 0.1) }} />
                             </View>
                         : 
-                        JobDetailsData.status==='STARTED' ?
+                                    JobDetailsData.status === 'STARTED' || JobDetailsData.status === 'FOLLOWEDUP' ?
                             
                         JobDetailsData.service.banner_image ?  
                         <View>
@@ -896,6 +921,39 @@ class JobDetails extends Component {
                         <Text style={styles.jobItemName}>{I18n.t('payment')}</Text>
                         <Text style={styles.jobItemValue}>{JobDetailsData.payment}</Text>
                     </View>
+                    {
+                        JobDetailsData.status==='FOLLOWEDUP'?
+                        <View>
+                                <ScrollView
+                                    ref='ScrollViewRenew'
+                                    pagingEnabled={true}
+                                    horizontal={true}
+                                    showsHorizontalScrollIndicator={false}
+                                    scrollEventThrottle={400}
+                                    onScrollEndDrag={() => this.StartJobSlide()}
+                                    style={{ width: '100%' }}>
+                                    <View style={{ width: win, backgroundColor: 'white', paddingLeft: 10, paddingRight: 10 }}>
+                                        <TouchableOpacity
+                                            style={{ flex: 1, alignItems: 'center', backgroundColor: '#81cdc7', justifyContent: 'center', marginTop: 3, borderRadius: 5 }}
+                                            activeOpacity={1}
+                                            onPress={() => this.renewJob()}
+                                        >
+                                            <Text style={{ color: '#fff' }}>{I18n.t('renew_job')}</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View style={{ width: win, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderBottomColor: '#ccc', borderBottomWidth: 1 }}>
+                                        <View style={{ backgroundColor: '#81cdc7', paddingLeft: 10, paddingRight: 10 }}>
+                                            <FontAwesome name="angle-right" style={{ color: '#fff', fontSize: 40 }} />
+                                        </View>
+                                        <View style={{ flex: 1, paddingLeft: 15 }}>
+                                            <Text>{I18n.t('slide_to_click_renew_job')}</Text>
+                                        </View>
+                                    </View>
+
+                                </ScrollView>
+                            </View>:
+                        <View></View>
+                    }
                     {
                         JobDetailsData.status === 'COMPLETED' ?
                             <View style={styles.jobItemWarp}>
