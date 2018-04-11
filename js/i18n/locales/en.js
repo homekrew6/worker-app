@@ -88,5 +88,19 @@ export default {
   no_location_found: 'No location found',
   total_bill: 'Total Bill',
   rate_your_customer: 'Please rate your customer',
-  myCurrency: 'My Currency'
+  myCurrency: 'My Currency',
+  jobDetails:'Job Details',
+  followUp:'Follow Up',
+  hours:'Hours',
+  materials:'Materials',
+  total:'Total',
+  slide_to_click_submit:'Slide to Click Submit',
+  add_materials:'Add Materials',
+  added_materials:'Added Materials',
+  click_here_to_add_in_list:'Click here to add in the list',
+  enter_name_of_material:'Enter name of material',
+  enter_price_of_material:'Enter price of material',
+  price:'Price',
+  slide_to_click_renew_job:'Slide to click renew job',
+  renew_job:'Renew Job'
 };

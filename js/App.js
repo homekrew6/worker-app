@@ -29,6 +29,9 @@ import Settings from './components/settings/settings';
 import LanguageList from './components/settings/languageList';
 import CurrencyList from './components/settings/currencyList';
 import TotalBill from './components/jobList/totalBill';
+import FollowUpList from './components/followUp/followUpList';
+import AddMaterial from './components/followUp/addMaterals';
+import FollowUpDate from './components/followUp/followUpDate';
 import Chat from './components/jobList/chat';
 
 const AppNavigator = StackNavigator(
@@ -55,6 +58,10 @@ const AppNavigator = StackNavigator(
         Settings: { screen: Settings},
         LanguageList:{screen:LanguageList},
         CurrencyList:{screen:CurrencyList},
+        TotalBill:{screen:TotalBill},
+        FollowUpList: { screen: FollowUpList},
+        AddMaterial: { screen: AddMaterial},
+        FollowUpDate: { screen: FollowUpDate},
         TotalBill: { screen: TotalBill },
         Chat: { screen: Chat}
     },

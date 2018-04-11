@@ -3,5 +3,20 @@ export default {
   username: 'Username',
   password: 'Password',
   done:'Terminé',
-  add_timing:'Ajouter / Modifier le minutage'
+  add_timing:'Ajouter / Modifier le minutage',
+  jobDetails: 'Détails du poste',
+  followUp: 'Suivre',
+  hours: 'Heures',
+  materials: 'Matériaux',
+  total: 'Total',
+  slide_to_click_submit:'Faites glisser pour cliquer sur Envoyer',
+  submit:'Soumettre',
+  add_materials: 'Ajouter des matériaux',
+  added_materials:'Matériaux ajoutés',
+  click_here_to_add_in_list: "Cliquez ici pour l'ajouter dans la liste",
+  enter_name_of_material: 'Entrez le nom du matériau',
+  enter_price_of_material: 'Entrez le prix du matériel',
+  price: 'Prix',
+  slide_to_click_renew_job: 'Faites glisser pour cliquer sur Renouveler le travail',
+  renew_job: 'Renouveler le travail'
 };

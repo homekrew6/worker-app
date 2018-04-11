@@ -85,5 +85,19 @@ export default {
   add_timing:'إضافة / تحرير التوقيت',
   total_bill: 'إجمالي الفاتورة',
   rate_your_customer: 'يرجى تقييم عميلك',
-  myCurrency: 'عملتي'
+  myCurrency: 'عملتي',
+  jobDetails: 'تفاصيل الوظيفة',
+  followUp: 'متابعة',
+  hours:'ساعات',
+  materials: 'المواد',
+  total: 'مجموع',
+  slide_to_click_submit: 'انقر على "إرسال"',
+  add_materials:'إضافة مواد',
+  added_materials:'مواد مضافة',
+  click_here_to_add_in_list: "انقر هنا لإضافته في القائمة",
+  enter_name_of_material: 'أدخل اسم المادة',
+  enter_price_of_material: 'أدخل سعر المواد',
+  price: 'السعر',
+  slide_to_click_renew_job: 'انقر على "النقر على تجديد العمل"',
+  renew_job: 'تجديد العمل'
 };
