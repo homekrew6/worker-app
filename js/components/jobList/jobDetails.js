@@ -642,8 +642,8 @@ class JobDetails extends Component {
                     {
                         
                         JobDetailsData.status=='JOBSTARTED'?(
-                            <View><Button transparent onPress={() => this.startFollowUp()} ><Text>{I18n.t('followUp')}</Text></Button></View>
-                        ):(<View></View>)
+                            <Button transparent onPress={() => this.startFollowUp()} ><Text>{I18n.t('followUp')}</Text></Button>
+                        ):(console.log())
                     }
                 </Header>
                 <Content style={{ backgroundColor: '#ccc' }}>

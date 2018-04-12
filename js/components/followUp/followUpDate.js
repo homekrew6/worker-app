@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import api from '../../api/index';
 import { View, StatusBar, Dimensions, Alert, TouchableOpacity, FlatList, } from "react-native";
-import { Container, Header, Button, Content, Form, Item, Text, Body, Card, CardItem } from "native-base";
+import { Container, Header, Button, Content, Form, Item, Text, Body, Card, CardItem, Title } from "native-base";
 import styles from './styles';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Calendar } from 'react-native-calendars';
@@ -128,8 +128,8 @@ class FollowUpDate extends Component {
                     <Button transparent onPress={() => this.props.navigation.goBack()}>
                         <Text>{I18n.t('cancel')}</Text>
                     </Button>
-                    <Body style={styles.tac}>
-                        <Text style={styles.hdClr}>{I18n.t('my_timing')}</Text>
+                    <Body style={styles.headBody}>
+                        <Title style={styles.hdClr}>{I18n.t('my_timing')}</Title>
                     </Body>
                     <Button transparent onPress={() => this.doneDateAndTime()}>
                         <Text>{I18n.t('done')}</Text>
@@ -144,7 +144,7 @@ class FollowUpDate extends Component {
                                 <FontAwesome name='calendar' style={{ color: '#81cdc7', fontSize: 20, marginRight: 5 }} />
                                 <Text>{I18n.t('start_day')}</Text>
                             </CardItem>
-                            <CardItem>
+                            <CardItem style={{ justifyContent: 'center' }}>
                                 <Calendar
                                     onDayPress={(day) => this.onDaySelect(day)}
                                     monthFormat={'MMM yyyy'}
@@ -181,6 +181,7 @@ class FollowUpDate extends Component {
                             <CardItem>
                                 <View style={{ flex: 1, flexDirection: 'row', }}>
                                     <FlatList
+                                        showsHorizontalScrollIndicator={false}
                                         data={
                                             this.state.colectionData
                                         }
