@@ -11,6 +11,7 @@ import FSpinner from 'react-native-loading-spinner-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './styles';
 import I18n from '../../i18n/i18n';
+import api from '../../api/index';
 import { availablejobs, setNewData, acceptJob, declineJob } from './elements/jobActions'
 const imageIcon1 = require('../../../img/icon/home.png');
 
@@ -121,6 +122,20 @@ class AvailableJobs extends Component {
         return self.indexOf(value) === index;
     }
 //bala: Start
+    IgnoreJob(data){
+        this.setState({
+            loader: true
+        })
+        let jobId = data.id;
+        let workerId = this.props.auth.data.id;
+        let serviceId = data.serviceId;
+        api.post('Jobs/ignoreJob', {"id": jobId, "workerId": workerId, "serviceId": serviceId}).then((resIgnore) => {
+            this.jobdata(); 
+        }).catch((errCatch) => {
+            Alert.alert('Failed Please try again');
+        })
+    }
+
     declineJob(data){
         this.setState({
             loader: true
@@ -335,9 +350,9 @@ class AvailableJobs extends Component {
                                         }
                                         renderLeftHiddenRow={data =>
                                             data.startTime.timeInt === true ?
-                                            <TouchableOpacity style={styles.leftAction} onPress={() => this.declineJob(data)}>
+                                            <TouchableOpacity style={styles.leftAction} onPress={() => this.IgnoreJob(data)}>
                                                 <MaterialIcons name="close" style={styles.leftActionIcon} />
-                                                <Text style={styles.leftActionText}>{I18n.t('decline_button')}</Text>
+                                                <Text style={styles.leftActionText}>{I18n.t('ignore_button')}</Text>
                                             </TouchableOpacity>
                                                 : <View style={styles.leftAction}>
                                                 </View>}
@@ -411,7 +426,7 @@ class AvailableJobs extends Component {
                             })}
                         </Content>
                     </Tab>
-                    <Tab heading="DECLINEDJOBS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
+                    <Tab heading="CANCELLED JOBS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
                         {this.props.availableJobs.data.response.message.declinedJobs? (
                             <List
                                 dataArray={this.props.availableJobs.data.response.message.declinedJobs}
