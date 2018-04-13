@@ -104,4 +104,10 @@ export default {
   slide_to_click_renew_job:'Slide to click renew job',
   renew_job:'Renew Job',
   ignore_button: 'IGNORE',
+  jobStatus: 'Job Status',
+  jobRequested: 'Job Requested',
+  jobAssigned: 'Job Assigned',
+  onTheWay: 'On The Way',
+  jobStarted: 'Job Started',
+  jobCompleted: 'Job Completed',
 };

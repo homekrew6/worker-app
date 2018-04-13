@@ -101,4 +101,10 @@ export default {
   slide_to_click_renew_job: 'انقر على "النقر على تجديد العمل"',
   renew_job: 'تجديد العمل',
   ignore_button: 'تجاهل',
+  jobStatus: 'حالة الوظيفة',
+  jobRequested: 'الوظيفة المطلوبة',
+  jobAssigned: 'وظيفة محددة',
+  onTheWay: 'علي الطريق',
+  jobStarted: 'بدأ العمل',
+  jobCompleted: 'أنجزت المهمة'
 };
