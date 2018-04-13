@@ -19,10 +19,10 @@ const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const logo_hdr = require("../../../img/logo2.png");
 const carve = require("../../../img/icon17.png");
-const icon2 = require("../../../img/icon2.png");
-const icon3 = require("../../../img/icon3.png");
-const icon4 = require("../../../img/icon4.png");
-const icon5 = require("../../../img/icon5.png");
+const icon2 = require("../../../img/icon/hourglass.png");
+const icon3 = require("../../../img/icon/calendar2.png");
+const icon4 = require("../../../img/icon/shopping-cart2.png");
+const icon5 = require("../../../img/icon/coins2.png");
 const icon6 = require("../../../img/icon6.png");
 const icon7 = require("../../../img/icon7.png");
 const icon8 = require("../../../img/icon8.png");
@@ -160,9 +160,9 @@ class FollowUpList extends Component {
             <Container >
                 <FSpinner visible={this.state.IsVisible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
                 <StatusBar
-                    backgroundColor="#cbf0ed"
+                    backgroundColor="#81cdc7"
                 />
-                <Header style={styles.headerWarp} noShadow androidStatusBarColor="#81cdc7" >
+                <Header style={styles.appHdr2} noShadow androidStatusBarColor="#81cdc7" >
                     <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }}>
                         <Ionicons name="ios-arrow-back" style={styles.headIcon2} />
                     </Button>
@@ -204,7 +204,6 @@ class FollowUpList extends Component {
                                 <Image source={icon3} style={styles.menuCardIcon} />
                                 <Text style={styles.menuCardTxt}>{I18n.t('date_timing')}</Text>
                                 <View style={styles.arw_lft}>
-                                    {/* <Image source={back_arow} style={styles.arw_lft_img} /> */}
                                     <Text>
                                         {this.state.saveDateDB}
                                     </Text>
@@ -224,7 +223,7 @@ class FollowUpList extends Component {
 
                         <CardItem style={styles.menuCarditem}>
                             <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate("myTiming")} >
-                                <Image source={icon4} style={styles.menuCardIcon} />
+                                <Image source={icon5} style={styles.menuCardIcon} />
                                 <Text style={styles.menuCardTxt}>{I18n.t('total')}</Text>
                                 <View style={styles.arw_lft}>
                                     <Text>

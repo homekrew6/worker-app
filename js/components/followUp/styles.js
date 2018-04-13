@@ -37,11 +37,16 @@ export default {
         borderBottomColor: '#ececec',
         borderBottomWidth: 1,
         paddingBottom: 10,
-        paddingTop: 10
+        paddingTop: 10,
+        alignItems: 'center',
     },
     menuCardIcon: {
-        height: 30,
-        width: 30
+        height: 20,
+        width: 20
+    },
+    menuCardIcon2:{
+        height: 50,
+        width: 50
     },
     menuCardTxt: {
         flex: 1,
@@ -181,6 +186,13 @@ export default {
 
 
     starRed: { color: 'red', fontSize: 12 },
-    starRedSkill: { color: 'red', fontSize: 10 }
+    starRedSkill: { color: 'red', fontSize: 10 },
+
+    headIcon: { fontSize: 22, color: '#81cdc7' },
+    headBody: { alignItems: 'center' },
+    headCenter: { color: '#1e3768', textAlign: 'center' },
+    headerWarp: { backgroundColor: '#81cdc7' },
+    appHdr2: { backgroundColor: '#81cdc7' },
+    headIcon2: { fontSize: 22, color: '#fff' },
 
 };
