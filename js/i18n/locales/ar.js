@@ -99,5 +99,6 @@ export default {
   enter_price_of_material: 'أدخل سعر المواد',
   price: 'السعر',
   slide_to_click_renew_job: 'انقر على "النقر على تجديد العمل"',
-  renew_job: 'تجديد العمل'
+  renew_job: 'تجديد العمل',
+  ignore_button: 'تجاهل',
 };

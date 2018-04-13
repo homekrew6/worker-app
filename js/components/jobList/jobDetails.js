@@ -87,6 +87,9 @@ class JobDetails extends Component {
             jobTrackingStatus: '',
             progressInterval:'',
             callChat: true,
+            reasonList: '',
+            reasonName: '',
+            reasonId: ''
         }
 
     }
@@ -95,6 +98,36 @@ class JobDetails extends Component {
         const timezoneDevice = DeviceInfo.getTimezone();
         const gmtToDeiveTime = gmtToDeiveTimeObj.clone().tz(timezoneDevice).format('ddd DD-MMM-YYYY hh:mm A');
         return gmtToDeiveTime;
+    }
+    cancelJob()
+    {
+        if(this.state.reasonId)
+        {
+            const ToSendData={jobId:this.state.remoteJobDetails.id, status:"CANCELLED", "reason":this.state.reasonId, "workerId":this.state.remoteJobDetails.worker.id, "serviceId":this.state.remoteJobDetails.service.id};
+            this.setState({loader:true});
+            debugger;
+            api.post('Jobs/cancelJob', ToSendData).then((res)=>{
+                if(res.response.type="Error")
+                {
+                    this.setState({loader:false});
+                    Alert.alert('Please try again later.');
+                }
+                else
+                {
+                    let jobDetails=this.state.remoteJobDetails;
+                    jobDetails.status='CANCELLED';
+                    this.setState({remoteJobDetails:jobDetails, loader:false});
+                }
+            }).catch((error)=>{
+                this.setState({loader:false});
+                Alert.alert('Please try again later.');
+            })
+        }
+        else
+        {
+            Alert.alert('Please select a reason to cancel the job.');
+        }
+       
     }
     _toggleModal = () =>
         this.setState({ isModalVisible: !this.state.isModalVisible });
@@ -516,6 +549,22 @@ class JobDetails extends Component {
         }).catch((err) => {
 
         })
+
+        api.get('cancelReasons').then((reason) => {
+            console.log('reason', reason);
+            let reasonsList=[];
+            reason.map((item)=>{
+                if(item.is_active)
+                {
+                 item.IsSelected=false;
+                 reasonsList.push(item);
+                }
+                
+            })
+            this.setState({ reasonList: reasonsList });
+        }).catch((errReason) => {
+            console.log(errReason);
+        })
         
         //this.updateProgressTime();
     }
@@ -524,6 +573,21 @@ class JobDetails extends Component {
             this.setState({ scrollStatus: 1 });
             this.refs.ScrollViewEnd.scrollToEnd();
         }, 50);
+    }
+
+    IgnoreJob(){
+        this.setState({
+            loader: true
+        })
+        let jobId = this.props.navigation.state.params.jobDetails.id;
+        let workerId = this.props.auth.data.id;
+        let serviceId = this.props.navigation.state.params.jobDetails.serviceId;
+        api.post('Jobs/ignoreJob', {"id": jobId, "workerId": workerId, "serviceId": serviceId}).then((resIgnore) => {
+            this.props.navigation.navigate('AvailableJobs');
+            this.setState({ loader: false });
+        }).catch((errCatch) => {
+            Alert.alert('Failed Please try again');
+        })
     }
 
     declineJob() {
@@ -596,6 +660,22 @@ class JobDetails extends Component {
         // );
        
     }
+
+    onReasonSelect(reasonData){
+        let reasonsList=this.state.reasonList;
+        reasonsList.map((item)=>{
+            if(item.id==reasonData.id)
+            {
+                item.IsSelected=true;
+            }
+            else
+            {
+                item.IsSelected=false;
+            }
+        })
+        this.setState({ reasonName: reasonData.name, reasonId: reasonData.id, reasonList:reasonsList });
+    }
+
     startFollowUp()
     {
         clearInterval(this.state.progressInterval);
@@ -965,9 +1045,9 @@ class JobDetails extends Component {
                     {
                         JobDetailsData.status == 'STARTED' ? (
                             <View style={{ flexDirection: 'row', flex: 1 }}>
-                                <TouchableOpacity style={{ flex: 1, backgroundColor: 'red', alignItems: 'center', height: 50, justifyContent: 'center' }} onPress={() => this.declineJob()}>
+                                <TouchableOpacity style={{ flex: 1, backgroundColor: 'red', alignItems: 'center', height: 50, justifyContent: 'center' }} onPress={() => this.IgnoreJob()}>
                                     <Text style={{ color: '#fff' }}>
-                                        {I18n.t('decline_button')}
+                                        {I18n.t('ignore_button')}
                                     </Text></TouchableOpacity>
                                 <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', alignItems: 'center', height: 50, justifyContent: 'center' }} onPress={() => this.acceptJob()}>
                                     <Text style={{ color: '#fff' }}>
@@ -1149,27 +1229,40 @@ class JobDetails extends Component {
                         <View style={{ padding: 15, borderRadius: 10, alignItems: 'center', justifyContent: 'center', width: '100%' }} >
                             <Text style={{ width: '100%', textAlign: 'center', color: '#fff', fontSize: 25, marginBottom: 15 }}> Choose Reason </Text>
                             <View style={{width: '100%', backgroundColor: '#fff', borderRadius: 10 }}>
-                                <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}>
-                                    <Text style={{ color: '#000' }}>Customer not around</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}>
-                                    <Text style={{ color: '#000' }}>Wrong job</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}>
-                                    <Text style={{ color: '#000' }}>Reason3</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}>
-                                    <Text style={{ color: '#000' }}>Reason4</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}>
-                                    <Text style={{ color: '#000' }}>Reason5</Text>
-                                </TouchableOpacity>
+                            {
+                                console.log('reasonList', this.state.reasonList)
+                            }
+                            {
+                                this.state.reasonList.length > 0 ?
+                                this.state.reasonList.map((reasonData, key) => {
+                                   return(
+                                    <View key={key}>
+                                    {
+                                        reasonData.IsSelected? <TouchableOpacity 
+                                        style={{ backgroundColor: '#81cdc7', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}
+                                        onPress={() => this.onReasonSelect(reasonData)}
+                                    >
+                                        <Text style={{ color: '#000' }}>{reasonData.name}</Text>
+                                    </TouchableOpacity>:
+                                     <TouchableOpacity 
+                                     style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}
+                                     onPress={() => this.onReasonSelect(reasonData)}
+                                 >
+                                     <Text style={{ color: '#000' }}>{reasonData.name}</Text>
+                                 </TouchableOpacity>
+                                    }
+                                       
+                                    </View>
+                                   ) 
+                                })
+                                : console.log('outer')
+                            }
                             </View>
                             <View style={{ width: '100%', flexDirection: 'row', padding: 15 }}>
                                 <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', height: 40, borderTopLeftRadius: 10, borderBottomLeftRadius: 10, alignItems: 'center', justifyContent: 'center' }} onPress={() => this.setState({ jobCancelModal: false })}>
                                     <Text style={{ fontSize: 14, color: '#fff' }}>{I18n.t('go_back')}</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={{ flex: 1, backgroundColor: 'red', height: 40, borderBottomRightRadius: 10, borderTopRightRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
+                                <TouchableOpacity style={{ flex: 1, backgroundColor: 'red', height: 40, borderBottomRightRadius: 10, borderTopRightRadius: 10, alignItems: 'center', justifyContent: 'center' }} onPress={() => this.cancelJob()}>
                                     <Text style={{ fontSize: 14, color: '#fff' }}>{I18n.t('yes_cancel')}</Text>                                    
                                 </TouchableOpacity>
                             </View>
