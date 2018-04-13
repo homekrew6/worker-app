@@ -25,6 +25,7 @@ class AvailableJobs extends Component {
             listItemFlag: false,
             loader: false,
             currency:'USD',
+            refreshing: false
         };
     }
 
