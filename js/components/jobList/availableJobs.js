@@ -173,7 +173,7 @@ class AvailableJobs extends Component {
     }
 
     onRefresh(){
-        //Alert.alert('pulled');
+        this.jobdata();
     }
     
 
@@ -386,7 +386,12 @@ class AvailableJobs extends Component {
                         </Content>
                     </Tab>
                     <Tab heading="UPCOMING JOBS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
-                        <Content>
+                        <Content
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={this.state.refreshing}
+                                    onRefresh={this.onRefresh.bind(this)}
+                                />}>
                             {
                                 finalArray2.length === 0 ?
                                     <View style={{ alignSelf: 'center', padding: 20 }}>
@@ -471,9 +476,9 @@ class AvailableJobs extends Component {
                         )
                         }
                     </Tab>
-                    <Tab heading="STATS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
+                    {/* <Tab heading="STATS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
                         <Text>Tab1</Text>
-                    </Tab>
+                    </Tab> */}
                 </Tabs>
                 <FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
             </Container>
