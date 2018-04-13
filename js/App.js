@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { Platform,Easing, Animated} from "react-native";
+import { Platform,Easing, Animated, Text} from "react-native";
 import { Root } from "native-base";
 import { StackNavigator } from "react-navigation";
 
@@ -34,6 +34,7 @@ import FollowUpList from './components/followUp/followUpList';
 import AddMaterial from './components/followUp/addMaterals';
 import FollowUpDate from './components/followUp/followUpDate';
 import Chat from './components/jobList/chat';
+import JobTracker from './components/jobList/jobTracker';
 const transitionConfig = () => {
     return {
       transitionSpec: {
@@ -87,7 +88,8 @@ const AppNavigator = StackNavigator(
         AddMaterial: { screen: AddMaterial},
         FollowUpDate: { screen: FollowUpDate},
         TotalBill: { screen: TotalBill },
-        Chat: { screen: Chat}
+        Chat: { screen: Chat },
+        JobTracker: { screen: JobTracker}
     },
     {
         initialRouteName: "Home",
@@ -97,6 +99,6 @@ const AppNavigator = StackNavigator(
 );
 
 export default () =>
-    <Root>
+     <Root>
         <AppNavigator />
     </Root>;

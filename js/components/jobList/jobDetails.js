@@ -947,13 +947,13 @@ class JobDetails extends Component {
                         :console.log()
                     }
 
-                    <View style={styles.jobItemWarp}>
+                    <TouchableOpacity style={styles.jobItemWarp} onPress={() => this.props.navigation.navigate('JobTracker', { Jobid : JobDetailsData.id})}>
                         <View style={{ width: 30, alignItems: 'center' }}>
                             <Ionicons name="ios-man-outline" style={styles.jobItemIconIonicons} />
                         </View>
                         <Text style={styles.jobItemName}>{I18n.t('job_tracker')}</Text>
                         <Text style={styles.jobItemValue}>{this.state.jobTrackingStatus}</Text>
-                    </View>
+                    </TouchableOpacity>
                     <View style={styles.jobItemWarp}>
                         <View style={{ width: 30, alignItems: 'center'  }}>
                             <EvilIcons name="location" style={{ color: '#81cdc7', fontSize: 24 }} />
