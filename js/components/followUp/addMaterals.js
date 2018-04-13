@@ -263,7 +263,6 @@ class AddMaterial extends Component {
                     let insertData = { "count": item.count, "price": item.price, "materialsId": item.id };
                     toSendData.push(insertData);
                 }
-               
             });
             const data = { "materials": toSendData, "jobId": jobId };
             api.post('jobMaterials/insertJobMaterial', data).then((res) => {
@@ -272,7 +271,6 @@ class AddMaterial extends Component {
                     Alert.alert(res.response.message);
                 }
                 else {
-                    debugger;
                     Alert.alert("Materials added successfully.");
                     this.props.navigation.navigate('FollowUpList', { totalPrice: this.state.totalPrice, materialsId: res.response.message[0].id });
                 }
@@ -493,10 +491,7 @@ class AddMaterial extends Component {
                                 )
                         }
                     </View>
-
                 </Content>
-
-
             </Container>
         );
 

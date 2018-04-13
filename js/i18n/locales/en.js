@@ -101,7 +101,7 @@ export default {
   enter_name_of_material:'Enter name of material',
   enter_price_of_material:'Enter price of material',
   price:'Price',
-  slide_to_click_renew_job:'Slide to click renew job',
+  slide_to_click_renew_job:'Slide to click Renew Job',
   renew_job:'Renew Job',
   ignore_button: 'IGNORE',
 };

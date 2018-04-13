@@ -100,8 +100,7 @@ class JobDetails extends Component {
         const gmtToDeiveTime = gmtToDeiveTimeObj.clone().tz(timezoneDevice).format('ddd DD-MMM-YYYY hh:mm A');
         return gmtToDeiveTime;
     }
-    cancelJob()
-    {
+    cancelJob(){
         if(this.state.reasonId)
         {
             const ToSendData={jobId:this.state.remoteJobDetails.id, status:"CANCELLED", "reason":this.state.reasonId, "workerId":this.state.remoteJobDetails.worker.id, "serviceId":this.state.remoteJobDetails.service.id};
@@ -134,7 +133,6 @@ class JobDetails extends Component {
         this.setState({ isModalVisible: !this.state.isModalVisible });
 
     onStarRatingPress(rating) {
-        debugger;
         this.setState({ starCount: rating });
         let dateToday_1 = new Date();
         api.post('ratings', {
@@ -149,10 +147,7 @@ class JobDetails extends Component {
         
         })
     }
-    renewJob()
-    {
-        
-    }
+   
     onMyWayPress(){
         this.setState({ bottomButtonStatus: 'start', loader: true });
 
@@ -269,6 +264,49 @@ class JobDetails extends Component {
     StartJobSlide(){
         this.setState({ jobCompletedbuttonStatus: true });
     }
+    renewJob() {
+        this.setState({ mapTrackingStatus: 'timing', bottomButtonStatus: 'complete', loader: true });
+        const time_interval = this.state.remoteJobDetails.expectedTimeInterval;
+        let timeNowWork = new Date();
+        let timeNowConvert = moment(timeNowWork).format('LT');
+        let momentConvert = moment(timeNowWork).add(time_interval, 'minutes').format('LT');
+        const progressSpeed = (time_interval / 100) * 60000;
+
+        let saveEndTime = moment(timeNowWork).add(time_interval, 'minute').format();
+        let newNowTime = moment(timeNowWork).format();
+        this.setState({ workProgressTime: 0.2 });
+        const progressInterval = setInterval(() => {
+            this.setState({ workProgressTime: this.state.workProgressTime + 1 });
+        }, progressSpeed);
+        this.setState({ progressInterval:progressInterval});
+
+        //update firebase database on job start
+
+        let jobIdTr = `${this.props.navigation.state.params.jobDetails.id}`;
+        let refStartFirebase = firebase.database().ref().child('tracking').orderByChild('jobId');
+        refStartFirebase.equalTo(jobIdTr).once('value').then((snapshot)=>{ 
+            this.onStartFirebaseCall(saveEndTime, newNowTime, snapshot);
+            setTimeout(() => {
+                if(this.state.loader === true){
+                    this.onStartFirebaseCall(saveEndTime, newNowTime, snapshot);
+                    setTimeout(() => {
+                        refStartFirebase.off();
+                        Alert.alert('Internal Error Please Try Again');
+                        this.setState({ loader: false });
+                    }, 5000);
+                }
+            }, 5000);
+        })
+
+        setTimeout(() => {
+           if(this.state.loader === true){
+            refStartFirebase.off();
+           }
+        }, 5000);
+        //update firebase on job start ** //
+       
+        this.setState({ job_start_time: timeNowConvert, job_end_time: momentConvert, start_time_full: timeNowWork });
+    }
 
     onStartFirebaseCall(saveEndTime, newNowTime, snapshot){
         if (snapshot && snapshot.val()) { 
@@ -286,27 +324,27 @@ class JobDetails extends Component {
             } 
             ref.update(data).then((thenRes) => {
                 //change job status for job started
-        api.post('Jobs/changeJobStatusByWorker', {
-            "id": this.props.navigation.state.params.jobDetails.id,
-            "status": 'JOBSTARTED',
-            "customerId": this.props.navigation.state.params.jobDetails.customerId,
-            "endTime": saveEndTime,
-            "startTime": newNowTime,
-        }).then((response) => {
-            api.post('Jobs/getJobDetailsById', {
-                "id": this.props.navigation.state.params.jobDetails.id,
-                "workerId": this.props.auth.data.id
-            }).then((response) => {
-                this.setState({ remoteJobDetails: response.response.message[0], loader: false, jobTrackingStatus: 'Job Started' });
-                setTimeout(() => {
-                    this.refs.ScrollViewComplete.scrollToEnd();
-                }, 50);
-            }).catch((err) => {
-    
-            })
-        }).catch((err) => {
+                api.post('Jobs/changeJobStatusByWorker', {
+                    "id": this.props.navigation.state.params.jobDetails.id,
+                    "status": 'JOBSTARTED',
+                    "customerId": this.props.navigation.state.params.jobDetails.customerId,
+                    "endTime": saveEndTime,
+                    "startTime": newNowTime,
+                }).then((response) => {
+                    api.post('Jobs/getJobDetailsById', {
+                        "id": this.props.navigation.state.params.jobDetails.id,
+                        "workerId": this.props.auth.data.id
+                    }).then((response) => {
+                        this.setState({ remoteJobDetails: response.response.message[0], loader: false, jobTrackingStatus: 'Job Started' });
+                        setTimeout(() => {
+                            this.refs.ScrollViewComplete.scrollToEnd();
+                        }, 50);
+                    }).catch((err) => {
+            
+                    })
+                }).catch((err) => {
 
-        })
+                })
                 //job status change end //
             })
         }
@@ -426,9 +464,6 @@ class JobDetails extends Component {
     }
 
     componentDidMount() {
-    
-        
-      
        navigator.geolocation.getCurrentPosition((position) => {
             this.setState({
                 latitudeUser: position.coords.latitude,

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, BackHandler, ScrollView } from "react-native";
 import Ico from 'react-native-vector-icons/MaterialIcons';
+import firebase from 'firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -15,6 +16,7 @@ import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Te
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 import api from '../../api/index';
+
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const logo_hdr = require("../../../img/logo2.png");
@@ -45,24 +47,87 @@ class FollowUpList extends Component {
 
     }
 
+    onFollowUpCall(snapshot){
+        if (snapshot && snapshot.val()) { 
+            const key = Object.keys(snapshot.val())[0];
+            const ref = firebase.database().ref().child('tracking').child(key); 
+            const data = { 
+                "jobId": `${this.state.jobDetails.id}`, 
+                "customerId": `${this.state.jobDetails.customerId}`, 
+                "workerId": `${this.state.jobDetails.workerId}`, 
+                "status": "FOLLOWEDUP",
+            } 
+            ref.update(data).then((thenRes) => {
+                let toSendData = { 
+                    "id": this.state.jobDetails.id,
+                    "price":this.state.totalPrice, 
+                    "followUpDate":this.state.saveDateDB, 
+                    "jobMaterialId": this.state.materialsId, 
+                    "jobStartTime": this.state.jobDetails.jobStartTime, 
+                    "jobEndTime": this.state.jobDetails.jobEndTime,
+                    "hours": this.state.hours,
+                    "expectedTimeInterval": this.state.jobDetails.expectedTimeInterval,
+                };
+                api.post('Jobs/followUpStart', toSendData).then((res) => {
+                    if (res.response.type == "Error") {
+                        this.setState({ IsVisible: false });
+                        Alert.alert('Please try again later.');
+                    }
+                    else {
+                        this.setState({ IsVisible: false });
+                        AsyncStorage.removeItem("jobDetails");
+                        AsyncStorage.removeItem("totalPrice");
+                        AsyncStorage.removeItem("saveDateDB");
+                        AsyncStorage.removeItem("materialsId");
+                        this.props.navigation.navigate('AvailableJobs');
+                    }
+                })
+
+                //change job status for job started
+                api.post('Jobs/changeJobStatusByWorker', {
+                    "id": this.state.jobDetails.id,
+                    "status": 'FOLLOWEDUP',
+                    "customerId": this.state.jobDetails.customerId,
+                }).then((response) => {
+                    api.post('Jobs/getJobDetailsById', {
+                        "id": this.state.jobDetails.id,
+                        "workerId": this.state.jobDetails.workerId
+                    }).then((response) => {
+                        this.setState({ jobDetails: response.response.message[0], loader: false});
+                    }).catch((err) => {
+            
+                    })
+                }).catch((err) => {
+
+                })
+                //job status change end //
+            })
+        }
+    }
+
     startFollowUp() {
         this.setState({ IsVisible: true });
-        let toSendData = { "id": this.state.jobDetails.id,"price":this.state.totalPrice, 
-        "followUpDate":this.state.saveDateDB, "jobMaterialId": this.state.materialsId, "jobStartTime": this.state.jobDetails.jobStartTime, "jobEndTime": this.state.jobDetails.jobEndTime };
-        api.post('Jobs/followUpStart', toSendData).then((res) => {
-            if (res.response.type == "Error") {
-                this.setState({ IsVisible: false });
-                Alert.alert('Please try again later.');
-            }
-            else {
-                this.setState({ IsVisible: false });
-                AsyncStorage.removeItem("jobDetails");
-                AsyncStorage.removeItem("totalPrice");
-                AsyncStorage.removeItem("saveDateDB");
-                AsyncStorage.removeItem("materialsId");
-                this.props.navigation.navigate('AvailableJobs');
-            }
-        })
+
+         //update firebase on complete job
+        
+         let jobIdTr = `${this.state.jobDetails.id}`;
+         let refFollowFirebase = firebase.database().ref().child('tracking'); 
+         refFollowFirebase.orderByChild('jobId').equalTo(jobIdTr).once('value').then((snapshot)=>{ 
+             this.onFollowUpCall(snapshot);
+             setTimeout(() => {
+                 if(this.state.loader === true){
+                     this.onFollowUpCall(snapshot);
+                     setTimeout(() => {
+                        refFollowFirebase.off();
+                         Alert.alert('Internal Error Please Try Again');
+                         this.setState({ loader: false });
+                     }, 5000);
+                 }
+             }, 5000);
+         })
+
+        //end firebase status on complete job // 
+        
     }
     componentDidMount() {
         setTimeout(() => {
