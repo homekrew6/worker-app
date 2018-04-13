@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { Platform } from "react-native";
+import { Platform,Easing, Animated} from "react-native";
 import { Root } from "native-base";
 import { StackNavigator } from "react-navigation";
 
@@ -34,7 +34,29 @@ import FollowUpList from './components/followUp/followUpList';
 import AddMaterial from './components/followUp/addMaterals';
 import FollowUpDate from './components/followUp/followUpDate';
 import Chat from './components/jobList/chat';
-
+const transitionConfig = () => {
+    return {
+      transitionSpec: {
+        duration: 750,
+        easing: Easing.out(Easing.poly(4)),
+        timing: Animated.timing,
+        useNativeDriver: true,
+      },
+      screenInterpolator: sceneProps => {      
+        const { layout, position, scene } = sceneProps
+  
+        const thisSceneIndex = scene.index
+        const width = layout.initWidth
+  
+        const translateX = position.interpolate({
+          inputRange: [thisSceneIndex - 1, thisSceneIndex],
+          outputRange: [width, 0],
+        })
+  
+        return { transform: [ { translateX } ] }
+      },
+    }
+  }
 const AppNavigator = StackNavigator(
     {
         Drawer: { screen: Drawer },
@@ -70,6 +92,7 @@ const AppNavigator = StackNavigator(
     {
         initialRouteName: "Home",
         headerMode: "none",
+        transitionConfig
     }
 );
 
