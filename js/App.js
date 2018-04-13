@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { Platform } from "react-native";
+import { Platform , Text } from "react-native";
 import { Root } from "native-base";
 import { StackNavigator } from "react-navigation";
 
@@ -34,6 +34,7 @@ import FollowUpList from './components/followUp/followUpList';
 import AddMaterial from './components/followUp/addMaterals';
 import FollowUpDate from './components/followUp/followUpDate';
 import Chat from './components/jobList/chat';
+import JobTracker from './components/jobList/jobTracker';
 
 const AppNavigator = StackNavigator(
     {
@@ -65,7 +66,8 @@ const AppNavigator = StackNavigator(
         AddMaterial: { screen: AddMaterial},
         FollowUpDate: { screen: FollowUpDate},
         TotalBill: { screen: TotalBill },
-        Chat: { screen: Chat}
+        Chat: { screen: Chat },
+        JobTracker: { screen: JobTracker}
     },
     {
         initialRouteName: "Home",
@@ -74,6 +76,6 @@ const AppNavigator = StackNavigator(
 );
 
 export default () =>
-    <Root>
-        <AppNavigator />
+    <Root style={{ fontFamily: 'GamjaFlower-Regular' }}>
+            <AppNavigator />
     </Root>;
