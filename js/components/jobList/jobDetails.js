@@ -10,6 +10,7 @@ import 'moment-timezone';
 import DeviceInfo from 'react-native-device-info';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 //import CircularSlider from 'react-native-circular-slider';
+import Communications from 'react-native-communications';
 import MapViewDirections from 'react-native-maps-directions';
 import MapView, { Marker } from 'react-native-maps';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'; 
@@ -953,7 +954,9 @@ class JobDetails extends Component {
                                         <MaterialIcons name="chat" style={{ fontSize: 18, color: '#fff' }} />
                                         <Text style={{ color: '#fff' }}>  Chat</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={{ flex: 1, backgroundColor: '#1e3768', height: 50, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+                                    <TouchableOpacity style={{ flex: 1, backgroundColor: '#1e3768', height: 50, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}
+                                        onPress={() => Communications.phonecall(JobDetailsData.worker.phone, true)}
+                                    >
                                         <MaterialIcons name="call" style={{ fontSize: 18, color: '#fff' }} />
                                         <Text style={{ color: '#fff' }}>Call</Text>
                                     </TouchableOpacity>
