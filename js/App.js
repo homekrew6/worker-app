@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { Platform , Text } from "react-native";
+import { Platform,Easing, Animated, Text} from "react-native";
 import { Root } from "native-base";
 import { StackNavigator } from "react-navigation";
 
@@ -35,7 +35,29 @@ import AddMaterial from './components/followUp/addMaterals';
 import FollowUpDate from './components/followUp/followUpDate';
 import Chat from './components/jobList/chat';
 import JobTracker from './components/jobList/jobTracker';
-
+const transitionConfig = () => {
+    return {
+      transitionSpec: {
+        duration: 750,
+        easing: Easing.out(Easing.poly(4)),
+        timing: Animated.timing,
+        useNativeDriver: true,
+      },
+      screenInterpolator: sceneProps => {      
+        const { layout, position, scene } = sceneProps
+  
+        const thisSceneIndex = scene.index
+        const width = layout.initWidth
+  
+        const translateX = position.interpolate({
+          inputRange: [thisSceneIndex - 1, thisSceneIndex],
+          outputRange: [width, 0],
+        })
+  
+        return { transform: [ { translateX } ] }
+      },
+    }
+  }
 const AppNavigator = StackNavigator(
     {
         Drawer: { screen: Drawer },
@@ -72,10 +94,11 @@ const AppNavigator = StackNavigator(
     {
         initialRouteName: "Home",
         headerMode: "none",
+        transitionConfig
     }
 );
 
 export default () =>
-    <Root style={{ fontFamily: 'GamjaFlower-Regular' }}>
-            <AppNavigator />
+     <Root>
+        <AppNavigator />
     </Root>;
