@@ -5,7 +5,7 @@ import moment from 'moment';
 import 'moment-timezone';
 import DeviceInfo from 'react-native-device-info';
 import { NavigationActions } from "react-navigation";
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ListView, Geolocation, platform, AsyncStorage } from "react-native";
+import { Image, RefreshControl, View, StatusBar, Dimensions, Alert, TouchableOpacity, ListView, Geolocation, platform, AsyncStorage } from "react-native";
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, List, ListItem, Icon, Tab, Tabs, ScrollableTab, Body } from "native-base";
 import FSpinner from 'react-native-loading-spinner-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -170,6 +170,10 @@ class AvailableJobs extends Component {
             })
         })
     }
+
+    onRefresh(){
+        //Alert.alert('pulled');
+    }
     
 
     render() {     
@@ -294,7 +298,13 @@ class AvailableJobs extends Component {
                     renderTabBar={() => <ScrollableTab tabsContainerStyle={{ backgroundColor: '#81cdc7' }} />}
                 >
                     <Tab heading="AVAILABLE JOBS" tabStyle={{ backgroundColor: '#81cdc7', }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
-                        <Content>
+                        <Content
+                            refreshControl={
+                            <RefreshControl
+                                refreshing={this.state.refreshing}
+                                onRefresh={this.onRefresh.bind(this)}
+                            />}
+                        >
                             {
                                 finalArray.length === 0 ?
                                 <View style={{ alignSelf: 'center', padding: 20 }}>

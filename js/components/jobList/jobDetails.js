@@ -684,7 +684,6 @@ class JobDetails extends Component {
     }
     componentWillMount(){
         // console.log(this.props.navigation.state.params.jobDetails);
-
     }
 
     render() {
