@@ -30,16 +30,30 @@ class AvailableJobs extends Component {
     }
 
     getLocalTimeFormat(gmtTime){
-        const gmtToDeiveTimeObj = moment.tz(gmtTime, "Europe/London");
-        const timezoneDevice = DeviceInfo.getTimezone();
-        const gmtToDeiveTime = gmtToDeiveTimeObj.clone().tz(timezoneDevice).format('ddd DD-MMM-YYYY hh:mm A');
-        return gmtToDeiveTime;
+        // const gmtToDeiveTimeObj = moment.tz(gmtTime, "Europe/London");
+        // const timezoneDevice = DeviceInfo.getTimezone();
+        // const gmtToDeiveTime = gmtToDeiveTimeObj.clone().tz(timezoneDevice).format('ddd DD-MMM-YYYY hh:mm A');
+        // return gmtToDeiveTime;
+        let dateNow = new Date();
+        var nUTC_diff = dateNow.getTimezoneOffset();
+        let slicedDate = gmtTime.slice(0, -4);
+        let timeToMan = Math.abs(nUTC_diff);
+        let utc_check = Math.sign(nUTC_diff);
+        let localTime;
+        if(utc_check === 1 || utc_check === 0) {
+            localTime = moment(slicedDate).subtract(timeToMan, 'minutes').format('ddd DD-MMM-YYYY hh:mm A');
+        }else{
+            localTime = moment(slicedDate).add(timeToMan, 'minutes').format('ddd DD-MMM-YYYY hh:mm A');
+        }
+        return localTime;
     }
     getTimeDiffLocal(gmtTime){
         
-        const gmtToDeiveTimeObj = moment.tz(gmtTime, "Europe/London");
-        const timezoneDevice = DeviceInfo.getTimezone();
-        const gmtToDeiveTime = gmtToDeiveTimeObj.clone().tz(timezoneDevice).format();
+        // const gmtToDeiveTimeObj = moment.tz(gmtTime, "Europe/London");
+        // const timezoneDevice = DeviceInfo.getTimezone();
+        // const gmtToDeiveTime = gmtToDeiveTimeObj.clone().tz(timezoneDevice).format();
+        let getLocalTime = this.getLocalTimeFormat(gmtTime);
+        let gmtToDeiveTime = moment(getLocalTime);
         //const timeDiffNow = moment(gmtToDeiveTime, "YYYY-MM-DD hh:mm:ss a").fromNow();
         const now = new Date();
         const timeDur = moment.duration({ from: now, to: gmtToDeiveTime });
@@ -86,6 +100,7 @@ class AvailableJobs extends Component {
         }
         return hourDiff;
     }
+
     goDetails(item){
         this.props.navigation.navigate('JobDetails',{jobDetails:item});
     }

@@ -95,11 +95,20 @@ class JobDetails extends Component {
 
     }
     getLocalTimeFormat(gmtTime){
-        const gmtToDeiveTimeObj = moment.tz(gmtTime, "Europe/London");
-        const timezoneDevice = DeviceInfo.getTimezone();
-        const gmtToDeiveTime = gmtToDeiveTimeObj.clone().tz(timezoneDevice).format('ddd DD-MMM-YYYY hh:mm A');
-        return gmtToDeiveTime;
+        let dateNow = new Date();
+        var nUTC_diff = dateNow.getTimezoneOffset();
+        let slicedDate = gmtTime.slice(0, -4);
+        let timeToMan = Math.abs(nUTC_diff);
+        let utc_check = Math.sign(nUTC_diff);
+        let localTime;
+        if(utc_check === 1 || utc_check === 0) {
+            localTime = moment(slicedDate).subtract(timeToMan, 'minutes').format('ddd DD-MMM-YYYY hh:mm A');
+        }else{
+            localTime = moment(slicedDate).add(timeToMan, 'minutes').format('ddd DD-MMM-YYYY hh:mm A');
+        }
+        return localTime;
     }
+
     cancelJob(){
         if(this.state.reasonId)
         {
