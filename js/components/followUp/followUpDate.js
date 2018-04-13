@@ -18,6 +18,7 @@ class FollowUpDate extends Component {
             minDate: '',
             satStartDate: '',
             setStartWeek: '',
+            setStartTime: '',
             colectionData: [],
             months: []
         }
