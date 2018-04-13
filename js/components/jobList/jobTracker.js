@@ -90,8 +90,8 @@ class JobTracker extends Component {
                 </Header>
                 <Content>
                     <FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />                    
-                    <View style={{ backgroundColor: '#fff', paddingTop: 20, paddingBottom: 20, marginBottom: 10 }}>
-                        <Text style={{ width: '100%', textAlign: 'center', paddingBottom: 15 }}>Job Status</Text>
+                    <View style={styles.trackmetterWarp}>
+                        <Text style={styles.trackmetterHeader}>{I18n.t('jobStatus')}</Text>
                         <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
                             <View style={[styles.trackLogo, statusColor[0] ? { backgroundColor: '#ffd228' } : {}]}>
                                 <Image source={require('../../../img/icon/home.png')} style={styles.trackLogoImg} />
@@ -125,7 +125,7 @@ class JobTracker extends Component {
 
                     <View style={styles.trackmetterWarp}>
 
-                        <Text style={styles.trackmetterHeader}>Job Tracking</Text>
+                        <Text style={styles.trackmetterHeader}>{I18n.t('job_tracker')}</Text>
 
                         <View style={styles.trackmetterMainWarp}>
 
@@ -133,7 +133,7 @@ class JobTracker extends Component {
                             statusColor[0] ? (
                                     <View style={styles.trackmetterItem}>
                                         <View style={styles.trackmetterItemInner}>
-                                            <Text>Job Assigned</Text>
+                                            <Text>{I18n.t('jobAssigned')}</Text>
                                             <Text style={styles.trackmetterItemDate}>{statusColor[0]}</Text>
                                             <View style={styles.crcl}></View>
                                             {
@@ -150,7 +150,7 @@ class JobTracker extends Component {
                             ) : (
                                     <View style={styles.trackmetterItem}>
                                         <View style={styles.trackmetterItemInner}>
-                                            <Text>Job Assigned</Text>
+                                                <Text>{I18n.t('jobAssigned')}</Text>
                                             <Text style={styles.trackmetterItemDate}></Text>                                            
                                             <View style={[styles.crcl, { backgroundColor: '#ccc' }]}></View>
                                                 <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
@@ -163,7 +163,7 @@ class JobTracker extends Component {
                                 statusColor[1] ? (
                                     <View style={styles.trackmetterItem}>
                                         <View style={styles.trackmetterItemInner}>
-                                            <Text>On the way</Text>
+                                            <Text>{I18n.t('onTheWay')}</Text>
                                             <Text style={styles.trackmetterItemDate}>{statusColor[1]}</Text>
                                             <View style={styles.crcl}></View>
                                             {
@@ -179,7 +179,7 @@ class JobTracker extends Component {
                                 ) : (
                                         <View style={styles.trackmetterItem}>
                                             <View style={styles.trackmetterItemInner}>
-                                                <Text>On the way</Text>
+                                                <Text>{I18n.t('onTheWay')}</Text>
                                                 <Text style={styles.trackmetterItemDate}></Text>
                                                 <View style={[styles.crcl, { backgroundColor: '#ccc' }]}></View>
                                                 <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
@@ -192,7 +192,7 @@ class JobTracker extends Component {
                                 statusColor[2] ? (
                                     <View style={styles.trackmetterItem}>
                                         <View style={styles.trackmetterItemInner}>
-                                            <Text>Job Started</Text>
+                                            <Text>{I18n.t('jobStarted')}</Text>
                                             <Text style={styles.trackmetterItemDate}>{statusColor[2]}</Text>
                                             <View style={styles.crcl}></View>
                                             {
@@ -208,7 +208,7 @@ class JobTracker extends Component {
                                 ) : (
                                         <View style={styles.trackmetterItem}>
                                             <View style={styles.trackmetterItemInner}>
-                                                <Text>Job Started</Text>
+                                                <Text>{I18n.t('jobStarted')}</Text>
                                                 <Text style={styles.trackmetterItemDate}></Text>
                                                 <View style={[styles.crcl, { backgroundColor: '#ccc' }]}></View>
                                                 <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
@@ -221,7 +221,7 @@ class JobTracker extends Component {
                                 statusColor[3] ? (
                                     <View style={styles.trackmetterItem}>
                                         <View style={styles.trackmetterItemInner}>
-                                            <Text>Follow Up</Text>
+                                            <Text>{I18n.t('followUp')}</Text>
                                             <Text style={styles.trackmetterItemDate}>{statusColor[3]}</Text>
                                             <View style={styles.crcl}></View>
                                             {
@@ -237,7 +237,7 @@ class JobTracker extends Component {
                                 ) : (
                                         <View style={styles.trackmetterItem}>
                                             <View style={styles.trackmetterItemInner}>
-                                                <Text>Follow Up</Text>
+                                                <Text>{I18n.t('followUp')}</Text>
                                                 <Text style={styles.trackmetterItemDate}></Text>
                                                 <View style={[styles.crcl, { backgroundColor: '#ccc' }]}></View>
                                                 <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
@@ -249,7 +249,7 @@ class JobTracker extends Component {
                                 statusColor[4] ? (
                                     <View style={styles.trackmetterItem}>
                                         <View style={styles.trackmetterItemInner}>
-                                            <Text>Job Completed</Text>
+                                            <Text>{I18n.t('jobCompleted')}</Text>
                                             <Text style={styles.trackmetterItemDate}>{statusColor[5]}</Text>
                                             <View style={styles.crcl}></View>
                                         </View>
@@ -257,7 +257,7 @@ class JobTracker extends Component {
                                 ) : (
                                         <View style={styles.trackmetterItem}>
                                             <View style={styles.trackmetterItemInner}>
-                                                <Text>Job Completed</Text>
+                                                <Text>{I18n.t('jobCompleted')}</Text>
                                                 <Text style={styles.trackmetterItemDate}></Text>
                                                 <View style={[styles.crcl, { backgroundColor: '#ccc' }]}></View>
                                             </View>
