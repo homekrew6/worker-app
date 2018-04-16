@@ -110,4 +110,7 @@ export default {
   onTheWay: 'On The Way',
   jobStarted: 'Job Started',
   jobCompleted: 'Job Completed',
+  quote: 'Quote',
+  pending: 'Pending',
+  quoteMsg: 'Click the pending material to put the price .'
 };

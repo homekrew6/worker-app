@@ -90,7 +90,8 @@ class JobDetails extends Component {
             callChat: true,
             reasonList: '',
             reasonName: '',
-            reasonId: ''
+            reasonId: '',
+            navId: ''
         }
 
     }
@@ -110,13 +111,17 @@ class JobDetails extends Component {
     }
 
     cancelJob(){
-        if(this.state.reasonId)
+        if(this.state.reasonId !== '')
         {
-            const ToSendData={jobId:this.state.remoteJobDetails.id, status:"CANCELLED", "reason":this.state.reasonId, "workerId":this.state.remoteJobDetails.worker.id, "serviceId":this.state.remoteJobDetails.service.id};
+            const ToSendData={jobId:this.state.remoteJobDetails.id,
+                 status:"CANCELLED",
+                "reason":this.state.reasonId,
+                "workerId":this.state.remoteJobDetails.worker.id,
+                "serviceId":this.state.remoteJobDetails.service.id
+            };
             this.setState({loader:true});
-            debugger;
             api.post('Jobs/cancelJob', ToSendData).then((res)=>{
-                if(res.response.type="Error")
+                if(res.response.type==="Error")
                 {
                     this.setState({loader:false});
                     Alert.alert('Please try again later.');
@@ -125,7 +130,8 @@ class JobDetails extends Component {
                 {
                     let jobDetails=this.state.remoteJobDetails;
                     jobDetails.status='CANCELLED';
-                    this.setState({remoteJobDetails:jobDetails, loader:false});
+                    this.setState({remoteJobDetails:jobDetails, loader:false, isModalVisible: false});
+                    this.props.navigation.navigate('AvailableJobs');
                 }
             }).catch((error)=>{
                 this.setState({loader:false});
@@ -161,7 +167,7 @@ class JobDetails extends Component {
         this.setState({ bottomButtonStatus: 'start', loader: true });
 
         //navigator watch location start
-                navigator.geolocation.watchPosition((position) => {
+                let navId = navigator.geolocation.watchPosition((position) => {
                     console.log('watchPosition', position);
                     this.setState({
                         latitudeUser: position.coords.latitude,
@@ -266,7 +272,7 @@ class JobDetails extends Component {
                     //{ enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 },
                 );
         //navigator end
-
+                this.setState({ navId: navId });
 
     }
 
@@ -359,6 +365,7 @@ class JobDetails extends Component {
         }
     }
     onStartPress(){
+        navigator.geolocation.clearWatch(this.state.navId);
         this.setState({ mapTrackingStatus: 'timing', bottomButtonStatus: 'complete', loader: true });
         const time_interval = this.props.navigation.state.params.jobDetails.service.time_interval;
         let timeNowWork = new Date();
@@ -755,8 +762,8 @@ class JobDetails extends Component {
                 <StatusBar
                     backgroundColor="#81cdc7"
                 />
-                <Header style={styles.headerWarp} noShadow androidStatusBarColor="#81cdc7" >
-                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }}>
+                <Header style={[styles.headerWarp, { alignItems: 'center', justifyContent: 'center' }]} noShadow androidStatusBarColor="#81cdc7" >
+                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 80, justifyContent: 'flex-start' }}>
                         <Ionicons name="ios-arrow-back" style={styles.headIcon2} />
                     </Button>
                     <Body style={styles.headBody}>
@@ -766,8 +773,8 @@ class JobDetails extends Component {
                     {
                         
                         JobDetailsData.status=='JOBSTARTED'?(
-                            <Button transparent onPress={() => this.startFollowUp()} ><Text>{I18n.t('followUp')}</Text></Button>
-                        ):(console.log())
+                            <Button transparent onPress={() => this.startFollowUp()} style={{ width: 90 }} ><Text style={{ fontWeight: '100' }}>{I18n.t('followUp')}</Text></Button>
+                        ) : (<Button transparent style={{ backgroundColor: 'transparent' }} disabled></Button>)
                     }
                 </Header>
                 <Content style={{ backgroundColor: '#ccc' }}>
@@ -1028,13 +1035,19 @@ class JobDetails extends Component {
                         <Text style={styles.jobItemName}>{I18n.t('job_summary')}</Text>
                         <Text style={styles.jobItemValue}>{this.state.currency} {JobDetailsData.price}</Text>
                     </View>
-                    <View style={styles.jobItemWarp}>
-                        <View style={{ width: 30, alignItems: 'center'  }}>
-                            <Ionicons name="ios-flag-outline" style={styles.jobItemIconIonicons} />
-                        </View>
-                        <Text style={styles.jobItemName}>{I18n.t('quote_follow')}</Text>
-                        <Text style={styles.jobItemValue}>Yes</Text>
-                    </View>
+                    {
+
+                        JobDetailsData.status === 'JOBSTARTED' || JobDetailsData.status === 'FOLLOWEDUP' ? (
+                            <TouchableOpacity style={styles.jobItemWarp} onPress={() => this.props.navigation.navigate('Quote', { jobId: JobDetailsData.id})}>
+                                <View style={{ width: 30, alignItems: 'center' }}>
+                                    <Ionicons name="ios-flag-outline" style={styles.jobItemIconIonicons} />
+                                </View>
+                                <Text style={styles.jobItemName}>{I18n.t('quote_follow')}</Text>
+                                <Text style={styles.jobItemValue}>Yes</Text>
+                            </TouchableOpacity>
+                        ) : (console.log(''))
+                    }
+                    
                     <View style={styles.jobItemWarp}>
                         <View style={{ width: 30, alignItems: 'center' }}>
                             <MaterialIcons name="payment" style={styles.jobItemIcon} />

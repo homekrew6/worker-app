@@ -49,30 +49,36 @@ class AddMaterial extends Component {
         };
     }
     addMaterial() {
-        
-        if (!(this.state.name == '' && this.state.price == '')){
+        debugger;
+        if (!(this.state.name == '')){
             this.setState({ loader: true });
             const data = { name: this.state.name, price: this.state.price, image: '' };
+
             api.post('Materials', data).then((res) => {
+                debugger
                 if (res.id) {
                     let addedItemArray = this.state.addedMaterialsList;
                     addedItemArray.push({ id: res.id, name: this.state.name, price: this.state.price, image: '', count: 1, actualPrice: this.state.price });
                     this.setState({ addedMaterialsList: addedItemArray, loader: false, IsModalVisible: false });
-                    let newPrice = parseInt(this.state.totalPrice) + parseInt(this.state.price);
-                    this.setState({
-                        totalPrice: newPrice.toFixed(2),
-                        price: '',
-                        name: ''
-                    })
+                    if (this.state.price !== ''){
+                        if (!(this.state.totalPrice == '')) {
+                            let newPrice = parseInt(this.state.totalPrice) + parseInt(this.state.price);
+                        }
+                        this.setState({
+                            totalPrice: newPrice.toFixed(2),
+                            price: '',
+                            name: ''
+                        })
+                    }   
                 }
                 else {
                     this.setState({ loader: false });
-                    Alert.alert("Please try again later.");
+                    Alert.alert("Please try again later. 1");
                 }
 
             }).catch((err) => {
                 this.setState({ loader: false });
-                Alert.alert("Please try again later.");
+                Alert.alert("Please try again later. 2");
             })
         }
         else{
@@ -252,6 +258,7 @@ class AddMaterial extends Component {
 
     }
     saveMaterials() {
+        debugger;
         const jobId = this.props.navigation.state.params.jobId ? this.props.navigation.state.params.jobId : '';
         if (jobId) {
             this.setState({ loader: true });
