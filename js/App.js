@@ -35,6 +35,9 @@ import AddMaterial from './components/followUp/addMaterals';
 import FollowUpDate from './components/followUp/followUpDate';
 import Chat from './components/jobList/chat';
 import JobTracker from './components/jobList/jobTracker';
+import Quote from './components/followUp/quote';
+
+
 const transitionConfig = () => {
     return {
       transitionSpec: {
@@ -88,8 +91,9 @@ const AppNavigator = StackNavigator(
         AddMaterial: { screen: AddMaterial},
         FollowUpDate: { screen: FollowUpDate},
         TotalBill: { screen: TotalBill },
-        Chat: { screen: Chat },
-        JobTracker: { screen: JobTracker}
+        Chat: { screen: Chat }, 
+        JobTracker: { screen: JobTracker },
+        Quote: { screen: Quote}
     },
     {
         initialRouteName: "Home",

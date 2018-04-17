@@ -106,5 +106,8 @@ export default {
   jobAssigned: 'وظيفة محددة',
   onTheWay: 'علي الطريق',
   jobStarted: 'بدأ العمل',
-  jobCompleted: 'أنجزت المهمة'
+  jobCompleted: 'أنجزت المهمة',
+  quote: 'اقتبس',
+  pending: 'قيد الانتظار',
+  quoteMsg: 'انقر فوق المواد المعلقة لوضع السعر.' 
 };

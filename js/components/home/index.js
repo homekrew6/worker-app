@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image, View, StatusBar, ImageBackground, AsyncStorage } from "react-native";
+import { Image, View, StatusBar, ImageBackground, AsyncStorage, } from "react-native";
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import FCM, { FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType } from "react-native-fcm";

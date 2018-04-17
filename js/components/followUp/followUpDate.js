@@ -36,8 +36,8 @@ class FollowUpDate extends Component {
         }
         let date = today.getFullYear() + "-" + dy + "-" + dm;
         this.setState({
-            minDate: [today],
-            daYSelected: [date],
+            minDate: this.props.navigation.state.params.jobDetails.postedDate,
+            daYSelected: this.props.navigation.state.params.jobDetails.postedDate,
             colectionData: [
                 { key: '1', time: '00:00 AM', isActive: false },
                 { key: '2', time: '01:00 AM', isActive: false },

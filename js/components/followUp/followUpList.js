@@ -39,7 +39,7 @@ class FollowUpList extends Component {
             IsVisible: false,
             currency: 'USD',
             jobDetails: '',
-            totalPrice: '0.0',
+            totalPrice: '0.00',
             hours: 1,
             saveDateDB: '',
             materialsId: ''
@@ -107,27 +107,26 @@ class FollowUpList extends Component {
 
     startFollowUp() {
         this.setState({ IsVisible: true });
-
-         //update firebase on complete job
-        
-         let jobIdTr = `${this.state.jobDetails.id}`;
-         let refFollowFirebase = firebase.database().ref().child('tracking'); 
-         refFollowFirebase.orderByChild('jobId').equalTo(jobIdTr).once('value').then((snapshot)=>{ 
-             this.onFollowUpCall(snapshot);
-             setTimeout(() => {
-                 if(this.state.loader === true){
-                     this.onFollowUpCall(snapshot);
-                     setTimeout(() => {
-                        refFollowFirebase.off();
-                         Alert.alert('Internal Error Please Try Again');
-                         this.setState({ loader: false });
-                     }, 5000);
-                 }
-             }, 5000);
-         })
-
-        //end firebase status on complete job // 
-        
+        if (this.state.totalPrice){
+            let jobIdTr = `${this.state.jobDetails.id}`;
+            let refFollowFirebase = firebase.database().ref().child('tracking');
+            refFollowFirebase.orderByChild('jobId').equalTo(jobIdTr).once('value').then((snapshot) => {
+                this.onFollowUpCall(snapshot);
+                setTimeout(() => {
+                    if (this.state.loader === true) {
+                        this.onFollowUpCall(snapshot);
+                        setTimeout(() => {
+                            refFollowFirebase.off();
+                            Alert.alert('Internal Error Please Try Again');
+                            this.setState({ loader: false });
+                        }, 5000);
+                    }
+                }, 5000);
+            }) 
+        }else{
+            Alert.alert('Please add price for the material to submit the request');
+        }
+                
     }
     componentDidMount() {
         setTimeout(() => {
@@ -265,7 +264,7 @@ class FollowUpList extends Component {
                         </CardItem>
 
                         <CardItem style={styles.menuCarditem}>
-                            <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate('FollowUpDate')} >
+                            <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate('FollowUpDate', { jobDetails: this.props.navigation.state.params.jobDetails })} >
                                 <Image source={icon3} style={styles.menuCardIcon} />
                                 <Text style={styles.menuCardTxt}>{I18n.t('date_timing')}</Text>
                                 <View style={styles.arw_lft}>
