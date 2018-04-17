@@ -106,26 +106,53 @@ class FollowUpList extends Component {
     }
 
     startFollowUp() {
-        this.setState({ IsVisible: true });
-        if (this.state.totalPrice){
-            let jobIdTr = `${this.state.jobDetails.id}`;
-            let refFollowFirebase = firebase.database().ref().child('tracking');
-            refFollowFirebase.orderByChild('jobId').equalTo(jobIdTr).once('value').then((snapshot) => {
-                this.onFollowUpCall(snapshot);
-                setTimeout(() => {
-                    if (this.state.loader === true) {
-                        this.onFollowUpCall(snapshot);
-                        setTimeout(() => {
-                            refFollowFirebase.off();
-                            Alert.alert('Internal Error Please Try Again');
-                            this.setState({ loader: false });
-                        }, 5000);
+        if(this.state.saveDateDB){
+            if (this.state.totalPrice !== '0.00'){
+                this.setState({ IsVisible: true });
+
+                api.post("jobMaterials/getJobMaterialByJobId", { "jobId": this.props.navigation.state.params.jobDetails.id }).then((addedList) => {
+                    if (addedList.type != "Error") {
+                        let addedItemsList = [];
+                        let isPriceAdded=true;
+                        for(let i =0; i < addedList.response.message.length; i++){
+                            if(!addedList.response.message[i].price){
+                               isPriceAdded = false;
+                               break;
+                            }
+                        }
+                        if(isPriceAdded){
+                            let jobIdTr = `${this.state.jobDetails.id}`;
+                            let refFollowFirebase = firebase.database().ref().child('tracking');
+                            refFollowFirebase.orderByChild('jobId').equalTo(jobIdTr).once('value').then((snapshot) => {
+                                this.onFollowUpCall(snapshot);
+                                setTimeout(() => {
+                                    if (this.state.loader === true) {
+                                        this.onFollowUpCall(snapshot);
+                                        setTimeout(() => {
+                                            refFollowFirebase.off();
+                                            if(this.state.loader){
+                                                Alert.alert('Internal Error Please Try Again');
+                                                this.setState({ loader: false });
+                                            }                                        
+                                        }, 5000);
+                                    }
+                                }, 5000);
+                            }) 
+                        }else{
+                            this.setState({ loader: false, IsVisible: false });
+                            Alert.alert('Please add price for all material(s)');
+                        }
                     }
-                }, 5000);
-            }) 
+                }).catch((err) => {
+                    this.setState({ loader: false });
+                })
+            }else{
+                Alert.alert('Please add price for the material to submit the request');
+            }
         }else{
-            Alert.alert('Please add price for the material to submit the request');
+            Alert.alert('Please select time and date.');
         }
+        
                 
     }
     componentDidMount() {
@@ -157,17 +184,16 @@ class FollowUpList extends Component {
             })
         }
         if (this.props.navigation.state.params.totalPrice) {
-            AsyncStorage.setItem("totalPrice", this.props.navigation.state.params.totalPrice).then((res) => {
-                this.setState({ totalPrice: this.props.navigation.state.params.totalPrice });
-            })
-
+            // AsyncStorage.setItem("totalPrice", this.props.navigation.state.params.totalPrice).then((res) => {
+            //     this.setState({ totalPrice: this.props.navigation.state.params.totalPrice });
+            // })
         }
         else {
-            AsyncStorage.getItem("totalPrice").then((value) => {
-                if (value) {
-                    this.setState({ totalPrice: value });
-                }
-            })
+            // AsyncStorage.getItem("totalPrice").then((value) => {
+            //     if (value) {
+            //         this.setState({ totalPrice: value });
+            //     }
+            // })
         }
         if (this.props.navigation.state.params.saveDateDB) {
             AsyncStorage.setItem("saveDateDB", this.props.navigation.state.params.saveDateDB).then((res) => {
@@ -194,6 +220,42 @@ class FollowUpList extends Component {
                 }
             })
         }
+        let jobId =  this.props.navigation.state.params.jobDetails.id;
+        api.post("jobMaterials/getJobMaterialByJobId", { "jobId": jobId }).then((addedList) => {                
+            if (addedList.type != "Error") {
+                let addedItemsList = [];
+                addedList.response.message.map((item) => {
+                    let item1 = {
+                        id: item.id, 
+                        name: item.materials ? item.materials.name : '', 
+                        price: item.price ? item.price: 0, 
+                        image: item.materials ? (item.materials.image ? item.materials.image : '') : '',
+                        count: item.count, 
+                        materialsId: item.materialsId,
+                        actualPrice: item.materials ? item.materials.price : '', 
+                        totalPrice: item.count * item.materials.price
+                        };
+                    addedItemsList.push(item1);
+                });
+                let totalPrice = 0;
+                if (addedItemsList.length){
+                    addedItemsList.map((item) => {
+                        totalPrice = totalPrice + Number(item.price);
+                    }); 
+                }
+                totalPrice = totalPrice + 50;
+                totalPrice = totalPrice.toFixed(2);
+                this.setState({
+                        loader: false, 
+                        addedMaterialsList: addedItemsList,
+                        totalPrice: totalPrice
+                });
+            }
+        }).catch((err) => {
+            this.setState({ loader: false });
+            console.log('error');
+        })
+
     }
 
 
@@ -276,7 +338,7 @@ class FollowUpList extends Component {
                         </CardItem>
 
                         <CardItem style={styles.menuCarditem}>
-                            <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate("AddMaterial", { jobId: this.state.jobDetails.id })}>
+                            <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate("AddMaterial", { jobDetails: this.state.jobDetails })}>
                                 <Image source={icon4} style={styles.menuCardIcon} />
                                 <Text style={styles.menuCardTxt}>{I18n.t('materials')}</Text>
                                 <View style={styles.arw_lft}>

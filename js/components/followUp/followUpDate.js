@@ -36,8 +36,8 @@ class FollowUpDate extends Component {
         }
         let date = today.getFullYear() + "-" + dy + "-" + dm;
         this.setState({
-            minDate: this.props.navigation.state.params.jobDetails.postedDate,
-            daYSelected: this.props.navigation.state.params.jobDetails.postedDate,
+            minDate: this.props.navigation.state.params.jobDetails.postedDate ? this.props.navigation.state.params.jobDetails.postedDate : [date],
+            daYSelected: this.props.navigation.state.params.jobDetails.postedDate ? this.props.navigation.state.params.jobDetails.postedDate : [date],
             colectionData: [
                 { key: '1', time: '00:00 AM', isActive: false },
                 { key: '2', time: '01:00 AM', isActive: false },
@@ -200,9 +200,6 @@ class FollowUpDate extends Component {
                             </CardItem>
 
                         </Card>
-
-
-
 
                     </View>
                 </Content>
