@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, AsyncStorage } from 'react-native';
 import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title, ActionSheet } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Modal from "react-native-modal";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
@@ -31,7 +32,11 @@ class Quote extends Component {
             currency: 'AED',
             followUpDetails: '',
             totalPrice: 0,
-            hoursTotal: 0
+            hoursTotal: 0,
+            pricePending: '',
+            IsModalVisible: false,
+            id: '',
+            materialsId: ''
          }
     }
     componentDidMount() {
@@ -46,30 +51,39 @@ class Quote extends Component {
         api.post("jobMaterials/getJobMaterialByJobId", { "jobId": this.props.navigation.state.params.jobId }).then((addedList) => {                
             if (addedList.type != "Error") {
                 let addedItemsList = [];
-
                 addedList.response.message.map((item) => {
-                    let item1 = { id: item.id, name: item.materials ? item.materials.name : '', price: item.price ? item.price: 0, image: item.materials ? (item.materials.image ? item.materials.image : '') : '', count: item.count, actualPrice: item.materials ? item.materials.price : '', totalPrice: item.materials ? item.count * item.materials.price: '' };
+                    let item1 = {
+                        id: item.id, 
+                        name: item.materials ? item.materials.name : '', 
+                        price: item.price ? item.price: 0, 
+                        image: item.materials ? (item.materials.image ? item.materials.image : '') : '',
+                        count: item.count, 
+                        materialsId: item.materialsId,
+                        actualPrice: item.materials ? item.materials.price : '', 
+                        totalPrice: item.materials ? item.count * item.materials.price: ''
+                        };
                     addedItemsList.push(item1);
                 });
                 let totalPrice = 0;
 
                 if (addedItemsList.length){
                     addedItemsList.map((item) => {
-                        totalPrice = totalPrice + item.totalPrice;
+                        totalPrice = totalPrice + Number(item.price);
                     }); 
                 }
-
+                totalPrice = totalPrice + 50;
+                totalPrice = totalPrice.toFixed(2);
                 this.setState({
                         loader: false, 
                         addedMaterialsList: addedItemsList,
                         totalPrice: totalPrice
                 });
             }
-
         }).catch((err) => {
             this.setState({ loader: false });
             console.log('error');
         })
+        
         this.setState({ loader: true });
         api.get('jobFollowUps').then((followupDetailsRes) => {
             let followUpDetails;
@@ -98,6 +112,71 @@ class Quote extends Component {
         });
     }
 
+    setPendingMat(item){
+        this.setState({ IsModalVisible: true });
+        this.setState({ id: item.materialsId, materialsId: item.id });
+    }
+
+    AddPendingMat(){
+        this.setState({ IsModalVisible: true });
+        if(this.state.pricePending !== ''){
+            api.post('Materials/updateupdateMaterialPrice', {
+                jobMaterialId: this.state.materialsId, 
+                id: this.state.id , 
+                price: this.state.pricePending
+            }).then((PendingRes) => {
+                
+                if(PendingRes.type === 'Error'){
+                    Alert.alert('Please try again later');
+                    this.setState({ IsModalVisible: false });
+                }else{
+                    Alert.alert('Added SuccessFully');
+                    api.post("jobMaterials/getJobMaterialByJobId", { "jobId": this.props.navigation.state.params.jobId }).then((addedList) => {                
+                        if (addedList.type != "Error") {
+                            let addedItemsList = [];
+                            addedList.response.message.map((item) => {
+                                let item1 = {
+                                    id: item.id, 
+                                    name: item.materials ? item.materials.name : '', 
+                                    price: item.price ? item.price: 0, 
+                                    image: item.materials ? (item.materials.image ? item.materials.image : '') : '',
+                                    count: item.count, 
+                                    materialsId: item.materialsId,
+                                    actualPrice: item.materials ? item.materials.price : '', 
+                                    totalPrice: item.materials ? item.count * item.materials.price: ''
+                                    };
+                                addedItemsList.push(item1);
+                            });
+                            let totalPrice = 0;
+            
+                            if (addedItemsList.length){
+                                addedItemsList.map((item) => {
+                                    totalPrice = totalPrice + item.totalPrice;
+                                }); 
+                            }
+                            this.setState({
+                                    loader: false, 
+                                    addedMaterialsList: addedItemsList,
+                                    totalPrice: totalPrice
+                            });
+                        }
+            
+                    }).catch((err) => {
+                        this.setState({ loader: false });
+                        console.log('error');
+                    })
+                    this.setState({ IsModalVisible: false });
+                }
+                
+            }).catch((err) => {
+                Alert.alert('Please try again later');
+                this.setState({ IsModalVisible: false });
+            })
+        }else{
+            this.setState({ IsModalVisible: false });
+            Alert.alert('Please add price');
+        }
+    }
     render() {
         
         return (
@@ -139,7 +218,8 @@ class Quote extends Component {
                             {
                                 this.state.addedMaterialsList.map((item, key) => {
                                     return(
-                                        <View style={styles.totalBillitem} key={key}>
+                                        // <View style={styles.totalBillitem} >
+                                        <TouchableOpacity key={key} style={styles.totalBillitem} onPress={() => item.price ? null : this.setPendingMat(item)}>
                                             <View style={[styles.imagesWarp, styles.subMaterials]}>
                                                 <Image source={{uri: item.image}} style={styles.totalImage} />
                                             </View>
@@ -147,15 +227,18 @@ class Quote extends Component {
                                                 <Text style={styles.text1}>{item.name}</Text>
                                             </View>
                                             <View style={{ flex: 1 }}>
-                                                <Text style={styles.text2}>{item.count}</Text>
-                                                {
-                                                    item.price ?(
-                                                        <Text style={[styles.text2, { color: '#ccc', fontSize: 12 }]}>x {this.state.currency} {item.price}</Text>
-                                                    ):(
-                                                        <Text style={[styles.text2, { color: '#ccc', fontSize: 12 }]}>{I18n.t('pending')}</Text>
-                                                    )
-                                                }
+                                                
+                                                    <Text style={styles.text2}>{item.count}</Text>
+                                                    {
+                                                        item.price ?(
+                                                            <Text style={[styles.text2, { color: '#ccc', fontSize: 12 }]}>x {this.state.currency} {item.price}</Text>
+                                                        ):(
+                                                            <Text style={[styles.text2, { color: '#ccc', fontSize: 12 }]}>{I18n.t('pending')}</Text>
+                                                        )
+                                                    }
+                                                
                                             </View>
+                                            
                                             <View style={styles.price}>
                                                 {
                                                     item.price ? (
@@ -165,7 +248,8 @@ class Quote extends Component {
                                                         )
                                                 }
                                             </View>
-                                        </View>
+                                        </TouchableOpacity>
+                                        // </View>
                                     )
                                 })
                             }
@@ -197,7 +281,7 @@ class Quote extends Component {
 
                             </View>
                             <View style={styles.price}>
-                                <Text style={styles.priceText}>{this.state.currency} {(this.state.totalPrice + this.state.hoursTotal) }</Text>
+                                <Text style={styles.priceText}>{this.state.currency} {(this.state.totalPrice) }</Text>
                             </View>
                         </View>
 
@@ -205,6 +289,36 @@ class Quote extends Component {
                             <Text style={{ fontSize: 12 }}><Text>* </Text>{I18n.t('quoteMsg')}</Text>
                         </View>
                     </View>
+                    <Modal isVisible={this.state.IsModalVisible}>
+                        <TouchableOpacity
+                            transparent style={{ flex: 1, justifyContent: 'center', display: 'flex', width: '100%' }}
+                            onPress={() => this.setState({ IsModalVisible: false })}
+                            activeOpacity={1}
+                        >
+
+                            <TouchableOpacity style={{ position: 'absolute', top: 0, right: 0, zIndex: 99999, }} onPress={() => this.setState({ IsModalVisible: false })}>
+                                <Ionicons style={{ color: 'rgba(255,255,255,0.5)', fontSize: 36 }} name='md-close-circle' />
+                            </TouchableOpacity>
+
+                            <View style={{ backgroundColor: 'white', borderRadius: 10, overflow: 'hidden' }}>
+                                <View>
+                                    <Item regular style={{ borderColor: 'transparent', borderWidth: 1, borderRadius: 2, height: 45 }}>
+                                        <Input onChangeText={(price) => this.setState({ pricePending: price })} placeholder={I18n.t('enter_price_of_material')} keyboardType={'numeric'} value={this.state.price} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} />
+                                    </Item>
+                                </View>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <TouchableOpacity onPress={() => this.setState({ IsModalVisible: false })} style={{ flex: 1, alignItems: 'center', justifyContent: 'center', height: 50, backgroundColor: 'red' }}>
+                                        <Text style={{ color: '#fff' }}>{I18n.t('cancel')}</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => this.AddPendingMat()} style={{ flex: 1, alignItems: 'center', justifyContent: 'center', height: 50, backgroundColor: '#81cdc7' }}>
+                                        <Text style={{ color: '#fff' }}>{I18n.t('add')}</Text>
+                                    </TouchableOpacity>
+                                </View>
+
+                            </View>
+
+                        </TouchableOpacity>
+                    </Modal>
                 </Content>
             </Container>
         );

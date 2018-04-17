@@ -198,7 +198,7 @@ export default {
 
     // total bill item
 
-    totalBillitem: { flexDirection: 'row', paddingTop: 15, paddingBottom: 15, paddingLeft: 10, paddingRight: 10, alignItems: 'center', borderBottomColor: '#ccc', borderBottomWidth: 1, backgroundColor: '#fff' },
+    totalBillitem: { flexDirection: 'row', paddingTop: 12, paddingBottom: 12, paddingLeft: 10, paddingRight: 10, alignItems: 'center', borderBottomColor: '#ccc', borderBottomWidth: 1, backgroundColor: '#fff' },
     totalImage: { width: 20, height: 20 },
     text1: { paddingLeft: 8 },
     text2: { width: '100%', textAlign: 'right', paddingRight: 10 },

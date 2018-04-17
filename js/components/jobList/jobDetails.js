@@ -392,8 +392,10 @@ class JobDetails extends Component {
                     this.onStartFirebaseCall(saveEndTime, newNowTime, snapshot);
                     setTimeout(() => {
                         refStartFirebase.off();
-                        Alert.alert('Internal Error Please Try Again');
-                        this.setState({ loader: false });
+                        if(this.state.loader){
+                            Alert.alert('Internal Error Please Try Again');
+                            this.setState({ loader: false });
+                        }
                     }, 5000);
                 }
             }, 5000);
