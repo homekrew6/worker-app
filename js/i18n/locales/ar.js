@@ -110,5 +110,6 @@ export default {
   quote: 'اقتبس',
   pending: 'قيد الانتظار',
   quoteMsg: 'انقر فوق المواد المعلقة لوضع السعر.' ,
-  jobSummary: 'ملخص العمل'
+  jobSummary: 'ملخص العمل',
+  commission:'عمولة'
 };

@@ -114,4 +114,5 @@ export default {
   pending: 'Pending',
   quoteMsg: 'Click the pending material to put the price .',
   jobSummary: 'Job Summary',
+  commission:'Commission'
 };
