@@ -179,7 +179,7 @@ class JobDetails extends Component {
                     let workerId = this.props.auth.data.id;
                     let jobIdTr = this.props.navigation.state.params.jobDetails.id;
                     this.state.itemsRef = firebase.database().ref().child('tracking'); 
-
+                    jobIdTr=jobIdTr.toString();
                     this.state.itemsRef.orderByChild('jobId').equalTo(jobIdTr).once('value').then((snapshot)=>{ 
                 console.warn(snapshot); 
                         if (snapshot && snapshot.val()) { 
@@ -206,7 +206,11 @@ class JobDetails extends Component {
                                 "id": this.props.navigation.state.params.jobDetails.id,
                                 "workerId": this.props.auth.data.id
                             }).then((response) => {
-                                this.setState({ remoteJobDetails: response.response.message[0], loader: false });
+                                if(response.response.message.length &&  response.response.message.length>0 && response.response.message[0].price)
+                                {
+                                    response.response.message[0].price=response.response.message[0].price.toFixed(2);
+                                }
+                                this.setState({ remoteJobDetails: response.response.message[0], loader: false, });
                                 setTimeout(() => {
                                     this.refs.ScrollViewStart.scrollToEnd();
                                 }, 50);
@@ -581,7 +585,13 @@ class JobDetails extends Component {
             "id": this.props.navigation.state.params.jobDetails.id,
             "workerId": this.props.auth.data.id
         }).then((response) => {
-            this.setState({ remoteJobDetails: response.response.message[0] });
+            debugger;
+             if(response.response.message.length &&  response.response.message.length>0 && response.response.message[0].price)
+                                {
+                                    response.response.message[0].price=response.response.message[0].price.toFixed(2);
+                                }
+
+            this.setState({ remoteJobDetails: response.response.message[0], jobTrackingStatus: response.response.message[0].status});
             console.log('did job de', response);
             if(this.state.remoteJobDetails.status === 'ONMYWAY'){
                 this.refs.ScrollViewStart.scrollToEnd();
@@ -1062,7 +1072,7 @@ class JobDetails extends Component {
                         <Text style={styles.jobItemName}>{I18n.t('payment')}</Text>
                         <Text style={styles.jobItemValue}>{JobDetailsData.payment}</Text>
                     </View>
-                    {
+                    {/* {
                         JobDetailsData.status==='FOLLOWEDUP'?
                         <View>
                                 <ScrollView
@@ -1094,7 +1104,7 @@ class JobDetails extends Component {
                                 </ScrollView>
                             </View>:
                         <View></View>
-                    }
+                    } */}
                     {
                         JobDetailsData.status === 'COMPLETED' ?
                             <View style={styles.jobItemWarp}>
