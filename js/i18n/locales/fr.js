@@ -18,5 +18,6 @@ export default {
   enter_price_of_material: 'Entrez le prix du matériel',
   price: 'Prix',
   slide_to_click_renew_job: 'Faites glisser pour cliquer sur Renouveler le travail',
-  renew_job: 'Renouveler le travail'
+  renew_job: 'Renouveler le travail',
+   commission:'Commission'
 };
