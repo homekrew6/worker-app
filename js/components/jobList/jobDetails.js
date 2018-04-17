@@ -1028,13 +1028,20 @@ class JobDetails extends Component {
                         <Text style={styles.jobItemName}>{I18n.t('location')}</Text>
                         <Text style={styles.jobItemValue}>{ JobDetailsData.userLocation.name }</Text>
                     </View>
-                    <View style={styles.jobItemWarp}>
+                    {
+                        JobDetailsData.status!='STARTED'?(
+<TouchableOpacity style={styles.jobItemWarp} onPress={() => this.props.navigation.navigate('jobSummary', {jobDetails: JobDetailsData})}>
                         <View style={{ width: 30, alignItems: 'center'  }}>
                             <SimpleLineIcons name="docs" style={styles.jobItemIcon} />
                         </View>
                         <Text style={styles.jobItemName}>{I18n.t('job_summary')}</Text>
                         <Text style={styles.jobItemValue}>{this.state.currency} {JobDetailsData.price}</Text>
-                    </View>
+                    </TouchableOpacity>
+                        ):(
+                            <View></View>
+                        )
+                    }
+                    
                     {
 
                         JobDetailsData.status === 'JOBSTARTED' || JobDetailsData.status === 'FOLLOWEDUP' ? (
