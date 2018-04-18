@@ -39,7 +39,7 @@ class AddMaterial extends Component {
             materialsList: [],
             loader: false,
             addedMaterialsList: [],
-            currency: 'USD',
+            currency: 'AED',
             renderMaterialsList: [],
             IsAutoComplete: false,
             IsModalVisible: false,

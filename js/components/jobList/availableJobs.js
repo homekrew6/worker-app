@@ -24,7 +24,7 @@ class AvailableJobs extends Component {
             finalJobData: [],
             listItemFlag: false,
             loader: false,
-            currency:'USD',
+            currency:'AED',
             refreshing: false
         };
     }

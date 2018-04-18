@@ -37,7 +37,7 @@ class FollowUpList extends Component {
         super(props);
         this.state = {
             IsVisible: false,
-            currency: 'USD',
+            currency: 'AED',
             jobDetails: '',
             totalPrice: '0.00',
             hours: 1,

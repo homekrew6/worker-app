@@ -83,7 +83,7 @@ class JobDetails extends Component {
             job_start_time: '',
             job_end_time: '',
             remoteJobDetails: '',
-            currency:'USD',
+            currency:'AED',
             itemsRef: '',
             jobTrackingStatus: '',
             progressInterval:'',
