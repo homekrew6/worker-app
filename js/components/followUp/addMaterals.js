@@ -254,10 +254,11 @@ class AddMaterial extends Component {
 
     }
     addPrice(id, count) {
+        debugger;
         let addedMaterialsList = this.state.addedMaterialsList;
         let item;
         this.state.addedMaterialsList.map((item1) => {
-            if (item1.id == id) {
+            if (item1.materialsId == id) {
                 item = item1;
             }
         });
@@ -265,7 +266,7 @@ class AddMaterial extends Component {
             item.count = count + 1;
             item.price = (item.count * item.actualPrice).toFixed(2);
             addedMaterialsList.map((item1) => {
-                if (item1.id == item.id) {
+                if (item1.materialsId == item.id) {
                     item1.count = item.count;
                     item1.price = item.price;
                 }
@@ -300,6 +301,7 @@ class AddMaterial extends Component {
                 }
                 else {
                     Alert.alert("Materials added successfully.");
+                    debugger;
                     this.props.navigation.navigate('FollowUpList', { 
                         totalPrice: this.state.totalPrice,
                         materialsId: res.response.message[0].materialsId,
@@ -400,7 +402,8 @@ class AddMaterial extends Component {
                                     <TouchableOpacity onPress={() => this.addItems(id, name, image, price)} style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row', backgroundColor: '#fff', paddingTop: 8, paddingBottom: 8, paddingLeft: 8, paddingRight: 8 }}>
                                         <View style={{ borderColor: '#ccc', borderWidth: 1, borderRadius: 10, overflow: 'hidden' }}>
                                             {
-                                                image ? <Image source={{ uri: image }} style={{ height: 50, width: 50 }} />: console.log()
+                                                image ? <Image source={{ uri: image }} style={{ height: 50, width: 50 }} />:
+                                                 <Image source={toolBoxIcon} style={{ height: 50, width: 50 }} />
                                             }
                                         </View>
                                         <View style={{ flex: 1, paddingLeft: 15 }}>
@@ -420,10 +423,7 @@ class AddMaterial extends Component {
                                         </TouchableOpacity>
                                     </TouchableOpacity>
                                 </View>
-
                             )}
-
-
                         />
                         <View>
                             <TouchableOpacity 
@@ -441,9 +441,7 @@ class AddMaterial extends Component {
                                     <View style={{ alignItems: 'center', justifyContent: 'center', marginBottom: 10, backgroundColor: '#fff', height: 60, width: 60, borderRadius: 10 }}>
                                         <Text>N/A</Text>                                        
                                     </View>
-
                                     <Text style={{ marginBottom: 10 }}>{I18n.t('click_here_to_add_in_list')}</Text>
-
                                     <TouchableOpacity style={{ flexDirection: 'row', backgroundColor: '#1e3768', borderRadius: 30, paddingLeft: 8, paddingRight: 8, paddingTop: 5, paddingBottom: 5, alignItems: 'center' }} onPress={() => this.setState({ IsModalVisible: true, name: '', price: '' })}>
                                         <FontAwesome name='plus' style={{ fontSize: 14, color: '#fff' }} />
                                         <Text style={{ color: '#fff' }}> { I18n.t('add') } </Text>
@@ -473,7 +471,7 @@ class AddMaterial extends Component {
                                                         {
                                                             item.image?
                                                                 <Image source={{ uri: item.image }} style={[styles.menuCardIcon, { height: 50, width: 50, borderRadius: 10, marginRight: 5 }]} />:
-                                                                <View></View>
+                                                                <Image source={toolBoxIcon} style={[styles.menuCardIcon, { height: 50, width: 50, borderRadius: 10, marginRight: 5 }]} />
                                                         }
                                                         
                                                     </View>
@@ -483,7 +481,7 @@ class AddMaterial extends Component {
                                                                 {item.name}
                                                             </Text>
                                                             <Text style={styles.itemText}>
-                                                                {this.state.currency}{item.price}
+                                                                {this.state.currency} {item.actualPrice}
                                                             </Text>
                                                         </View>
                                                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
@@ -497,13 +495,13 @@ class AddMaterial extends Component {
                                                                 </Text>
                                                             </View>
 
-                                                            <TouchableOpacity style={{ height: 30, width: 30, backgroundColor: '#81cdc7', alignItems: 'center', justifyContent: 'center' }} onPress={() => this.addPrice(item.id, item.count)}>
+                                                            <TouchableOpacity style={{ height: 30, width: 30, backgroundColor: '#81cdc7', alignItems: 'center', justifyContent: 'center' }} onPress={() => this.addPrice(item.materialsId, item.count)}>
                                                                 <FontAwesome name="plus" style={{ fontSize: 14, color: '#fff' }} />
                                                             </TouchableOpacity>
                                                         </View>
                                                         <View>
                                                             <Text style={{ textAlign: 'right' }}>
-                                                                {this.state.currency}{item.price}
+                                                                {this.state.currency} {item.price}
                                                             </Text>
                                                         </View>
                                                     </View>
