@@ -106,7 +106,6 @@ class FollowUpList extends Component {
     }
 
     startFollowUp() {
-        debugger;
         if(this.state.saveDateDB){
             if (this.state.totalPrice !== '0.00'){
                 this.setState({ IsVisible: true });
@@ -308,7 +307,7 @@ class FollowUpList extends Component {
                     <Card>
 
                         <CardItem style={styles.menuCarditem}>
-                            <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate("AvailableJobs")} >
+                            <View style={styles.menuCardView}  >
                                 <Image source={icon2} style={styles.menuCardIcon} />
                                 <Text style={styles.menuCardTxt}>{I18n.t('hours')}</Text>
                                 <View style={styles.arw_lft}>
@@ -328,7 +327,7 @@ class FollowUpList extends Component {
                                         </TouchableOpacity>
                                     </View>
                                 </View>
-                            </TouchableOpacity>
+                            </View>
                         </CardItem>
 
                         <CardItem style={styles.menuCarditem}>
@@ -354,7 +353,7 @@ class FollowUpList extends Component {
                         </CardItem>
 
                         <CardItem style={styles.menuCarditem}>
-                            <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate("myTiming")} >
+                            <View style={styles.menuCardView}  >
                                 <Image source={icon5} style={styles.menuCardIcon} />
                                 <Text style={styles.menuCardTxt}>{I18n.t('total')}</Text>
                                 <View style={styles.arw_lft}>
@@ -362,7 +361,7 @@ class FollowUpList extends Component {
                                         {this.state.currency} {this.state.totalPrice}
                                     </Text>
                                 </View>
-                            </TouchableOpacity>
+                            </View>
                         </CardItem>
 
                     </Card>

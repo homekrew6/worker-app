@@ -36,7 +36,8 @@ class Quote extends Component {
             pricePending: '',
             IsModalVisible: false,
             id: '',
-            materialsId: ''
+            materialsId: ',',
+            materialTotalPrice:''
          }
     }
     componentDidMount() {
@@ -55,28 +56,34 @@ class Quote extends Component {
                     let item1 = {
                         id: item.id, 
                         name: item.materials ? item.materials.name : '', 
-                        price: item.price ? item.price: 0, 
+                        price: item.price ? item.price: '', 
                         image: item.materials ? (item.materials.image ? item.materials.image : '') : '',
                         count: item.count, 
                         materialsId: item.materialsId,
                         actualPrice: item.materials ? item.materials.price : '', 
                         totalPrice: item.materials ? item.count * item.materials.price: ''
                         };
+                        if(typeof(item1.price)!='string')
+                        {
+                            item1.price = item1.price.toFixed();
+                        }
                     addedItemsList.push(item1);
                 });
                 let totalPrice = 0;
-
+                let materialTotalPrice=0;
                 if (addedItemsList.length){
                     addedItemsList.map((item) => {
-                        totalPrice = totalPrice + Number(item.price);
+                        materialTotalPrice = materialTotalPrice + Number(item.price);
                     }); 
                 }
-                totalPrice = totalPrice + 50;
+                totalPrice = materialTotalPrice + 50;
+                materialTotalPrice = materialTotalPrice.toFixed(2);
                 totalPrice = totalPrice.toFixed(2);
                 this.setState({
                         loader: false, 
                         addedMaterialsList: addedItemsList,
-                        totalPrice: totalPrice
+                        totalPrice: totalPrice,
+                    materialTotalPrice: materialTotalPrice
                 });
             }
         }).catch((err) => {
@@ -90,16 +97,17 @@ class Quote extends Component {
             let hoursTotal = 0;
 
             // let totalPrice
-
-            console.log('followUpDetails', followupDetailsRes);  
-            console.log(this.props.navigation.state.params.jobId)                      
+                    
             followupDetailsRes.map((item) => {
                 if (item.jobId == this.props.navigation.state.params.jobId) {
                     followUpDetails = item;
-                    hoursTotal = item.hours * parseInt(item.price)
+                    hoursTotal = item.hours * 50;
                 }
             });
-            console.log('hoursTotal', hoursTotal);  
+             if(hoursTotal==0)
+             {
+                 hoursTotal=50;
+             }
             hoursTotal=hoursTotal.toFixed(2);
             this.setState({
                 followUpDetails: followUpDetails ? followUpDetails : '',
@@ -148,16 +156,20 @@ class Quote extends Component {
                                 addedItemsList.push(item1);
                             });
                             let totalPrice = 0;
-            
+                            let materialTotalPrice=0;
                             if (addedItemsList.length){
                                 addedItemsList.map((item) => {
-                                    totalPrice = totalPrice + item.totalPrice;
+                                    materialTotalPrice = materialTotalPrice + item.totalPrice;
                                 }); 
                             }
+                            totalPrice=materialTotalPrice+50;
+                            totalPrice=totalPrice.toFixed(2);
+                            materialTotalPrice = materialTotalPrice.toFixed(2);
                             this.setState({
                                     loader: false, 
                                     addedMaterialsList: addedItemsList,
-                                    totalPrice: totalPrice
+                                    totalPrice: totalPrice,
+                                materialTotalPrice: materialTotalPrice
                             });
                         }
             
@@ -208,7 +220,7 @@ class Quote extends Component {
                             <View style={{ flex: 1 }}>
                             </View>
                             <View style={styles.price}>
-                                <Text style={styles.priceText}>{this.state.currency} {(this.state.totalPrice)}</Text>
+                                <Text style={styles.priceText}>{this.state.currency} {(this.state.materialTotalPrice)}</Text>
                             </View>
                         </View>
                         {
@@ -262,9 +274,17 @@ class Quote extends Component {
                             <View>
                                 <Text style={styles.text1}>{I18n.t('hours')}</Text>
                             </View>
+                            
                             <View style={{ flex: 1 }}>
-                                <Text style={styles.text2}>{this.state.followUpDetails.hours}</Text>
-                                <Text style={[styles.text2, { color: '#ccc', fontSize: 12 }]}>x {this.state.currency} {this.state.followUpDetails.price}</Text>
+                              {
+                                    this.state.followUpDetails.hours?(
+                                        <Text style={styles.text2}>{this.state.followUpDetails.hours}</Text>
+                                    ):(
+                                            <Text style={styles.text2}>1</Text>
+                                    )
+                              }
+                                <Text style={[styles.text2, { color: '#ccc', fontSize: 12 }]}>x {this.state.currency} 50.00</Text>
+                               
                             </View>
                             <View style={styles.price}>
                                 <Text style={styles.priceText}>{this.state.currency} {(this.state.hoursTotal)}</Text>
