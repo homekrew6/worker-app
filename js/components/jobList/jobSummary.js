@@ -89,7 +89,7 @@ class jobSummary extends Component {
                 materialTotalPrice = 0;
                 materialList.map((materialItem)=>{
                     if(materialItem.materials){
-                        materialTotalPrice = materialTotalPrice + materialItem.materials.price;
+                        materialTotalPrice = Number(materialTotalPrice) + Number(materialItem.materials.price);
                     }
                 })
                 materialTotalPrice =parseInt( materialTotalPrice).toFixed(2);
@@ -232,10 +232,8 @@ class jobSummary extends Component {
                                 <Text style={[styles.text1, { fontSize: 12 }]}>Materials</Text>
                             </View>
                             <View style={[ styles.price ]}>
-                                <Text style={[styles.priceText, { color: '#ccc', fontSize: 12 }]} >{this.state.currency}
-                                    {
-                                        (this.state.materialTotalPrice)
-                                    }
+                                <Text style={[styles.priceText, { color: '#ccc', fontSize: 12 }]} >
+                                    {this.state.currency} { (this.state.materialTotalPrice) }
                                 </Text>
                             </View>
                         </View>
