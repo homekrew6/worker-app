@@ -109,5 +109,7 @@ export default {
   jobCompleted: 'أنجزت المهمة',
   quote: 'اقتبس',
   pending: 'قيد الانتظار',
-  quoteMsg: 'انقر فوق المواد المعلقة لوضع السعر.' 
+  quoteMsg: 'انقر فوق المواد المعلقة لوضع السعر.' ,
+  jobSummary: 'ملخص العمل',
+  commission:'عمولة'
 };

@@ -49,26 +49,32 @@ class AddMaterial extends Component {
         };
     }
     addMaterial() {
-        debugger;
         if (!(this.state.name == '')){
             this.setState({ loader: true });
-            const data = { name: this.state.name, price: this.state.price, image: '' };
-
+            const data = { name: this.state.name, price: this.state.price, image: '', is_active: true };
             api.post('Materials', data).then((res) => {
-                debugger
                 if (res.id) {
                     let addedItemArray = this.state.addedMaterialsList;
-                    addedItemArray.push({ id: res.id, name: this.state.name, price: this.state.price, image: '', count: 1, actualPrice: this.state.price });
+                    addedItemArray.push({ 
+                        id: '', 
+                        name: this.state.name, 
+                        price: this.state.price, 
+                        image: '', 
+                        count: 1, 
+                        actualPrice: this.state.price,
+                        materialsId: res.id,
+                    });
                     this.setState({ addedMaterialsList: addedItemArray, loader: false, IsModalVisible: false });
                     if (this.state.price !== ''){
                         if (!(this.state.totalPrice == '')) {
                             let newPrice = parseInt(this.state.totalPrice) + parseInt(this.state.price);
+                            this.setState({
+                                totalPrice: newPrice.toFixed(2),
+                                price: '',
+                                name: ''
+                            })
                         }
-                        this.setState({
-                            totalPrice: newPrice.toFixed(2),
-                            price: '',
-                            name: ''
-                        })
+                       
                     }   
                 }
                 else {
@@ -89,7 +95,15 @@ class AddMaterial extends Component {
 
     addItems(id, name, image, price) {
         let addedItemArray = this.state.addedMaterialsList;
-        addedItemArray.push({ id: id, name: name, price: price, image: image, count: 1, actualPrice: price });
+        addedItemArray.push({ 
+            id: '', 
+            name: name, 
+            price: price, 
+            image: image, 
+            count: 1, 
+            actualPrice: price,
+            materialsId: id,
+        });
         let totalPrice = 0;
         addedItemArray.map((item) => {
             totalPrice = totalPrice + Number(item.price);
@@ -105,19 +119,26 @@ class AddMaterial extends Component {
         });
         this.setState({ loader: true });
         api.get('Materials').then((res) => {
-
-            if (this.props.navigation.state.params.jobId) {
-                api.post("jobMaterials/getJobMaterialByJobId", { "jobId": this.props.navigation.state.params.jobId }).then((addedList) => {
+            if (this.props.navigation.state.params.jobDetails.id) {
+                api.post("jobMaterials/getJobMaterialByJobId", { "jobId": this.props.navigation.state.params.jobDetails.id }).then((addedList) => {
                     if (addedList.type != "Error") {
                         let addedItemsList = [];
                         addedList.response.message.map((item) => {
-                            let item1 = { id: item.id, name: item.materials ? item.materials.name : '', price: item.price, image: item.materials ? (item.materials.image ? item.materials.image : '') : '', count: item.count, actualPrice: item.materials ? item.materials.price : '' };
+                            let item1 = { 
+                                id: item.id, 
+                                name: item.materials ? item.materials.name : '', 
+                                price: item.price, 
+                                image: item.materials ? (item.materials.image ? item.materials.image : '') : '', 
+                                count: item.count, 
+                                actualPrice: item.materials ? item.materials.price : '',
+                                materialsId: item.materialsId, 
+                            };
                             addedItemsList.push(item1);
                         });
                         if (addedItemsList.length > 0) {
                             let totalPrice = 0;
                             addedItemsList.map((item) => {
-                                totalPrice = totalPrice + Number(item.price);
+                                totalPrice = totalPrice + Number(item.actualPrice);
                             });
                             totalPrice = totalPrice.toFixed(2);
                             this.setState({ materialsList: res, loader: false, addedMaterialsList: addedItemsList, totalPrice: totalPrice });
@@ -162,6 +183,7 @@ class AddMaterial extends Component {
     }
 
     findMaterial(query) {
+        this.setState({ query: query });
         if (query === '') {
             return [];
         }
@@ -258,8 +280,7 @@ class AddMaterial extends Component {
 
     }
     saveMaterials() {
-        debugger;
-        const jobId = this.props.navigation.state.params.jobId ? this.props.navigation.state.params.jobId : '';
+        const jobId = this.props.navigation.state.params.jobDetails.id ? this.props.navigation.state.params.jobDetails.id : '';
         if (jobId) {
             this.setState({ loader: true });
 
@@ -267,7 +288,7 @@ class AddMaterial extends Component {
             this.state.addedMaterialsList.map((item) => {
                 if(item.count!=0)
                 {
-                    let insertData = { "count": item.count, "price": item.price, "materialsId": item.id };
+                    let insertData = { "count": item.count, "price": item.price, "materialsId": item.materialsId };
                     toSendData.push(insertData);
                 }
             });
@@ -279,7 +300,11 @@ class AddMaterial extends Component {
                 }
                 else {
                     Alert.alert("Materials added successfully.");
-                    this.props.navigation.navigate('FollowUpList', { totalPrice: this.state.totalPrice, materialsId: res.response.message[0].id });
+                    this.props.navigation.navigate('FollowUpList', { 
+                        totalPrice: this.state.totalPrice,
+                        materialsId: res.response.message[0].materialsId,
+                        jobDetails : this.props.navigation.state.params.jobDetails,
+                    });
                 }
 
             }).catch((err) => {
@@ -291,6 +316,9 @@ class AddMaterial extends Component {
             Alert.alert("Please select a job to add materials.");
         }
 
+    }
+    resetSearch(){
+        this.setState({ query: '', renderMaterialsList: [] });
     }
 
     render() {
@@ -314,16 +342,13 @@ class AddMaterial extends Component {
                         <Text>Save</Text>
                     </Button>
                 </Header>
-
                 <Content>
-
                     <Modal isVisible={this.state.IsModalVisible}>
                         <TouchableOpacity
                             transparent style={{ flex: 1, justifyContent: 'center', display: 'flex', width: '100%' }}
                             onPress={() => this.setState({ IsModalVisible: false })}
                             activeOpacity={1}
                         >
-
                             <TouchableOpacity style={{ position: 'absolute', top: 0, right: 0, zIndex: 99999, }} onPress={() => this.setState({ IsModalVisible: false })}>
                                 <Ionicons style={{ color: 'rgba(255,255,255,0.5)', fontSize: 36 }} name='md-close-circle' />
                             </TouchableOpacity>
@@ -363,7 +388,13 @@ class AddMaterial extends Component {
                             inputContainerStyle={{ backgroundColor: '#fff', borderWidth: 0, borderColor: 'transparent', height: 40, marginTop: 5, marginBottom: 5, borderRadius: 20, overflow: 'hidden' }}
                             listContainerStyle = {{ backgroundColor: '#fff', overflow: 'visible', width: (win), marginLeft: -5 }}
                             listStyle = {{ borderColor: 'transparent', borderBottomWidth: 1, borderBottomColor: '#ccc', paddingLeft: 0, paddingRight: 0}}
-                            renderTextInput={() => <TextInput underlineColorAndroid={'white'} style={{ textAlign: 'center' }} placeholder='Search' onChangeText={text => this.findMaterial(text)}/>}
+                            renderTextInput={() => <TextInput 
+                                    underlineColorAndroid={'white'} 
+                                    style={{ textAlign: 'center' }} 
+                                    placeholder='Search'
+                                    value={this.state.query}
+                                    onChangeText={text => this.findMaterial(text)}/>
+                                }
                             renderItem={({ name, image, price, id }) => (
                                 <View style={{ }}>
                                     <TouchableOpacity onPress={() => this.addItems(id, name, image, price)} style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row', backgroundColor: '#fff', paddingTop: 8, paddingBottom: 8, paddingLeft: 8, paddingRight: 8 }}>
@@ -380,7 +411,10 @@ class AddMaterial extends Component {
                                                 {this.state.currency} {price}
                                             </Text>
                                         </View>
-                                        <TouchableOpacity style={{ flexDirection: 'row', backgroundColor: '#1e3768', borderRadius: 30, paddingLeft: 8, paddingRight: 8, paddingTop: 5, paddingBottom: 5, alignItems: 'center' }} onPress={() => this.addItems(id, name, image, price)} >
+                                        <TouchableOpacity
+                                            style={{ flexDirection: 'row', backgroundColor: '#1e3768', borderRadius: 30, paddingLeft: 8, paddingRight: 8, paddingTop: 5, paddingBottom: 5, alignItems: 'center' }} 
+                                            onPress={() => this.addItems(id, name, image, price)} 
+                                        >
                                             <FontAwesome name="plus" style={{ fontSize: 16, color: '#fff' }} />
                                             <Text style={{ color: '#fff' }}> {I18n.t('add')} </Text>
                                         </TouchableOpacity>
@@ -392,7 +426,10 @@ class AddMaterial extends Component {
 
                         />
                         <View>
-                            <TouchableOpacity style={{ paddingLeft: 10, paddingRight: 10, backgroundColor: '#81cdc7', height: 50, alignItems: 'center', justifyContent: 'center' }}>
+                            <TouchableOpacity 
+                                style={{ paddingLeft: 10, paddingRight: 10, backgroundColor: '#81cdc7', height: 50, alignItems: 'center', justifyContent: 'center' }}
+                                onPress={() => this.resetSearch()}
+                            >
                                 <Text style={{ color: '#fff' }}>Cancel</Text>
                             </TouchableOpacity>
                         </View>

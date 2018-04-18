@@ -112,5 +112,7 @@ export default {
   jobCompleted: 'Job Completed',
   quote: 'Quote',
   pending: 'Pending',
-  quoteMsg: 'Click the pending material to put the price .'
+  quoteMsg: 'Click the pending material to put the price .',
+  jobSummary: 'Job Summary',
+  commission:'Commission'
 };

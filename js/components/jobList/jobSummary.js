@@ -1,24 +1,28 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import moment from 'moment';
-import 'moment-timezone';
-import DeviceInfo from 'react-native-device-info';
-import { NavigationActions } from "react-navigation";
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ListView, Geolocation, platform, AsyncStorage } from "react-native";
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, List, ListItem, Icon, Tab, Tabs, ScrollableTab, Body, Title } from "native-base";
-import FSpinner from 'react-native-loading-spinner-overlay';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, BackHandler } from "react-native";
+import Ico from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import styles from './styles';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
+import FSpinner from 'react-native-loading-spinner-overlay';
+import { NavigationActions } from 'react-navigation';
+import { Container, Header, Button, Content, Card, CardItem, Item, Frame, Input, Label, Text, Body, Title, Footer, FooterTab } from "native-base";
 import I18n from '../../i18n/i18n';
+import styles from './styles';
 import api from '../../api/index';
-import { availablejobs, setNewData, acceptJob, declineJob } from './elements/jobActions'
-const imageIcon1 = require('../../../img/icon/home.png');
+
+const deviceHeight = Dimensions.get('window').height;
+const deviceWidth = Dimensions.get('window').width;
 const logo_hdr = require("../../../img/logo2.png");
 const carve = require("../../../img/icon17.png");
 const totalImg = require("../../../img/icon/coins.png");
-class TotalBill extends Component {
+
+
+class jobSummary extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -26,24 +30,19 @@ class TotalBill extends Component {
             currency: 'AED',
             totalPrice: 0,
             materialTotalPrice: 0,
-            grndtotal: 0,
-            commission:'0.0'
+            grndtotal: 0
         };
     }
+    componentDidMount() {
+        AsyncStorage.getItem("currency").then((value) => {
+            if (value) {
+                const value1 = JSON.parse(value);
+                this.setState({ currency: value1.language })
+            }
+        });
 
-componentDidMount() {
-
-    AsyncStorage.getItem("currency").then((value) => {
-        if (value) {
-            const value1 = JSON.parse(value);
-            this.setState({ currency: value1.language })
-        }
-    });
-    let jodId = this.props.navigation.state.params.jobDetails.id;
-    if(this.props.navigation.state.params.jobDetails && this.props.navigation.state.params.jobDetails.service && this.props.navigation.state.params.jobDetails.service.commission)
-    {
-        this.setState({commission:this.props.navigation.state.params.jobDetails.service.commission});
-    }
+        // console.log(this.props);
+        let jodId = this.props.navigation.state.params.jobDetails.id;
         api.post('jobSelectedQuestions/getJobSelectedAnswerList', { "id": jodId }).then((resAns) => {
             if(resAns.response.message.length && resAns.response.message.length>0 && resAns.response.message[0].questionList)
             {
@@ -107,8 +106,10 @@ componentDidMount() {
             });
 
         })
-}
-CalculatePrice(type, impact_type, price_impact, time_impact, impact_no, BoolStatus, AnsArray) {
+        
+       
+    }
+    CalculatePrice(type, impact_type, price_impact, time_impact, impact_no, BoolStatus, AnsArray) {
         let retPrice;
         let totalPrice=0;
         switch (type) {
@@ -159,27 +160,24 @@ CalculatePrice(type, impact_type, price_impact, time_impact, impact_no, BoolStat
 
         }
     }
-
     render() {
-        
-
         return (
-
             <Container >
                 <StatusBar
                     backgroundColor="#81cdc7"
                 />
-                <Header style={styles.headerWarp} noShadow noShadow androidStatusBarColor="#81cdc7" onPress={() => this.props.navigation.goBack()}>
-                    <Button transparent style={{ width: 30 }} onPress={() => this.props.navigation.goBack()}>
-                        <Ionicons name="ios-arrow-back" style={styles.headIcon2} />
+                <Header style={styles.appHdr2} androidStatusBarColor="#81cdc7" noShadow>
+                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }} >
+                        <Ionicons name="ios-arrow-back" style={styles.headIcon} />
                     </Button>
-                    <Body style={styles.headBody}>
-                        <Title>{I18n.t('total_bill')}</Title>
+                    <Body style={{ alignItems: 'center' }}>
+                        <Title style={styles.appHdr2Txt}>{I18n.t('jobSummary')}</Title>
                     </Body>
-                    <Button transparent style={{ width: 30, backgroundColor: 'transparent' }} disabled={true}/>
+
                 </Header>
-                <Content style={styles.bgWhite}>
-                     <View style={{ flex: 1 }} >
+
+                <Content style={styles.bgWhite} >
+                    <View style={{ flex: 1 }} >
                         {
                             this.state.jsonAnswer.length > 0 ?
                                 this.state.jsonAnswer.map((AnsList, key) => {
@@ -231,7 +229,7 @@ CalculatePrice(type, impact_type, price_impact, time_impact, impact_no, BoolStat
                                 <Image source={logo_hdr} style={styles.totalImage} />
                             </View>
                             <View style={{ flex: 1 }}>
-                                <Text style={[styles.text1, { fontSize: 12 }]}>{I18n.t('materials')}</Text>
+                                <Text style={[styles.text1, { fontSize: 12 }]}>Materials</Text>
                             </View>
                             <View style={[ styles.price ]}>
                                 <Text style={[styles.priceText, { color: '#ccc', fontSize: 12 }]} >{this.state.currency}
@@ -247,7 +245,7 @@ CalculatePrice(type, impact_type, price_impact, time_impact, impact_no, BoolStat
                                 <Image source={totalImg} style={styles.totalImage} />
                             </View>
                             <View>
-                                <Text  style={styles.text1}>{I18n.t('total')}</Text>
+                                <Text  style={styles.text1}>Total</Text>
                             </View>
                             <View style={{ flex: 1 }}>
                                 <Text></Text>
@@ -256,164 +254,14 @@ CalculatePrice(type, impact_type, price_impact, time_impact, impact_no, BoolStat
                                 <Text style={styles.priceText}>{this.state.currency} {this.state.grndtotal}</Text>
                             </View>
                         </View>
-                         <View>
-                        <Text style={{ paddingTop: 15, paddingBottom: 15, paddingLeft: 10, paddingRight: 10 }}>{I18n.t('commission')}</Text>
                     </View>
-                    <View style={styles.totalBillitem}>
-                        <View>
-                            <Image source={require('../../../img/icon/coins.png')} style={styles.totalImage} />
-                        </View>
-                        <View>
-                            <Text style={styles.text1}>{I18n.t('materials')}</Text>
-                        </View>
-                        <View style={{ flex: 1 }}>
-                           
-                        </View>
-                        <View style={styles.price}>
-                            <Text style={styles.priceText}>{this.state.currency} {this.state.commission}</Text>
-                        </View>
-                    </View> 
-                    </View>
-                    
-                    {/* <View style={styles.totalBillitem}>
-                        <View>
-                            <Image source={require('../../../img/icon/flower.png')} style={styles.totalImage} />
-                        </View>
-                        <View>
-                            <Text style={styles.text1}>Need Yes</Text>
-                        </View>
-                        <View style={{ flex: 1  }}>
-                            <Text style={styles.text2}>2 Bedroom</Text>
-                        </View>
-                        <View style={styles.price}>
-                            <Text style={styles.priceText}></Text>
-                        </View>
-                    </View>
-                    <View style={styles.totalBillitem}>
-                        <View>
-                            <Image source={require('../../../img/icon/lightbulb.png')} style={styles.totalImage} />
-                        </View>
-                        <View>
-                            <Text style={styles.text1}>Bulbs to change</Text>
-                        </View>
-                        <View style={{ flex: 1 }}>
-                            <Text style={styles.text2}>2</Text>
-                        </View>
-                        <View style={styles.price}>
-                        </View>
-                    </View>
-                    <View style={styles.totalBillitem}>
-                        <View>
-                            <Image source={require('../../../img/icon/wrench-tool-in-a-hand.png')} style={styles.totalImage} />
-                        </View>
-                        <View>
-                            <Text style={styles.text1}>Light Fixtures</Text>
-                        </View>
-                        <View style={{ flex: 1 }}>
-                            <Text style={styles.text2}>2</Text>
-                        </View>
-                        <View style={styles.price}>
-                        </View>
-                    </View>
-                    <View style={styles.totalBillitem}>
-                        <View>
-                            <Image source={require('../../../img/icon/timer.png')} style={styles.totalImage} />
-                        </View>
-                        <View>
-                            <Text style={styles.text1}>Hours</Text>
-                        </View>
-                        <View style={{ flex: 1 }}>
-                            <Text style={styles.text2}>2</Text>
-                            <Text style={[styles.text2, { color: '#ccc', fontSize: 12 }]}>x {this.state.currency} 50</Text>
-                        </View>
-                        <View style={styles.price}>
-                            <Text style={styles.priceText}>{this.state.currency} 60.00</Text>
-                        </View>
-                    </View>
-                    <View style={styles.totalBillitem}>
-                        <View>
-                            <Image source={require('../../../img/icon/standing-up-man-.png')} style={styles.totalImage} />
-                        </View>
-                        <View>
-                            <Text style={styles.text1}>Cleaners</Text>
-                        </View>
-                        <View style={{ flex: 1 }}>
-                            <Text style={styles.text2}>2</Text>
-                            <Text style={[styles.text2, { color: '#ccc', fontSize: 12 }]}>x {this.state.currency} 50</Text>
-                        </View>
-                        <View style={styles.price}>
-                            <Text style={styles.priceText}>{this.state.currency} 60.00</Text>
-                        </View>
-                    </View>
-                    <View style={styles.totalBillitem}>
-                        <View>
-                            <Image source={require('../../../img/icon/shopping-cart.png')} style={styles.totalImage} />
-                        </View>
-                        <View>
-                            <Text style={styles.text1}>Materials</Text>
-                        </View>
-                        <View style={{ flex: 1 }}>
-                            
-                        </View>
-                        <View style={styles.price}>
-                            <Text style={styles.priceText}>{this.state.currency} 60.00</Text>
-                        </View>
-                    </View>
-                    <View style={styles.totalBillitem}>
-                        <View>
-                            <Image source={require('../../../img/icon/coins.png')} style={styles.totalImage} />
-                        </View>
-                        <View>
-                            <Text style={styles.text1}>Total</Text>
-                        </View>
-                        <View style={{ flex: 1 }}>
 
-                        </View>
-                        <View style={styles.price}>
-                            <Text style={styles.priceText}>{this.state.currency} 60.00</Text>
-                        </View>
-                    </View>
-                    <View>
-                        <Text style={{ paddingTop: 15, paddingBottom: 15, paddingLeft: 10, paddingRight: 10 }}>Commission</Text>
-                    </View>
-                    <View style={styles.totalBillitem}>
-                        <View>
-                            <Image source={require('../../../img/icon/coins.png')} style={styles.totalImage} />
-                        </View>
-                        <View>
-                            <Text style={styles.text1}>Total</Text>
-                        </View>
-                        <View style={{ flex: 1 }}>
-                           
-                        </View>
-                        <View style={styles.price}>
-                            <Text style={styles.priceText}>{this.state.currency} 60.00</Text>
-                        </View>
-                    </View> */}
                 </Content>
-            </Container>
-        )
+            </Container >
+        );
     }
+
 }
 
-TotalBill.propTypes = {
-    auth: PropTypes.object.isRequired,
-    availableJobs: PropTypes.object.isRequired
-}
-const mapStateToProps = (state) => {
-    return {
-        auth: state.auth,
-        availableJobs: state.availableJobs
-    }
-}
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        availablejobs: (id) => dispatch(availablejobs(id)),
-        setNewData: (data) => dispatch(setNewData(data)),
-        acceptJob: (jobId, workerId) => dispatch(acceptJob(jobId, workerId)),
-        declineJob: (jobId, workerId, serviceId) => dispatch(declineJob(jobId, workerId, serviceId)),
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(TotalBill);
+export default jobSummary;

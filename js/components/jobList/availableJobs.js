@@ -120,6 +120,7 @@ class AvailableJobs extends Component {
     }
 
     jobdata(){
+        
         let id = this.props.auth.data.id;
         this.props.availablejobs(id).then(res => {
             this.setState({ 
@@ -206,7 +207,7 @@ class AvailableJobs extends Component {
                 let dataFormatAva = moment(dateConvertAva).format('DD MMM YYYY');
                 dateList.push(dataFormatAva);
                 
-            }) 
+            }); 
             const uniqueList = dateList.filter( this.onlyUnique );                    
             const sortedList = uniqueList.sort(function(a,b){
                 const retValue = new Date(a) - new Date(b);
@@ -240,7 +241,14 @@ class AvailableJobs extends Component {
             })
             finalArray.push(finalObject);
         })
-        console.log('final Array', finalArray);
+        finalArray.map((item)=>{
+                item.data.map((item1)=>{
+                    if(item1.price && typeof(item1.price) !='string')
+                    {
+item1.price=item1.price.toFixed(2);
+                    }
+                });
+            });
         // upcoming jobs
 
             const dateList2 = [];
@@ -283,8 +291,15 @@ class AvailableJobs extends Component {
 
                 finalArray2.push(finalObject);
                 
-            })
-            console.log('final Array2', finalArray2);
+            });
+            finalArray2.map((item)=>{
+                item.data.map((item1)=>{
+                    if(item1.price && typeof(item1.price) !='string')
+                    {
+item1.price=item1.price.toFixed(2);
+                    }
+                });
+            });
 
         return (
             
