@@ -40,6 +40,10 @@ class Menu extends Component {
     };
 
     logout() {
+        AsyncStorage.clear();
+        AsyncStorage.setItem("IsSliderShown", "true").then((res) => {
+
+        })
         this.props.logout(res => {
             if (res) {
                 //this.props.navigation.navigate("Login");
