@@ -24,7 +24,15 @@ const resetActionCategory = NavigationActions.reset({
 	index: 0,
 	actions: [NavigationActions.navigate({ routeName: 'Login' })],
 });
+const resetActionForSkill = NavigationActions.reset({
+	index: 0,
+	actions: [NavigationActions.navigate({ routeName: 'EditProfile' })],
+});
 
+const resetActionForTiming = NavigationActions.reset({
+	index: 0,
+	actions: [NavigationActions.navigate({ routeName: 'myTiming' })],
+});
 class Home extends Component {
 	// eslint-disable-line
 	constructor(params) {
@@ -99,8 +107,30 @@ class Home extends Component {
 				if (userToken) {
 					const userToken1 = JSON.parse(userToken);
 					this.props.getUserDetail(userToken1.userId, userToken1.id).then(userRes => {
-						this.props.navigation.dispatch(resetAction);
+						//this.props.navigation.dispatch(resetAction);
+						let filter = '{"where":{"workerId":' + userToken1.userId + '}}';
+						api.get('WorkerSkills?filter=' + filter + '&access_token=' + userToken1.id).then((skills)=>{
+							if (skills.length && skills.length > 0) {
+								//this.props.navigation.dispatch(resetAction);
+								const WorkerAvailabilitiesUrl = `Workeravailabletimings?filter={"where":{"workerId":"${userToken1.userId}"}}`;
+								api.get(WorkerAvailabilitiesUrl).then((timings) => {
+									if (timings.length && timings.length > 0) {
+										this.props.navigation.dispatch(resetAction);
 
+									}
+									else {
+										this.props.navigation.dispatch(resetActionForTiming);
+									}
+								}).catch((erro4) => {
+									this.props.navigation.dispatch(resetAction);
+								});
+							}
+							else {
+								this.props.navigation.dispatch(resetActionForSkill);
+							}
+						}).catch((error1)=>{
+							this.props.navigation.dispatch(resetAction);
+						});
 					}).catch(err => {
 						Alert.alert('Please login');
 						this.props.navigation.navigate("Login")

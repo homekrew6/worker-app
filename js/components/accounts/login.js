@@ -20,6 +20,15 @@ const resetAction = NavigationActions.reset({
 	index: 0,
 	actions: [NavigationActions.navigate({ routeName: 'Menu' })],
 });
+const resetActionForSkill = NavigationActions.reset({
+	index: 0,
+	actions: [NavigationActions.navigate({ routeName: 'EditProfile' })],
+});
+
+const resetActionForTiming = NavigationActions.reset({
+	index: 0,
+	actions: [NavigationActions.navigate({ routeName: 'myTiming' })],
+});
 
 
 class Login extends Component {
@@ -28,7 +37,8 @@ class Login extends Component {
 		this.state = {
 			email: '',
 			password: '',
-			deviceToken: ''
+			deviceToken: '',
+			IsVisible: false
 		}
 	}
 
@@ -58,20 +68,51 @@ class Login extends Component {
 				this.props.login(email, password).then(res => {
 					if (res.type == 'success') {
 						this.props.getUserDetail(res.userId);
-						
+
 						//.then(userRes => {
-							//this.props.checkAuth((res) => {
+						//this.props.checkAuth((res) => {
 
-								// if (userRes) {
-									api.put(`Workers/editWorker/${res.userId}?access_token=${res.id}`, { deviceToken: this.state.deviceToken }).then((resEdit) => {
+						// if (userRes) {
+						this.setState({ IsVisible: true });
+						api.put(`Workers/editWorker/${res.userId}?access_token=${res.id}`, { deviceToken: this.state.deviceToken }).then((resEdit) => {
+
+							let filter = '{"where":{"workerId":' + res.userId + '}}';
+							api.get('WorkerSkills?filter=' + filter + '&access_token=' + res.id).then((skills) => {
+								if (skills.length && skills.length > 0) {
+									const WorkerAvailabilitiesUrl = `Workeravailabletimings?filter={"where":{"workerId":"${res.userId }"}}`;
+									api.get(WorkerAvailabilitiesUrl).then((timings)=>{
+									 if(timings.length && timings.length>0)
+									 {
+										 this.setState({ IsVisible: false });
+										 this.props.navigation.dispatch(resetAction);
+										 
+									 }
+									 else
+									 {
+										 this.setState({ IsVisible: false });
+										 this.props.navigation.dispatch(resetActionForTiming);
+									 }
+									}).catch((erro4)=>{
+										this.setState({ IsVisible: false });
 										this.props.navigation.dispatch(resetAction);
-									}).catch((err) => {
 									});
-								// }
-
-							//}, (err) => {
-							//});
+								}
+								else {
+									this.setState({ IsVisible: false });
+									this.props.navigation.dispatch(resetActionForSkill);
+								}
+							}).catch((err1) => {
+								this.setState({ IsVisible: false });
+								this.props.navigation.dispatch(resetAction);
+							});   
 							//this.props.navigation.dispatch(resetAction);
+						}).catch((err) => {
+						});
+						// }
+
+						//}, (err) => {
+						//});
+						//this.props.navigation.dispatch(resetAction);
 						// }).catch(err => {
 						// 	Alert.alert('Login failed, please try again');
 						// })
@@ -102,7 +143,7 @@ class Login extends Component {
 				/>
 				<ImageBackground source={launchscreenBg} style={styles.imageContainer}>
 					<Content>
-						<FSpinner visible={this.props.auth.busy} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
+						<FSpinner visible={this.props.auth.busy || this.state.IsVisible} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
 						<View style={styles.logoContainer}>
 							<Image source={launchscreenLogo} style={styles.logo} />
 						</View>
@@ -124,7 +165,7 @@ class Login extends Component {
 						<TouchableOpacity onPress={() => this.pressForgotPassword()}>
 							<View>
 								<Text style={{ textAlign: 'right', color: '#1e3768', fontSize: 12, paddingBottom: 20, textDecorationStyle: 'solid', paddingLeft: 15, paddingRight: 15, textDecorationLine: 'underline', textDecorationColor: '#1e3768' }}>
-									{I18n.t('forgot_password_q_mark')} 
+									{I18n.t('forgot_password_q_mark')}
 								</Text>
 							</View>
 						</TouchableOpacity>

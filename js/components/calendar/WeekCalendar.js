@@ -338,7 +338,7 @@ class WeekCalendar extends Component {
         if (timimgDataCheck === '') {
           //api to hit adding Timing
           api.post('Workeravailabletimings',{"timings": JSONdata, "workerId": workerId}).then(res => {
-			  this.props.navigation.navigate('myTiming');
+			  this.props.navigation.navigate('Menu');
 			  
           }).catch((err) => {
           });
