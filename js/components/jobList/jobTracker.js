@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import FSpinner from 'react-native-loading-spinner-overlay';
+import moment from 'moment';
 import styles from './styles';
 import I18n from '../../i18n/i18n';
 import api from '../../api/index';
@@ -16,22 +17,64 @@ class JobTracker extends Component {
             trackerData: [],
             loader: true, 
             progessArray: [4],
+            jobcomplited: false,
+            jobcomplitedDate: ''
             // statusColor: [ true, false, false, false ]
         }
     }
+
+    getLocalTimeFormat(gmtTime) {
+        if (gmtTime) {
+            let dateNow = new Date();
+            var nUTC_diff = dateNow.getTimezoneOffset();
+            let slicedDate = gmtTime.slice(0, -4);
+            let timeToMan = Math.abs(nUTC_diff);
+            let utc_check = Math.sign(nUTC_diff);
+            let localTime;
+            if (utc_check === 1 || utc_check === 0) {
+                localTime = moment(slicedDate).subtract(timeToMan, 'minutes').format('ddd DD-MMM-YYYY hh:mm A');
+            } else {
+                localTime = moment(slicedDate).add(timeToMan, 'minutes').format('ddd DD-MMM-YYYY hh:mm A');
+            }
+            return localTime;
+        } else {
+            return null;
+        }
+
+    }
+
     componentDidMount(){
+        console.log(this.props.navigation.state.params.Jobid);
         api.post('jobTrackerStatuses/getJobTrackingDetailsById', { "jobId": this.props.navigation.state.params.Jobid }).then((res) => {           
+            let statusArray = [];
+            if (res.response.message.length <= 3) {
+                for (i = 0; i < 3; i++) {
+                    res.response.message[i] ? statusArray.push(res.response.message[i]) : statusArray.push('');
+                }
+            }
+            else {
+                statusArray = res.response.message;
+            }
+            console.log(statusArray);
+            statusArray.map((newdata) => {
+                if (newdata.status == 'JOBCOMPLITED') {
+                    this.setState({
+                        jobcomplited: true,
+                        jobcomplitedDate: newdata.statusChangeddate,
+                    })
+                }
+            })
+            
             this.setState({
-                trackerData: res.response.message,
+                trackerData: statusArray,
                 loader: false,
-            })                        
+            })  
+
         }).catch((error) => {
             this.setState({
                 loader: false,
             })  
         })
-       
-        console.log(this.state.trackerData)
         
     }
 
@@ -39,8 +82,6 @@ class JobTracker extends Component {
 
         let statusColor = [ '', '', '', '', '' ];
         if (this.state.trackerData){
-
-            console.log(this.state.trackerData);
 
             this.state.trackerData.map((data, key) => {
                 if (data.status == 'ACCEPTED'){
@@ -58,21 +99,7 @@ class JobTracker extends Component {
                 if (data.status == 'JOBCOMPLITED') {
                     statusColor[4] = data.statusChangeddate;
                 }
-            })
-            
-            console.log(statusColor);
-            // let newArray = this.state.statusColor;  
-            // for (i = 0; i >= this.state.trackerData.length; i++){
-            //     if (this.state.trackerData[i] == 'ONMYWAY' ){
-            //         newArray[1] == true;
-            //     }
-            //     if (this.state.trackerData[i] == 'JOBSTARTED') {
-            //         newArray[2] == true;
-            //     }
-            //     if (this.state.trackerData[i] == 'FOLLOWEDUP') {
-            //         newArray[3] == true;
-            //     }
-            // }            
+            })           
         }
         return (
             <Container >
@@ -125,49 +152,60 @@ class JobTracker extends Component {
 
                     <View style={styles.trackmetterWarp}>
 
-                        <Text style={styles.trackmetterHeader}>{I18n.t('job_tracker')}</Text>
+                        <Text style={styles.trackmetterHeader}>{I18n.t('jobStatus')}</Text>
 
                         <View style={styles.trackmetterMainWarp}>
-
-                        {
-                            statusColor[0] ? (
+                            {
+                                this.state.trackerData.length < 4 ?
                                     <View style={styles.trackmetterItem}>
                                         <View style={styles.trackmetterItemInner}>
                                             <Text>{I18n.t('jobAssigned')}</Text>
-                                            <Text style={styles.trackmetterItemDate}>{statusColor[0]}</Text>
-                                            <View style={styles.crcl}></View>
+                                            <Text style={styles.trackmetterItemDate}>
+                                                {
+                                                    this.state.trackerData[0] ?
+                                                        this.getLocalTimeFormat(this.state.trackerData[0].statusChangeddate)
+                                                        : null
+                                                }
+                                            </Text>
+
                                             {
-                                                statusColor[1] ? (
-                                                    
+                                                this.state.trackerData[0] ?
+                                                    <View style={[styles.crcl]}></View>
+                                                    : <View style={[styles.crcl, { backgroundColor: '#ccc' }]}></View>
+                                            }
+
+                                            {
+                                                this.state.trackerData[1] ? (
+
                                                     <View style={styles.line}></View>
-                                                ):(
-                                                    <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
-                                                )
+                                                ) : (
+                                                        <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
+                                                    )
                                             }
                                             
                                         </View>
-                                    </View>
-                            ) : (
-                                    <View style={styles.trackmetterItem}>
-                                        <View style={styles.trackmetterItemInner}>
-                                                <Text>{I18n.t('jobAssigned')}</Text>
-                                            <Text style={styles.trackmetterItemDate}></Text>                                            
-                                            <View style={[styles.crcl, { backgroundColor: '#ccc' }]}></View>
-                                                <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
-                                        </View>
-                                    </View>
-                            )
-                        }
+                                    </View> : null
+                            }
 
                             {
-                                statusColor[1] ? (
+                                this.state.trackerData.length < 4 ?
                                     <View style={styles.trackmetterItem}>
                                         <View style={styles.trackmetterItemInner}>
                                             <Text>{I18n.t('onTheWay')}</Text>
-                                            <Text style={styles.trackmetterItemDate}>{statusColor[1]}</Text>
-                                            <View style={styles.crcl}></View>
+                                            <Text style={styles.trackmetterItemDate}>
+                                                {
+                                                    this.state.trackerData[1] ?
+                                                        this.getLocalTimeFormat(this.state.trackerData[1].statusChangeddate)
+                                                        : null
+                                                }
+                                            </Text>
                                             {
-                                                statusColor[2] ? (
+                                                this.state.trackerData[1] ?
+                                                    <View style={[styles.crcl]}></View>
+                                                    : <View style={[styles.crcl, { backgroundColor: '#ccc' }]}></View>
+                                            }
+                                            {
+                                                this.state.trackerData[2] != '' ? (
 
                                                     <View style={styles.line}></View>
                                                 ) : (
@@ -175,28 +213,28 @@ class JobTracker extends Component {
                                                     )
                                             }
                                         </View>
-                                    </View>
-                                ) : (
-                                        <View style={styles.trackmetterItem}>
-                                            <View style={styles.trackmetterItemInner}>
-                                                <Text>{I18n.t('onTheWay')}</Text>
-                                                <Text style={styles.trackmetterItemDate}></Text>
-                                                <View style={[styles.crcl, { backgroundColor: '#ccc' }]}></View>
-                                                <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
-                                            </View>
-                                        </View>
-                                    )
+                                    </View> : null
                             }
 
                             {
-                                statusColor[2] ? (
+                                this.state.trackerData.length < 4 ?
                                     <View style={styles.trackmetterItem}>
                                         <View style={styles.trackmetterItemInner}>
                                             <Text>{I18n.t('jobStarted')}</Text>
-                                            <Text style={styles.trackmetterItemDate}>{statusColor[2]}</Text>
-                                            <View style={styles.crcl}></View>
+                                            <Text style={styles.trackmetterItemDate}>
+                                                {
+                                                    this.state.trackerData[2] ?
+                                                        this.getLocalTimeFormat(this.state.trackerData[2].statusChangeddate)
+                                                        : null
+                                                }
+                                            </Text>
                                             {
-                                                statusColor[3] ? (
+                                                this.state.trackerData[2] ?
+                                                    <View style={[styles.crcl]}></View>
+                                                    : <View style={[styles.crcl, { backgroundColor: '#ccc' }]}></View>
+                                            }
+                                            {
+                                                this.state.trackerData[3] ? (
 
                                                     <View style={styles.line}></View>
                                                 ) : (
@@ -204,65 +242,99 @@ class JobTracker extends Component {
                                                     )
                                             }
                                         </View>
-                                    </View>
-                                ) : (
-                                        <View style={styles.trackmetterItem}>
-                                            <View style={styles.trackmetterItemInner}>
-                                                <Text>{I18n.t('jobStarted')}</Text>
-                                                <Text style={styles.trackmetterItemDate}></Text>
-                                                <View style={[styles.crcl, { backgroundColor: '#ccc' }]}></View>
-                                                <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
-                                            </View>
-                                        </View>
-                                    )
+                                    </View> : null
                             }
 
                             {
-                                statusColor[3] ? (
-                                    <View style={styles.trackmetterItem}>
-                                        <View style={styles.trackmetterItemInner}>
-                                            <Text>{I18n.t('followUp')}</Text>
-                                            <Text style={styles.trackmetterItemDate}>{statusColor[3]}</Text>
-                                            <View style={styles.crcl}></View>
-                                            {
-                                                statusColor[4] ? (
+                                this.state.trackerData.length >= 4 ?
+                                    this.state.trackerData.map((trackStatus, key) => {
+                                        return(
+                                            trackStatus.status === 'ACCEPTED' ?
+                                            <View style={styles.trackmetterItem} key={key}>
+                                                <View style={styles.trackmetterItemInner}>
+                                                        <Text>{I18n.t('jobAssigned')}</Text>
+                                                    <Text style={styles.trackmetterItemDate}>{this.getLocalTimeFormat(trackStatus.statusChangeddate)}</Text>
+                                                    <View style={styles.crcl}></View>
+                                                    {
+                                                        this.state.trackerData[key + 1] != undefined ? (
 
-                                                    <View style={styles.line}></View>
-                                                ) : (
-                                                        <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
-                                                    )
-                                            }
-                                        </View>
-                                    </View>
-                                ) : (
-                                        <View style={styles.trackmetterItem}>
-                                            <View style={styles.trackmetterItemInner}>
-                                                <Text>{I18n.t('followUp')}</Text>
-                                                <Text style={styles.trackmetterItemDate}></Text>
-                                                <View style={[styles.crcl, { backgroundColor: '#ccc' }]}></View>
-                                                <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
-                                            </View>
-                                        </View>
-                                    )
+                                                            <View style={styles.line}></View>
+                                                        ) : (
+                                                                <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
+                                                            )
+                                                    }
+                                                </View>
+                                                </View> : trackStatus.status === 'ONMYWAY' ?
+                                                    <View style={styles.trackmetterItem} key={key}>
+                                                        <View style={styles.trackmetterItemInner}>
+                                                            <Text>{I18n.t('onTheWay')}</Text>
+                                                            <Text style={styles.trackmetterItemDate}>{this.getLocalTimeFormat(trackStatus.statusChangeddate)}</Text>
+                                                            <View style={styles.crcl}></View>
+                                                            {
+                                                                this.state.trackerData[key + 1] != undefined ? (
+
+                                                                    <View style={styles.line}></View>
+                                                                ) : (
+                                                                        <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
+                                                                    )
+                                                            }
+                                                    </View>
+                                                    </View> : trackStatus.status === 'JOBSTARTED' ?
+                                                        <View style={styles.trackmetterItem} key={key}>
+                                                            <View style={styles.trackmetterItemInner}>
+                                                                <Text>{I18n.t('jobStarted')}</Text>
+                                                                <Text style={styles.trackmetterItemDate}>{this.getLocalTimeFormat(trackStatus.statusChangeddate)}</Text>
+                                                                <View style={styles.crcl}></View>
+                                                                {
+                                                                    this.state.trackerData[key + 1] != undefined ? (
+
+                                                                        <View style={styles.line}></View>
+                                                                    ) : (
+                                                                            <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
+                                                                        )
+                                                                }
+                                                            </View>
+                                                    </View> : trackStatus.status === 'FOLLOWEDUP' ?
+                                                    <View style={styles.trackmetterItem} key={key}>
+                                                        <View style={styles.trackmetterItemInner}>
+                                                            <Text>{I18n.t('followUp')}</Text>
+                                                            <Text style={styles.trackmetterItemDate}>{this.getLocalTimeFormat(trackStatus.statusChangeddate)}</Text>
+                                                            <View style={styles.crcl}></View>
+                                                            {
+                                                                this.state.trackerData[key + 1] != undefined ? (
+
+                                                                    <View style={styles.line}></View>
+                                                                ) : (
+                                                                        <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
+                                                                    )
+                                                            }
+                                                        </View>
+                                                    </View>: null
+                                        )
+                                    })
+                                    : null
                             }
+
                             {
-                                statusColor[4] ? (
+
                                     <View style={styles.trackmetterItem}>
                                         <View style={styles.trackmetterItemInner}>
                                             <Text>{I18n.t('jobCompleted')}</Text>
-                                            <Text style={styles.trackmetterItemDate}>{statusColor[5]}</Text>
-                                            <View style={styles.crcl}></View>
+                                            
+                                            
+                                            <Text style={styles.trackmetterItemDate}>
+                                                {
+                                                this.state.jobcomplited ?
+                                                    this.getLocalTimeFormat(this.state.jobcomplitedDate)
+                                                        : null
+                                                }
+                                            </Text>
+                                            {
+                                                this.state.jobcomplited ? (<View style={[styles.crcl]}></View>) : (<View style={[styles.crcl, { backgroundColor: '#ccc' }]}></View>)
+
+                                            }
                                         </View>
                                     </View>
-                                ) : (
-                                        <View style={styles.trackmetterItem}>
-                                            <View style={styles.trackmetterItemInner}>
-                                                <Text>{I18n.t('jobCompleted')}</Text>
-                                                <Text style={styles.trackmetterItemDate}></Text>
-                                                <View style={[styles.crcl, { backgroundColor: '#ccc' }]}></View>
-                                            </View>
-                                        </View>
-                                    )
                             }
                         </View>
                     </View>
