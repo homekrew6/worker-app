@@ -6,6 +6,7 @@ import { Container, Header, Button, Content, Form, Item, Icon, Frame, Input, Lab
 import { logout } from './elements/authActions'
 import I18n from '../../i18n/i18n';
 import styles from "./styles";
+import api from '../../api';
 import { NavigationActions } from "react-navigation";
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
@@ -40,16 +41,24 @@ class Menu extends Component {
     };
 
     logout() {
-        AsyncStorage.clear();
-        AsyncStorage.setItem("IsSliderShown", "true").then((res) => {
+        AsyncStorage.getItem("userToken").then((userToken) => {
+            if (userToken) {
+                const userToken1 = JSON.parse(userToken);
+                api.put(`Workers/editWorker/${userToken1.userId}?access_token=${userToken1.id}`, { deviceToken: '' }).then((resEdit) => {
+                    AsyncStorage.clear();
+                    AsyncStorage.setItem("IsSliderShown", "true").then((res) => {
 
-        })
-        this.props.logout(res => {
-            if (res) {
-                //this.props.navigation.navigate("Login");
-                this.props.navigation.dispatch(resetAction);
-            } else {
-                this.props.navigation.navigate("Menu")
+                    })
+                    this.props.logout(res => {
+                        if (res) {
+                            //this.props.navigation.navigate("Login");
+                            this.props.navigation.dispatch(resetAction);
+                        } else {
+                            this.props.navigation.navigate("Menu")
+                        }
+                    })
+                }).catch((err) => {
+                });
             }
         })
     }
