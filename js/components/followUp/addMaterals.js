@@ -30,6 +30,13 @@ class AddMaterial extends Component {
     //     );
     // }
 
+    returnWithZero(num){
+        if(num){
+            return num.toFixed(2);
+        }else{
+            return null;
+        }            
+    }
 
     constructor(props) {
         super(props);
@@ -54,37 +61,40 @@ class AddMaterial extends Component {
             const data = { name: this.state.name, price: this.state.price, image: '', is_active: true };
             api.post('Materials', data).then((res) => {
                 if (res.id) {
+                    debugger;
                     let addedItemArray = this.state.addedMaterialsList;
                     addedItemArray.push({ 
                         id: '', 
                         name: this.state.name, 
-                        price: this.state.price, 
+                        price: this.state.price ? this.state.price : 0, 
                         image: '', 
                         count: 1, 
-                        actualPrice: this.state.price,
+                        actualPrice: this.state.price ? this.state.price : 0,
                         materialsId: res.id,
                     });
                     this.setState({ addedMaterialsList: addedItemArray, loader: false, IsModalVisible: false });
-                    if (this.state.price !== ''){
-                        if (!(this.state.totalPrice == '')) {
-                            let newPrice = parseInt(this.state.totalPrice) + parseInt(this.state.price);
+                    //if (this.state.price){
+                        //if (!(this.state.totalPrice)) {
+                            let totalPrice = this.state.totalPrice === '' ? 0 : this.state.totalPrice;
+                            let matPrice =  this.state.price === '' ? 0 : this.state.price;
+                            let newPrice = parseFloat(totalPrice) + parseFloat(matPrice);
                             this.setState({
                                 totalPrice: newPrice.toFixed(2),
-                                price: '',
+                                price: 0,
                                 name: ''
                             })
-                        }
+                       // }
                        
-                    }   
+                   // }   
                 }
                 else {
                     this.setState({ loader: false });
-                    Alert.alert("Please try again later. 1");
+                    Alert.alert("Please try again later.");
                 }
 
             }).catch((err) => {
                 this.setState({ loader: false });
-                Alert.alert("Please try again later. 2");
+                Alert.alert("Please try again later.");
             })
         }
         else{
@@ -411,7 +421,7 @@ class AddMaterial extends Component {
                                                 {name}
                                             </Text>
                                             <Text style={[styles.itemText, { fontSize: 13 }]}>
-                                                {this.state.currency} {price}
+                                                {this.state.currency} {parseFloat(price).toFixed(2)}
                                             </Text>
                                         </View>
                                         <TouchableOpacity
@@ -481,27 +491,27 @@ class AddMaterial extends Component {
                                                                 {item.name}
                                                             </Text>
                                                             <Text style={styles.itemText}>
-                                                                {this.state.currency} {item.actualPrice}
+                                                                {this.state.currency} {parseFloat(item.actualPrice).toFixed(2)}
                                                             </Text>
                                                         </View>
                                                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-                                                            <TouchableOpacity style={{ height: 30, width: 30, backgroundColor: '#81cdc7', alignItems: 'center', justifyContent: 'center' }} onPress={() => this.subtractPrice(item.id, item.count)}>
+                                                            <TouchableOpacity style={{ height: 25, width: 25, backgroundColor: '#81cdc7', alignItems: 'center', justifyContent: 'center' }} onPress={() => this.subtractPrice(item.id, item.count)}>
                                                                 <FontAwesome name='minus' style={{ fontSize: 14, color: '#fff' }} />
 
                                                             </TouchableOpacity>
-                                                            <View style={{ height: 30, width: 30, alignItems: 'center', justifyContent: 'center' }}>
+                                                            <View style={{ height: 25, width: 25, alignItems: 'center', justifyContent: 'center' }}>
                                                                 <Text>
                                                                     {item.count}
                                                                 </Text>
                                                             </View>
 
-                                                            <TouchableOpacity style={{ height: 30, width: 30, backgroundColor: '#81cdc7', alignItems: 'center', justifyContent: 'center' }} onPress={() => this.addPrice(item.materialsId, item.count)}>
+                                                            <TouchableOpacity style={{ height: 25, width: 25, backgroundColor: '#81cdc7', alignItems: 'center', justifyContent: 'center' }} onPress={() => this.addPrice(item.materialsId, item.count)}>
                                                                 <FontAwesome name="plus" style={{ fontSize: 14, color: '#fff' }} />
                                                             </TouchableOpacity>
                                                         </View>
                                                         <View>
                                                             <Text style={{ textAlign: 'right' }}>
-                                                                {this.state.currency} {item.price}
+                                                                {this.state.currency} {parseFloat(item.price).toFixed(2)}
                                                             </Text>
                                                         </View>
                                                     </View>
