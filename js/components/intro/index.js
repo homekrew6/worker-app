@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image, View, StatusBar, Dimensions, StyleSheet, ImageBackground } from "react-native";
+import { Image, View, StatusBar, Dimensions, StyleSheet, ImageBackground, AsyncStorage } from "react-native";
 import { Container, Button, H3, Text, Header, Title, Body, Left, Right,Grid } from "native-base";
 // import ImageSlider from 'react-native-image-slider';
 import AppIntroSlider from './AppIntroSlider';
@@ -34,6 +34,10 @@ class Intro extends Component {
 	}
 
     componentWillMount() {
+		AsyncStorage.setItem("IsSliderShown", "true").then((res)=>{
+			
+		})
+
 		this.setState({
 			interval: setInterval(() => {
             this.setState({position: this.state.position === 2 ? 0 : this.state.position + 1});

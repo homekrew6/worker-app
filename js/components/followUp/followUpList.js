@@ -106,41 +106,47 @@ class FollowUpList extends Component {
     }
 
     startFollowUp() {
+        debugger;
         if(this.state.saveDateDB){
             if (this.state.totalPrice !== '0.00'){
                 this.setState({ IsVisible: true });
 
                 api.post("jobMaterials/getJobMaterialByJobId", { "jobId": this.props.navigation.state.params.jobDetails.id }).then((addedList) => {
                     if (addedList.type != "Error") {
-                        let addedItemsList = [];
-                        let isPriceAdded=true;
-                        for(let i =0; i < addedList.response.message.length; i++){
-                            if(!addedList.response.message[i].price){
-                               isPriceAdded = false;
-                               break;
+                        if(addedList.response.message.length !== 0){
+                            let addedItemsList = [];
+                            let isPriceAdded=true;
+                            for(let i =0; i < addedList.response.message.length; i++){
+                                if(!addedList.response.message[i].price){
+                                isPriceAdded = false;
+                                break;
+                                }
                             }
-                        }
-                        if(isPriceAdded){
-                            let jobIdTr = `${this.state.jobDetails.id}`;
-                            let refFollowFirebase = firebase.database().ref().child('tracking');
-                            refFollowFirebase.orderByChild('jobId').equalTo(jobIdTr).once('value').then((snapshot) => {
-                                this.onFollowUpCall(snapshot);
-                                setTimeout(() => {
-                                    if (this.state.loader === true) {
-                                        this.onFollowUpCall(snapshot);
-                                        setTimeout(() => {
-                                            refFollowFirebase.off();
-                                            if(this.state.loader){
-                                                Alert.alert('Internal Error Please Try Again');
-                                                this.setState({ loader: false });
-                                            }                                        
-                                        }, 5000);
-                                    }
-                                }, 5000);
-                            }) 
+                            if(isPriceAdded){
+                                let jobIdTr = `${this.state.jobDetails.id}`;
+                                let refFollowFirebase = firebase.database().ref().child('tracking');
+                                refFollowFirebase.orderByChild('jobId').equalTo(jobIdTr).once('value').then((snapshot) => {
+                                    this.onFollowUpCall(snapshot);
+                                    setTimeout(() => {
+                                        if (this.state.loader === true) {
+                                            this.onFollowUpCall(snapshot);
+                                            setTimeout(() => {
+                                                refFollowFirebase.off();
+                                                if(this.state.loader){
+                                                    Alert.alert('Internal Error Please Try Again');
+                                                    this.setState({ loader: false });
+                                                }                                        
+                                            }, 5000);
+                                        }
+                                    }, 5000);
+                                }) 
+                            }else{
+                                this.setState({ loader: false, IsVisible: false });
+                                Alert.alert('Please add price for all material(s)');
+                            }
                         }else{
+                            Alert.alert('Please add at least a material');
                             this.setState({ loader: false, IsVisible: false });
-                            Alert.alert('Please add price for all material(s)');
                         }
                     }
                 }).catch((err) => {

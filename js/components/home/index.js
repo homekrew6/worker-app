@@ -20,6 +20,10 @@ const resetAction = NavigationActions.reset({
 	index: 0,
 	actions: [NavigationActions.navigate({ routeName: 'Menu' })],
 });
+const resetActionCategory = NavigationActions.reset({
+	index: 0,
+	actions: [NavigationActions.navigate({ routeName: 'Login' })],
+});
 
 class Home extends Component {
 	// eslint-disable-line
@@ -30,7 +34,7 @@ class Home extends Component {
 		}
 	}
 	componentWillMount() {
-
+		
 
 		FCM.requestPermissions();
 		FCM.getFCMToken().then(token => {
@@ -102,7 +106,17 @@ class Home extends Component {
 						this.props.navigation.navigate("Login")
 					})
 				} else {
-					this.props.navigation.dispatch(resetActionIntro);
+					//this.props.navigation.dispatch(resetActionIntro);
+					AsyncStorage.getItem('IsSliderShown').then((res) => {
+						if (res) {
+							this.props.navigation.dispatch(resetActionCategory);
+						}
+						else {
+							this.props.navigation.dispatch(resetActionIntro);
+						}
+					}).catch((err) => {
+						this.props.navigation.dispatch(resetActionIntro);
+					})
 
 				}
 			}).catch((err)=>{
