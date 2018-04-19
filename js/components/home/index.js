@@ -63,7 +63,6 @@ class Home extends Component {
 
 		});
 		this.notificationUnsubscribe = FCM.on(FCMEvent.Notification, notif => {
-			console.log("a", notif);
 			if (notif && notif.local_notification) {
 				return;
 			}
@@ -71,9 +70,7 @@ class Home extends Component {
 			this.sendRemote(notif);
 		});
 		this.refreshUnsubscribe = FCM.on(FCMEvent.Notification, token => {
-			console.log("TOKEN (refreshUnsubscribe)", token);
 			FCM.getFCMToken().then(token => {
-				console.log("TOKEN (getFCMToken)", token);
 				AsyncStorage.getItem("userToken").then((userToken) => {
 					if (userToken) {
 						const userToken1 = JSON.parse(userToken);

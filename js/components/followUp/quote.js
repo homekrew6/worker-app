@@ -63,6 +63,14 @@ class Quote extends Component {
                         actualPrice: item.materials ? item.materials.price : '', 
                         totalPrice: item.materials ? item.count * item.materials.price: ''
                         };
+                        if(Number(item1.price)!=0)
+                        {
+
+                        }
+                        else
+                        {
+                            item1.price='';
+                        }
                         if(typeof(item1.price)!='string')
                         {
                             item1.price = item1.price.toFixed();
@@ -88,7 +96,6 @@ class Quote extends Component {
             }
         }).catch((err) => {
             this.setState({ loader: false });
-            console.log('error');
         })
         
         this.setState({ loader: true });
@@ -116,7 +123,6 @@ class Quote extends Component {
             })          
         }).catch((err2) => {
             this.setState({ loader: false });
-            console.log('error');
         });
     }
 
@@ -175,7 +181,6 @@ class Quote extends Component {
             
                     }).catch((err) => {
                         this.setState({ loader: false });
-                        console.log('error');
                     })
                     this.setState({ IsModalVisible: false });
                 }

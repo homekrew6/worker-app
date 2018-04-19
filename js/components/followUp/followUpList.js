@@ -120,6 +120,18 @@ class FollowUpList extends Component {
                                 isPriceAdded = false;
                                 break;
                                 }
+                                else
+                                {
+                                    if (Number(addedList.response.message[i].price)!=0)
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        isPriceAdded = false;
+                                        break;
+                                    }
+                                }
                             }
                             if(isPriceAdded){
                                 let jobIdTr = `${this.state.jobDetails.id}`;
@@ -258,7 +270,6 @@ class FollowUpList extends Component {
             }
         }).catch((err) => {
             this.setState({ loader: false });
-            console.log('error');
         })
 
     }

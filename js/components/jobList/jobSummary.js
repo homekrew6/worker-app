@@ -58,10 +58,14 @@ class jobSummary extends Component {
                             jsonAnswer[i].answers[0].time_impact,
                             jsonAnswer[i].IncrementId,
                             jsonAnswer[i].Status,
-                            jsonAnswer[i].answers)
-                        totalPrice = totalPrice + price;
-                        price = price.toFixed(2);
-                        jsonAnswer[i].price = price;
+                            jsonAnswer[i].answers, jsonAnswer[i].start_range, jsonAnswer[i].rangeValue);
+                        if (price)
+                        {
+                            totalPrice = totalPrice + price;
+                            price = parseFloat(price).toFixed(2);
+                            jsonAnswer[i].price = price;
+                        }
+                        
                         jsonAnswer[i].option_price_impact = jsonAnswer[i].answers[0].option_price_impact;
 
                         if (jsonAnswer[i].type != 3) {
@@ -80,7 +84,7 @@ class jobSummary extends Component {
                     }
 
                 }
-                totalPrice = totalPrice.toFixed(2);
+                totalPrice = parseFloat(totalPrice).toFixed(2);
                 //console.log('jsonAnswer', jsonAnswer);
                 this.setState({ jsonAnswer: jsonAnswer, totalPrice: totalPrice });
             }
@@ -93,18 +97,18 @@ class jobSummary extends Component {
                         materialTotalPrice = Number(materialTotalPrice) + Number(materialItem.price);
                     }
                 })
-                materialTotalPrice = parseInt(materialTotalPrice).toFixed(2);
+                materialTotalPrice = parseFloat(materialTotalPrice).toFixed(2);
                 this.setState({
                     materialTotalPrice: materialTotalPrice,
-                })
-                let grndtotal = (parseInt(this.state.totalPrice) + parseInt(this.state.materialTotalPrice));
+                });
+                let grndtotal = (parseFloat(this.state.totalPrice) + parseFloat(this.state.materialTotalPrice));
                 let IsShow = false;
                 if (Number(this.state.materialTotalPrice) != 0) {
                     IsShow = true;
                     grndtotal = grndtotal + 50;
                 }
 
-                grndtotal = grndtotal.toFixed(2);
+                grndtotal = parseFloat(grndtotal).toFixed(2);
                 this.setState({
                     grndtotal: grndtotal,
                     IsShow: IsShow
@@ -118,12 +122,12 @@ class jobSummary extends Component {
 
 
     }
-    CalculatePrice(type, impact_type, price_impact, time_impact, impact_no, BoolStatus, AnsArray) {
+    CalculatePrice(type, impact_type, price_impact, time_impact, impact_no, BoolStatus, AnsArray,start_range,
+        rangeValue) {
         let retPrice;
         let totalPrice = 0;
         switch (type) {
             case 1:
-            case 4:
                 if (impact_type === 'Addition') {
                     //retPrice = Number(price_impact) + Number(impact_no);
                     impact_no = Number(impact_no);
@@ -141,6 +145,19 @@ class jobSummary extends Component {
                 //this.setState({ totalPrice: this.state.totalPrice + retPrice });
 
                 return totalPrice;
+                break;
+            case 4:
+                if (rangeValue) {
+                    if (impact_type === 'Addition') {
+                        //retPrice = Number(price_impact) + Number(impact_no);
+                        totalPrice = totalPrice + (start_range + Number(price_impact));
+                    } else {
+                            totalPrice = totalPrice + (start_range * Number(price_impact));
+                        
+                        //retPrice = Number(price_impact) * Number(impact_no);
+                    }
+                    return totalPrice;
+                }
                 break;
             case 2:
                 if (BoolStatus) {

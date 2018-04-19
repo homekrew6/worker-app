@@ -8,7 +8,6 @@ export function login(email, password) {
 
       AsyncStorage.setItem('userToken', JSON.stringify(res), (err, result) => {
         AsyncStorage.getItem('userToken', (err, result) => {
-          console.log(result);
         })
       })
       res.type = 'success';
@@ -17,7 +16,6 @@ export function login(email, password) {
 
     }).catch(err => {
       err.type = 'error';
-      console.log(err)
       dispatch(authStateFailed())
       return err
     })

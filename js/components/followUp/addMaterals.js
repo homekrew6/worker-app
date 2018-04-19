@@ -61,7 +61,6 @@ class AddMaterial extends Component {
             const data = { name: this.state.name, price: this.state.price, image: '', is_active: true };
             api.post('Materials', data).then((res) => {
                 if (res.id) {
-                    debugger;
                     let addedItemArray = this.state.addedMaterialsList;
                     addedItemArray.push({ 
                         id: '', 
@@ -200,7 +199,6 @@ class AddMaterial extends Component {
         const { materialsList } = this.state;
         const regex = new RegExp(`${query.trim()}`, 'i');
         let items = materialsList.filter(material => material.name.search(regex) >= 0);
-        console.log(items);
         this.setState({ renderMaterialsList: items, IsAutoComplete: true });
         //return items;
     }
@@ -209,7 +207,7 @@ class AddMaterial extends Component {
             let addedMaterialsList = this.state.addedMaterialsList;
             let item;
             this.state.addedMaterialsList.map((item1) => {
-                if (item1.id == id) {
+                if (item1.materialsId == id) {
                     item = item1;
                 }
             });
@@ -217,7 +215,7 @@ class AddMaterial extends Component {
                 item.count = count - 1;
                 item.price = (item.count * item.actualPrice).toFixed(2);
                 addedMaterialsList.map((item1) => {
-                    if (item1.id == item.id) {
+                    if (item1.materialsId == item.id) {
                         item1.count = item.count;
                         item1.price = item.price;
                     }
@@ -493,7 +491,7 @@ class AddMaterial extends Component {
                                                             </Text>
                                                         </View>
                                                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-                                                            <TouchableOpacity style={{ height: 25, width: 25, backgroundColor: '#81cdc7', alignItems: 'center', justifyContent: 'center' }} onPress={() => this.subtractPrice(item.id, item.count)}>
+                                                            <TouchableOpacity style={{ height: 25, width: 25, backgroundColor: '#81cdc7', alignItems: 'center', justifyContent: 'center' }} onPress={() => this.subtractPrice(item.materialsId, item.count)}>
                                                                 <FontAwesome name='minus' style={{ fontSize: 14, color: '#fff' }} />
 
                                                             </TouchableOpacity>

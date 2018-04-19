@@ -79,7 +79,7 @@ class FollowUpDate extends Component {
         else {
             this.setState({ visible: false });
             const saveDateDB = this.state.daYSelected + " " + this.state.setStartTime.slice(0, -2) + this.state.setStartTime.slice(5).toLowerCase();
-            this.props.navigation.navigate('FollowUpList', { saveDateDB: saveDateDB});
+            this.props.navigation.navigate('FollowUpList', { saveDateDB: saveDateDB, jobDetails: this.props.navigation.state.params.jobDetails});
 
         }
     }
