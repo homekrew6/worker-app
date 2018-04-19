@@ -168,7 +168,7 @@ class JobDetails extends Component {
 
         //navigator watch location start
                 let navId = navigator.geolocation.watchPosition((position) => {
-                    console.log('watchPosition', position);
+                    
                     this.setState({
                         latitudeUser: position.coords.latitude,
                         longitudeUser: position.coords.longitude,
@@ -219,7 +219,7 @@ class JobDetails extends Component {
                             })
                             //update lastest job details end
                         }).catch((err) => {
-                            console.log('err on press', err);
+                           
                         })
                         //Change job status in DB end
                             });
@@ -253,7 +253,7 @@ class JobDetails extends Component {
                                     })
                                     //update lastest job details end
                                 }).catch((err) => {
-                                    console.log('err on press', err);
+                                   
                                 })
                                 //Change job status in DB end
                         })
@@ -268,7 +268,7 @@ class JobDetails extends Component {
                     }, 5000);
 
                         }).catch((err) => {
-                            console.log('eer', err);
+                          
                         })
         
                     },
@@ -452,7 +452,7 @@ class JobDetails extends Component {
     
             })
         }).catch(err => {
-            console.log(err)
+           
         })
                 //end complete job DB update //
             })
@@ -482,7 +482,7 @@ class JobDetails extends Component {
     MyChat(JobDetailsData){
         this.props.navigation.navigate('Chat', { workerDetails: JobDetailsData });
         this.setState({ callChat: true })
-        console.log(JobDetailsData);
+        
     }
 
     componentDidMount() {
@@ -569,7 +569,7 @@ class JobDetails extends Component {
                 // }
             }
         }).catch((err) => {
-            console.log('did catch', err)
+ 
         })
 
         if(this.state.bottomButtonStatus === 'way'){
@@ -626,7 +626,7 @@ class JobDetails extends Component {
                  {
                      response.response.message[0].price = response.response.message[0].price.toFixed(2);
                      this.setState({ remoteJobDetails: response.response.message[0], jobTrackingStatus: response.response.message[0].status });
-                     console.log('did job de', response);
+                     
                      if (this.state.remoteJobDetails.status === 'ONMYWAY') {
                          this.refs.ScrollViewStart.scrollToEnd();
                          this.setState({ jobTrackingStatus: 'Krew On The Way' });
@@ -653,7 +653,7 @@ class JobDetails extends Component {
         })
 
         api.get('cancelReasons').then((reason) => {
-            console.log('reason', reason);
+         
             let reasonsList=[];
             reason.map((item)=>{
                 if(item.is_active)
@@ -665,7 +665,7 @@ class JobDetails extends Component {
             })
             this.setState({ reasonList: reasonsList });
         }).catch((errReason) => {
-            console.log(errReason);
+            
         })
         
         //this.updateProgressTime();
@@ -710,7 +710,7 @@ class JobDetails extends Component {
     
             })
         }).catch(err => {
-            console.log(err);
+           
             this.setState({
                 loader: false
             })
@@ -738,7 +738,7 @@ class JobDetails extends Component {
     
             })
         }).catch(err => {
-            console.log(err);
+           
             this.setState({
                 loader: false
             })
@@ -860,7 +860,7 @@ class JobDetails extends Component {
                                     strokeWidth={3}
                                     strokeColor="hotpink"
                                     onReady={(result) => {
-                                        console.log('onready start', result, result.coordinates[0].latitude);
+                                       
                                         let lastCount = result.coordinates.length - 1;
                                         let midCount = parseInt(result.coordinates.length / 2 );
                                         let trDistance = parseFloat(result.distance).toFixed(1);
@@ -886,7 +886,7 @@ class JobDetails extends Component {
                                             trDistance: trDistance,
                                             trTime: trDuration,
                                         })
-                                        console.log('onready end 1', this.state, lastCount)
+                                      
                                         this.mapView.fitToCoordinates(result.coordinates, {
                                         edgePadding: { 
                                             right: (width / 20),

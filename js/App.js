@@ -90,7 +90,6 @@ const AppNavigator = StackNavigator(
         FollowUpList: { screen: FollowUpList},
         AddMaterial: { screen: AddMaterial},
         FollowUpDate: { screen: FollowUpDate},
-        TotalBill: { screen: TotalBill },
         Chat: { screen: Chat }, 
         JobTracker: { screen: JobTracker },
         Quote: { screen: Quote},

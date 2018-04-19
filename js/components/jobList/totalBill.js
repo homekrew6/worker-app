@@ -101,9 +101,9 @@ componentDidMount() {
                 this.setState({
                     grndtotal: grndtotal,
                 })
-                console.log(materialList);
+                
             }).catch(err => {
-                console.log('err', err);
+                
             });
 
         })

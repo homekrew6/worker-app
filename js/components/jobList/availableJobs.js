@@ -128,7 +128,6 @@ class AvailableJobs extends Component {
                 loader: false 
             });
         }).catch(err => {
-            console.log(err);
             this.setState({
                 loader: false
             })
@@ -163,7 +162,6 @@ class AvailableJobs extends Component {
         this.props.declineJob(jobId, workerId, serviceId).then(res => {
             this.jobdata();
         }).catch(err => {
-            console.log(err);
             this.setState({
                 loader: false
             })
@@ -177,11 +175,9 @@ class AvailableJobs extends Component {
         let jobId = data.id;        
         let workerId = this.props.auth.data.id;
         let customerId=data.customer.id;
-        console.log(jobId, workerId );
         this.props.acceptJob( jobId , workerId,customerId ).then(res => {
             this.jobdata();
         }).catch(err => {
-            console.log(err);
             this.setState({
                 loader: false
             })
@@ -199,7 +195,7 @@ class AvailableJobs extends Component {
             items = this.props.availableJobs.data.response.message.upcomingJobs
         } 
         if (this.props.availableJobs.data){
-            console.log(this.props.availableJobs.data.response.message.declinedJobs)
+        
 
             const dateList = [];
             this.props.availableJobs.data.response.message.upcomingJobs.map((data, key) => {

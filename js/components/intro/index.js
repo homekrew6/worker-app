@@ -134,7 +134,6 @@ class Intro extends Component {
 			)
 		}
 		else {
-			console.log("pragati");
 			return (
 			<Container>
 					<Swiper

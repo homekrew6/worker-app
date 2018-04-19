@@ -44,7 +44,7 @@ class JobTracker extends Component {
     }
 
     componentDidMount(){
-        console.log(this.props.navigation.state.params.Jobid);
+      
         api.post('jobTrackerStatuses/getJobTrackingDetailsById', { "jobId": this.props.navigation.state.params.Jobid }).then((res) => {           
             let statusArray = [];
             if (res.response.message.length <= 3) {
@@ -55,7 +55,7 @@ class JobTracker extends Component {
             else {
                 statusArray = res.response.message;
             }
-            console.log(statusArray);
+            
             statusArray.map((newdata) => {
                 if (newdata.status == 'JOBCOMPLITED') {
                     this.setState({

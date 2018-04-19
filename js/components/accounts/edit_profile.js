@@ -41,10 +41,28 @@ class EditProfile extends Component {
             serviceList: [],
             zoneList: []
         };
+        this.actionSheet = null;
     }
 
-
-
+    showActionSheet()
+    {
+        if (this.actionSheet !== null) {
+            // Call as you would ActionSheet.show(config, callback)
+            this.actionSheet._root.showActionSheet({
+                options: BUTTONS,
+            },
+                (buttonIndex) => {
+                    this.setState({ clicked: BUTTONS[buttonIndex] });
+                    // this.setState({ filecat: buttonIndex });
+                    // this.setState({ filecat: buttonIndex});
+                    this.fileUploadType(buttonIndex);
+                });
+        }
+        
+    }
+    componentDidMount() {
+        ActionSheet.actionsheetInstance = null;
+    }
     componentWillMount() {
         api.get('Zones/getParentZone').then((res) => {
             //console.log(res);
@@ -68,12 +86,12 @@ class EditProfile extends Component {
                                         serviceIds.push(item.serviceId);
                                     });
                                     resService.response.map((data1) => {
-                                        if(data1.service){
+                                        if (data1.service) {
                                             if (serviceIds.includes(data1.service.id)) {
                                                 data1.selected = true;
                                             }
                                         }
-                                        
+
                                     });
                                     this.setState({ serviceList: resService.response });
 
@@ -133,8 +151,8 @@ class EditProfile extends Component {
                 if (response.status == 201) {
                     this.setState({ uploadButton: true });
                     this.setState({ uploaded: true });
-                     //this.props.setProfilePic(response.body.postResponse.location);
-                    
+                    //this.props.setProfilePic(response.body.postResponse.location);
+
                     this.setState({ image: response.body.postResponse.location })
                     this.setState({ visible: false });
                 }
@@ -297,7 +315,7 @@ class EditProfile extends Component {
                 this.state.serviceList.map((data, key) => {
                     if (!data.service) return;
                     return (
-                        <View key={data.id} style={{flexDirection: 'row', paddingTop: 7, paddingBottom: 7, alignItems: 'center'}}>
+                        <View key={data.id} style={{ flexDirection: 'row', paddingTop: 7, paddingBottom: 7, alignItems: 'center' }}>
                             <View style={styles.catIten_img_view}>
                                 <Switch value={data.selected} onValueChange={(value) => this.switchChange(value, data)} />
                             </View>
@@ -330,7 +348,7 @@ class EditProfile extends Component {
                                 this.state.image ? (
                                     <Thumbnail source={{ uri: this.state.image }} style={styles.editPflHdrThumbnail} />
                                 ) : (
-                                    <Thumbnail source={profileImage} style={styles.editPflHdrThumbnail} />
+                                        <Thumbnail source={profileImage} style={styles.editPflHdrThumbnail} />
                                     )
                             }
 
@@ -338,22 +356,11 @@ class EditProfile extends Component {
                                 primary noShadow small
                                 style={styles.editPflHdrBtn}
                                 onPress={() =>
-                                    ActionSheet.show(
-                                        {
-                                            options: BUTTONS
-                                        },
-                                        (buttonIndex) => {
-                                            this.setState({ clicked: BUTTONS[buttonIndex] });
-                                            //this.setState({ filecat: buttonIndex });
-                                            console.log(buttonIndex);
-                                            //this.setState({ filecat: buttonIndex});
-                                            this.fileUploadType(buttonIndex);
-
-                                        }
-                                    )}
+                                    this.showActionSheet()}
                             >
                                 <Text>{I18n.t('change_photo')}</Text>
                             </Button>
+                            <ActionSheet ref={(c) => { this.actionSheet = c; }} />
                         </View>
                     </View>
 
@@ -405,7 +412,7 @@ class EditProfile extends Component {
                                 <Text style={{ paddingBottom: 5, paddingLeft: 5 }}>{I18n.t('skills')}</Text>
                                 <Text style={styles.starRedSkill}>*</Text>
                             </View>
-                            
+
                             <View>{serviceListing}</View>
                         </View>
                     </View>
