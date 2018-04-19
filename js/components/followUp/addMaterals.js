@@ -46,7 +46,7 @@ class AddMaterial extends Component {
             materialsList: [],
             loader: false,
             addedMaterialsList: [],
-            currency: 'USD',
+            currency: 'AED',
             renderMaterialsList: [],
             IsAutoComplete: false,
             IsModalVisible: false,
@@ -264,7 +264,6 @@ class AddMaterial extends Component {
 
     }
     addPrice(id, count) {
-        debugger;
         let addedMaterialsList = this.state.addedMaterialsList;
         let item;
         this.state.addedMaterialsList.map((item1) => {
@@ -311,7 +310,6 @@ class AddMaterial extends Component {
                 }
                 else {
                     Alert.alert("Materials added successfully.");
-                    debugger;
                     this.props.navigation.navigate('FollowUpList', { 
                         totalPrice: this.state.totalPrice,
                         materialsId: res.response.message[0].materialsId,

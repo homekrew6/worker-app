@@ -15,7 +15,7 @@ class Settings extends Component {
         this.state = {
             language: 'English',
             visible: false,
-            currency: 'USD'
+            currency: 'AED'
         }
 
     }

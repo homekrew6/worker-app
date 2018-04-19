@@ -83,7 +83,7 @@ class JobDetails extends Component {
             job_start_time: '',
             job_end_time: '',
             remoteJobDetails: '',
-            currency:'USD',
+            currency:'AED',
             itemsRef: '',
             jobTrackingStatus: '',
             progressInterval:'',
@@ -587,29 +587,67 @@ class JobDetails extends Component {
             "id": this.props.navigation.state.params.jobDetails.id,
             "workerId": this.props.auth.data.id
         }).then((response) => {
-            debugger;
              if(response.response.message.length &&  response.response.message.length>0 && response.response.message[0].price)
                                 {
-                                    response.response.message[0].price=response.response.message[0].price.toFixed(2);
+                 if (response.response.message[0].status=='FOLLOWEDUP')
+                 {
+                     api.post('jobMaterials/getJobMaterialByJobId', { "jobId": this.props.navigation.state.params.jobDetails.id }).then((materialAns)=>{
+                         let materialList = materialAns.response.message;
+                         materialTotalPrice = 0;
+                         materialList.map((materialItem) => {
+                             if (materialItem.materials) {
+                                 materialTotalPrice = Number(materialTotalPrice) + Number(materialItem.price);
+                             }
+                         })
+                         materialTotalPrice = Number(materialTotalPrice) + Number(response.response.message[0].price)+50;
+                         materialTotalPrice=materialTotalPrice.toFixed(2);
+                         response.response.message[0].price = materialTotalPrice;
+                         this.setState({ remoteJobDetails: response.response.message[0], jobTrackingStatus: response.response.message[0].status });
+                         if (this.state.remoteJobDetails.status === 'ONMYWAY') {
+                             this.refs.ScrollViewStart.scrollToEnd();
+                             this.setState({ jobTrackingStatus: 'Krew On The Way' });
+                         } else if (this.state.remoteJobDetails.status === 'JOBSTARTED') {
+                             this.refs.ScrollViewComplete.scrollToEnd();
+                             this.setState({ jobTrackingStatus: 'Job Started' });
+                         } else if (this.state.remoteJobDetails.status === 'ACCEPTED') {
+                             this.setState({ jobTrackingStatus: 'Krew Assigned' });
+                         } else if (this.state.remoteJobDetails.status === 'STARTED') {
+                             this.setState({ jobTrackingStatus: 'Job Requested' });
+                         }
+                         else if (this.state.remoteJobDetails.status === 'FOLLOWEDUP') {
+                             this.refs.ScrollViewRenew.scrollToEnd();
+                             this.setState({ jobTrackingStatus: 'Job Followed Up' });
+                         }
+                     }).catch((err5)=>{
+
+                     })
+                 }
+                 else
+                 {
+                     response.response.message[0].price = response.response.message[0].price.toFixed(2);
+                     this.setState({ remoteJobDetails: response.response.message[0], jobTrackingStatus: response.response.message[0].status });
+                     console.log('did job de', response);
+                     if (this.state.remoteJobDetails.status === 'ONMYWAY') {
+                         this.refs.ScrollViewStart.scrollToEnd();
+                         this.setState({ jobTrackingStatus: 'Krew On The Way' });
+                     } else if (this.state.remoteJobDetails.status === 'JOBSTARTED') {
+                         this.refs.ScrollViewComplete.scrollToEnd();
+                         this.setState({ jobTrackingStatus: 'Job Started' });
+                     } else if (this.state.remoteJobDetails.status === 'ACCEPTED') {
+                         this.setState({ jobTrackingStatus: 'Krew Assigned' });
+                     } else if (this.state.remoteJobDetails.status === 'STARTED') {
+                         this.setState({ jobTrackingStatus: 'Job Requested' });
+                     }
+                     else if (this.state.remoteJobDetails.status === 'FOLLOWEDUP') {
+                         this.refs.ScrollViewRenew.scrollToEnd();
+                         this.setState({ jobTrackingStatus: 'Job Followed Up' });
+                     }
+                 }
+                                    
                                 }
 
-            this.setState({ remoteJobDetails: response.response.message[0], jobTrackingStatus: response.response.message[0].status});
-            console.log('did job de', response);
-            if(this.state.remoteJobDetails.status === 'ONMYWAY'){
-                this.refs.ScrollViewStart.scrollToEnd();
-                this.setState({ jobTrackingStatus: 'Krew On The Way' });
-            }else if(this.state.remoteJobDetails.status === 'JOBSTARTED'){
-                this.refs.ScrollViewComplete.scrollToEnd();
-                this.setState({ jobTrackingStatus: 'Job Started' });
-            }else if(this.state.remoteJobDetails.status === 'ACCEPTED'){
-                this.setState({ jobTrackingStatus:'Krew Assigned'});
-            }else if(this.state.remoteJobDetails.status === 'STARTED'){
-                this.setState({ jobTrackingStatus:'Job Requested'});
-            }
-            else if (this.state.remoteJobDetails.status === 'FOLLOWEDUP') {
-                this.refs.ScrollViewRenew.scrollToEnd();
-                this.setState({ jobTrackingStatus: 'Job Followed Up' });
-            }
+           
+           
         }).catch((err) => {
 
         })
