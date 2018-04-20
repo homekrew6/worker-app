@@ -165,7 +165,6 @@ class JobDetails extends Component {
    
     onMyWayPress(){
         this.setState({ bottomButtonStatus: 'start', loader: true });
-
         //navigator watch location start
                 let navId = navigator.geolocation.watchPosition((position) => {
                     
@@ -181,7 +180,7 @@ class JobDetails extends Component {
                     this.state.itemsRef = firebase.database().ref().child('tracking'); 
                     jobIdTr=jobIdTr.toString();
                     this.state.itemsRef.orderByChild('jobId').equalTo(jobIdTr).once('value').then((snapshot)=>{ 
-                console.warn(snapshot); 
+                    console.warn(snapshot); 
                         if (snapshot && snapshot.val()) { 
                             const key = Object.keys(snapshot.val())[0];
                             const ref = this.state.itemsRef.child(key); 
@@ -486,7 +485,7 @@ class JobDetails extends Component {
     }
 
     componentDidMount() {
-       navigator.geolocation.getCurrentPosition((position) => {
+        navigator.geolocation.getCurrentPosition((position) => {
             this.setState({
                 latitudeUser: position.coords.latitude,
                 longitudeUser: position.coords.longitude,
@@ -502,7 +501,7 @@ class JobDetails extends Component {
                 this.setState({ currency: value1.language })
             }
         })
-        
+
         let jobIdDump = `key@${this.props.navigation.state.params.jobDetails.id}`;
         AsyncStorage.removeItem(jobIdDump, (err) => console.log('finished', err));
         AsyncStorage.getItem(jobIdDump).then((value) => {
@@ -588,7 +587,7 @@ class JobDetails extends Component {
             "workerId": this.props.auth.data.id
         }).then((response) => {
              if(response.response.message.length &&  response.response.message.length>0 && response.response.message[0].price)
-                                {
+                {
                  if (response.response.message[0].status=='FOLLOWEDUP')
                  {
                      api.post('jobMaterials/getJobMaterialByJobId', { "jobId": this.props.navigation.state.params.jobDetails.id }).then((materialAns)=>{
@@ -642,26 +641,19 @@ class JobDetails extends Component {
                          this.refs.ScrollViewRenew.scrollToEnd();
                          this.setState({ jobTrackingStatus: 'Job Followed Up' });
                      }
-                 }
-                                    
-                                }
-
-           
-           
+                 }                  
+            }
         }).catch((err) => {
 
         })
 
         api.get('cancelReasons').then((reason) => {
-         
             let reasonsList=[];
             reason.map((item)=>{
-                if(item.is_active)
-                {
-                 item.IsSelected=false;
-                 reasonsList.push(item);
+                if(item.is_active){
+                    item.IsSelected=false;
+                    reasonsList.push(item);
                 }
-                
             })
             this.setState({ reasonList: reasonsList });
         }).catch((errReason) => {
@@ -670,6 +662,7 @@ class JobDetails extends Component {
         
         //this.updateProgressTime();
     }
+
     swipeButtonReady(){
         setTimeout(() => {
             this.setState({ scrollStatus: 1 });
