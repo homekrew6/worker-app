@@ -19,5 +19,10 @@ export default {
   price: 'Prix',
   slide_to_click_renew_job: 'Faites glisser pour cliquer sur Renouveler le travail',
   renew_job: 'Renouveler le travail',
-   commission:'Commission'
+  commission:'Commission',
+  clearAll: 'Tout effacer',
+  notification: 'Notification',
+  new: 'NOUVEAU',
+  earlier: 'PLUS TÔT',
+  nodatafound : 'Aucune donnée disponible'   
 };
