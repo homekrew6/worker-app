@@ -134,7 +134,6 @@ class UnavailableDate extends Component {
     }
 
     componentDidMount() {
-        //debugger;
         this.setState({ visible: true });
         var today = new Date();
         var dy = parseInt(today.getMonth() + 1);
