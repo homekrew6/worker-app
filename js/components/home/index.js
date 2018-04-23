@@ -59,7 +59,6 @@ class Home extends Component {
 		});
 		//called on initial
 		FCM.getInitialNotification().then(notif => {
-			debugger;
 			console.log('getInitialNotification', notif);
 			setTimeout(() => {
 				AsyncStorage.getItem("userToken").then((userToken) => {
@@ -180,7 +179,6 @@ class Home extends Component {
 		});
 		//
 		this.notificationUnsubscribe = FCM.on(FCMEvent.Notification, notif => {
-			debugger;
 			console.log('notificationUnsubscribe', notif);
 			if (notif && notif.local_notification) {
 				//when notification clicked

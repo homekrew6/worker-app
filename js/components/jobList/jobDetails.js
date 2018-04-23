@@ -1140,7 +1140,7 @@ class JobDetails extends Component {
                     } */}
                     {
                         JobDetailsData.status === 'COMPLETED' ?
-                            <TouchableOpacity style={styles.jobItemWarp} onPress={() => this.props.navigation.navigate('jobSummary', {jobDetails: JobDetailsData})}>
+                            <TouchableOpacity style={styles.jobItemWarp} onPress={() => this.props.navigation.navigate('TotalBill', {jobDetails: JobDetailsData})}>
                                 <View style={{ width: 30, alignItems: 'center' }}>
                                     <FontAwesome name="money" style={styles.jobItemIcon} />
                                 </View>

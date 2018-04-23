@@ -22,14 +22,26 @@ const resetAction = NavigationActions.reset({
     actions: [NavigationActions.navigate({ routeName: 'SelectLocation' })]
 });
 
- 
+const datas = [
+    'Simon Mignolet',
+    'Nathaniel Clyne',
+    'Dejan Lovren',
+    'Mama Sakho',
+    'Alberto Moreno',
+    'Emre Can',
+    'Joe Allen',
+    'Phil Coutinho',
+];
 
 class myLocation extends Component {
     constructor(props) {
         super(props);
+        this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
         this.state = {
             locationFlag: false,
             loader: false,
+            basic: true,
+            listViewData: datas,
         }
     }
 
