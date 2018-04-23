@@ -114,5 +114,10 @@ export default {
   pending: 'Pending',
   quoteMsg: 'Click the pending material to put the price .',
   jobSummary: 'Job Summary',
-  commission:'Commission'
+  commission:'Commission',
+  clearAll: 'Clear All',
+  notification: 'Notification',
+  new: 'NEW',
+  earlier: 'EARLIER',
+  nodatafound : 'No data found' 
 };

@@ -111,5 +111,10 @@ export default {
   pending: 'قيد الانتظار',
   quoteMsg: 'انقر فوق المواد المعلقة لوضع السعر.' ,
   jobSummary: 'ملخص العمل',
-  commission:'عمولة'
+  commission:'عمولة',
+  clearAll: 'امسح الكل',
+  notification: 'إعلام',
+  new: 'الجديد',
+  earlier: 'سابقا',
+  nodatafound : 'لاتوجد بيانات', 
 };

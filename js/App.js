@@ -37,6 +37,7 @@ import Chat from './components/jobList/chat';
 import JobTracker from './components/jobList/jobTracker';
 import Quote from './components/followUp/quote';
 import jobSummary from './components/jobList/jobSummary';
+import NotificationList from './components/notification/notificationList';
 
 const transitionConfig = () => {
     return {
@@ -93,7 +94,8 @@ const AppNavigator = StackNavigator(
         Chat: { screen: Chat }, 
         JobTracker: { screen: JobTracker },
         Quote: { screen: Quote},
-        jobSummary: { screen: jobSummary }
+        jobSummary: { screen: jobSummary },
+        NotificationList: {screen: NotificationList}
     },
     {
         initialRouteName: "Home",
