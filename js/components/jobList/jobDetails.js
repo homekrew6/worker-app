@@ -428,7 +428,7 @@ class JobDetails extends Component {
                 "workerId": `${this.props.auth.data.id}`, 
                 "lat": snapshot.val()[key].lat, 
                 "lng": snapshot.val()[key].lng, 
-                "status": "COMPLETED",
+                "status": "PAYPENDING",
             } 
             ref.update(data).then((thenRes) => {
                 //complete job DB update
@@ -439,14 +439,14 @@ class JobDetails extends Component {
         const jobId = this.props.navigation.state.params.jobDetails.id;
         const customerId = this.props.navigation.state.params.jobDetails.customerId;
         api.post('Jobs/completeJob', { 
-            "id": jobId, "status": "COMPLETED", "customerId": customerId, "actualTime": minuteDiff,
+            "id": jobId, "status": "PAYPENDING", "customerId": customerId, "actualTime": minuteDiff,
             price: price
         }).then(responseJson => {
             api.post('Jobs/getJobDetailsById', {
                 "id": this.props.navigation.state.params.jobDetails.id,
                 "workerId": this.props.auth.data.id
             }).then((response) => {
-                this.setState({ remoteJobDetails: response.response.message[0], loader: false, jobTrackingStatus: 'Job Completed' });
+                this.setState({ remoteJobDetails: response.response.message[0], loader: false, jobTrackingStatus: 'Payment Pending' });
             }).catch((err) => {
     
             })
@@ -485,6 +485,7 @@ class JobDetails extends Component {
     }
 
     componentDidMount() {
+        console.log('job details . . . . . ', this.props.navigation.state.params.jobDetails);
         navigator.geolocation.getCurrentPosition((position) => {
             this.setState({
                 latitudeUser: position.coords.latitude,
@@ -494,7 +495,14 @@ class JobDetails extends Component {
             },
             (error) => this.setState({ errorLocation: error.message })
         );
-
+        this.state.itemsRef.on('child_changed', (snapshot)=>{
+            const snapShotVal = snapshot.val();
+            if (snapShotVal.status == 'COMPLETED') {
+                let jobDetails = this.state.remoteJobDetails;
+                jobDetails.status = snapShotVal.status;
+                this.setState({  job_start_time: '', remoteJobDetails: jobDetails, job_end_time: '', jobTrackingStatus: 'Job Completed' });
+            }
+        })
         AsyncStorage.getItem("currency").then((value) => {
             if (value) {
                 const value1 = JSON.parse(value);
@@ -617,6 +625,9 @@ class JobDetails extends Component {
                              this.refs.ScrollViewRenew.scrollToEnd();
                              this.setState({ jobTrackingStatus: 'Job Followed Up' });
                          }
+                         else if (this.state.remoteJobDetails.status === 'PAYPENDING') {
+                             this.setState({ jobTrackingStatus: 'Payment Pending' });
+                         }
                      }).catch((err5)=>{
 
                      })
@@ -636,6 +647,9 @@ class JobDetails extends Component {
                          this.setState({ jobTrackingStatus: 'Krew Assigned' });
                      } else if (this.state.remoteJobDetails.status === 'STARTED') {
                          this.setState({ jobTrackingStatus: 'Job Requested' });
+                     }
+                     else if (this.state.remoteJobDetails.status === 'PAYPENDING') {
+                         this.setState({ jobTrackingStatus: 'Payment Pending' });
                      }
                      else if (this.state.remoteJobDetails.status === 'FOLLOWEDUP') {
                          this.refs.ScrollViewRenew.scrollToEnd();
@@ -972,7 +986,7 @@ class JobDetails extends Component {
                                 <Image source={require('../../../img/icon17.png')} style={{ width: win, height: (win* 0.1), marginTop: -(win* 0.1) }} />
                             </View>
                         : 
-                                    JobDetailsData.status === 'STARTED' || JobDetailsData.status === 'FOLLOWEDUP' ?
+                                    JobDetailsData.status === 'STARTED' || JobDetailsData.status === 'FOLLOWEDUP' || JobDetailsData.status === 'PAYPENDING' ?
                             
                         JobDetailsData.service.banner_image ?  
                         <View>
@@ -1097,7 +1111,22 @@ class JobDetails extends Component {
                             </TouchableOpacity>
                         ) : (console.log(''))
                     }
+
+                    {/* {
+
+                        JobDetailsData.status === 'PAYPENDING'  ? (
+
+                            <TouchableOpacity style={styles.jobItemWarp}>
+                                <View style={{ width: 30, alignItems: 'center' }}>
+                                    <MaterialIcons name="payment" style={styles.jobItemIcon} />
+                                </View>
+                                <Text style={styles.jobItemName}>{I18n.t('payment')}</Text>
+                                <Text style={styles.jobItemValue}>{JobDetailsData.payment}</Text>
+                            </TouchableOpacity>
+                        ) : null
+                    } */}
                     
+                    {/*
                     <View style={styles.jobItemWarp}>
                         <View style={{ width: 30, alignItems: 'center' }}>
                             <MaterialIcons name="payment" style={styles.jobItemIcon} />
@@ -1105,7 +1134,7 @@ class JobDetails extends Component {
                         <Text style={styles.jobItemName}>{I18n.t('payment')}</Text>
                         <Text style={styles.jobItemValue}>{JobDetailsData.payment}</Text>
                     </View>
-                    {/* {
+                     {
                         JobDetailsData.status==='FOLLOWEDUP'?
                         <View>
                                 <ScrollView
