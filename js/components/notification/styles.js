@@ -27,6 +27,7 @@ export default {
     deleteWarp: { height: '100%' , paddingBottom: 10 },
     deleteWarpInner: { height: '100%' , backgroundColor: 'red', marginBottom: 15, alignItems: 'center', justifyContent: 'center' },
     deleteWarpText: { color: '#fff' },
+    deleteWarpIcon: { fontSize: 20, color: '#fff', marginBottom: 0 },
     noDataFound: {alignItems: 'center', justifyContent: 'center', marginTop: 15 }
 
 };

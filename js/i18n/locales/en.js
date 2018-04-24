@@ -119,5 +119,10 @@ export default {
   notification: 'Notification',
   new: 'NEW',
   earlier: 'EARLIER',
-  nodatafound : 'No data found' 
+  nodatafound : 'No data found' ,
+  liveChat: 'LIVE CHAT',
+  callMe: 'CALL ME',
+  callUs: 'Call Us',
+  call: 'Call'
+  
 };

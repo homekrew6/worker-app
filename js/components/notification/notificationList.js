@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Image, View, StatusBar, TouchableOpacity, Text, TextInput, Alert, ListView } from "react-native";
 import { Container, Header, Content, Body, Title, Footer, FooterTab, Button, List, ListItem, Icon } from "native-base";
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Ionicons from 'react-native-vector-icons/Ionicons'; 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import moment from 'moment';
 import I18n from '../../i18n/i18n';
 import FSpinner from 'react-native-loading-spinner-overlay';
@@ -153,7 +154,9 @@ class NotificationList extends Component {
     render() {
         return (
             <Container >
-					<FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{color: '#FFF'}} />                
+
+				<FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{color: '#FFF'}} />  
+
                 <StatusBar
                     backgroundColor="#81cdc7"
                 />
@@ -171,9 +174,10 @@ class NotificationList extends Component {
                 </Header>
 
                 <Content>
+
                     {
                         this.state.NotificationListUnread.length ?
-                        <View style={{ marginTop: 10, paddingLeft: 15, marginBottom: 10 }}>
+                            <View style={styles.listHeadingWarp}>
                             <Text>{I18n.t('new')}</Text>
                         </View> : null
                     }
@@ -204,7 +208,8 @@ class NotificationList extends Component {
                                 renderRightHiddenRow={(data, secId, rowId, rowMap) =>
                                     <View onPress={() => this.deleteNotification(data)} style={styles.deleteWarp}>
                                         <TouchableOpacity onPress={() => this.deleteNotification(data)} style={styles.deleteWarpInner}>
-                                            <Icon active name="trash" style={styles.deleteWarpText} />
+                                            <EvilIcons name="close" style={styles.deleteWarpIcon} />
+                                            <Text style={styles.deleteWarpText}>DELETE</Text>
                                         </TouchableOpacity>
                                     </View>}
                                 leftOpenValue={75}
@@ -247,7 +252,8 @@ class NotificationList extends Component {
                             renderRightHiddenRow={(data, secId, rowId, rowMap) =>
                             <View onPress={() => this.deleteNotification(data)} style={styles.deleteWarp}>
                                 <TouchableOpacity onPress={() => this.deleteNotification(data)} style={ styles.deleteWarpInner }>
-                                    <Icon active name="trash" style={styles.deleteWarpText}/>
+                                    <EvilIcons name="close" style={styles.deleteWarpIcon} />
+                                    <Text style={styles.deleteWarpText} >DELETE</Text>
                                 </TouchableOpacity>
                             </View>}
                             leftOpenValue={75}
