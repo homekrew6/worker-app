@@ -24,5 +24,9 @@ export default {
   notification: 'Notification',
   new: 'NOUVEAU',
   earlier: 'PLUS TÔT',
-  nodatafound : 'Aucune donnée disponible'   
+  nodatafound : 'Aucune donnée disponible',
+  liveChat: 'CHAT EN DIRECT',
+  callMe: 'APPELLE-MOI',
+  callUs: 'Appelez-nous',
+  call: 'Appel'   
 };

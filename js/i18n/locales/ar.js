@@ -117,4 +117,8 @@ export default {
   new: 'الجديد',
   earlier: 'سابقا',
   nodatafound : 'لاتوجد بيانات', 
+  liveChat: 'دردشة مباشرة',
+  callMe: 'اتصل بي',
+  callUs: 'اتصل بنا',
+  call: 'Appel'
 };

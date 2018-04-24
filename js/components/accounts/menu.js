@@ -193,13 +193,13 @@ componentWillMount(){
                         </CardItem>
 
                         <CardItem style={styles.menuCarditem}>
-                            <View style={styles.menuCardView}>
+                            <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate('Support')}>
                                 <Image source={icon6} style={styles.menuCardIcon} />
                                 <Text style={styles.menuCardTxt}>{I18n.t('support')}</Text>
                                 <View style={styles.arw_lft}>
                                     <Image source={back_arow} style={styles.arw_lft_img} />
                                 </View>
-                            </View>
+                            </TouchableOpacity>
                         </CardItem>
 
                         <CardItem style={styles.menuCarditem}>
