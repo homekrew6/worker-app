@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { NavigationActions } from "react-navigation";
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Image, View, StatusBar, TouchableOpacity, Text, TextInput, Alert, ListView } from "react-native";
 import { Container, Header, Content, Body, Title, Footer, FooterTab, Button, List, ListItem, Icon } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -31,7 +34,7 @@ class NotificationList extends Component {
     }
 
     notificationListData(){
-        let workerId = this.props.navigation.state.params.workerId? this.props.navigation.state.params.workerId : '';
+        let workerId = this.props.auth.data.id ? this.props.auth.data.id : '';
         console.log('cuId', workerId);       
         if(workerId){
         let notiDataread = [], notiDataunread = [], notiData;
@@ -87,7 +90,7 @@ class NotificationList extends Component {
             loader: true
         })
 
-        let workerId = this.props.navigation.state.params.workerId? this.props.navigation.state.params.workerId : '';   
+        let workerId = this.props.auth.data.id ? this.props.auth.data.id : '';   
 
         api.post( 'Notifications/clearAllNotificationByWorkerId', { "workerId":  workerId }  ).then((res) => {
             this.setState({
@@ -104,6 +107,8 @@ class NotificationList extends Component {
     }
 
     gotoDetails(data){
+        let jobDetails = 'abc';
+
         if(!data.IsRead){
             this.setState({
                 loader: true
@@ -121,8 +126,27 @@ class NotificationList extends Component {
             });                              
         }
 
-        if(data.notificationType == "NewJob"){
-            this.props.navigation.navigate('AvailableJobs');            
+        if (data.notificationType == "NewJob") {
+            this.props.navigation.navigate('AvailableJobs');
+        } else if (data.notificationType == "JobFollowUp") {
+            this.setState({
+                loader: true
+            });
+            api.post('Jobs/getJobDetailsById', {
+                "id": data.jobId,
+                "workerId": this.props.auth.data.id
+            }).then((res) => {
+                jobDetails = res.response.message[0];
+                this.props.navigation.navigate('JobDetails', { jobDetails: jobDetails }); 
+                this.setState({
+                    loader: false,
+                });               
+            }).catch((err) => {
+                console.log(err);
+                this.setState({
+                    loader: false,
+                });
+            })
         }
     }
 
@@ -160,9 +184,9 @@ class NotificationList extends Component {
                                 dataSource={this.ds.cloneWithRows(this.state.NotificationListUnread)}
                                 disableRightSwipe={true}
                                 renderRow={data =>
-                                <ListItem style={styles.listHeadingWarp}>
-                                    <TouchableOpacity style={styles.listWarp} onPress={()=> this.gotoDetails(data)}>
-                                         <View style={styles.listWarpInner}>
+                                    <ListItem style={styles.listWarp}>
+                                        <TouchableOpacity style={styles.listWarpInner} onPress={()=> this.gotoDetails(data)}>
+                                            <View style={styles.listImageWarp}>
                                              <Image source={require('../../../img/icon/notificationIcon1.png')} style={styles.listImage} />
                                          </View>
                                          <View style={styles.listTextWarp}>
@@ -176,13 +200,13 @@ class NotificationList extends Component {
                                      </TouchableOpacity>
                                 </ListItem>}
                                 renderLeftHiddenRow={data =>
-                                <Button></Button>}
+                                <View></View>}
                                 renderRightHiddenRow={(data, secId, rowId, rowMap) =>
-                                <View onPress={() => this.deleteNotification(data)} style={styles.deleteWarp}>
-                                    <TouchableOpacity onPress={() => this.deleteNotification(data)} style={ styles.deleteWarpInner }>
-                                        <Icon active name="trash" style={styles.deleteWarpText}/>
-                                    </TouchableOpacity>
-                                </View>}
+                                    <View onPress={() => this.deleteNotification(data)} style={styles.deleteWarp}>
+                                        <TouchableOpacity onPress={() => this.deleteNotification(data)} style={styles.deleteWarpInner}>
+                                            <Icon active name="trash" style={styles.deleteWarpText} />
+                                        </TouchableOpacity>
+                                    </View>}
                                 leftOpenValue={75}
                                 rightOpenValue={-75}
                             />
@@ -210,7 +234,7 @@ class NotificationList extends Component {
                                     </View>
                                     <View style={styles.listTextWarp}>
                                         <Text>{data.title}</Text>
-                                        <Text numberOfLines={1} style={data.listTextsecend}>{data.notificationDate}</Text>
+                                            <Text numberOfLines={1} style={styles.listTextsecend}>{data.notificationDate}</Text>
                                         {/* <Text style={styles.listTextthird}>Home</Text> */}
                                     </View>
                                     <View>
@@ -219,7 +243,7 @@ class NotificationList extends Component {
                                 </TouchableOpacity>
                             </ListItem>}
                             renderLeftHiddenRow={data =>
-                                <Button></Button>}
+                                <View></View>}
                             renderRightHiddenRow={(data, secId, rowId, rowMap) =>
                             <View onPress={() => this.deleteNotification(data)} style={styles.deleteWarp}>
                                 <TouchableOpacity onPress={() => this.deleteNotification(data)} style={ styles.deleteWarpInner }>
@@ -232,7 +256,7 @@ class NotificationList extends Component {
                     }
 
                     {
-                        !(this.state.NotificationListRead.length  && this.state.NotificationListUnread.length)? null: <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 15 }}><Text> {I18n.t('nodatafound')} </Text></View>
+                        !(this.state.NotificationListRead.length==0  && this.state.NotificationListUnread.length==0)? null: <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 15 }}><Text> {I18n.t('nodatafound')} </Text></View>
                     }
 
                 </Content>
@@ -242,5 +266,15 @@ class NotificationList extends Component {
 }
 
 
+NotificationList.propTypes = {
+    auth: PropTypes.object.isRequired
+}
+const mapStateToProps = (state) => {
+    return {
+        auth: state.auth
+    }
+}
 
-export default NotificationList;
+
+// export default NotificationList;
+export default connect(mapStateToProps)(NotificationList);
