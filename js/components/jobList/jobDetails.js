@@ -495,6 +495,7 @@ class JobDetails extends Component {
             },
             (error) => this.setState({ errorLocation: error.message })
         );
+        this.state.itemsRef = firebase.database().ref().child('tracking'); 
         this.state.itemsRef.on('child_changed', (snapshot)=>{
             const snapShotVal = snapshot.val();
             if (snapShotVal.status == 'COMPLETED') {
