@@ -56,6 +56,8 @@ class JobTracker extends Component {
                 statusArray = res.response.message;
             }
             
+            console.log('trackingDetails', res.response.message);
+
             statusArray.map((newdata) => {
                 if (newdata.status == 'JOBCOMPLITED') {
                     this.setState({
@@ -103,9 +105,11 @@ class JobTracker extends Component {
         }
         return (
             <Container >
+
                 <StatusBar
                     backgroundColor="#81cdc7"
                 />
+
                 <Header style={styles.appHdr2} noShadow androidStatusBarColor="#81cdc7">
                     <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }}>
                         <EvilIcons name="close" style={[styles.headIcon, { color: '#fff'}]} />
@@ -115,6 +119,7 @@ class JobTracker extends Component {
                     </Body>
                     <Button transparent style={{ width: 30, backgroundColor: 'transparent', }} disabled={true} />
                 </Header>
+
                 <Content>
                     <FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />                    
                     <View style={styles.trackmetterWarp}>
@@ -309,6 +314,21 @@ class JobTracker extends Component {
                                                                     )
                                                             }
                                                         </View>
+                                                        </View> : trackStatus.status === 'PAYPENDING' ?
+                                                        <View style={styles.trackmetterItem} key={key}>
+                                                            <View style={styles.trackmetterItemInner}>
+                                                                    <Text>{I18n.t('pay_pending')}</Text>
+                                                                <Text style={styles.trackmetterItemDate}>{this.getLocalTimeFormat(trackStatus.statusChangeddate)}</Text>
+                                                                <View style={styles.crcl}></View>
+                                                                {
+                                                                    this.state.trackerData[key + 1] != undefined ? (
+
+                                                                        <View style={styles.line}></View>
+                                                                    ) : (
+                                                                            <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
+                                                                        )
+                                                                }
+                                                        </View>
                                                     </View>: null
                                         )
                                     })
@@ -340,6 +360,7 @@ class JobTracker extends Component {
                     </View>
                    
                 </Content>
+
             </Container>
         );
     }

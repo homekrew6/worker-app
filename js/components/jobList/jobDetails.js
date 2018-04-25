@@ -63,7 +63,7 @@ class JobDetails extends Component {
             isModalVisible: false,
             bottomButtonStatus: 'way',
             jobCancelModal: false,
-            jobCancelbuttonStatus: true,
+            jobCancelbuttonStatus: false,
             jobCompletedbuttonStatus: false,
             mapTrackingStatus: 'map',
             latitudeUser: '',
@@ -817,11 +817,13 @@ class JobDetails extends Component {
         let GOOGLE_MAPS_APIKEY = 'AIzaSyCya136InrAdTM3EkhM9hryzbCcfTUu7UU';
         return (
             <Container style={{ backgroundColor: '#fff' }}>
+
                 <StatusBar
                     backgroundColor="#81cdc7"
                 />
+
                 <Header style={[styles.headerWarp, { alignItems: 'center', justifyContent: 'center' }]} noShadow androidStatusBarColor="#81cdc7" >
-                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 80, justifyContent: 'flex-start' }}>
+                    <Button transparent onPress={() => this.props.navigation.goBack()} style={[{ justifyContent: 'flex-start' }, JobDetailsData.status == 'JOBSTARTED' ? { width: 90 } : { width: 30 }]}>
                         <Ionicons name="ios-arrow-back" style={styles.headIcon2} />
                     </Button>
                     <Body style={styles.headBody}>
@@ -832,9 +834,10 @@ class JobDetails extends Component {
                         
                         JobDetailsData.status=='JOBSTARTED'?(
                             <Button transparent onPress={() => this.startFollowUp()} style={{ width: 90 }} ><Text style={{ fontWeight: '100' }}>{I18n.t('followUp')}</Text></Button>
-                        ) : (<Button transparent style={{ backgroundColor: 'transparent' }} disabled></Button>)
+                        ) : (<Button transparent style={{ backgroundColor: 'transparent', width: 30 }} disabled></Button>)
                     }
                 </Header>
+
                 <Content style={{ backgroundColor: '#ccc' }}>
                     {/* 
                         Time tracking start 
@@ -1334,7 +1337,7 @@ class JobDetails extends Component {
                                                 >
                                                     <Text style={{ color: '#fff' }}>{I18n.t('cancel_job_button')}</Text>
                                                 </TouchableOpacity>
-                                            : console.log() }
+                                            : null }
                                         </View>
                                         {/* cancel button end */}
                                         </View>

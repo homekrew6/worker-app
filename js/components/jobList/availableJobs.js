@@ -192,7 +192,8 @@ class AvailableJobs extends Component {
     render() {     
         let items;
         if (this.props.availableJobs.data) {
-            items = this.props.availableJobs.data.response.message.upcomingJobs
+            items = this.props.availableJobs.data.response.message.upcomingJobs;
+            console.log(this.props.availableJobs.data);
         } 
         if (this.props.availableJobs.data){
         
@@ -300,9 +301,11 @@ item1.price=item1.price.toFixed(2);
         return (
             
             <Container >
+
                 <StatusBar
                     backgroundColor="#f3f3f3"
                 />
+
                 <Header style={styles.headerWarp} noShadow androidStatusBarColor="#f3f3f3">
                     <Button transparent >
                         <MaterialIcons name="menu" style={styles.headIcon2} />
@@ -318,6 +321,7 @@ item1.price=item1.price.toFixed(2);
                         <MaterialIcons name="search" style={styles.headIcon2} />
                     </Button>
                 </Header>
+
                 <Tabs
                     tabBarUnderlineStyle={styles.Tabs}
                     locked={true}
@@ -452,9 +456,12 @@ item1.price=item1.price.toFixed(2);
                                                         <View style={styles.flexDirectionRow}>
                                                             <Text>{item.userLocation.name}</Text>
                                                         </View>
-                                                        <View style={styles.flexDirectionRow}>
+                                                        {
+                                                                item.status === 'STARTED'?
+                                                            <View style={styles.flexDirectionRow}>
                                                                 <Text style={{ color: '#81cdc7', fontSize: 16 }}>{item.startTime.startTime}</Text>
-                                                        </View>
+                                                            </View>: null
+                                                        }
                                                     </View>
                                                     <View>
                                                         <Text style={styles.listWarpPriceUp}>{this.state.currency} {item.price}</Text>

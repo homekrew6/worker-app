@@ -28,5 +28,6 @@ export default {
   liveChat: 'CHAT EN DIRECT',
   callMe: 'APPELLE-MOI',
   callUs: 'Appelez-nous',
-  call: 'Appel'   
+  call: 'Appel',
+  pay_pending: 'Paiement en attente',   
 };
