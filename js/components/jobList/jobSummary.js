@@ -58,7 +58,11 @@ class jobSummary extends Component {
                             jsonAnswer[i].answers[0].time_impact,
                             jsonAnswer[i].IncrementId,
                             jsonAnswer[i].Status,
-                            jsonAnswer[i].answers, jsonAnswer[i].start_range, jsonAnswer[i].rangeValue);
+                            jsonAnswer[i].answers, 
+                            jsonAnswer[i].start_range,
+                            jsonAnswer[i].rangeValue,
+                            jsonAnswer[i].isSlided,
+                        );
                         if (price)
                         {
                             totalPrice = totalPrice + price;
@@ -83,6 +87,11 @@ class jobSummary extends Component {
                         finalList.push(jsonAnswer[i]);
                     }
 
+                }
+                if(this.props.navigation.state.params.jobDetails.promoPrice){
+                    totalPrice = totalPrice - Number(this.props.navigation.state.params.jobDetails.promoPrice);
+                }else {
+                    totalPrice = totalPrice.toFixed(2);
                 }
                 totalPrice = parseFloat(totalPrice).toFixed(2);
                 //console.log('jsonAnswer', jsonAnswer);
@@ -123,7 +132,8 @@ class jobSummary extends Component {
 
     }
     CalculatePrice(type, impact_type, price_impact, time_impact, impact_no, BoolStatus, AnsArray,start_range,
-        rangeValue) {
+        rangeValue, isSlided) {
+           
         let retPrice;
         let totalPrice = 0;
         switch (type) {
@@ -147,7 +157,7 @@ class jobSummary extends Component {
                 return totalPrice;
                 break;
             case 4:
-                if (rangeValue) {
+                if (isSlided !== 'false') {
                     if (impact_type === 'Addition') {
                         //retPrice = Number(price_impact) + Number(impact_no);
                         totalPrice = totalPrice + (start_range + Number(price_impact));
@@ -217,7 +227,6 @@ class jobSummary extends Component {
                                                         ) : (
                                                                 <Image source={logo_hdr} style={styles.totalImage} />
                                                             )
-
                                                     }
                                                 </View>
                                                 <View style={{ flex: 1 }}>
@@ -283,6 +292,26 @@ class jobSummary extends Component {
                                     )
                             }
                         </View>
+                        {
+                            this.props.navigation.state.params.jobDetails.promoPrice ?
+                            <View style={styles.totalBillitem}>
+                                <View style={styles.imagesWarp} >
+                                    <Image source={totalImg} style={styles.totalImage} />
+                                </View>
+                                <View>
+                                    <Text style={[styles.text1, { fontSize: 12 }]}>Promo Price</Text>
+                                </View>
+                                <View style={{ flex: 1 }}>
+                                    <Text></Text>
+                                </View>
+                                <View style={styles.price}>
+                                    <Text style={[styles.priceText, { color: '#ccc', fontSize: 12 }]}>{this.state.currency} {parseFloat(this.props.navigation.state.params.jobDetails.promoPrice).toFixed(2)}</Text>
+                                </View>
+                            </View>
+                            : null
+                        }
+                      
+
                         <View style={styles.totalBillitem}>
                             <View style={styles.imagesWarp} >
                                 <Image source={totalImg} style={styles.totalImage} />
