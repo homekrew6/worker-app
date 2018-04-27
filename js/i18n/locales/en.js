@@ -123,6 +123,7 @@ export default {
   liveChat: 'LIVE CHAT',
   callMe: 'CALL ME',
   callUs: 'Call Us',
-  call: 'Call'
+  call: 'Call',
+  pay_pending: 'Payment Pending',
   
 };

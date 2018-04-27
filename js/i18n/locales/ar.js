@@ -120,5 +120,6 @@ export default {
   liveChat: 'دردشة مباشرة',
   callMe: 'اتصل بي',
   callUs: 'اتصل بنا',
-  call: 'Appel'
+  call: 'Appel',
+  pay_pending: 'انتظار الدفع',
 };
