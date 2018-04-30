@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { NavigationActions } from "react-navigation";
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Image, View, StatusBar, TouchableOpacity, Text, TextInput, Alert, ListView } from "react-native";
+import { Image, View, StatusBar, TouchableOpacity, Text, TextInput, Alert, ListView, BackHandler } from "react-native";
 import { Container, Header, Content, Body, Title, Footer, FooterTab, Button, List, ListItem, Icon } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons'; 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -25,13 +25,33 @@ class NotificationList extends Component {
         this.state = {
             NotificationListRead: [],
             NotificationListUnread: [],
-            loader: false
+            loader: false,
+            backReturn: false,
         }
     }
 
     componentDidMount() {
         this.notificationListData();
-        
+        // this.backhandler = BackHandler.addEventListener('hardwareBackPress', function () {
+        //     if(this.state.backReturn === true){
+        //         Alert.alert(
+        //             'Confirm',
+        //             'Are you sure to exit the app?',
+        //             [
+        //                 { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+        //                 { text: 'OK', onPress: () => BackHandler.exitApp() },
+        //             ],
+        //             { cancelable: false }
+        //         )
+        //         return true;
+        //     }else{
+        //         this.setState({ backReturn: true });
+        //         this.props.navigation.goBack(null);
+        //         return true;
+        //     }
+            
+        // }.bind(this));
+
     }
 
     notificationListData(){

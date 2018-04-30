@@ -9,11 +9,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import { selectedLocation, allLocation } from './elements/locationAction';
-
+import {navigateAndSaveCurrentScreen} from '../accounts/elements/authActions';
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title } from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
-
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 
@@ -44,7 +43,14 @@ class myLocation extends Component {
             listViewData: datas,
         }
     }
-
+    navigate(screen) {
+        const data = this.props.auth.data;
+        data.activeScreen = screen;
+        data.previousScreen = "MyLocation";
+        this.props.navigateAndSaveCurrentScreen(data);
+       this.props.navigation.navigate(screen);
+        
+      }
     componentWillMount() {
         this.setState({
             loader: true,
@@ -117,7 +123,7 @@ class myLocation extends Component {
                             <Text style={styles.hdClr}>{I18n.t('my_location')}</Text>
                         </Body>
                         <Button transparent 
-                            onPress={() => this.props.navigation.navigate('SelectLocation')}
+                            onPress={() => this.navigate('SelectLocation')}
                             >
                             <Ico name='edit' style={styles.editIcon} />
                             <Text style={styles.editIconTxt}>{I18n.t('edit')}</Text>
@@ -221,7 +227,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        selectedLocation: (id) => dispatch(selectedLocation(id))
+        selectedLocation: (id) => dispatch(selectedLocation(id)),
+        navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
     }
 }
 

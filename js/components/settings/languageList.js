@@ -13,6 +13,7 @@ import styles from './styles';
 import api from '../../api';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import { getAllLanguagesList } from '../accounts/elements/authActions';
+import {  navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 
@@ -65,6 +66,7 @@ class LanguageList extends Component {
             this.setState({ visible: false });
             Alert.alert("Please try again later.");
         })
+        
     }
     selectActive(data) {
         this.setState({ languageId: data.id });
@@ -102,9 +104,13 @@ class LanguageList extends Component {
         })
         if (loc) {
             //const data = { langId: loc.id, language: loc.name };
-            const data = { langId: loc.id, language: loc.name, Code:loc.Code };
+            const data = { langId: loc.id, language: loc.name, Code: loc.Code };
             AsyncStorage.setItem("language", JSON.stringify(data)).then((res) => {
                 this.setState({ visible: false });
+                const data = this.props.auth.data;
+                data.activeScreen = 'Settings';
+                data.previousScreen = "";
+                this.props.navigateAndSaveCurrentScreen(data);
                 this.props.navigation.navigate('Settings');
             }).catch((err) => {
                 this.setState({ visible: false });
@@ -162,14 +168,13 @@ class LanguageList extends Component {
 }
 
 // export default Expect;
-LanguageList.propTypes = {
-    auth: PropTypes.object.isRequired
-};
+
 const mapStateToProps = state => ({
     auth: state.auth
 });
 const mapDispatchToProps = dispatch => ({
-    getAllLanguagesList: () => dispatch(getAllLanguagesList())
+    getAllLanguagesList: () => dispatch(getAllLanguagesList()),
+    navigateAndSaveCurrentScreen:(data)=>dispatch(navigateAndSaveCurrentScreen(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LanguageList);

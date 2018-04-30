@@ -12,7 +12,7 @@ import I18n from '../../i18n/i18n';
 import styles from './styles';
 const buttonImage = require("../../../img/lgo2.png");
 import api from '../../api';
-
+import {navigateAndSaveCurrentScreen} from '../accounts/elements/authActions';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 
@@ -39,7 +39,23 @@ class myTiming extends Component {
       })
 
     }
-
+    navigate(screen) {        
+        const data = this.props.auth.data;
+        data.activeScreen = screen;
+        data.previousScreen = "Settings";
+        this.props.navigateAndSaveCurrentScreen(data);
+        if(screen==='WeekCalendar')
+        {
+            this.props.navigation.navigate(screen, { timimgData: this.state.timimgData,
+                tableRowId: this.state.tableRowId})
+        }
+      else
+      {
+        this.props.navigation.navigate(screen, {  unAvailId: this.state.unAvailId,
+            unAvailTiming:this.state.unavailableTiming})
+      }
+        
+      }
 getWeekOff(day, data){
   const VarAr = [];
     data.map((OffCheck, key) => {
@@ -165,10 +181,7 @@ renderUnavalData(UnAvData, key){
                             <View style={styles.flexOne}>
                                 <Text style={styles.listHdr}>{I18n.t('available_timing')}</Text>
                             </View>
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate("WeekCalendar", {
-                               timimgData: this.state.timimgData,
-                               tableRowId: this.state.tableRowId
-                             })}>
+                            <TouchableOpacity onPress={() => this.navigate("WeekCalendar")}>
                               <View style={{ flexDirection: 'row' }}>
                                   <Ico name='edit' style={styles.listHdrEdtIcn} />
                                   <Text style={styles.listHdrEdt}>{I18n.t('add_edit')}</Text>
@@ -272,11 +285,7 @@ renderUnavalData(UnAvData, key){
                             <View style={styles.flexOne}>
                                 <Text style={styles.listHdr}>{I18n.t('unavailable_timing')}</Text>
                             </View>
-                            <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => this.props.navigation.navigate('UnavailableDate', {
-                               unAvailId: this.state.unAvailId,
-                               unAvailTiming:this.state.unavailableTiming
-
-                             })}>
+                            <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => this.navigate('UnavailableDate')}>
                                 <Ico name='add-circle' style={styles.listHdrEdtIcn} />
                                 <Text style={styles.listHdrEdt}>{I18n.t('add_edit')}</Text>
                             </TouchableOpacity>
@@ -309,7 +318,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-
+        navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
     }
 }
 

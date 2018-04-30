@@ -11,6 +11,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import api from '../../api/index';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Modal from "react-native-modal";
+import { NavigationActions } from "react-navigation";
 const API = 'https://swapi.co/api';
 const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
 const icon2 = require("../../../img/icon2.png");
@@ -308,11 +309,21 @@ class AddMaterial extends Component {
                 }
                 else {
                     Alert.alert("Materials added successfully.");
-                    this.props.navigation.navigate('FollowUpList', { 
-                        totalPrice: this.state.totalPrice,
-                        materialsId: res.response.message[0].materialsId,
-                        jobDetails : this.props.navigation.state.params.jobDetails,
-                    });
+                    this.props.navigation.dispatch(
+                        NavigationActions.reset({
+                            index: 3,
+                            actions: [
+                            NavigationActions.navigate({ routeName: 'Menu' }),
+                            NavigationActions.navigate({ routeName: 'AvailableJobs' }),
+                            NavigationActions.navigate({ routeName: 'JobDetails', params: { jobDetails: this.props.navigation.state.params.jobDetails } }),
+                            NavigationActions.navigate({ routeName: 'FollowUpList', params: {
+                                totalPrice: this.state.totalPrice,
+                                materialsId: res.response.message[0].materialsId,
+                                jobDetails : this.props.navigation.state.params.jobDetails,
+                            } }),
+                            ],
+                        })
+                    );
                 }
 
             }).catch((err) => {
