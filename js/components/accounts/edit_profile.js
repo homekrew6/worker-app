@@ -42,6 +42,7 @@ class EditProfile extends Component {
             zoneList: []
         };
         this.actionSheet = null;
+
     }
 
     showActionSheet()
@@ -60,9 +61,8 @@ class EditProfile extends Component {
         }
         
     }
-    componentDidMount() {
-        ActionSheet.actionsheetInstance = null;
-    }
+   
+    
     componentWillMount() {
         api.get('Zones/getParentZone').then((res) => {
             //console.log(res);
@@ -78,7 +78,7 @@ class EditProfile extends Component {
                         });
                         this.props.checkAuth((res) => {
                             this.props.getUserDetail(res.userId, res.id).then((userRes) => {
-
+console.log(this.props.auth);
                                 let filter = '{"where":{"workerId":' + res.userId + '}}';
                                 api.get('WorkerSkills?filter=' + filter + '&access_token=' + res.id).then((skills) => {
                                     let serviceIds = [];

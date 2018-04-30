@@ -11,7 +11,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import api from '../../api/index';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import { allLocation, checkUncheck, clearMyLocation, selectedLocation } from './elements/locationAction';
-
+import {  navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, CheckBox } from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
@@ -83,7 +83,12 @@ class selectLocation extends Component {
                                 this.setState({
                                     loader: false,
                                 });
-                                this.props.navigation.navigate("MyLocation");
+                                const data = this.props.auth.data;
+                                data.activeScreen = 'MyLocation';
+                                data.previousScreen = "";
+                                this.props.navigateAndSaveCurrentScreen(data);
+                                this.props.navigation.navigate('MyLocation');
+                               // this.props.navigation.navigate("MyLocation");
                             }
 
                         }).catch((err) => {
@@ -263,8 +268,8 @@ const mapDispatchToProps = (dispatch) => {
         allLocation: () => dispatch(allLocation()),
         checkUncheck: (a, b) => dispatch(checkUncheck(a, b)),
         clearMyLocation: (a) => dispatch(clearMyLocation(a)),
-        selectedLocation: (id) => dispatch(selectedLocation(id))
-        
+        selectedLocation: (id) => dispatch(selectedLocation(id)),
+        navigateAndSaveCurrentScreen:(data)=>dispatch(navigateAndSaveCurrentScreen(data))
     }
 }
 

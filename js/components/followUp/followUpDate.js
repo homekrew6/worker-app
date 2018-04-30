@@ -9,7 +9,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Calendar } from 'react-native-calendars';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import I18n from '../../i18n/i18n';
-
+import { NavigationActions } from "react-navigation";
 
 class FollowUpDate extends Component {
     constructor(props) {
@@ -79,8 +79,25 @@ class FollowUpDate extends Component {
         else {
             this.setState({ visible: false });
             const saveDateDB = this.state.daYSelected + " " + this.state.setStartTime.slice(0, -2) + this.state.setStartTime.slice(5).toLowerCase();
-            this.props.navigation.navigate('FollowUpList', { saveDateDB: saveDateDB, jobDetails: this.props.navigation.state.params.jobDetails});
-
+            
+            // this.props.navigation.navigate('FollowUpList',  { 
+            //     saveDateDB: saveDateDB, jobDetails: 
+            //     this.props.navigation.state.params.jobDetails 
+            // });
+            this.props.navigation.dispatch(
+                NavigationActions.reset({
+                    index: 3,
+                    actions: [
+                    NavigationActions.navigate({ routeName: 'Menu' }),
+                    NavigationActions.navigate({ routeName: 'AvailableJobs' }),
+                    NavigationActions.navigate({ routeName: 'JobDetails', params: { jobDetails: this.props.navigation.state.params.jobDetails  } }),
+                    NavigationActions.navigate({ routeName: 'FollowUpList', params: {
+                        saveDateDB: saveDateDB,
+                        jobDetails: this.props.navigation.state.params.jobDetails
+                    } }),
+                    ],
+                })
+            );
         }
     }
     pressOnCircle(index) {
