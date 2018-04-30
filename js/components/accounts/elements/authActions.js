@@ -109,6 +109,11 @@ export function logout(cb) {
   }
 }
 
+export function navigateAndSaveCurrentScreen(data){
+  return function (dispatch) {
+    dispatch(authStateSuccess(data));
+  };
+}
 
 export function authStateBusy() {
   return {

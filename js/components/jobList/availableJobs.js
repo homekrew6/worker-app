@@ -5,14 +5,15 @@ import moment from 'moment';
 import 'moment-timezone';
 import DeviceInfo from 'react-native-device-info';
 import { NavigationActions } from "react-navigation";
-import { Image, RefreshControl, View, StatusBar, Dimensions, Alert, TouchableOpacity, ListView, Geolocation, platform, AsyncStorage } from "react-native";
+import { Image, RefreshControl, BackHandler, View, StatusBar, Dimensions, Alert, TouchableOpacity, ListView, Geolocation, platform, AsyncStorage } from "react-native";
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, List, ListItem, Icon, Tab, Tabs, ScrollableTab, Body } from "native-base";
 import FSpinner from 'react-native-loading-spinner-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './styles';
 import I18n from '../../i18n/i18n';
 import api from '../../api/index';
-import { availablejobs, setNewData, acceptJob, declineJob } from './elements/jobActions'
+import { availablejobs, setNewData, acceptJob, declineJob } from './elements/jobActions';
+import {  navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 const imageIcon1 = require('../../../img/icon/home.png');
 
 class AvailableJobs extends Component {
@@ -25,7 +26,8 @@ class AvailableJobs extends Component {
             listItemFlag: false,
             loader: false,
             currency:'AED',
-            refreshing: false
+            refreshing: false,
+            backReturn: false,
         };
     }
 
@@ -102,17 +104,41 @@ class AvailableJobs extends Component {
     }
 
     goDetails(item){
+        const data = this.props.auth.data;
+        data.activeScreen = 'JobDetails';
+        data.previousScreen = "AvailableJobs";
+        this.props.navigateAndSaveCurrentScreen(data);
         this.props.navigation.navigate('JobDetails',{jobDetails:item});
     }
 
-  
     componentDidMount(){
         AsyncStorage.getItem("currency").then((value) => {
             if (value) {
                 const value1 = JSON.parse(value);
                 this.setState({ currency: value1.language })
             }
-        })
+        });
+
+        // this.backhandler = BackHandler.addEventListener('hardwareBackPress', function () {
+
+        //     if(this.state.backReturn === true){
+        //         Alert.alert(
+        //             'Confirm',
+        //             'Are you sure to exit the app?',
+        //             [
+        //                 { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+        //                 { text: 'OK', onPress: () => BackHandler.exitApp() },
+        //             ],
+        //             { cancelable: false }
+        //         )
+        //         return true;
+        //     }else{
+        //         this.setState({ backReturn: true });
+        //         this.props.navigation.goBack(null);
+        //         return true;
+        //     }
+            
+        // }.bind(this));
     }
 
     componentWillMount(){
@@ -520,7 +546,26 @@ item1.price=item1.price.toFixed(2);
         else{
             return (
                 <Container >
-                    <FSpinner visible={true} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
+                      <StatusBar
+                    backgroundColor="#f3f3f3"
+                />
+                 <FSpinner visible={true} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
+                <Header style={styles.headerWarp} noShadow androidStatusBarColor="#f3f3f3">
+                    <Button transparent >
+                        <MaterialIcons name="menu" style={styles.headIcon2} />
+                    </Button>
+                    <Button transparent>
+                        <MaterialIcons name="notifications" style={styles.headIcon2} />
+                    </Button>
+                    <Body style={styles.headBody}>
+                        <Image source={require('../../../img/logo2.png')} style={{ height: 20, width: 115 }}/>
+                    </Body>
+                    <Button transparent />
+                    <Button transparent>
+                        <MaterialIcons name="search" style={styles.headIcon2} />
+                    </Button>
+                </Header>
+                   
                 </Container>
             )
         }
@@ -544,6 +589,7 @@ const mapDispatchToProps = (dispatch) => {
         setNewData: (data) => dispatch(setNewData(data)),
         acceptJob: (jobId, workerId) => dispatch(acceptJob(jobId, workerId)),
         declineJob: (jobId, workerId, serviceId) => dispatch(declineJob(jobId, workerId, serviceId )),
+        navigateAndSaveCurrentScreen:(data)=>dispatch(navigateAndSaveCurrentScreen(data))
     }
 }
 

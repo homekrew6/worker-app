@@ -13,6 +13,7 @@ import styles from './styles';
 import api from '../../api';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import { getAllCurrencyList } from '../accounts/elements/authActions';
+import {  navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 
@@ -104,6 +105,10 @@ class CurrencyList extends Component {
             const data = { langId: loc.id, language: loc.name };
             AsyncStorage.setItem("currency", JSON.stringify(data)).then((res) => {
                 this.setState({ visible: false });
+                const data = this.props.auth.data;
+                data.activeScreen = 'Settings';
+                data.previousScreen = "";
+                this.props.navigateAndSaveCurrentScreen(data);
                 this.props.navigation.navigate('Settings');
             }).catch((err) => {
                 this.setState({ visible: false });
@@ -166,7 +171,8 @@ const mapStateToProps = state => ({
     auth: state.auth
 });
 const mapDispatchToProps = dispatch => ({
-    getAllCurrencyList: () => dispatch(getAllCurrencyList())
+    getAllCurrencyList: () => dispatch(getAllCurrencyList()),
+    navigateAndSaveCurrentScreen:(data)=>dispatch(navigateAndSaveCurrentScreen(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CurrencyList);

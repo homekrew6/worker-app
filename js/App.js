@@ -1,10 +1,13 @@
 /* @flow */
 
-import React from "react";
+import React, { Component } from "react";
 
 import { Platform,Easing, Animated, Text} from "react-native";
 import { Root } from "native-base";
 import { StackNavigator } from "react-navigation";
+import RouterOwn from './router';
+import { connect } from 'react-redux';
+import { ChangeRoute } from './actions/routerAction';
 
 import Drawer from "./Drawer";
 import Home from "./components/home/";
@@ -106,7 +109,29 @@ const AppNavigator = StackNavigator(
     }
 );
 
-export default () =>
-     <Root>
-        <AppNavigator />
-    </Root>;
+class App extends Component{
+  updateRedux(prevState, newState){
+    this.props.ChangeRoute(prevState, newState)
+  }
+  render(){
+    return(
+      <Root>
+          <AppNavigator
+            onNavigationStateChange={(prevState, newState) =>  this.updateRedux(prevState, newState) }
+          />
+      </Root>
+    );
+    
+  }
+}
+
+function mapStateToProps(state) {
+  console.log('mapStateToProps App', state);
+  return {
+      currentRoute: state.newState,
+      prevRoute: state.prevRoute
+  }
+}
+
+export default connect(mapStateToProps, {ChangeRoute})(App);
+     

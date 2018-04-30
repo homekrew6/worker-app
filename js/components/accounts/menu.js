@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, AsyncStorage } from "react-native";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, AsyncStorage, BackHandler } from "react-native";
 import { Container, Header, Button, Content, Form, Item, Icon, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title, Thumbnail } from "native-base";
-import { logout } from './elements/authActions'
+import { logout, navigateAndSaveCurrentScreen } from './elements/authActions'
 import I18n from '../../i18n/i18n';
 import styles from "./styles";
 import api from '../../api';
@@ -28,21 +28,29 @@ const resetAction = NavigationActions.reset({
 
 class Menu extends Component {
     constructor(props) {
-        super(props);
-        this.state={ 
-            visible:'',
-            notificatonCount: 0,
-         };
-        AsyncStorage.getItem("language").then((value)=>{
-        if(value)
-        {
-            const value1=JSON.parse(value);
-            I18n.locale = value1.Code;
-            this.setState({visible:'fhfh'});
-        }
-        })
-    };
 
+        super(props);
+        this.state = {
+            visible: '',
+            notificatonCount: 0,
+        };
+        AsyncStorage.getItem("language").then((value) => {
+            if (value) {
+                const value1 = JSON.parse(value);
+                I18n.locale = value1.Code;
+                this.setState({ visible: 'fhfh' });
+            }
+        });
+    };
+    navigate(screen) {
+        if (screen == "NotificationList") {
+                    this.props.navigation.navigate(screen, { workerId: this.props.auth.data.id });
+                }
+                else {
+                    this.props.navigation.navigate(screen);
+                }
+    }
+    
     logout() {
         AsyncStorage.getItem("userToken").then((userToken) => {
             if (userToken) {
@@ -66,17 +74,214 @@ class Menu extends Component {
         })
     }
 
-componentWillMount(){
-    // console.log('this is saikat bala');    
-    // console.log(this.props.auth.data);
-    api.post('Notifications/getUnreadWorkerNot', { "workerId": this.props.auth.data.id }).then((res) => {
-        this.setState({ 
-          notificatonCount: res.response.message,
-         })
-      }).catch((err) => {
-        console.log(err);
-      });
-}
+
+
+
+    //    componentWillUnmount()
+    //    {
+    //        Alert.alert('unmount');
+    //        this.backhandler.remove();
+    //    }
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', function () {
+            console.log('hardwareBackPress', this.props);
+            debugger;
+            if(this.props.currentRoute === 'Menu'){
+                Alert.alert(
+                    'Confirm',
+                    'Are you sure to exit the app?',
+                    [
+                        { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                        { text: 'OK', onPress: () => BackHandler.exitApp() },
+                    ],
+                    { cancelable: false }
+                );
+                return true;
+            }else{
+                this.props.navigation.goBack(null);
+                return true;
+            }
+            
+        }.bind(this));
+    }
+
+    // componentDidMount() {
+    //     const data = this.props.auth.data;
+    //     data.activeScreen = "Menu";
+    //     this.props.navigateAndSaveCurrentScreen(data);
+    //     BackHandler.addEventListener('hardwareBackPress', function () {
+
+    //       const { dispatch, navigation, nav } = this.props;
+    //       if (this.props.auth.data.activeScreen && this.props.auth.data.activeScreen == 'Menu') {
+    //         Alert.alert(
+    //           'Confirm',
+    //           'Are you sure to exit the app?',
+    //           [
+    //             { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+    //             { text: 'OK', onPress: () => BackHandler.exitApp() },
+    //           ],
+    //           { cancelable: false }
+    //         )
+    //       }
+    //       else {
+    //         let saveData = this.props.auth.data;
+    //         // if (this.props.auth.data.previousScreen)
+    //         //   this.props.navigation.navigate(this.props.auth.data.previousScreen);
+    //         // else {
+    //         //   this.props.navigation.navigate('Menu');
+    //         // }
+
+
+    //         switch (this.props.auth.data.activeScreen) {
+    //           case "EditProfile":
+    //             saveData.activeScreen = "Menu";
+    //             saveData.previousScreen = "";
+    //             this.props.navigateAndSaveCurrentScreen(saveData);
+    //             break;
+    //             case "NotificationList":
+    //             saveData.activeScreen = "Menu";
+    //             saveData.previousScreen = "";
+    //             this.props.navigateAndSaveCurrentScreen(saveData);
+    //             break;
+    //           case "MyLocation":
+    //             break;
+    //           case "myTiming":
+    //             break;
+    //             case "Settings":
+    //             break;
+    //           case "LocationList":
+    //             // saveData.activeScreen = "Confirmation";
+    //             // saveData.previousScreen = "ServiceDetails";
+    //             // this.props.navigateAndSaveCurrentScreen(saveData);
+    //             break;
+    //             case "Support":
+    //             break;
+    //         case "AvailableJobs" :
+    //             // saveData.activeScreen = "Menu";
+    //             // saveData.previousScreen = "Menu";
+    //             // this.props.navigateAndSaveCurrentScreen(saveData);
+    //             break;
+    //           default:
+    //             break;
+    //         }
+
+    //          if(this.props.auth.data.activeScreen==='MyLocation')
+    //         {
+    //           saveData.activeScreen = "Menu";
+    //           saveData.previousScreen = "";
+    //           this.props.navigateAndSaveCurrentScreen(saveData);
+    //           this.props.navigation.navigate(saveData.activeScreen);
+    //         }
+    //         else if(this.props.auth.data.activeScreen==='myTiming')
+    //         {
+    //           saveData.activeScreen = "Menu";
+    //           saveData.previousScreen = "";
+    //           this.props.navigateAndSaveCurrentScreen(saveData);
+    //           this.props.navigation.navigate(saveData.activeScreen);
+    //         }
+    //         else if(this.props.auth.data.activeScreen==='WeekCalendar' || this.props.auth.data.activeScreen==="UnavailableDate")
+    //         {
+    //           saveData.activeScreen = "myTiming";
+    //           saveData.previousScreen = "";
+    //           this.props.navigateAndSaveCurrentScreen(saveData);
+    //           this.props.navigation.navigate(saveData.activeScreen);
+    //         }
+    //         else if(this.props.auth.data.activeScreen=="Support")
+    //         {
+    //             saveData.activeScreen = "Menu";
+    //             saveData.previousScreen = "";
+    //             this.props.navigateAndSaveCurrentScreen(saveData);
+    //             this.props.navigation.navigate(saveData.activeScreen);
+    //         }
+    //         else if(this.props.auth.data.activeScreen=="Settings")
+    //         {
+    //             saveData.activeScreen = "Menu";
+    //             saveData.previousScreen = "";
+    //             this.props.navigateAndSaveCurrentScreen(saveData);
+    //             this.props.navigation.navigate(saveData.activeScreen);
+    //         }
+    //         else if(this.props.auth.data.activeScreen=="AvailableJobs")
+    //         {
+    //             saveData.activeScreen = "Menu";
+    //             saveData.previousScreen = "";
+    //             this.props.navigateAndSaveCurrentScreen(saveData);
+    //             this.props.navigation.navigate(saveData.activeScreen);
+    //         }
+    //         else if(this.props.auth.data.activeScreen=="LanguageList" ||this.props.auth.data.activeScreen=="CurrencyList" )
+    //         {
+    //             saveData.activeScreen = "Settings";
+    //             saveData.previousScreen = "Menu";
+    //             this.props.navigateAndSaveCurrentScreen(saveData);
+    //             this.props.navigation.navigate(saveData.activeScreen);
+    //         }
+    //         else if(this.props.auth.data.activeScreen=="SelectLocation" )
+    //         {
+    //             saveData.activeScreen = "MyLocation";
+    //             saveData.previousScreen = "Menu";
+    //             this.props.navigateAndSaveCurrentScreen(saveData);
+    //             this.props.navigation.navigate(saveData.activeScreen);
+    //         }
+    //         else if(this.props.auth.data.activeScreen==='LocationList')
+    //         {
+    //           saveData.activeScreen = "Confirmation";
+    //           saveData.previousScreen = "ServiceDetails";
+    //           this.props.navigateAndSaveCurrentScreen(saveData);
+    //           this.props.navigation.navigate(saveData.activeScreen);
+    //         }
+    //         else if(this.props.auth.data.activeScreen==='JobDetails')
+    //         {
+    //           saveData.activeScreen = "AvailableJobs";
+    //           saveData.previousScreen = "Menu";
+    //           this.props.navigateAndSaveCurrentScreen(saveData);
+    //           this.props.navigation.navigate(saveData.activeScreen);
+    //         }
+    //         else if(this.props.auth.data.activeScreen==='MyMap')
+    //         {
+    //           AsyncStorage.getItem("fromConfirmation").then((value)=>{
+    //             if(value)
+    //             {
+    //               saveData.activeScreen = "LocationList";
+    //               saveData.previousScreen = "Menu";
+    //               this.props.navigateAndSaveCurrentScreen(saveData);
+    //               this.props.navigation.navigate(saveData.activeScreen);
+    //             }
+    //             else
+    //             {
+    //               saveData.activeScreen = "MyLocation";
+    //               saveData.previousScreen = "Menu";
+    //               this.props.navigateAndSaveCurrentScreen(saveData);
+    //               this.props.navigation.navigate(saveData.activeScreen);
+    //             }
+    //           })
+
+    //         }
+    //         else {
+    //           this.props.navigation.goBack(null);
+    //           return true;
+    //         }
+
+    //       }
+
+    //       return true;
+    //     }.bind(this));
+
+    // }
+
+
+
+
+
+    componentWillMount() {
+        // console.log('this is saikat bala');    
+        // console.log(this.props.auth.data);
+        api.post('Notifications/getUnreadWorkerNot', { "workerId": this.props.auth.data.id }).then((res) => {
+            this.setState({
+                notificatonCount: res.response.message,
+            })
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
 
     render() {
         return (
@@ -106,7 +311,7 @@ componentWillMount(){
                                         )
                                 }
                                 <View>
-                                    <TouchableOpacity onPress={() => this.props.navigation.navigate("EditProfile")}>
+                                    <TouchableOpacity onPress={() => this.navigate("EditProfile")}>
                                         <Text style={styles.pname}>{this.props.auth.data.name}</Text>
                                         <Text style={styles.pemail}>{this.props.auth.data.email}</Text>
                                         <Text style={styles.pphone}>{this.props.auth.data.phone}</Text>
@@ -125,25 +330,25 @@ componentWillMount(){
                     <Card>
 
                         <CardItem style={styles.menuCarditem}>
-                            <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate('NotificationList',{ workerId: this.props.auth.data.id })}>
-                            <Image source={icon1} style={styles.menuCardIcon} />
-                            <Text style={styles.menuCardTxt}>{I18n.t('notification')}</Text>
-                            {
-                                this.state.notificatonCount != 0 ? (  
-                                <View style={styles.artNt}>
-                                    <Text style={styles.artNtTxt}>{this.state.notificatonCount}</Text>
-                                </View>
-                                ):null
+                            <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('NotificationList')}>
+                                <Image source={icon1} style={styles.menuCardIcon} />
+                                <Text style={styles.menuCardTxt}>{I18n.t('notification')}</Text>
+                                {
+                                    this.state.notificatonCount != 0 ? (
+                                        <View style={styles.artNt}>
+                                            <Text style={styles.artNtTxt}>{this.state.notificatonCount}</Text>
+                                        </View>
+                                    ) : null
 
-                            }
-                            <View style={styles.arw_lft}>
-                                <Image source={back_arow} style={styles.arw_lft_img} />
-                            </View>
+                                }
+                                <View style={styles.arw_lft}>
+                                    <Image source={back_arow} style={styles.arw_lft_img} />
+                                </View>
                             </TouchableOpacity>
                         </CardItem>
 
                         <CardItem style={styles.menuCarditem}>
-                            <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate("AvailableJobs")} >
+                            <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate("AvailableJobs")} >
                                 <Image source={icon2} style={styles.menuCardIcon} />
                                 <Text style={styles.menuCardTxt}>{I18n.t('my_job')}</Text>
                                 <View style={styles.arw_lft}>
@@ -153,7 +358,7 @@ componentWillMount(){
                         </CardItem>
 
                         <CardItem style={styles.menuCarditem}>
-                            <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate('MyLocation')} >
+                            <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('MyLocation')} >
                                 <Image source={icon3} style={styles.menuCardIcon} />
                                 <Text style={styles.menuCardTxt}>{I18n.t('my_location')}</Text>
                                 <View style={styles.arw_lft}>
@@ -173,7 +378,7 @@ componentWillMount(){
                         </CardItem>
 
                         <CardItem style={styles.menuCarditem}>
-                            <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate("myTiming")} >
+                            <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate("myTiming")} >
                                 <Image source={icon4} style={styles.menuCardIcon} />
                                 <Text style={styles.menuCardTxt}>{I18n.t('my_timing')}</Text>
                                 <View style={styles.arw_lft}>
@@ -182,7 +387,7 @@ componentWillMount(){
                             </TouchableOpacity>
                         </CardItem>
 
-                        {/* <CardItem style={styles.menuCarditem}>
+ {/* <CardItem style={styles.menuCarditem}>
                             <View style={styles.menuCardView}>
                                 <Image source={icon5} style={styles.menuCardIcon} />
                                 <Text style={styles.menuCardTxt}>{I18n.t('my_promo_code')}</Text>
@@ -201,9 +406,10 @@ componentWillMount(){
                                 </View>
                             </TouchableOpacity>
                         </CardItem>
+                       
 
                         <CardItem style={styles.menuCarditem}>
-                            <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate("Settings")} >
+                            <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate("Settings")} >
                                 <Image source={icon7} style={styles.menuCardIcon} />
                                 <Text style={styles.menuCardTxt}>{I18n.t('setting')}</Text>
                                 <View style={styles.arw_lft}>
@@ -239,13 +445,16 @@ Menu.propTypes = {
 }
 const mapStateToProps = (state) => {
     return {
-        auth: state.auth
+        auth: state.auth,
+        currentRoute: state.RouterOwn.currentRoute,
+        prevRoute: state.RouterOwn.prevRoute
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        logout: (cb) => dispatch(logout(cb))
+        logout: (cb) => dispatch(logout(cb)),
+        navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
     }
 }
 

@@ -5,6 +5,7 @@ import CheckBox from './ReducerCheckBox';
 import WeekData from './ReducerWeek';
 import payment from '../components/payment/elements/paymentReducer';
 import availableJobs from '../components/jobList/elements/jobReducer'
+import RouterOwn from './routerReducer';
 
 const rootReducer = combineReducers({
 	auth,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
 	CheckBox,
 	WeekData,
 	payment,
-	availableJobs
+	availableJobs,
+	RouterOwn
 })
 
 export default rootReducer
