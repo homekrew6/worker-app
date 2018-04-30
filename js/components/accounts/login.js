@@ -56,6 +56,11 @@ class Login extends Component {
 			Alert.alert('Please enter email');
 			return false;
 		}
+		let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+		if (!regEmail.test(this.state.email)) {
+			Alert.alert('Please enter a valid email');
+			return false;
+		}
 		if (!this.state.password) {
 			Alert.alert('Please enter password');
 			return false;

@@ -182,7 +182,7 @@ componentWillMount(){
                             </TouchableOpacity>
                         </CardItem>
 
-                        <CardItem style={styles.menuCarditem}>
+                        {/* <CardItem style={styles.menuCarditem}>
                             <View style={styles.menuCardView}>
                                 <Image source={icon5} style={styles.menuCardIcon} />
                                 <Text style={styles.menuCardTxt}>{I18n.t('my_promo_code')}</Text>
@@ -190,7 +190,7 @@ componentWillMount(){
                                     <Image source={back_arow} style={styles.arw_lft_img} />
                                 </View>
                             </View>
-                        </CardItem>
+                        </CardItem> */}
 
                         <CardItem style={styles.menuCarditem}>
                             <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate('Support')}>

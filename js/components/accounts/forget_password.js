@@ -24,8 +24,13 @@ class ForgotPassword extends Component {
     }
 
     pressSend() {
-        if (!this.state.email) {
+        if (!this.state.email.trimLeft()) {
             Alert.alert('Please enter email');
+            return false;
+        }
+        let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if (!regEmail.test(this.state.email)) {
+            Alert.alert('Please enter a valid email');
             return false;
         }
         this.setState({ visible: true });

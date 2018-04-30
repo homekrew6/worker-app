@@ -361,6 +361,7 @@ class UnavailableDate extends Component {
                 }
             }
             else {
+                this.setState({ visible: false })
                 Alert.alert("Start date is less than or equal to end Date ")
             }
 

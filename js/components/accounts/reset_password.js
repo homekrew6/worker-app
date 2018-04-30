@@ -34,10 +34,18 @@ class ResetPassword extends Component {
             Alert.alert('Please enter otp');
             return false;
         }
+
         if (!this.state.password) {
             Alert.alert('Please enter password');
             return false;
         }
+
+        let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if (!regEmail.test(this.state.email)) {
+            Alert.alert('Please enter a valid email');
+            return false;
+        }
+        
         this.setState({ visible: true });
         api.post('Customers/otpChecking', { otp: this.state.otp }).then(res => {
             api.post('Workers/reset-password?access_token=' + res.response.access_token, { newPassword: this.state.password }).then(resReset => {
@@ -115,7 +123,7 @@ class ResetPassword extends Component {
                         </View>
                         <View style={{ marginTop: 30 }}>
                             <Item regular style={{ borderColor: '#29416f', borderWidth: 1, borderRadius: 2, height: 45 }}>
-                                <Input onChangeText={(text) => this.setState({ otp: text })} value={this.state.otp}  keyboardType={'numeric'} placeholder={I18n.t('four_digit_code')} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} />
+                                <Input onChangeText={(text) => this.setState({ otp: text })} value={this.state.otp} keyboardType={'numeric'} placeholder={I18n.t('four_digit_code')} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }}/>
                             </Item>
                             <Item regular style={{ borderColor: '#29416f', borderWidth: 1, borderRadius: 2, height: 45, marginTop: 10 }}>
                                 <Input onChangeText={(text) => this.setState({ password: text })} value={this.state.password} secureTextEntry={true} placeholder={I18n.t('new_password')} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} />
