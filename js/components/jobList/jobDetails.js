@@ -1026,7 +1026,11 @@ class JobDetails extends Component {
                         <View style={{ width: 30, alignItems: 'center'  }}>
                             <EvilIcons name="location" style={{ color: '#81cdc7', fontSize: 24 }} />
                         </View>
-                        <Text style={styles.jobItemName}>{JobDetailsData.userLocation.buildingName}, {JobDetailsData.userLocation.name}, {JobDetailsData.userLocation.villa}</Text>
+                        {
+                            JobDetailsData.userLocation.buildingName? (
+                                <Text style={styles.jobItemName}>{JobDetailsData.userLocation.buildingName}, {JobDetailsData.userLocation.name}, {JobDetailsData.userLocation.villa}</Text>                                
+                            ): null
+                        }
                     </View>
                     {
                         this.state.callChat ? (
@@ -1087,7 +1091,10 @@ class JobDetails extends Component {
                             <MaterialIcons name="location-on" style={styles.jobItemIcon} />
                         </View>
                         <Text style={styles.jobItemName}>{I18n.t('location')}</Text>
-                        <Text style={styles.jobItemValue}>{ JobDetailsData.userLocation.name }</Text>
+                        {
+                            JobDetailsData.userLocation.name ? (<Text style={styles.jobItemValue}>{JobDetailsData.userLocation.name}</Text>) : null
+                        }
+                        
                     </View>
                     {
                         JobDetailsData.status!='STARTED'?(

@@ -394,7 +394,7 @@ console.log(this.props.auth);
                                 <Text style={styles.starRed}>*</Text>
                             </View>
                             <View style={styles.editprofileInputwrap}>
-                                <Input style={styles.editprofileInput} onChangeText={text => this.setState({ phone: text })} value={this.state.phone} />
+                                <Input style={styles.editprofileInput} onChangeText={text => this.setState({ phone: text })} value={this.state.phone} keyboardType = { 'numeric' }/>
                             </View>
                         </View>
 
@@ -404,7 +404,7 @@ console.log(this.props.auth);
                                 <Text style={styles.starRed}>*</Text>
                             </View>
                             <View style={styles.editprofileInputwrap}>
-                                <Input style={styles.editprofileInput} value={I18n.t('password_small_case')} secureTextEntry />
+                                <Input style={styles.editprofileInput} value={I18n.t('password_small_case')} secureTextEntry editable={false}/>
                             </View>
                         </View>
                         <View style={{ padding: 10 }}>

@@ -35,7 +35,6 @@ class Support extends Component {
                 if (item.is_active){
                     newsupportList.push(i);
                 }
-
             })
             this.setState({
                 supportList: newsupportList,
