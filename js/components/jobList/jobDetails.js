@@ -207,7 +207,7 @@ class JobDetails extends Component {
                             }).then((response) => {
                                 if(response.response.message.length &&  response.response.message.length>0 && response.response.message[0].price)
                                 {
-                                    response.response.message[0].price=response.response.message[0].price.toFixed(2);
+                                    response.response.message[0].price =parseFloat(response.response.message[0].price).toFixed(2);
                                 }
                                 this.setState({ remoteJobDetails: response.response.message[0], loader: false, });
                                 setTimeout(() => {
@@ -635,8 +635,20 @@ class JobDetails extends Component {
                  }
                  else
                  {
-                     response.response.message[0].price = response.response.message[0].price.toFixed(2);
-                     this.setState({ remoteJobDetails: response.response.message[0], jobTrackingStatus: response.response.message[0].status });
+                     response.response.message[0].price = parseFloat(response.response.message[0].price).toFixed(2);
+                     let jobCancelbuttonStatus=false;
+                     if (response.response.message[0].status == 'ACCEPTED')
+                     {
+                         if (response.response.message[0].worker && response.response.message[0].worker.isDedicated)
+                         {
+                             
+                         }
+                         else
+                         {
+                             jobCancelbuttonStatus=true;
+                         }
+                     }
+                     this.setState({ jobCancelbuttonStatus: jobCancelbuttonStatus ,remoteJobDetails: response.response.message[0], jobTrackingStatus: response.response.message[0].status });
                      
                      if (this.state.remoteJobDetails.status === 'ONMYWAY') {
                          this.refs.ScrollViewStart.scrollToEnd();
@@ -1033,51 +1045,54 @@ class JobDetails extends Component {
                         }
                     </View>
                     {
-                        this.state.callChat ? (
-                            <View style={styles.jobItemWarp}>
-                                <View>
-                                    {
-                                        JobDetailsData.customer ?
-                                            JobDetailsData.customer.image == "" ? (
-                                                <Image source={require('../../../img/avatar.png')} style={{ height: 50, width: 50, borderRadius: 45, }} />
-                                            ) : (<Image source={{ uri: JobDetailsData.customer.image }} style={{ height: 50, width: 50, borderRadius: 45, }} />)
-                                            : console.log()
-                                    }
+                        JobDetailsData.status!='STARTED'?(
+                            this.state.callChat ? (
+                                <View style={styles.jobItemWarp}>
+                                    <View>
+                                        {
+                                            JobDetailsData.customer ?
+                                                JobDetailsData.customer.image == "" ? (
+                                                    <Image source={require('../../../img/avatar.png')} style={{ height: 50, width: 50, borderRadius: 45, }} />
+                                                ) : (<Image source={{ uri: JobDetailsData.customer.image }} style={{ height: 50, width: 50, borderRadius: 45, }} />)
+                                                : console.log()
+                                        }
 
-                                </View>
-                                <View style={{ paddingLeft: 10, flex: 1 }}>
-                                    <Text style={{ fontSize: 16, fontWeight: '700' }}>{JobDetailsData.customer ? JobDetailsData.customer.name : console.log()}</Text>
-                                    <TouchableOpacity style={{ width: 90 }} onPress={this._toggleModal}>
-                                        <StarRating
-                                            disabled={false}
-                                            maxStars={5}
-                                            starSize={14}
-                                            halfStarEnabled={true}
-                                            rating={Number(JobDetailsData.customerRating) === 0 ? this.state.starCount : Number(JobDetailsData.customerRating)}
-                                            fullStarColor='#81cdc7'
-                                            selectedStar={this._toggleModal}
-                                        />
+                                    </View>
+                                    <View style={{ paddingLeft: 10, flex: 1 }}>
+                                        <Text style={{ fontSize: 16, fontWeight: '700' }}>{JobDetailsData.customer ? JobDetailsData.customer.name : console.log()}</Text>
+                                        <TouchableOpacity style={{ width: 90 }} onPress={this._toggleModal}>
+                                            <StarRating
+                                                disabled={false}
+                                                maxStars={5}
+                                                starSize={14}
+                                                halfStarEnabled={true}
+                                                rating={Number(JobDetailsData.customerRating) === 0 ? this.state.starCount : Number(JobDetailsData.customerRating)}
+                                                fullStarColor='#81cdc7'
+                                                selectedStar={this._toggleModal}
+                                            />
+                                        </TouchableOpacity>
+                                    </View>
+                                    <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.setState({ callChat: false })}>
+                                        <Image source={require('../../../img/icon/chat-support.png')} style={{ height: 25, width: 25 }} />
+                                        <Text style={{ fontSize: 12 }}>{I18n.t('chat_call')}</Text>
                                     </TouchableOpacity>
                                 </View>
-                                <TouchableOpacity style={{ alignItems: 'center' }} onPress={()=> this.setState({ callChat: false })}>
-                                    <Image source={require('../../../img/icon/chat-support.png')} style={{ height: 25, width: 25 }} />
-                                    <Text style={{ fontSize: 12 }}>{I18n.t('chat_call')}</Text>
-                                </TouchableOpacity>
-                            </View>
-                        ): (
-                                <View style={[styles.jobItemWarp, { paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 0 }]}>
-                                    <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', height: 50, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }} onPress={() => this.MyChat(JobDetailsData)}>
-                                        <MaterialIcons name="chat" style={{ fontSize: 18, color: '#fff' }} />
-                                        <Text style={{ color: '#fff' }}>  Chat</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={{ flex: 1, backgroundColor: '#1e3768', height: 50, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}
-                                        onPress={() => Communications.phonecall(JobDetailsData.worker.phone, true)}
-                                    >
-                                        <MaterialIcons name="call" style={{ fontSize: 18, color: '#fff' }} />
-                                        <Text style={{ color: '#fff' }}>Call</Text>
-                                    </TouchableOpacity>
-                                </View>
-                        )
+                            ) : (
+                                    <View style={[styles.jobItemWarp, { paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 0 }]}>
+                                        <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', height: 50, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }} onPress={() => this.MyChat(JobDetailsData)}>
+                                            <MaterialIcons name="chat" style={{ fontSize: 18, color: '#fff' }} />
+                                            <Text style={{ color: '#fff' }}>  Chat</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={{ flex: 1, backgroundColor: '#1e3768', height: 50, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}
+                                            onPress={() => Communications.phonecall(JobDetailsData.worker.phone, true)}
+                                        >
+                                            <MaterialIcons name="call" style={{ fontSize: 18, color: '#fff' }} />
+                                            <Text style={{ color: '#fff' }}>Call</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                )
+                        ):null
+                       
                     }
                     <View style={styles.jobItemWarp}>
                         <View style={{ width: 30, alignItems: 'center'  }}>

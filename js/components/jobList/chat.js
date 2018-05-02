@@ -38,7 +38,6 @@ class Chat extends Component {
             message: '',
             chatRoomId: '',
             typeMessage: '',
-            chatRoomId: '',
             chatList: [],
             visible: false
         }
