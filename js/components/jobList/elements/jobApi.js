@@ -8,7 +8,7 @@ class jobApi {
 				resolve(responseJson)
 			}).catch(err => {
 				reject(err)
-			})
+			});
 		})
 	}
 
