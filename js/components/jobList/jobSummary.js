@@ -31,7 +31,8 @@ class jobSummary extends Component {
             totalPrice: 0,
             materialTotalPrice: 0,
             grndtotal: 0,
-            IsShow: false
+            IsShow: false,
+            min_charge:''
         };
     }
     componentDidMount() {
@@ -94,8 +95,12 @@ class jobSummary extends Component {
                     totalPrice = totalPrice.toFixed(2);
                 }
                 totalPrice = parseFloat(totalPrice).toFixed(2);
+                let minCharge = "0.0";
+                if (this.props.navigation.state.params.jobDetails.service && this.props.navigation.state.params.jobDetails.service.min_charge) {
+                    minCharge = parseFloat(this.props.navigation.state.params.jobDetails.service.min_charge).toFixed(2);
+                }
                 //console.log('jsonAnswer', jsonAnswer);
-                this.setState({ jsonAnswer: jsonAnswer, totalPrice: totalPrice });
+                this.setState({ jsonAnswer: jsonAnswer, totalPrice: totalPrice, min_charge: minCharge });
             }
 
             api.post('jobMaterials/getJobMaterialByJobId', { "jobId": jodId }).then((materialAns) => {
@@ -157,7 +162,7 @@ class jobSummary extends Component {
                 return totalPrice;
                 break;
             case 4:
-                if (isSlided !== 'false') {
+                if (isSlided && isSlided != 'false') {
                     if (impact_type === 'Addition') {
                         //retPrice = Number(price_impact) + Number(impact_no);
                         totalPrice = totalPrice + (start_range + Number(price_impact));
@@ -299,7 +304,7 @@ class jobSummary extends Component {
                                     <Image source={totalImg} style={styles.totalImage} />
                                 </View>
                                 <View>
-                                    <Text style={[styles.text1, { fontSize: 12 }]}>Promo Price</Text>
+                                        <Text style={[styles.text1, { fontSize: 12 }]}>{I18n.t('promoPrice')}</Text>
                                 </View>
                                 <View style={{ flex: 1 }}>
                                     <Text></Text>
@@ -317,13 +322,27 @@ class jobSummary extends Component {
                                 <Image source={totalImg} style={styles.totalImage} />
                             </View>
                             <View>
-                                <Text style={styles.text1}>Total</Text>
+                                <Text style={styles.text1}>{I18n.t('total')}</Text>
                             </View>
                             <View style={{ flex: 1 }}>
                                 <Text></Text>
                             </View>
                             <View style={styles.price}>
                                 <Text style={styles.priceText}>{this.state.currency} {this.state.grndtotal}</Text>
+                            </View>
+                        </View>
+                        <View style={styles.totalBillitem}>
+                            <View style={styles.imagesWarp} >
+                                <Image source={totalImg} style={styles.totalImage} />
+                            </View>
+                            <View>
+                                <Text style={styles.text1}>{I18n.t('minimum_price')}</Text>
+                            </View>
+                            <View style={{ flex: 1 }}>
+                                <Text></Text>
+                            </View>
+                            <View style={styles.price}>
+                                <Text style={styles.priceText}>{this.state.currency} {this.state.min_charge}</Text>
                             </View>
                         </View>
                     </View>

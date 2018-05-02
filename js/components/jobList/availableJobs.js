@@ -333,18 +333,16 @@ item1.price=item1.price.toFixed(2);
                 />
 
                 <Header style={styles.headerWarp} noShadow androidStatusBarColor="#f3f3f3">
-                    <Button transparent >
+                    <Button transparent onPress={() => this.props.navigation.navigate('Menu')}>
                         <MaterialIcons name="menu" style={styles.headIcon2} />
                     </Button>
-                    <Button transparent>
-                        <MaterialIcons name="notifications" style={styles.headIcon2} />
-                    </Button>
+                    
                     <Body style={styles.headBody}>
                         <Image source={require('../../../img/logo2.png')} style={{ height: 20, width: 115 }}/>
                     </Body>
                     <Button transparent />
-                    <Button transparent>
-                        <MaterialIcons name="search" style={styles.headIcon2} />
+                    <Button transparent onPress={() => this.props.navigation.navigate('NotificationList')}>
+                        <MaterialIcons name="notifications" style={styles.headIcon2} />
                     </Button>
                 </Header>
 
@@ -550,21 +548,19 @@ item1.price=item1.price.toFixed(2);
                     backgroundColor="#f3f3f3"
                 />
                  <FSpinner visible={true} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
-                <Header style={styles.headerWarp} noShadow androidStatusBarColor="#f3f3f3">
-                    <Button transparent >
-                        <MaterialIcons name="menu" style={styles.headIcon2} />
-                    </Button>
-                    <Button transparent>
-                        <MaterialIcons name="notifications" style={styles.headIcon2} />
-                    </Button>
-                    <Body style={styles.headBody}>
-                        <Image source={require('../../../img/logo2.png')} style={{ height: 20, width: 115 }}/>
-                    </Body>
-                    <Button transparent />
-                    <Button transparent>
-                        <MaterialIcons name="search" style={styles.headIcon2} />
-                    </Button>
-                </Header>
+                    <Header style={styles.headerWarp} noShadow androidStatusBarColor="#f3f3f3">
+                        <Button transparent onPress={() => this.props.navigation.navigate('Menu')}>
+                            <MaterialIcons name="menu" style={styles.headIcon2} />
+                        </Button>
+
+                        <Body style={styles.headBody}>
+                            <Image source={require('../../../img/logo2.png')} style={{ height: 20, width: 115 }} />
+                        </Body>
+                        <Button transparent />
+                        <Button transparent onPress={() => this.props.navigation.navigate('NotificationList')}>
+                            <MaterialIcons name="notifications" style={styles.headIcon2} />
+                        </Button>
+                    </Header>
                    
                 </Container>
             )

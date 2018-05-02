@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Moment from 'moment';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, ListView } from "react-native";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, ListView, BackHandler } from "react-native";
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -38,6 +38,32 @@ class myTiming extends Component {
       }).catch((err) => {
       })
 
+    }
+
+
+    renderBackButton()
+    {
+        if (this.props.currentRoute === "myTiming" && !this.props.prevRoute) {
+         this.backHandler=   BackHandler.addEventListener('hardwareBackPress', function () {
+                console.log('hardwareBackPress', this.props);
+                if (this.props.currentRoute === 'myTiming') {
+                    Alert.alert(
+                        'Confirm',
+                        'Are you sure to exit the app?',
+                        [
+                            { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                            { text: 'OK', onPress: () => BackHandler.exitApp() },
+                        ],
+                        { cancelable: false }
+                    );
+                    return true;
+                } else {
+                    this.props.navigation.goBack(null);
+                    return true;
+                }
+
+            }.bind(this));
+        }
     }
     navigate(screen) {        
         const data = this.props.auth.data;
@@ -121,6 +147,7 @@ renderUnavalData(UnAvData, key){
 }
 
     render() {
+        this.renderBackButton();
       const data = [
         {
             "id": 1,
@@ -312,7 +339,9 @@ myTiming.propTypes = {
 const mapStateToProps = (state) => {
     return {
         location: state.location,
-        auth: state.auth
+        auth: state.auth,
+        currentRoute: state.RouterOwn.currentRoute,
+        prevRoute: state.RouterOwn.prevRoute
     }
 }
 

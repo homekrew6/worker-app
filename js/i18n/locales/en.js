@@ -125,5 +125,8 @@ export default {
   callUs: 'Call Us',
   call: 'Call',
   pay_pending: 'Payment Pending',
+  promoPrice: 'Promo Price',
+  minimum_price: 'Minimum Price',
+  faq: 'FAQS'
   
 };
