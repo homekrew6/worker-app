@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import { Image, View, StatusBar, TouchableOpacity, Text, TextInput, Alert  } from "react-native";
+import { Image, View, StatusBar, TouchableOpacity, Text, TextInput, Alert, Dimensions } from "react-native";
 import { Container, Header, Content, Body, Title, Footer, FooterTab, Button  } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import Communications from 'react-native-communications';
 import Modal from "react-native-modal";
+import HTML from 'react-native-render-html';
 import I18n from '../../i18n/i18n';
 import api from '../../api/index';
 import styles from "./styles";
@@ -132,7 +133,11 @@ class Support extends Component {
                                         </TouchableOpacity>
                                         {
                                             item.is_active_item ? <View style={{ paddingBottom: 15 }}>
-                                                <Text style={styles.chatListTime}>{item.answer}</Text>
+                                                <HTML 
+                                                    style={styles.chatListTime} html={item.answer} 
+                                                    imagesMaxWidth={Dimensions.get('window').width} 
+                                                />
+                                                {/* <Text style={styles.chatListTime}>{item.answer}</Text> */}
                                             </View>: null
                                         }
                                     </View>

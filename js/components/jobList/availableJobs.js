@@ -195,19 +195,26 @@ class AvailableJobs extends Component {
     }
 //bala: End
     acceptJob(data) {
-        this.setState({
-            loader: true
-        })
+        this.setState({ loader: true });
         let jobId = data.id;        
         let workerId = this.props.auth.data.id;
         let customerId=data.customer.id;
-        this.props.acceptJob( jobId , workerId,customerId ).then(res => {
-            this.jobdata();
+
+        api.post('Jobs/acceptJob', { "id": jobId, "status": "ACCEPTED", "workerId": workerId , "customerId":customerId}).then(responseJson => {
+            console.log(responseJson);
+            this.setState({ loader: false });
+            this.props.navigation.navigate('JobDetails',{jobDetails:data});
         }).catch(err => {
-            this.setState({
-                loader: false
-            })
+            console.log(err);
         })
+
+        // this.props.acceptJob( jobId , workerId,customerId ).then(res => {
+        //     this.jobdata();
+        // }).catch(err => {
+        //     this.setState({
+        //         loader: false
+        //     })
+        // })
     }
 
     onRefresh(){
@@ -216,6 +223,7 @@ class AvailableJobs extends Component {
     
 
     render() {     
+
         let items;
         if (this.props.availableJobs.data) {
             items = this.props.availableJobs.data.response.message.upcomingJobs;
@@ -268,7 +276,7 @@ class AvailableJobs extends Component {
                 item.data.map((item1)=>{
                     if(item1.price && typeof(item1.price) !='string')
                     {
-item1.price=item1.price.toFixed(2);
+                        item1.price=item1.price.toFixed(2);
                     }
                 });
             });
@@ -285,6 +293,7 @@ item1.price=item1.price.toFixed(2);
                 const retValue = new Date(a) - new Date(b);
                 return retValue;
             });
+
             let finalArray2 = [];
             sortedList2.map((dateOne, key) => {
 
@@ -317,12 +326,118 @@ item1.price=item1.price.toFixed(2);
             });
             finalArray2.map((item)=>{
                 item.data.map((item1)=>{
-                    if(item1.price && typeof(item1.price) !='string')
-                    {
-item1.price=item1.price.toFixed(2);
+                    if(item1.price && typeof(item1.price) !='string'){
+                        item1.price=item1.price.toFixed(2);
                     }
                 });
             });
+
+
+
+
+             // ongoing jobs
+
+             const dateListOnGoing = [];
+             this.props.availableJobs.data.response.message.onGoingJobs.map((data, key) => {
+                 let dateConvertUpa = new Date(data.postedDate);
+                 let dataFormatUpa = moment(dateConvertUpa).format('DD MMM YYYY');
+                 dateListOnGoing.push(dataFormatUpa);
+             })
+             const uniqueList3 = dateListOnGoing.filter(this.onlyUnique);
+             const sortedList3 = uniqueList3.sort(function (a, b) {
+                 const retValue = new Date(a) - new Date(b);
+                 return retValue;
+             });
+             
+             let finalArray3 = [];
+             sortedList3.map((dateOne, key) => {
+ 
+                 let dateNow = new Date();
+                 let nowDateFormat = moment(dateNow).format('DD MMM YYYY');
+                 let convertedDate = new Date(dateOne);
+                 let dateNew = moment(convertedDate).format('DD MMM YYYY');
+ 
+                 var tomorrow = new Date();
+                 tomorrow.setDate(dateNow.getDate() + 1);
+                 let tomorrowFormat = moment(tomorrow).format('DD MMM YYYY');
+ 
+                 if (nowDateFormat === dateNew) {
+                     dateNew = 'Today';
+                 } else if (tomorrowFormat === dateNew) {
+                     dateNew = 'Tomorrow';
+                 }
+                 let finalObject = { date: dateNew, data: [] };
+                 this.props.availableJobs.data.response.message.onGoingJobs.map((dataNew, key) => {
+                     let timeDiffNowRet = this.getTimeDiffLocal(dataNew.postedDate);
+                     let postDateCompare = new Date(dataNew.postedDate);
+                     if (dateOne === moment(postDateCompare).format('DD MMM YYYY')) {
+                         dataNew.startTime = timeDiffNowRet;
+                         finalObject.data.push(dataNew);
+                     }
+                 })
+ 
+                 finalArray3.push(finalObject);
+                 
+             });
+             finalArray3.map((item)=>{
+                 item.data.map((item1)=>{
+                     if(item1.price && typeof(item1.price) !='string'){
+                         item1.price=item1.price.toFixed(2);
+                     }
+                 });
+             });
+
+
+             //complete job
+             const dateListComp = [];
+             this.props.availableJobs.data.response.message.completedJobs.map((data, key) => {
+                 let dateConvertUpa = new Date(data.postedDate);
+                 let dataFormatUpa = moment(dateConvertUpa).format('DD MMM YYYY');
+                 dateListComp.push(dataFormatUpa);
+             })
+             const uniqueList4 = dateListComp.filter(this.onlyUnique);
+             const sortedList4 = uniqueList4.sort(function (a, b) {
+                 const retValue = new Date(a) - new Date(b);
+                 return retValue;
+             });
+             
+             let finalArray4 = [];
+             sortedList4.map((dateOne, key) => {
+ 
+                 let dateNow = new Date();
+                 let nowDateFormat = moment(dateNow).format('DD MMM YYYY');
+                 let convertedDate = new Date(dateOne);
+                 let dateNew = moment(convertedDate).format('DD MMM YYYY');
+ 
+                 var tomorrow = new Date();
+                 tomorrow.setDate(dateNow.getDate() + 1);
+                 let tomorrowFormat = moment(tomorrow).format('DD MMM YYYY');
+ 
+                 if (nowDateFormat === dateNew) {
+                     dateNew = 'Today';
+                 } else if (tomorrowFormat === dateNew) {
+                     dateNew = 'Tomorrow';
+                 }
+                 let finalObject = { date: dateNew, data: [] };
+                 this.props.availableJobs.data.response.message.completedJobs.map((dataNew, key) => {
+                     let timeDiffNowRet = this.getTimeDiffLocal(dataNew.postedDate);
+                     let postDateCompare = new Date(dataNew.postedDate);
+                     if (dateOne === moment(postDateCompare).format('DD MMM YYYY')) {
+                         dataNew.startTime = timeDiffNowRet;
+                         finalObject.data.push(dataNew);
+                     }
+                 })
+ 
+                 finalArray4.push(finalObject);
+                 
+             });
+             finalArray4.map((item)=>{
+                 item.data.map((item1)=>{
+                     if(item1.price && typeof(item1.price) !='string'){
+                         item1.price=item1.price.toFixed(2);
+                     }
+                 });
+             });
 
         return (
             
@@ -439,6 +554,7 @@ item1.price=item1.price.toFixed(2);
                             })}
                         </Content>
                     </Tab>
+
                     <Tab heading="UPCOMING JOBS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
                         <Content
                             refreshControl={
@@ -500,7 +616,133 @@ item1.price=item1.price.toFixed(2);
                             })}
                         </Content>
                     </Tab>
-                    <Tab heading="CANCELLED JOBS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
+                    {/* On going jobs */}
+                    <Tab heading="ON GOING JOBS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
+                        <Content
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={this.state.refreshing}
+                                    onRefresh={this.onRefresh.bind(this)}
+                                />}>
+                            {
+                            finalArray3.length === 0 ?
+                                    <View style={{ alignSelf: 'center', padding: 20 }}>
+                                        <Text>{I18n.t('no_job_found')}</Text>
+                                    </View>
+                                :
+                            
+                            finalArray3.map((dataQ, key) => {
+                                return (
+                                    <View key={key}>
+                                        <View style={styles.dayHeading}>
+                                            <Text>{dataQ.date}</Text>
+                                        </View>
+                                        <List
+                                            dataArray={dataQ.data}
+                                            style={styles.jobList}
+                                            renderRow={(item) =>
+                                            <ListItem style={styles.jobListItem}>
+                                                <TouchableOpacity style={styles.listWarp} onPress={() => this.goDetails(item)}>
+                                                    <View style={styles.listWarpImageWarp}>
+                                                            <Image source={{uri: item.service.banner_image}} style={styles.listWarpImage} />
+                                                    </View>
+                                                    <View style={styles.listWarpTextWarp}>
+                                                        <View style={styles.flexDirectionRow}>
+                                                            <Text>{item.service.name}</Text>
+                                                        </View>
+                                                        <View style={styles.flexDirectionRow}>
+                                                            {/* <Text style={[styles.fontWeight700, { fontSize: 14 }]}>Tuesday </Text>
+                                                            <Text style={{ fontSize: 14 }}> 10:00 AM</Text> */}
+                                                                <Text style={{ fontSize: 12 }}>{this.getLocalTimeFormat(item.postedDate)}</Text>
+                                                        </View>
+                                                        <View style={styles.flexDirectionRow}>
+                                                            <Text>{item.userLocation ? item.userLocation.name : ''}</Text>
+
+                                                        </View>
+                                                        {
+                                                                item.status === 'STARTED'?
+                                                            <View style={styles.flexDirectionRow}>
+                                                                <Text style={{ color: '#81cdc7', fontSize: 16 }}>{item.startTime.startTime}</Text>
+                                                            </View>: null
+                                                        }
+                                                    </View>
+                                                    <View>
+                                                        <Text style={styles.listWarpPriceUp}>{this.state.currency} {item.price}</Text>
+                                                        <Text style={styles.listWarpPriceDown}>4 hours</Text>
+                                                    </View>
+                                                </TouchableOpacity>
+                                            </ListItem>}
+                                        />
+                                    </View>
+                                )
+                            })}
+                        </Content>
+                    </Tab>
+
+                    {/* Completed Jobs */}
+                    <Tab heading="COMPLETED JOBS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
+                        <Content
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={this.state.refreshing}
+                                    onRefresh={this.onRefresh.bind(this)}
+                                />}>
+                            {
+                            finalArray4.length === 0 ?
+                                    <View style={{ alignSelf: 'center', padding: 20 }}>
+                                        <Text>{I18n.t('no_job_found')}</Text>
+                                    </View>
+                                :
+                            
+                            finalArray4.map((dataQ, key) => {
+                                return (
+                                    <View key={key}>
+                                        <View style={styles.dayHeading}>
+                                            <Text>{dataQ.date}</Text>
+                                        </View>
+                                        <List
+                                            dataArray={dataQ.data}
+                                            style={styles.jobList}
+                                            renderRow={(item) =>
+                                            <ListItem style={styles.jobListItem}>
+                                                <TouchableOpacity style={styles.listWarp} onPress={() => this.goDetails(item)}>
+                                                    <View style={styles.listWarpImageWarp}>
+                                                            <Image source={{uri: item.service.banner_image}} style={styles.listWarpImage} />
+                                                    </View>
+                                                    <View style={styles.listWarpTextWarp}>
+                                                        <View style={styles.flexDirectionRow}>
+                                                            <Text>{item.service.name}</Text>
+                                                        </View>
+                                                        <View style={styles.flexDirectionRow}>
+                                                            {/* <Text style={[styles.fontWeight700, { fontSize: 14 }]}>Tuesday </Text>
+                                                            <Text style={{ fontSize: 14 }}> 10:00 AM</Text> */}
+                                                                <Text style={{ fontSize: 12 }}>{this.getLocalTimeFormat(item.postedDate)}</Text>
+                                                        </View>
+                                                        <View style={styles.flexDirectionRow}>
+                                                            <Text>{item.userLocation ? item.userLocation.name : ''}</Text>
+
+                                                        </View>
+                                                        {
+                                                                item.status === 'STARTED'?
+                                                            <View style={styles.flexDirectionRow}>
+                                                                <Text style={{ color: '#81cdc7', fontSize: 16 }}>{item.startTime.startTime}</Text>
+                                                            </View>: null
+                                                        }
+                                                    </View>
+                                                    <View>
+                                                        <Text style={styles.listWarpPriceUp}>{this.state.currency} {item.price}</Text>
+                                                        <Text style={styles.listWarpPriceDown}>4 hours</Text>
+                                                    </View>
+                                                </TouchableOpacity>
+                                            </ListItem>}
+                                        />
+                                    </View>
+                                )
+                            })}
+                        </Content>
+                    </Tab>
+
+                    <Tab heading="IGNORED JOBS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
                         {this.props.availableJobs.data.response.message.declinedJobs? (
                             <List
                                 dataArray={this.props.availableJobs.data.response.message.declinedJobs}

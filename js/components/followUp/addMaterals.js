@@ -105,18 +105,33 @@ class AddMaterial extends Component {
 
     addItems(id, name, image, price) {
         let addedItemArray = this.state.addedMaterialsList;
-        addedItemArray.push({ 
-            id: '', 
-            name: name, 
-            price: price, 
-            image: image, 
-            count: 1, 
-            actualPrice: price,
-            materialsId: id,
-        });
+        let addStatus = true;
+        debugger;
+        addedItemArray.map((dataA, key) => {
+            if(id === dataA.materialsId){
+                addedItemArray[key].price = Number(dataA.count + 1 ) * dataA.price;
+                addedItemArray[key].count = Number(dataA.count) + 1;
+                addStatus = false
+            }
+        })
+        if(addStatus){
+            addedItemArray.push({ 
+                id: '', 
+                name: name, 
+                price: price, 
+                image: image, 
+                count: 1, 
+                actualPrice: price,
+                materialsId: id,
+            });
+        }
+        
         let totalPrice = 0;
+        let itemTotalPrice;
+        debugger;
         addedItemArray.map((item) => {
-            totalPrice = totalPrice + Number(item.price);
+            itemTotalPrice = parseFloat(item.price) * item.count;
+            totalPrice = totalPrice + itemTotalPrice;
         });
         totalPrice = totalPrice.toFixed(2);
 
