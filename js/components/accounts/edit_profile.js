@@ -179,6 +179,7 @@ class EditProfile extends Component {
 
                     this.setState({ image: response.body.postResponse.location })
                     this.setState({ visible: false });
+                    Alert.alert('', 'Press the save button to save the image.');
                 }
             }).catch((err) => {
                 console.log(err);
@@ -228,8 +229,9 @@ class EditProfile extends Component {
                 if (response.status == 201) {
                     this.setState({ cameraButton: true });
                     this.setState({ cameraUploaded: true });
-                    this.setState({ image: response.body.postResponse.location })
+                    this.setState({ image: response.body.postResponse.location });
                     this.setState({ visible: false });
+                    Alert.alert('', 'Press the save button to save the image.');
                 }
             }).catch((err) => {
                 this.setState({ visible: false });
