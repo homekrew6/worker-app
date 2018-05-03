@@ -6,7 +6,6 @@ class RouterOwn extends Component{
         console.log('router', this.props);
     }
     render(){
-        debugger;
         return(
             null
         )

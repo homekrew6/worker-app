@@ -122,4 +122,5 @@ export default {
   callUs: 'اتصل بنا',
   call: 'Appel',
   pay_pending: 'انتظار الدفع',
+  setting_page_title: 'إعدادات',
 };

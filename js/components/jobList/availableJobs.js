@@ -118,7 +118,7 @@ class AvailableJobs extends Component {
                 this.setState({ currency: value1.language })
             }
         });
-
+            
         // this.backhandler = BackHandler.addEventListener('hardwareBackPress', function () {
 
         //     if(this.state.backReturn === true){
@@ -401,7 +401,7 @@ item1.price=item1.price.toFixed(2);
                                                                 <Text style={{ fontSize: 14 }}>{this.getLocalTimeFormat(item.postedDate)}</Text>
                                                             </View>
                                                             <View style={styles.flexDirectionRow}>
-                                                                <Text>{item.userLocation.name}</Text>
+                                                                <Text>{item.userLocation ? item.userLocation.name : ''}</Text>
                                                             </View>
                                                             <View style={styles.flexDirectionRow}>
                                                                 <Text style={ item.startTime.timeInt === true ? {color: '#81cdc7'} : {color: '#FF0000'} }>{item.startTime.startTime}</Text>
@@ -480,7 +480,7 @@ item1.price=item1.price.toFixed(2);
                                                                 <Text style={{ fontSize: 12 }}>{this.getLocalTimeFormat(item.postedDate)}</Text>
                                                         </View>
                                                         <View style={styles.flexDirectionRow}>
-                                                            <Text>{item.userLocation.name}</Text>
+                                                            <Text>{item.userLocation ? item.userLocation.name : ''}</Text>
                                                         </View>
                                                         {
                                                                 item.status === 'STARTED'?

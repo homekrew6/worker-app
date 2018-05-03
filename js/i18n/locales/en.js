@@ -125,5 +125,5 @@ export default {
   callUs: 'Call Us',
   call: 'Call',
   pay_pending: 'Payment Pending',
-  
+  setting_page_title: 'Settings',
 };

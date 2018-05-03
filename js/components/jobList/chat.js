@@ -34,7 +34,7 @@ class Chat extends Component {
         this.state = {
             chatRef: '',
             customerId: this.props.navigation.state.params.workerDetails.customer.id ? this.props.navigation.state.params.workerDetails.customer.id : '',
-            workerId: this.props.navigation.state.params.workerDetails.worker.id ? this.props.navigation.state.params.workerDetails.worker.id : '',
+            workerId: this.props.navigation.state.params.workerDetails.worker ? this.props.navigation.state.params.workerDetails.worker.id : '',
             message: '',
             chatRoomId: '',
             typeMessage: '',

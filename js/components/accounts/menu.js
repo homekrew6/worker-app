@@ -85,7 +85,6 @@ class Menu extends Component {
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', function () {
             console.log('hardwareBackPress', this.props);
-            debugger;
             if(this.props.currentRoute === 'Menu'){
                 Alert.alert(
                     'Confirm',

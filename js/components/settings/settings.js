@@ -88,7 +88,7 @@ class Settings extends Component {
                         <Ionicons name="ios-arrow-back" style={{ fontSize: 26, color: '#fff' }} />
                     </Button>
                     <Body style={{ alignItems: 'center' }}>
-                        <Title>Settings</Title>
+                        <Title>{I18n.t('setting_page_title')}</Title>
                     </Body>
                     <Button transparent style={{ width: 30, backgroundColor: 'transparent' }} disabled/>
                 </Header>

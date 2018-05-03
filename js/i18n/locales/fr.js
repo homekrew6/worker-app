@@ -29,5 +29,6 @@ export default {
   callMe: 'APPELLE-MOI',
   callUs: 'Appelez-nous',
   call: 'Appel',
-  pay_pending: 'Paiement en attente',   
+  pay_pending: 'Paiement en attente',
+  setting_page_title: 'Paramètres',
 };
