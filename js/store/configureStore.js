@@ -1,7 +1,6 @@
 import {compose, createStore , applyMiddleware } from 'redux'
 import rootReducer from '../reducers/rootReducer'
 import thunk from 'redux-thunk'
-import logger from 'redux-logger'
 
 
 const store = createStore(
@@ -9,7 +8,7 @@ const store = createStore(
 	undefined,
 	compose(
 		//applyMiddleware(thunk)
-		applyMiddleware(thunk,logger),
+		applyMiddleware(thunk),
 		//autoRehydrate()
 	)
 )
