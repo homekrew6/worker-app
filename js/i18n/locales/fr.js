@@ -31,4 +31,9 @@ export default {
   call: 'Appel',
   pay_pending: 'Paiement en attente',
   setting_page_title: 'Paramètres',
+  pay_pending: 'Paiement en attente',  
+  promoPrice: 'Prix ​​promotionnel' ,
+  minimum_price: 'Prix ​​minimum',
+  faq: 'FAQS',
+  continue:'CONTINUER'
 };

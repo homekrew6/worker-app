@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { checkAuth, getUserDetail } from './elements/authActions';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from 'react-native';
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, BackHandler } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -10,7 +10,7 @@ import config from '../../config'
 import { RNS3 } from 'react-native-aws3';
 import api from '../../api';
 import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title, ActionSheet, Switch } from 'native-base';
-
+import { NavigationActions } from "react-navigation";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 const deviceHeight = Dimensions.get('window').height;
@@ -21,7 +21,10 @@ var BUTTONS = [
     { text: "Camera", icon: "ios-camera", iconColor: "#2c8ef4" },
     { text: "File", icon: "ios-images", iconColor: "#f42ced" }
 ];
-
+const resetActionForTiming = NavigationActions.reset({
+    index: 0,
+    actions: [NavigationActions.navigate({ routeName: 'myTiming' })],
+});
 class EditProfile extends Component {
     constructor(props) {
         super(props);
@@ -44,9 +47,30 @@ class EditProfile extends Component {
         this.actionSheet = null;
 
     }
+    renderBackButton() {
+        if (this.props.currentRoute === "EditProfile" && !this.props.prevRoute) {
+            this.backHandler = BackHandler.addEventListener('hardwareBackPress', function () {
+                console.log('hardwareBackPress', this.props);
+                if (this.props.currentRoute === 'EditProfile') {
+                    Alert.alert(
+                        'Confirm',
+                        'Are you sure to exit the app?',
+                        [
+                            { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                            { text: 'OK', onPress: () => BackHandler.exitApp() },
+                        ],
+                        { cancelable: false }
+                    );
+                    return true;
+                } else {
+                    this.props.navigation.goBack(null);
+                    return true;
+                }
 
-    showActionSheet()
-    {
+            }.bind(this));
+        }
+    }
+    showActionSheet() {
         if (this.actionSheet !== null) {
             // Call as you would ActionSheet.show(config, callback)
             this.actionSheet._root.showActionSheet({
@@ -59,10 +83,10 @@ class EditProfile extends Component {
                     this.fileUploadType(buttonIndex);
                 });
         }
-        
+
     }
-   
-    
+
+
     componentWillMount() {
         api.get('Zones/getParentZone').then((res) => {
             //console.log(res);
@@ -78,7 +102,7 @@ class EditProfile extends Component {
                         });
                         this.props.checkAuth((res) => {
                             this.props.getUserDetail(res.userId, res.id).then((userRes) => {
-console.log(this.props.auth);
+                                console.log(this.props.auth);
                                 let filter = '{"where":{"workerId":' + res.userId + '}}';
                                 api.get('WorkerSkills?filter=' + filter + '&access_token=' + res.id).then((skills) => {
                                     let serviceIds = [];
@@ -248,13 +272,28 @@ console.log(this.props.auth);
                         data.workerId = res.userId;
                         console.log(data);
                         api.post(`WorkerSkills/insertWorkerSkill?access_token=${res.id}`, data).then((skillRes) => {
-                            this.props.getUserDetail(res.userId, res.id).then((userRes) => {
-                                this.setState({ visible: false });
-                                this.props.navigation.navigate('Menu');
-                            }).catch((err) => {
-                                this.setState({ visible: false });
-                                Alert.alert('Data not saved, Please try again');
+                            const WorkerAvailabilitiesUrl = `Workeravailabletimings?filter={"where":{"workerId":"${res.userId}"}}`;
+                            api.get(WorkerAvailabilitiesUrl).then((timings) => {
+                                if (timings.length && timings.length > 0) {
+                                    this.props.getUserDetail(res.userId, res.id).then((userRes) => {
+                                        this.setState({ visible: false });
+                                        this.props.navigation.navigate('Menu');
+                                    }).catch((err) => {
+                                        this.setState({ visible: false });
+                                        Alert.alert('Data not saved, Please try again');
+                                    });
+                                }
+                                else {
+                                    this.props.getUserDetail(res.userId, res.id).then((userRes) => {
+                                        this.setState({ visible: false });
+                                        this.props.navigation.dispatch(resetActionForTiming);
+                                    }).catch((err) => {
+                                        this.setState({ visible: false });
+                                        Alert.alert('Data not saved, Please try again');
+                                    });
+                                }
                             });
+
                         }).catch((err) => {
                             this.setState({ visible: false });
                             Alert.alert("Please try again later.");
@@ -262,13 +301,15 @@ console.log(this.props.auth);
                         })
                     }
                     else {
-                        this.props.getUserDetail(res.userId, res.id).then((userRes) => {
-                            this.setState({ visible: false });
-                            this.props.navigation.navigate('Menu');
-                        }).catch((err) => {
-                            this.setState({ visible: false });
-                            Alert.alert('Data not saved, Please try again');
-                        });
+                        this.setState({ visible: false });
+                        Alert.alert('', 'Please select atleast one skill to continue.');
+                        // this.props.getUserDetail(res.userId, res.id).then((userRes) => {
+                        //     this.setState({ visible: false });
+                        //     this.props.navigation.navigate('Menu');
+                        // }).catch((err) => {
+                        //     this.setState({ visible: false });
+                        //     Alert.alert('Data not saved, Please try again');
+                        // });
 
                     }
                 }).catch((err) => {
@@ -394,7 +435,7 @@ console.log(this.props.auth);
                                 <Text style={styles.starRed}>*</Text>
                             </View>
                             <View style={styles.editprofileInputwrap}>
-                                <Input style={styles.editprofileInput} onChangeText={text => this.setState({ phone: text })} value={this.state.phone} />
+                                <Input style={styles.editprofileInput} onChangeText={text => this.setState({ phone: text })} value={this.state.phone} keyboardType={'numeric'} />
                             </View>
                         </View>
 
@@ -404,7 +445,7 @@ console.log(this.props.auth);
                                 <Text style={styles.starRed}>*</Text>
                             </View>
                             <View style={styles.editprofileInputwrap}>
-                                <Input style={styles.editprofileInput} value={I18n.t('password_small_case')} secureTextEntry />
+                                <Input style={styles.editprofileInput} value={I18n.t('password_small_case')} secureTextEntry editable={false} />
                             </View>
                         </View>
                         <View style={{ padding: 10 }}>
@@ -435,6 +476,8 @@ EditProfile.propTypes = {
 };
 const mapStateToProps = state => ({
     auth: state.auth,
+    currentRoute: state.RouterOwn.currentRoute,
+    prevRoute: state.RouterOwn.prevRoute
 });
 
 const mapDispatchToProps = dispatch => ({

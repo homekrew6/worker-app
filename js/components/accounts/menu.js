@@ -293,9 +293,9 @@ class Menu extends Component {
                         <Body style={styles.appHdrtitleWarp}>
                             <Image source={logo_hdr} style={{ height: 18, width: 110 }} />
                         </Body>
-                        <Button transparent >
+                        {/* <Button transparent >
                             <Icon name='search' style={styles.bg_head_icon} />
-                        </Button>
+                        </Button> */}
                     </Header>
 
                     <Card>
@@ -366,7 +366,7 @@ class Menu extends Component {
                             </TouchableOpacity>
                         </CardItem>
 
-                        <CardItem style={styles.menuCarditem}>
+                       {/* <CardItem style={styles.menuCarditem}>
                             <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate("MyPaymentList")}>
                                 <Image source={icon4} style={styles.menuCardIcon} />
                                 <Text style={styles.menuCardTxt}>{I18n.t('my_card')}</Text>
@@ -374,7 +374,7 @@ class Menu extends Component {
                                     <Image source={back_arow} style={styles.arw_lft_img} />
                                 </View>
                             </TouchableOpacity>
-                        </CardItem>
+                        </CardItem> */}
 
                         <CardItem style={styles.menuCarditem}>
                             <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate("myTiming")} >
@@ -386,15 +386,26 @@ class Menu extends Component {
                             </TouchableOpacity>
                         </CardItem>
 
+ {/* <CardItem style={styles.menuCarditem}>
+                            <View style={styles.menuCardView}>
+                                <Image source={icon5} style={styles.menuCardIcon} />
+                                <Text style={styles.menuCardTxt}>{I18n.t('my_promo_code')}</Text>
+                                <View style={styles.arw_lft}>
+                                    <Image source={back_arow} style={styles.arw_lft_img} />
+                                </View>
+                            </View>
+                        </CardItem> */}
+
                         <CardItem style={styles.menuCarditem}>
-                            <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('Support')}>
+                            <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate('Support')}>
                                 <Image source={icon6} style={styles.menuCardIcon} />
-                                <Text style={styles.menuCardTxt}>{I18n.t('support')}</Text>
+                                <Text style={styles.menuCardTxt}>{I18n.t('faq')}</Text>
                                 <View style={styles.arw_lft}>
                                     <Image source={back_arow} style={styles.arw_lft_img} />
                                 </View>
                             </TouchableOpacity>
                         </CardItem>
+                       
 
                         <CardItem style={styles.menuCarditem}>
                             <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate("Settings")} >

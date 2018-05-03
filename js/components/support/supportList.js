@@ -35,7 +35,6 @@ class Support extends Component {
                 if (item.is_active){
                     newsupportList.push(i);
                 }
-
             })
             this.setState({
                 supportList: newsupportList,
@@ -96,7 +95,7 @@ class Support extends Component {
                         <Ionicons style={styles.headerIconClose} name='ios-arrow-back' />
                     </Button>
                     <Body style={styles.headerBody}>
-                        <Title style={styles.headerTitle}>{I18n.t('support')}</Title>
+                        <Title style={styles.headerTitle}>{I18n.t('faq')}</Title>
                     </Body>
                     <Button transparent style={styles.buttonIconWarp} disabled />
                 </Header>

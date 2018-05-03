@@ -11,7 +11,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import api from '../../api/index';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import { allLocation, checkUncheck, clearMyLocation, selectedLocation } from './elements/locationAction';
-import {  navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
+
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, CheckBox } from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
@@ -73,34 +73,20 @@ class selectLocation extends Component {
                 api.delete('Workers/' + this.props.auth.data.id + '/workerLocations?' + 'access_token=' + JSON.parse(result).id).then((res) => {
                     for ( i = 0; i < newSelectedItemIds.length; i++) {
                         api.post('WorkerLocations?' + 'access_token=' + JSON.parse(result).id, { workerId: this.props.auth.data.id, zoneId: newSelectedItemIds[i] }).then((res1) => {
-                            //console.log((newSelectedItemIds.length - 1),i);
                             if (i === newSelectedItemIds.length) {
-                                //console.log('a')
-                                //this.props.navigation.navigate('MyLocation');
                                 this.setState({
                                     locationFlag: false
                                 })
                                 this.setState({
                                     loader: false,
-                                });
-                                const data = this.props.auth.data;
-                                data.activeScreen = 'MyLocation';
-                                data.previousScreen = "";
-                                this.props.navigateAndSaveCurrentScreen(data);
-                                this.props.navigation.navigate('MyLocation');
-                               // this.props.navigation.navigate("MyLocation");
-                            }
+                                });                            }
 
                         }).catch((err) => {
                             //reject(err);
-
-                        });
-                        
+                        }); 
                     }
+                    this.props.navigation.navigate("MyLocation");                    
                 })
-                
-
-
             } else {
                 //reject(err);
             }
@@ -109,31 +95,6 @@ class selectLocation extends Component {
         }else{
             Alert.alert('Please select atleast one zone')
         }
-        // console.log('newSelectedItemIds' + newSelectedItemIds);
-        // AsyncStorage.getItem('userToken', (err, result) => {
-        //     if (!err) {
-        //         api.delete('Workers/' + this.props.auth.data.id + '/workerLocations?' + 'access_token=' + JSON.parse(result).id).then((res) => {
-        //             //resolve(res)
-        //         })
-        //         for (var i = 0; i < newSelectedItemIds.length; i++ ){
-        //             api.post('/workerLocations?' + 'access_token=' + JSON.parse(result).id, { workerId: this.props.auth.data.id, zoneId: newSelectedItemIds[i] }).then((res) => {
-        //                 console.log(res);
-                            
-        //             }).catch((err) => {
-        //                 //reject(err);
-                        
-        //             });
-        //             //if (i == newSelectedItemIds.length - 1){
-        //                 this.props.navigation.dispatch(resetAction);
-        //             //}
-        //         }
-                
-            
-        //     } else {
-        //         //reject(err);
-        //     }
-
-        // })
         
     }
     
@@ -142,12 +103,11 @@ class selectLocation extends Component {
         let locationList
         if(this.state.locationFlag){
             let locationListItm = this.props.location.data;
-            // locationListItm[2].is_active = false;
             locationList = (
                 locationListItm.map((data, key) => (
                     <View style={styles.mainItem} key={data.id}>
                     <View style={styles.checkBoxWarp}>
-                            <CheckBox color='#29416f' checked={data.selected} id={data.id} onPress={() => this.chkbox_check(data.id)} />
+                        <CheckBox color='#29416f' checked={data.selected} id={data.id} onPress={() => this.chkbox_check(data.id)} />
                     </View>
                     <View style={styles.mainItemText}>
                         <Text style={styles.lstHeader}>{data.name}</Text>
@@ -181,67 +141,9 @@ class selectLocation extends Component {
                     </Header>
                     
                     <View>
+
                         {locationList}
 
-                        {/* <View style={styles.mainItem}>
-                            <View style={styles.checkBoxWarp}>
-                                <CheckBox color='#29416f' checked={true} onPress={() => this.chkbox_check(1)} />
-                            </View>
-                            <View style={styles.mainItemText}>
-                                <Text style={styles.lstHeader}>Deira</Text>
-                                <Text style={styles.lstHeader2}>Port Saeed</Text>
-                            </View>
-                        </View>
-
-                        <View style={styles.mainItem}>
-                            <View style={styles.checkBoxWarp}>
-                                <CheckBox color='#29416f' checked={false} />
-                            </View>
-                            <View style={styles.mainItemText}>
-                                <Text style={styles.lstHeader}>Deira</Text>
-                                <Text style={styles.lstHeader2}>Port Saeed</Text>
-                            </View>
-                        </View>
-
-                        <View style={styles.mainItem}>
-                            <View style={styles.checkBoxWarp}>
-                                <CheckBox color='#29416f' checked={false} />
-                            </View>
-                            <View style={styles.mainItemText}>
-                                <Text style={styles.lstHeader}>Deira</Text>
-                                <Text style={styles.lstHeader2}>Port Saeed</Text>
-                            </View>
-                        </View>
-
-                        <View style={styles.mainItem}>
-                            <View style={styles.checkBoxWarp}>
-                                <CheckBox color='#29416f' checked={false} />
-                            </View>
-                            <View style={styles.mainItemText}>
-                                <Text style={styles.lstHeader}>Deira</Text>
-                                <Text style={styles.lstHeader2}>Port Saeed</Text>
-                            </View>
-                        </View>
-
-                        <View style={styles.mainItem}>
-                            <View style={styles.checkBoxWarp}>
-                                <CheckBox color='#29416f' checked={false} />
-                            </View>
-                            <View style={styles.mainItemText}>
-                                <Text style={styles.lstHeader}>Deira</Text>
-                                <Text style={styles.lstHeader2}>Port Saeed</Text>
-                            </View>
-                        </View>
-                        
-                        <View style={styles.mainItem}>
-                            <View style={styles.checkBoxWarp}>
-                                <CheckBox color='#29416f' checked={false} />
-                            </View>
-                            <View style={styles.mainItemText}>
-                                <Text style={styles.lstHeader}>Deira</Text>
-                                <Text style={styles.lstHeader2}>Port Saeed</Text>
-                            </View>
-                        </View> */}
                     </View>
                     
                     
@@ -268,8 +170,8 @@ const mapDispatchToProps = (dispatch) => {
         allLocation: () => dispatch(allLocation()),
         checkUncheck: (a, b) => dispatch(checkUncheck(a, b)),
         clearMyLocation: (a) => dispatch(clearMyLocation(a)),
-        selectedLocation: (id) => dispatch(selectedLocation(id)),
-        navigateAndSaveCurrentScreen:(data)=>dispatch(navigateAndSaveCurrentScreen(data))
+        selectedLocation: (id) => dispatch(selectedLocation(id))
+        
     }
 }
 

@@ -126,4 +126,7 @@ export default {
   call: 'Call',
   pay_pending: 'Payment Pending',
   setting_page_title: 'Settings',
+  promoPrice: 'Promo Price',
+  minimum_price: 'Minimum Price',
+  faq: 'FAQS'
 };

@@ -38,7 +38,6 @@ class Chat extends Component {
             message: '',
             chatRoomId: '',
             typeMessage: '',
-            chatRoomId: '',
             chatList: [],
             visible: false
         }
@@ -88,6 +87,7 @@ class Chat extends Component {
                     listMesage.push(snapshot.val()[key]);
                 }
                 this.setState({ chatList: listMesage });
+                debugger;
                 console.log(this.state.chatList);
             }
         }).catch((Err) => {
@@ -263,6 +263,7 @@ class Chat extends Component {
                     <ScrollView
                         
                         ref='ScrollViewStart'
+                        style={{ padding: 10 }}
                         >
                             {
                                 this.state.chatList.map((data, key) => (
@@ -276,28 +277,28 @@ class Chat extends Component {
                                                 }
                                             </View>
                                             <View style={{ marginBottom: 10, overflow: 'visible', position: 'relative', maxWidth: '80%' }}>
-                                                <View style={{ padding: 8, borderRadius: 5, backgroundColor: '#ccc', position: 'relative', overflow: 'visible' }}>
+                                                <View style={{ padding: 8, borderRadius: 5, backgroundColor: '#fff', position: 'relative', overflow: 'visible' }}>
                                                     {
                                                         data.Message ? (
                                                             <Text style={{ fontSize: 14 }}> {data.Message} </Text>
-                                                        ) : (<Image source={{ uri: data.MessageImage }} style={{ height: 100, width: 100, borderRadius: 4 }} />)
+                                                        ) : (<Image source={{ uri: data.MessageImage }} style={{ height: 100, width: 100, borderRadius: 3 }} />)
                                                     }
                                                     {/* <Text style={{ fontSize: 14 }}>{this.props.auth.data.name}</Text> */}
                                                 </View>
-                                                <Image source={require('../../../img/icon/chats.png')} style={{ height: 12, width: 12, position: 'absolute', left: -4, bottom: -4, zIndex: 999 }} />
+                                                <Image source={require('../../../img/icon/chats.png')} style={{ height: 12, width: 12, position: 'absolute', left: -3, bottom: -3, zIndex: 999 }} />
                                             </View>
                                         </View>
                                     ) : (
                                             <View style={{ flexDirection: 'row', marginBottom: 15 }} key={key}>
                                                 <View style={{ flex: 1, marginBottom: 10, overflow: 'visible', position: 'relative', alignItems: 'flex-end' }}>
-                                                    <View style={{ maxWidth: '80%', padding: 8, borderRadius: 5, backgroundColor: '#ccc', position: 'relative', overflow: 'visible' }}>
+                                                    <View style={{ maxWidth: '80%', padding: 8, borderRadius: 5, backgroundColor: '#fff', position: 'relative', overflow: 'visible' }}>
                                                         {
                                                             data.Message ? (
                                                                 <Text style={{ fontSize: 14 }}> {data.Message} </Text>
-                                                            ) : (<Image source={{ uri: data.MessageImage }} style={{ height: 100, width: 100, borderRadius: 4 }} />)
+                                                            ) : (<Image source={{ uri: data.MessageImage }} style={{ height: 100, width: 100, borderRadius: 3 }} />)
                                                         }
                                                     </View>
-                                                    <Image source={require('../../../img/icon/chats2.png')} style={{ height: 12, width: 12, position: 'absolute', right: -3, bottom: -4, zIndex: 999 }} />
+                                                    <Image source={require('../../../img/icon/chats2.png')} style={{ height: 12, width: 12, position: 'absolute', right: -3, bottom: -3, zIndex: 999 }} />
                                                 </View>
                                                 <TouchableOpacity style={{ marginLeft: 15, justifyContent: 'flex-end' }} onPress={() => console.log('test 1')} >
                                                     {

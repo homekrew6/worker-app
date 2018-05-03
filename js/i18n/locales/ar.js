@@ -123,4 +123,7 @@ export default {
   call: 'Appel',
   pay_pending: 'انتظار الدفع',
   setting_page_title: 'إعدادات',
+  promoPrice: 'سعر العرض',
+  minimum_price: 'سعر الحد الأدنى',
+  faq:'أسئلة وأجوبة'
 };
