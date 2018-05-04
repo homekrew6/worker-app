@@ -787,7 +787,7 @@ class AvailableJobs extends Component {
         else{
             return (
                 <Container >
-                      <StatusBar
+                    <StatusBar
                     backgroundColor="#f3f3f3"
                 />
                  <FSpinner visible={true} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
