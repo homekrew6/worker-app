@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, AsyncStorage, BackHandler } from "react-native";
-import { Container, Header, Button, Content, Form, Item, Icon, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title, Thumbnail } from "native-base";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, AsyncStorage, BackHandler, Text } from "react-native";
+import { Container, Header, Button, Content, Form, Item, Icon, Frame, Input, Label, CardItem, Right, Card, Left, Body, Title, Thumbnail } from "native-base";
 import { logout, navigateAndSaveCurrentScreen } from './elements/authActions'
 import I18n from '../../i18n/i18n';
 import styles from "./styles";

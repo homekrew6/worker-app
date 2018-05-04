@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { checkAuth, getUserDetail } from './elements/authActions';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, BackHandler } from 'react-native';
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, BackHandler, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import ImagePicker from 'react-native-image-crop-picker';
 import config from '../../config'
 import { RNS3 } from 'react-native-aws3';
 import api from '../../api';
-import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title, ActionSheet, Switch } from 'native-base';
+import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Form, Item, Frame, Input, Label, CardItem, Right, Card, Left, Body, Title, ActionSheet, Switch } from 'native-base';
 import { NavigationActions } from "react-navigation";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
@@ -399,7 +399,7 @@ class EditProfile extends Component {
                                 onPress={() =>
                                     this.showActionSheet()}
                             >
-                                <Text>{I18n.t('change_photo')}</Text>
+                                <Text style={{ color: '#fff' }}>{I18n.t('change_photo')}</Text>
                             </Button>
                             <ActionSheet ref={(c) => { this.actionSheet = c; }} />
                         </View>

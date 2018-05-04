@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, TouchableHighlight, ScrollView, AsyncStorage } from "react-native";
-import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Icon, Frame, Input, Label, Text } from "native-base";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, TouchableHighlight, ScrollView, AsyncStorage, Text } from "react-native";
+import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Icon, Frame, Input, Label } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons'; 
 import moment from 'moment';
 import * as firebase from 'firebase';
