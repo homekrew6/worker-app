@@ -105,13 +105,14 @@ class Support extends Component {
                         onChangeText={text => this.supportSearch(text)} 
                     />
                 </View>
-
+                {
+                    this.state.supportList.length ?
 
                 <Content>
-
+                    
                     <View style={[ this.state.supportList.length ? styles.bgWhite: '', { marginBottom: 20 } ]}>
                         {
-                            this.state.supportList.length ? this.state.supportList.map((item, key)=>{
+                             this.state.supportList.map((item, key)=>{
                                 return(
                                     <View style={styles.chatListWarp} key={key}>
                                         <TouchableOpacity style={styles.chatListTouchWarp} onPress={()=> this.faqFunction(key)}>
@@ -137,11 +138,12 @@ class Support extends Component {
                                         }
                                     </View>
                                 )
-                            }) : <View style={styles.noDataFound}><Text> {I18n.t('nodatafound')} </Text></View>
+                            }) 
                         }
                     </View>
                 </Content>
-
+                    : <View style={[styles.noDataFound,{ flex: 1, alignItems: 'center', justifyContent: 'center' } ]}><Text> {I18n.t('nodatafound')} </Text></View>
+                }
             </Container>
         );
     }

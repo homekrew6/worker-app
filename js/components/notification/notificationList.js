@@ -204,7 +204,8 @@ class NotificationList extends Component {
                         <Text style={{ color: '#fff' }}>{I18n.t('clearAll')}</Text>
                     </Button>
                 </Header>
-
+                {
+                    !(this.state.NotificationListRead.length == 0 && this.state.NotificationListUnread.length == 0) ? 
                 <Content>
 
                     {
@@ -293,11 +294,10 @@ class NotificationList extends Component {
                         />: null
                     }
 
-                    {
-                        !(this.state.NotificationListRead.length==0  && this.state.NotificationListUnread.length==0)? null: <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 15 }}><Text> {I18n.t('nodatafound')} </Text></View>
-                    }
-
                 </Content>
+
+                 : <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}><Text> {I18n.t('nodatafound')} </Text></View>
+                }
             </Container>
         );
     }
