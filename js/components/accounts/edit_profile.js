@@ -1,25 +1,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { checkAuth, getUserDetail } from './elements/authActions';
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, BackHandler, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import ImagePicker from 'react-native-image-crop-picker';
-import config from '../../config'
 import { RNS3 } from 'react-native-aws3';
 import api from '../../api';
-import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Form, Item, Frame, Input, Label, CardItem, Right, Card, Left, Body, Title, ActionSheet, Switch } from 'native-base';
+import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Input, Body, ActionSheet, Switch } from 'native-base';
 import { NavigationActions } from "react-navigation";
 import I18n from '../../i18n/i18n';
-import styles from './styles';
-const deviceHeight = Dimensions.get('window').height;
+import styles from './styles';'react-navigation'
+import config from '../../config'
+import { checkAuth, getUserDetail } from './elements/authActions';
+
 const deviceWidth = Dimensions.get('window').width;
 const profileImage = require('../../../img/atul.png');
 const carveImage = require('../../../img/bg-1.png');
-var BUTTONS = [
-    { text: "Camera", icon: "ios-camera", iconColor: "#2c8ef4" },
-    { text: "File", icon: "ios-images", iconColor: "#f42ced" }
+const BUTTONS = [
+    { text: 'Camera', icon: 'ios-camera', iconColor: '#2c8ef4' },
+    { text: 'File', icon: 'ios-images', iconColor: '#f42ced' }
 ];
 const resetActionForTiming = NavigationActions.reset({
     index: 0,
@@ -124,7 +124,7 @@ class EditProfile extends Component {
                                 })
                             }).catch((err) => {
                                 this.setState({ visible: false });
-                                Alert.alert('Data not saved, Please try again');
+                                Alert.alert(I18n.t('data_not_saved_try_again'));
                             });
                         })
                         //this.setState({ visible: false })
@@ -179,6 +179,7 @@ class EditProfile extends Component {
 
                     this.setState({ image: response.body.postResponse.location })
                     this.setState({ visible: false });
+                    Alert.alert(I18n.t('press_the_save_button_to_save_image'));
                 }
             }).catch((err) => {
                 console.log(err);
@@ -228,8 +229,9 @@ class EditProfile extends Component {
                 if (response.status == 201) {
                     this.setState({ cameraButton: true });
                     this.setState({ cameraUploaded: true });
-                    this.setState({ image: response.body.postResponse.location })
+                    this.setState({ image: response.body.postResponse.location });
                     this.setState({ visible: false });
+                    Alert.alert(I18n.t('press_the_save_button_to_save_image'));
                 }
             }).catch((err) => {
                 this.setState({ visible: false });
@@ -244,15 +246,15 @@ class EditProfile extends Component {
 
     pressSave() {
         if (!this.state.email) {
-            Alert.alert('Please enter email');
+            Alert.alert(I18n.t('enter_email'));
             return false;
         }
         if (!this.state.name) {
-            Alert.alert('Please enter name');
+            Alert.alert(I18n.t('enter_name'));
             return false;
         }
         if (!this.state.phone) {
-            Alert.alert('Please enter phone');
+            Alert.alert(I18n.t('enter_phone'));
             return false;
         }
         this.setState({ visible: true });
@@ -280,7 +282,7 @@ class EditProfile extends Component {
                                         this.props.navigation.navigate('Menu');
                                     }).catch((err) => {
                                         this.setState({ visible: false });
-                                        Alert.alert('Data not saved, Please try again');
+                                        Alert.alert(I18n.t('data_not_saved_try_again'));
                                     });
                                 }
                                 else {
@@ -289,32 +291,24 @@ class EditProfile extends Component {
                                         this.props.navigation.dispatch(resetActionForTiming);
                                     }).catch((err) => {
                                         this.setState({ visible: false });
-                                        Alert.alert('Data not saved, Please try again');
+                                        Alert.alert(I18n.t('data_not_saved_try_again'));
                                     });
                                 }
                             });
 
                         }).catch((err) => {
                             this.setState({ visible: false });
-                            Alert.alert("Please try again later.");
+                            Alert.alert(I18n.t('please_try_again_later'));
                             console.log(err);
                         })
                     }
                     else {
                         this.setState({ visible: false });
-                        Alert.alert('', 'Please select atleast one skill to continue.');
-                        // this.props.getUserDetail(res.userId, res.id).then((userRes) => {
-                        //     this.setState({ visible: false });
-                        //     this.props.navigation.navigate('Menu');
-                        // }).catch((err) => {
-                        //     this.setState({ visible: false });
-                        //     Alert.alert('Data not saved, Please try again');
-                        // });
-
+                        Alert.alert(I18n.t('please_select_atleast_one_skill'));
                     }
                 }).catch((err) => {
                     this.setState({ visible: false });
-                    Alert.alert('Data not saved, please try again.');
+                    Alert.alert(I18n.t('data_not_saved_try_again'));
                 });
             } else {
                 this.setState({ visible: false });

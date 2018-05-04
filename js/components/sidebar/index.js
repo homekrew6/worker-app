@@ -11,11 +11,6 @@ import {
 	Left,
 	Right,
 	Badge,
-	Button,
-	View,
-	StyleProvider,
-	getTheme,
-	variables,
 } from "native-base";
 
 import styles from "./style";

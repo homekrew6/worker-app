@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, FlatList, View, Dimensions, Text, TouchableOpacity, Platform, StatusBar,} from 'react-native';
+import { StyleSheet, FlatList, View, Dimensions, Text, TouchableOpacity, Platform, StatusBar, } from 'react-native';
 import DefaultSlide from './DefaultSlide';
 
 const { width, height } = Dimensions.get('window');

@@ -1,21 +1,15 @@
 import React, { Component } from "react";
-import { NavigationActions } from "react-navigation";
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Image, View, StatusBar, TouchableOpacity, Text, TextInput, Alert, ListView, BackHandler } from "react-native";
-import { Container, Header, Content, Body, Title, Footer, FooterTab, Button, List, ListItem, Icon } from "native-base";
+import { Image, View, StatusBar, TouchableOpacity, Text, Alert, ListView } from "react-native";
+import { Container, Header, Content, Body, Title, Button, List, ListItem } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons'; 
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import moment from 'moment';
 import I18n from '../../i18n/i18n';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import styles from "./styles";
 import api from '../../api/index';
-
-const icon1 = require('../../../img/chatIcon3.png');
-const icon2 = require('../../../img/chatIcon1.png');
-const icon3 = require('../../../img/chatIcon2.png');
 
 
 class NotificationList extends Component {
@@ -82,7 +76,7 @@ class NotificationList extends Component {
         });
     }
     else{
-        Alert.alert('Please login');
+        Alert.alert(I18n.t('please_login'));
     }
     }
 
@@ -126,7 +120,25 @@ class NotificationList extends Component {
         });
 
     }
+    getLocalTimeFormat(gmtTime) {
+        if (gmtTime) {
+            let dateNow = new Date();
+            var nUTC_diff = dateNow.getTimezoneOffset();
+            let slicedDate = gmtTime.slice(0, -4);
+            let timeToMan = Math.abs(nUTC_diff);
+            let utc_check = Math.sign(nUTC_diff);
+            let localTime;
+            if (utc_check === 1 || utc_check === 0) {
+                localTime = moment(slicedDate).subtract(timeToMan, 'minutes').format('ddd DD-MMM-YYYY hh:mm A');
+            } else {
+                localTime = moment(slicedDate).add(timeToMan, 'minutes').format('ddd DD-MMM-YYYY hh:mm A');
+            }
+            return localTime;
+        } else {
+            return null;
+        }
 
+    }
     gotoDetails(data){
         let jobDetails = 'abc';
 
@@ -215,8 +227,8 @@ class NotificationList extends Component {
                                              <Image source={require('../../../img/icon/notificationIcon1.png')} style={styles.listImage} />
                                          </View>
                                          <View style={styles.listTextWarp}>
-                                             <Text>{data.title}</Text>
-                                             <Text numberOfLines={1} style={styles.listTextsecend}>{data.notificationDate}</Text>
+                                                <Text>{data.title}</Text>
+                                                <Text numberOfLines={1} style={styles.listTextsecend}>{this.getLocalTimeFormat(data.notificationDate)}</Text>
                                              {/* <Text style={styles.listTextthird}>Home</Text> */}
                                          </View>
                                          <View>
@@ -260,7 +272,7 @@ class NotificationList extends Component {
                                     </View>
                                     <View style={styles.listTextWarp}>
                                         <Text>{data.title}</Text>
-                                            <Text numberOfLines={1} style={styles.listTextsecend}>{data.notificationDate}</Text>
+                                            <Text numberOfLines={1} style={styles.listTextsecend}>{this.getLocalTimeFormat(data.notificationDate)}</Text>
                                         {/* <Text style={styles.listTextthird}>Home</Text> */}
                                     </View>
                                     <View>

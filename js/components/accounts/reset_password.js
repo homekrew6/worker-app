@@ -5,14 +5,12 @@ import { login } from './elements/authActions'
 import api from '../../api'
 import { NavigationActions } from "react-navigation"
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, Text } from "react-native";
-
-import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Icon, Frame, Input, Label } from "native-base";
+import { Container, Header, Button, Content, Left, Body, Title, Item, Icon, Input } from "native-base";
 
 import I18n from '../../i18n/i18n';
 import styles from "./styles";
 import FSpinner from 'react-native-loading-spinner-overlay';
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
+
 const lockImage = require("../../../img/lock.png");
 const buttonImage = require("../../../img/bg-button.png");
 const resetAction = NavigationActions.reset({
@@ -31,18 +29,18 @@ class ResetPassword extends Component {
 
     pressSend() {
         if (!this.state.otp) {
-            Alert.alert('Please enter otp');
+            Alert.alert(I18n.t('please_enter_otp'));
             return false;
         }
 
         if (!this.state.password) {
-            Alert.alert('Please enter password');
+            Alert.alert(I18n.t('please_enter_password'));
             return false;
         }
 
         let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         if (!regEmail.test(this.state.email)) {
-            Alert.alert('Please enter a valid email');
+            Alert.alert(I18n.t('please_enter_valid_email'));
             return false;
         }
         
@@ -51,16 +49,16 @@ class ResetPassword extends Component {
             api.post('Workers/reset-password?access_token=' + res.response.access_token, { newPassword: this.state.password }).then(resReset => {
                 
                 this.setState({ visible: false });
-                Alert.alert('Password changed successfully')
+                Alert.alert(I18n.t('password_changed_successfully'));
                 //this.props.navigation.navigate("Login");
                 this.props.navigation.dispatch(resetAction);                
             }).catch((errReset) => {
                 this.setState({ visible: false });
-                Alert.alert('Please try again')
+                Alert.alert(I18n.t('please_try_again'));
             })
         }).catch((err) => {
             this.setState({ visible: false });
-            Alert.alert('Wrong OTP.')
+            Alert.alert(I18n.t('wrong_otp'));
         })
     }
 

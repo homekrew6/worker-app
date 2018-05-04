@@ -3,16 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { login, getUserDetail, checkAuth } from './elements/authActions';
 import { NavigationActions } from "react-navigation";
-import { Image, ImageBackground, View, StatusBar, Dimensions, Alert, TouchableOpacity, Text } from "react-native";
-import FCM, { FCMEvent, NotificationType } from "react-native-fcm";
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label } from "native-base";
+import { Image, ImageBackground, View, StatusBar, Alert, TouchableOpacity, Text } from "react-native";
+import FCM from "react-native-fcm";
+import { Container, Content, Item, Input } from "native-base";
 import FSpinner from 'react-native-loading-spinner-overlay';
 import api from '../../api';
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
 const launchscreenBg = require("../../../img/bg-login.png");
 const launchscreenLogo = require("../../../img/logo.png");
 const buttonImage = require("../../../img/bg-button.png");
@@ -53,12 +51,12 @@ class Login extends Component {
 	}
 	pressLogin() {
 		if (!this.state.email) {
-			Alert.alert('Please enter email');
+			Alert.alert(I18n.t('enter_email'));
 			return false;
 		}
 		let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 		if (!regEmail.test(this.state.email)) {
-			Alert.alert('Please enter a valid email');
+			Alert.alert(I18n.t('please_enter_valid_email'));
 			return false;
 		}
 		if (!this.state.password) {

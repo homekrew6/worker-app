@@ -1,22 +1,17 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import moment from 'moment';
 import 'moment-timezone';
-import DeviceInfo from 'react-native-device-info';
-import { NavigationActions } from "react-navigation";
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ListView, Geolocation, platform, AsyncStorage, Text } from "react-native";
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, List, ListItem, Icon, Tab, Tabs, ScrollableTab, Body, Title } from "native-base";
-import FSpinner from 'react-native-loading-spinner-overlay';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { Image, View, StatusBar, AsyncStorage, Text } from "react-native";
+import { Container, Header, Button, Content, Body, Title } from "native-base";
+
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from './styles';
 import I18n from '../../i18n/i18n';
 import api from '../../api/index';
 import { availablejobs, setNewData, acceptJob, declineJob } from './elements/jobActions'
-const imageIcon1 = require('../../../img/icon/home.png');
+
 const logo_hdr = require("../../../img/logo2.png");
-const carve = require("../../../img/icon17.png");
 const totalImg = require("../../../img/icon/coins.png");
 class TotalBill extends Component {
     constructor(props) {

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { View, Text } from 'react-native';
-import  MapView from 'react-native-maps';
+import { View, } from 'react-native';
+import MapView from 'react-native-maps';
 
 class TestLocation extends Component {
     state = {

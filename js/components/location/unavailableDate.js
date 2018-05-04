@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import api from '../../api/index';
 //import { NavigationActions } from "react-navigation";
-import { View, StatusBar, Dimensions, Alert, TouchableOpacity, FlatList, Text } from "react-native";
-import { Container, Header, Button, Content, Form, Item, Body, Card, CardItem } from "native-base";
+
+import { View, StatusBar, Alert, TouchableOpacity, FlatList, Text } from "react-native";
+import { Container, Header, Button, Content, Body, Card, CardItem } from "native-base";
+
 import styles from './styles';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Calendar } from 'react-native-calendars';
@@ -262,16 +264,16 @@ class UnavailableDate extends Component {
         this.setState({ visible: true });
         if (this.state.satStartDate == '') {
             this.setState({ visible: false });
-            Alert.alert('Please enter Start Date');
-        } else if (this.state.setStartTime == '') {
+            Alert.alert(I18n.t('please_enter_start_date'));
+        } else if (this.state.setStartTime == '') { 
             this.setState({ visible: false });
-            Alert.alert('Please enter Start Time');
+            Alert.alert(I18n.t('please_enter_start_time'));
         } else if (this.state.satEndDate == '') {
             this.setState({ visible: false });
-            Alert.alert('Please enter End Date');
+            Alert.alert(I18n.t('please_enter_end_date'));
         } else if (this.state.setEndTime == '') {
             this.setState({ visible: false });
-            Alert.alert('Please enter End Time');
+            Alert.alert(I18n.t('please_enter_end_time'));
         } //else if (this.state.setStartTime < this.state.setEndTime) {
         //      Alert.alert('End time will be getter than start time');
         //  } else if (this.state.setStartTime < this.state.setEndTime){
@@ -284,7 +286,7 @@ class UnavailableDate extends Component {
             if (d1 <= d2) {
                 if (!(d1 < d2)) {
                     if (this.state.setStartTimeKey > this.state.setEndTimeKey) {
-                        Alert.alert('End time will be greater than start time');
+                        Alert.alert(I18n.t('end_time_will_greater_than_start'));
                     } else {
                         if (this.props.navigation.state.params.unAvailId) {
                             const patchUrl = `WorkerUnavailabilities/${this.props.navigation.state.params.unAvailId}`;
@@ -300,7 +302,7 @@ class UnavailableDate extends Component {
                                 this.props.navigation.navigate('myTiming');
                             }).catch((err) => {
                                 this.setState({ visible: false });
-                                Alert.alert('Please try again later.');
+                                Alert.alert(I18n.t('please_try_again_later'));
                             });
                         }
                         else {
@@ -317,7 +319,7 @@ class UnavailableDate extends Component {
                                 this.props.navigation.navigate('myTiming');
                             }).catch((err) => {
                                 this.setState({ visible: false });
-                                Alert.alert('Please try again later.');
+                                Alert.alert(I18n.t('please_try_again_later'));
                             });
                         }
 
@@ -337,7 +339,7 @@ class UnavailableDate extends Component {
                             this.props.navigation.navigate('myTiming');
                         }).catch((err) => {
                             this.setState({ visible: false });
-                            Alert.alert('Please try again later.');
+                            Alert.alert(I18n.t('please_try_again_later'));
                         });
                     }
                     else {
@@ -354,7 +356,7 @@ class UnavailableDate extends Component {
                             this.props.navigation.navigate('myTiming');
                         }).catch((err) => {
                             this.setState({ visible: false });
-                            Alert.alert('Please try again later.');
+                            Alert.alert(I18n.t('please_try_again_later'));
                         });
                     }
 
@@ -362,7 +364,7 @@ class UnavailableDate extends Component {
             }
             else {
                 this.setState({ visible: false })
-                Alert.alert("Start date is less than or equal to end Date ")
+                Alert.alert(I18n.t('start_date_less_than_end_date'));
             }
 
 
