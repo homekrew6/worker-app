@@ -18,27 +18,6 @@ const icon2 = require("../../../img/icon2.png");
 const toolBoxIcon = require("../../../img/toolBoxIcon.png");
 const win = Dimensions.get('window').width;
 class AddMaterial extends Component {
-    // static renderFilm(film) {
-    //     const { title, director, opening_crawl, episode_id } = film;
-    //     const roman = episode_id < ROMAN.length ? ROMAN[episode_id] : episode_id;
-
-    //     return (
-    //         <View>
-    //             <Text style={styles.titleText}>{roman}. {title}</Text>
-    //             <Text style={styles.directorText}>({director})</Text>
-    //             <Text style={styles.openingText}>{opening_crawl}</Text>
-    //         </View>
-    //     );
-    // }
-
-    returnWithZero(num){
-        if(num){
-            return num.toFixed(2);
-        }else{
-            return null;
-        }            
-    }
-
     constructor(props) {
         super(props);
         this.state = {
@@ -56,6 +35,15 @@ class AddMaterial extends Component {
             totalPrice: ''
         };
     }
+
+    returnWithZero(num){
+        if(num){
+            return num.toFixed(2);
+        }else{
+            return null;
+        }            
+    }
+
     addMaterial() {
         if (!(this.state.name == '')){
             this.setState({ loader: true });
@@ -102,21 +90,33 @@ class AddMaterial extends Component {
         }
     }
 
-
     addItems(id, name, image, price) {
         let addedItemArray = this.state.addedMaterialsList;
-        addedItemArray.push({ 
-            id: '', 
-            name: name, 
-            price: price, 
-            image: image, 
-            count: 1, 
-            actualPrice: price,
-            materialsId: id,
-        });
+        let addStatus = true;
+        addedItemArray.map((dataA, key) => {
+            if(id === dataA.materialsId){
+                addedItemArray[key].price = Number(dataA.count + 1 ) * dataA.price;
+                addedItemArray[key].count = Number(dataA.count) + 1;
+                addStatus = false
+            }
+        })
+        if(addStatus){
+            addedItemArray.push({ 
+                id: '', 
+                name: name, 
+                price: price, 
+                image: image, 
+                count: 1, 
+                actualPrice: price,
+                materialsId: id,
+            });
+        }
+        
         let totalPrice = 0;
+        let itemTotalPrice;
         addedItemArray.map((item) => {
-            totalPrice = totalPrice + Number(item.price);
+            itemTotalPrice = parseFloat(item.price) * item.count;
+            totalPrice = totalPrice + itemTotalPrice;
         });
         totalPrice = totalPrice.toFixed(2);
 
@@ -229,35 +229,47 @@ class AddMaterial extends Component {
                 totalPrice = totalPrice.toFixed(2);
                 this.setState({ addedMaterialsList: addedMaterialsList, totalPrice: totalPrice });
             }
-        }
-        else {
-            if(count!=0)
-            {
-                let addedMaterialsList = this.state.addedMaterialsList;
-                let item;
-                this.state.addedMaterialsList.map((item1) => {
-                    if (item1.id == id) {
-                        item = item1;
+        } else {
+            if(count == 1){
+                let addedMaterialsList1 = this.state.addedMaterialsList;
+                addedMaterialsList1.map((itemR, key) => {
+                    if (itemR.materialsId == id) {
+                        addedMaterialsList1.splice(key, 1);
                     }
                 });
-                if (item) {
-                    item.count = 0;
-                    item.price = "0.0";
-                    addedMaterialsList.map((item1) => {
-                        if (item1.id == item.id) {
-                            item1.count = item.count;
-                            item1.price = item.price;
-                        }
-                    });
-
-                    let totalPrice = 0;
-                    addedMaterialsList.map((item) => {
-                        totalPrice = totalPrice + Number(item.price);
-                    });
-                    totalPrice = totalPrice.toFixed(2);
-                    this.setState({ addedMaterialsList: addedMaterialsList, totalPrice: totalPrice });
-                }
+                let totalPrice = 0;
+                addedMaterialsList1.map((item) => {
+                    totalPrice = totalPrice + Number(item.price);
+                });
+                totalPrice = totalPrice.toFixed(2);
+                this.setState({ addedMaterialsList: addedMaterialsList1, totalPrice: totalPrice });
             }
+            // if(count!=0){
+            //     let addedMaterialsList = this.state.addedMaterialsList;
+            //     let item;
+            //     this.state.addedMaterialsList.map((item1) => {
+            //         if (item1.id == id) {
+            //             item = item1;
+            //         }
+            //     });
+            //     if (item) {
+            //         item.count = 0;
+            //         item.price = "0.0";
+            //         addedMaterialsList.map((item1) => {
+            //             if (item1.id == item.id) {
+            //                 item1.count = item.count;
+            //                 item1.price = item.price;
+            //             }
+            //         });
+
+            //         let totalPrice = 0;
+            //         addedMaterialsList.map((item) => {
+            //             totalPrice = totalPrice + Number(item.price);
+            //         });
+            //         totalPrice = totalPrice.toFixed(2);
+            //         this.setState({ addedMaterialsList: addedMaterialsList, totalPrice: totalPrice });
+            //     }
+            // }
             
         }
 
@@ -502,7 +514,9 @@ class AddMaterial extends Component {
                                                             </Text>
                                                         </View>
                                                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-                                                            <TouchableOpacity style={{ height: 25, width: 25, backgroundColor: '#81cdc7', alignItems: 'center', justifyContent: 'center' }} onPress={() => this.subtractPrice(item.materialsId, item.count)}>
+                                                            <TouchableOpacity style={{ height: 25, width: 25, backgroundColor: '#81cdc7', alignItems: 'center', justifyContent: 'center' }} 
+                                                                onPress={() => this.subtractPrice(item.materialsId, item.count)}
+                                                            >
                                                                 <FontAwesome name='minus' style={{ fontSize: 14, color: '#fff' }} />
 
                                                             </TouchableOpacity>
@@ -512,7 +526,9 @@ class AddMaterial extends Component {
                                                                 </Text>
                                                             </View>
 
-                                                            <TouchableOpacity style={{ height: 25, width: 25, backgroundColor: '#81cdc7', alignItems: 'center', justifyContent: 'center' }} onPress={() => this.addPrice(item.materialsId, item.count)}>
+                                                            <TouchableOpacity style={{ height: 25, width: 25, backgroundColor: '#81cdc7', alignItems: 'center', justifyContent: 'center' }} 
+                                                                onPress={() => this.addPrice(item.materialsId, item.count)}
+                                                            >
                                                                 <FontAwesome name="plus" style={{ fontSize: 14, color: '#fff' }} />
                                                             </TouchableOpacity>
                                                         </View>

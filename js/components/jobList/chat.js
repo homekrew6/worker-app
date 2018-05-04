@@ -34,7 +34,7 @@ class Chat extends Component {
         this.state = {
             chatRef: '',
             customerId: this.props.navigation.state.params.workerDetails.customer.id ? this.props.navigation.state.params.workerDetails.customer.id : '',
-            workerId: this.props.navigation.state.params.workerDetails.worker.id ? this.props.navigation.state.params.workerDetails.worker.id : '',
+            workerId: this.props.navigation.state.params.workerDetails.worker ? this.props.navigation.state.params.workerDetails.worker.id : '',
             message: '',
             chatRoomId: '',
             typeMessage: '',
@@ -58,7 +58,9 @@ class Chat extends Component {
                 this.setState({ typeMessage: '', chatList: chatList });
             }
             setTimeout(() => {
-                this.refs.ScrollViewStart.scrollToEnd(true);
+                if(this.refs && this.refs.ScrollViewStart){
+                    this.refs.ScrollViewStart.scrollToEnd(true);
+                } 
             }, 400);
 
         })
@@ -70,7 +72,9 @@ class Chat extends Component {
     componentDidMount() {
 
         setTimeout(() => {
-            this.refs.ScrollViewStart.scrollToEnd();
+            if(this.refs && this.refs.ScrollViewStart){
+                this.refs.ScrollViewStart.scrollToEnd();
+            }
         }, 50);
 
         if (this.state.customerId && this.state.workerId) {
