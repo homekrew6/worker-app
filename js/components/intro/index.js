@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Image, View, Dimensions, ImageBackground, AsyncStorage } from "react-native";
-import { Container, Button, Text, } from "native-base";
+import { Image, View, Dimensions, ImageBackground, AsyncStorage, Text } from "react-native";
+import { Container, Button, } from "native-base";
 // import ImageSlider from 'react-native-image-slider';
 import AppIntroSlider from './AppIntroSlider';
 import styles from './styles';
@@ -152,7 +152,7 @@ class Intro extends Component {
 						paddingLeft: 10, paddingRight: 10, paddingTop: 10,
 						paddingBottom: 10
 					}}>
-					<Button full style={{ backgroundColor: '#81cdc7', marginTop: 0 }} onPress={() => this.props.navigation.navigate('Login')} ><Text>LOGIN</Text></Button>
+					<Button full style={{ backgroundColor: '#81cdc7', marginTop: 0 }} onPress={() => this.props.navigation.navigate('Login')} ><Text style={{ color: '#fff' }}>LOGIN</Text></Button>
 					</View>
 
 			</Container>

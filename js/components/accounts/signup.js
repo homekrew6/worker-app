@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { signup } from './elements/authActions'
-import { Image, ImageBackground, View, StatusBar, Alert, TouchableOpacity } from "react-native";
+import { Image, ImageBackground, View, StatusBar, Alert, TouchableOpacity, Text } from "react-native";
+import { Container, Content, Item, Input, CheckBox } from "native-base";
 
-import { Container, Content, Item, Input, Text, CheckBox } from "native-base";
 import styles from "./styles";
 import I18n from '../../i18n/i18n';
 import FSpinner from 'react-native-loading-spinner-overlay';

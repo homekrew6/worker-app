@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Image, View, StatusBar, Alert, TouchableOpacity, AsyncStorage } from 'react-native';
-import { Container, Header, Button, Content, Item, Input, Text, Body, Title, } from 'native-base';
+import { Image, View, StatusBar, Alert, TouchableOpacity, AsyncStorage, Text } from 'react-native';
+import { Container, Header, Button, Content, Item, Input, Body, Title, } from 'native-base';
 import Modal from "react-native-modal";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from './styles';

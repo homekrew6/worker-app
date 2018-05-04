@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Image, View, StatusBar, } from 'react-native';
-import { Container, Header, Button, Content, Text, Body, Title, } from 'native-base';
+import { Image, View, StatusBar, Text } from 'react-native';
+import { Container, Header, Button, Content, Body, Title, } from 'native-base';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import moment from 'moment';

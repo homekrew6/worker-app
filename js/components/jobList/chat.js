@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
-import { Image, View, StatusBar, Alert, TouchableOpacity, TextInput, ScrollView } from 'react-native';
-import { Footer, FooterTab, Container, Header, Button, Text, Body, Title, ActionSheet } from 'native-base';
+import { Image, View, StatusBar, Alert, TouchableOpacity, TextInput, ScrollView, Text } from 'react-native';
+import { Footer, FooterTab, Container, Header, Button, Body, Title, ActionSheet } from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Entypo from 'react-native-vector-icons/Entypo';

@@ -1,8 +1,8 @@
 import Autocomplete from 'react-native-autocomplete-input';
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
-import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, TextInput } from "react-native";
-import { Container, Header, Button, Content, Item, Input, Text, Body, Title } from "native-base";
+import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, TextInput, Text } from "react-native";
+import { Container, Header, Button, Content, Item, Input, Body, Title } from "native-base";
 import FSpinner from 'react-native-loading-spinner-overlay';
 import styles from './styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';

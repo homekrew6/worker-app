@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { AsyncStorage } from 'react-native';
-import { View, StatusBar, Alert, } from "react-native";
+import { View, StatusBar, Alert, Text } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import api from '../../api/index';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import { allLocation, checkUncheck, clearMyLocation, selectedLocation } from './elements/locationAction';
-import { Container, Header, Button, Content, Text, Body, CheckBox } from "native-base";
+
+import { Container, Header, Button, Content, Body, CheckBox } from "native-base";
+
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 //this.props.navigation.dispatch(resetAction);

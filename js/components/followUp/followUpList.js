@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, ScrollView } from "react-native";
+import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, ScrollView, Text } from "react-native";
 import firebase from 'firebase';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { Container, Header, Button, Content, Text, Body, Title, Footer, Card, CardItem } from "native-base";
+import { Container, Header, Button, Content, Body, Title, Footer, Card, CardItem } from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 import api from '../../api/index';

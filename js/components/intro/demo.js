@@ -1,6 +1,7 @@
 import React, { Component } from "react";
+import { Text } from 'react-native';
+import { Container, Content, Form, Item, Input } from "native-base";
 
-import { Container, Content, Form, Item, Input, Text } from "native-base";
 import I18n from '../../i18n/i18n';
 
 class Demo extends Component {

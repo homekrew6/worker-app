@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import 'moment-timezone';
-import { Image, View, StatusBar, AsyncStorage } from "react-native";
-import { Container, Header, Button, Content, Text, Body, Title } from "native-base";
+import { Image, View, StatusBar, AsyncStorage, Text } from "react-native";
+import { Container, Header, Button, Content, Body, Title } from "native-base";
+
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from './styles';
 import I18n from '../../i18n/i18n';
