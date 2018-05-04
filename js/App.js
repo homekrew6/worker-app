@@ -2,10 +2,9 @@
 
 import React, { Component } from "react";
 
-import { Platform,Easing, Animated, Text} from "react-native";
+import { Easing, Animated } from "react-native";
 import { Root } from "native-base";
 import { StackNavigator } from "react-navigation";
-import RouterOwn from './router';
 import { connect } from 'react-redux';
 import { ChangeRoute } from './actions/routerAction';
 
@@ -89,9 +88,9 @@ const AppNavigator = StackNavigator(
     {
         Drawer: { screen: Drawer },
         Home: { screen: Home },
-        Intro: {screen: Intro},
-        Demo: {screen: Demo},
-        Signup: {screen: Signup},
+        Intro: { screen: Intro },
+        Demo: { screen: Demo },
+        Signup: { screen: Signup },
         Login: { screen: Login },
         ForgotPassword: { screen: ForgotPassword },
         ResetPassword: { screen: ResetPassword },
@@ -107,18 +106,18 @@ const AppNavigator = StackNavigator(
         MyPaymentList: { screen: MyPaymentList },
         AvailableJobs: { screen: AvailableJobs },
         JobDetails: { screen: JobDetails },
-        Settings: { screen: Settings},
-        LanguageList:{screen:LanguageList},
-        CurrencyList:{screen:CurrencyList},
-        TotalBill:{screen:TotalBill},
-        FollowUpList: { screen: FollowUpList},
-        AddMaterial: { screen: AddMaterial},
-        FollowUpDate: { screen: FollowUpDate},
+        Settings: { screen: Settings },
+        LanguageList:{ screen: LanguageList },
+        CurrencyList:{ screen: CurrencyList },
+        TotalBill:{ screen: TotalBill },
+        FollowUpList: { screen: FollowUpList },
+        AddMaterial: { screen: AddMaterial },
+        FollowUpDate: { screen: FollowUpDate },
         Chat: { screen: Chat }, 
         JobTracker: { screen: JobTracker },
-        Quote: { screen: Quote},
+        Quote: { screen: Quote },
         jobSummary: { screen: jobSummary },
-        NotificationList: {screen: NotificationList},
+        NotificationList: { screen: NotificationList },
         Support: { screen: Support },
     },
     {
@@ -132,11 +131,11 @@ class App extends Component{
   updateRedux(prevState, newState){
     this.props.ChangeRoute(prevState, newState)
   }
-  render(){
-    return(
+  render() {
+    return (
       <Root>
           <AppNavigator
-            onNavigationStateChange={(prevState, newState) =>  this.updateRedux(prevState, newState) }
+            onNavigationStateChange={(prevState, newState) => this.updateRedux(prevState, newState)}
           />
       </Root>
     );
@@ -152,5 +151,5 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, {ChangeRoute})(App);
+export default connect(mapStateToProps, { ChangeRoute })(App);
      

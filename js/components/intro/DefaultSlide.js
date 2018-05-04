@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, Dimensions, Platform } from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions, } from 'react-native';
 import imgLogo from '../../../img/logo.png'
 
 const deviceHeight = Dimensions.get("window").height;

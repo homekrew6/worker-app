@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, AsyncStorage, TextInput, ScrollView, Text } from 'react-native';
-import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Form, Item, Frame, Input, Label, CardItem, Right, Card, Left, Body, Title, ActionSheet } from 'native-base';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { Image, View, StatusBar, Alert, TouchableOpacity, TextInput, ScrollView, Text } from 'react-native';
+import { Footer, FooterTab, Container, Header, Button, Body, Title, ActionSheet } from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -19,8 +18,7 @@ const firebaseConfig = {
     databaseURL: "https://krew-user-app.firebaseio.com",
     storageBucket: "krew-user-app.appspot.com"
 };
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
+
 import { RNS3 } from 'react-native-aws3';
 var BUTTONS = [
     { text: "Camera", icon: "ios-camera", iconColor: "#2c8ef4" },

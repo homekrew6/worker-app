@@ -1,15 +1,14 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, AsyncStorage, BackHandler, Text } from "react-native";
-import { Container, Header, Button, Content, Form, Item, Icon, Frame, Input, Label, CardItem, Right, Card, Left, Body, Title, Thumbnail } from "native-base";
+import { Image, View, StatusBar, Alert, TouchableOpacity, AsyncStorage, BackHandler, Text } from "react-native";
+import { Container, Header, Button, Content, CardItem, Card, Body, Thumbnail } from "native-base";
 import { logout, navigateAndSaveCurrentScreen } from './elements/authActions'
 import I18n from '../../i18n/i18n';
 import styles from "./styles";
 import api from '../../api';
 import { NavigationActions } from "react-navigation";
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
+
 const profileImage = require("../../../img/atul.png");
 const icon1 = require("../../../img/icon1.png");
 const icon2 = require("../../../img/icon2.png");

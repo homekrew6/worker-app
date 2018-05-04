@@ -1,33 +1,19 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, BackHandler, ScrollView, Text } from "react-native";
-import Ico from 'react-native-vector-icons/MaterialIcons';
+import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, ScrollView, Text } from "react-native";
 import firebase from 'firebase';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import Entypo from 'react-native-vector-icons/Entypo';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { NavigationActions } from 'react-navigation';
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Body, Title, Footer, FooterTab, Card, CardItem } from "native-base";
+import { Container, Header, Button, Content, Body, Title, Footer, Card, CardItem } from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 import api from '../../api/index';
 
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
 const logo_hdr = require("../../../img/logo2.png");
-const carve = require("../../../img/icon17.png");
 const icon2 = require("../../../img/icon/hourglass.png");
 const icon3 = require("../../../img/icon/calendar2.png");
 const icon4 = require("../../../img/icon/shopping-cart2.png");
 const icon5 = require("../../../img/icon/coins2.png");
-const icon6 = require("../../../img/icon6.png");
-const icon7 = require("../../../img/icon7.png");
-const icon8 = require("../../../img/icon8.png");
 const back_arow = require("../../../img/arrow_back.png");
 
 const win = Dimensions.get('window').width;

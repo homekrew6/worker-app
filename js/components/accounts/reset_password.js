@@ -5,14 +5,12 @@ import { login } from './elements/authActions'
 import api from '../../api'
 import { NavigationActions } from "react-navigation"
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, Text } from "react-native";
-
-import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Icon, Frame, Input, Label } from "native-base";
+import { Container, Header, Button, Content, Left, Body, Title, Item, Icon, Input } from "native-base";
 
 import I18n from '../../i18n/i18n';
 import styles from "./styles";
 import FSpinner from 'react-native-loading-spinner-overlay';
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
+
 const lockImage = require("../../../img/lock.png");
 const buttonImage = require("../../../img/bg-button.png");
 const resetAction = NavigationActions.reset({
