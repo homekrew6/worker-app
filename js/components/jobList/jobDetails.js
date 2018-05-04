@@ -102,7 +102,7 @@ class JobDetails extends Component {
                 if(res.response.type==="Error")
                 {
                     this.setState({loader:false});
-                    Alert.alert('Please try again later.');
+                    Alert.alert(I18n.t('please_try_again_later'));
                 }
                 else
                 {
@@ -113,12 +113,12 @@ class JobDetails extends Component {
                 }
             }).catch((error)=>{
                 this.setState({loader:false});
-                Alert.alert('Please try again later.');
+                Alert.alert(I18n.t('please_try_again_later'));
             })
         }
         else
         {
-            Alert.alert('Please select a reason to cancel the job.');
+            Alert.alert(I18n.t('please_select_reason_to_cancel'));
         }
        
     }
@@ -135,7 +135,7 @@ class JobDetails extends Component {
             "customerId": this.props.navigation.state.params.jobDetails.customerId,
             "workerId": this.props.auth.data.id
         }).then((response) => {
-            Alert.alert("Rating has given Successfully");
+            Alert.alert(I18n.t('rating_given_successfully'));
         }).catch((err) => {
         
         })
@@ -239,7 +239,7 @@ class JobDetails extends Component {
                     setTimeout(() => {
                         if(this.state.loader === true){
                             this.state.itemsRef.off();
-                            Alert.alert('Internal Error Please Try Again');
+                            Alert.alert(I18n.t('internal_error_try_again'));
                             this.setState({ loader: false });
                         }
                     }, 5000);
@@ -287,7 +287,7 @@ class JobDetails extends Component {
                     this.onStartFirebaseCall(saveEndTime, newNowTime, snapshot);
                     setTimeout(() => {
                         refStartFirebase.off();
-                        Alert.alert('Internal Error Please Try Again');
+                        Alert.alert(I18n.t('internal_error_try_again'));
                         this.setState({ loader: false });
                     }, 5000);
                 }
@@ -374,7 +374,7 @@ class JobDetails extends Component {
                     setTimeout(() => {
                         refStartFirebase.off();
                         if(this.state.loader){
-                            Alert.alert('Internal Error Please Try Again');
+                            Alert.alert(I18n.t('internal_error_try_again'));
                             this.setState({ loader: false });
                         }
                     }, 5000);
@@ -447,7 +447,7 @@ class JobDetails extends Component {
                         this.onCompleteFirebaseCall(snapshot);
                         setTimeout(() => {
                             refCompleteFirebase.off();
-                            Alert.alert('Internal Error Please Try Again');
+                            Alert.alert(I18n.t('internal_error_try_again'));
                             this.setState({ loader: false });
                         }, 5000);
                     }
@@ -686,7 +686,7 @@ class JobDetails extends Component {
             this.props.navigation.navigate('AvailableJobs');
             this.setState({ loader: false });
         }).catch((errCatch) => {
-            Alert.alert('Failed Please try again');
+            Alert.alert(I18n.t('failed_please_try_again'));
         })
     }
 

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, StatusBar, ImageBackground, AsyncStorage, } from "react-native";
+import { View, StatusBar, ImageBackground, AsyncStorage, Alert } from "react-native";
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import FCM, { FCMEvent } from "react-native-fcm";
@@ -7,6 +7,7 @@ import { checkAuth, getUserDetail } from '../accounts/elements/authActions'
 import { Container, Text } from "native-base";
 import { NavigationActions } from "react-navigation";
 import api from '../../api';
+import I18n from '../../i18n/i18n';
 import styles from "./styles";
 
 //const launchscreenBg = require("../../../img/launchscreen-bg.png");
@@ -124,7 +125,7 @@ class Home extends Component {
 							}
 							
 						}).catch(err => {
-							Alert.alert('Please login');
+							Alert.alert(I18n.t('please_login'));
 							this.props.navigation.navigate("Login")
 						})
 					} else {

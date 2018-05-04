@@ -77,16 +77,16 @@ class AddMaterial extends Component {
                 }
                 else {
                     this.setState({ loader: false });
-                    Alert.alert("Please try again later.");
+                    Alert.alert(I18n.t('please_try_again_later'));
                 }
 
             }).catch((err) => {
                 this.setState({ loader: false });
-                Alert.alert("Please try again later.");
+                Alert.alert(I18n.t('please_try_again_later'));
             })
         }
         else{
-            Alert.alert("Please enter Name and Price");
+            Alert.alert(I18n.t('please_enter_name_price'));
         }
     }
 
@@ -166,7 +166,7 @@ class AddMaterial extends Component {
             }
         }).catch((Err) => {
             this.setState({ loader: true });
-            Alert.alert('Please try again later.');
+            Alert.alert(I18n.t('please_try_again_later'));
         })
 
         AsyncStorage.getItem("currency").then((value) => {
@@ -320,7 +320,7 @@ class AddMaterial extends Component {
                     Alert.alert(res.response.message);
                 }
                 else {
-                    Alert.alert("Materials added successfully.");
+                    Alert.alert(I18n.t('material_added_successfully'));
                     this.props.navigation.dispatch(
                         NavigationActions.reset({
                             index: 3,
@@ -340,11 +340,11 @@ class AddMaterial extends Component {
 
             }).catch((err) => {
                 this.setState({ loader: false });
-                Alert.alert("Please try again later.");
+                Alert.alert(I18n.t('please_try_again_later'));
             })
         }
         else {
-            Alert.alert("Please select a job to add materials.");
+            Alert.alert(I18n.t('please_select_job_add_material'));
         }
 
     }

@@ -172,7 +172,7 @@ class AvailableJobs extends Component {
         api.post('Jobs/ignoreJob', {"id": jobId, "workerId": workerId, "serviceId": serviceId}).then((resIgnore) => {
             this.jobdata();
         }).catch((errCatch) => {
-            Alert.alert('Failed Please try again');
+            Alert.alert(I18n.t('failed_please_try_again'));
         })
     }
 

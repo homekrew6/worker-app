@@ -41,7 +41,7 @@ class MyPaymentList extends Component {
             this.setState({
                 loader: false
             });
-            Alert.alert('Please try again later.');
+            Alert.alert(I18n.t('please_try_again_later'));
         })
     }
 

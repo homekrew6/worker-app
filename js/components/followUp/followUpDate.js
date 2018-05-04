@@ -71,10 +71,10 @@ class FollowUpDate extends Component {
         this.setState({ visible: true });
         if (this.state.satStartDate == '') {
             this.setState({ visible: false });
-            Alert.alert('Please enter Start Date');
+            Alert.alert(I18n.t('please_enter_start_date'));
         } else if (this.state.setStartTime == '') {
             this.setState({ visible: false });
-            Alert.alert('Please enter Start Time');
+            Alert.alert(I18n.t('please_enter_start_time'));
         }
         else {
             this.setState({ visible: false });

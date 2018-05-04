@@ -89,7 +89,7 @@ class selectLocation extends Component {
 
         })
         }else{
-            Alert.alert('Please select atleast one zone')
+            Alert.alert(I18n.t('please_select_one_zone'));
         }
         
     }

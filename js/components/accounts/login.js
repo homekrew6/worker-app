@@ -51,12 +51,12 @@ class Login extends Component {
 	}
 	pressLogin() {
 		if (!this.state.email) {
-			Alert.alert('Please enter email');
+			Alert.alert(I18n.t('enter_email'));
 			return false;
 		}
 		let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 		if (!regEmail.test(this.state.email)) {
-			Alert.alert('Please enter a valid email');
+			Alert.alert(I18n.t('please_enter_valid_email'));
 			return false;
 		}
 		if (!this.state.password) {
