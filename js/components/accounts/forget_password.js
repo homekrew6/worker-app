@@ -2,15 +2,14 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { login } from './elements/authActions';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, Text  } from "react-native";
+import { Image, View, StatusBar, Alert, TouchableOpacity, ImageBackground, Text } from "react-native";
 import api from '../../api';
 import FSpinner from 'react-native-loading-spinner-overlay';
-import { Container, Header, Button, Content, Left, Body, Title, Item, Icon, Input, Text } from "native-base";
+import { Container, Header, Button, Content, Left, Body, Title, Item, Icon, Input } from "native-base";
 
 import I18n from '../../i18n/i18n';
 import styles from "./styles";
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
+
 const lockImage = require("../../../img/lock.png");
 const buttonImage = require("../../../img/bg-button.png");
 class ForgotPassword extends Component {
@@ -24,12 +23,12 @@ class ForgotPassword extends Component {
 
     pressSend() {
         if (!this.state.email.trimLeft()) {
-            Alert.alert('Please enter email');
+            Alert.alert(I18n.t('enter_email'));
             return false;
         }
         let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         if (!regEmail.test(this.state.email)) {
-            Alert.alert('Please enter a valid email');
+            Alert.alert(I18n.t('please_enter_valid_email'));
             return false;
         }
         this.setState({ visible: true });
@@ -39,11 +38,11 @@ class ForgotPassword extends Component {
                 this.props.navigation.navigate('ResetPassword');
             }).catch((errReset) => {
                 this.setState({ visible: false });
-                Alert.alert('Please try again')
+                Alert.alert(I18n.t('please_try_again'));
             })
         }).catch((err) => {
             this.setState({ visible: false });
-            Alert.alert('Email does not exist.')
+            Alert.alert(I18n.t('email_does_not_exist'));
         })
 
 

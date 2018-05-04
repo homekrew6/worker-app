@@ -102,7 +102,7 @@ class Chat extends Component {
             this.state.chatRef.push({ "customerId": this.state.customerId, "workerId": this.state.workerId, "chatRoomId": this.state.chatRoomId, "IsCustomerSender": false, "Message": this.state.typeMessage });
         }
         else {
-            Alert.alert("Please type your message to send.")
+            Alert.alert(I18n.t('please_type_message_to_send'));
         }
     }
 

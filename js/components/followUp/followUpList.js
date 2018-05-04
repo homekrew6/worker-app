@@ -57,9 +57,8 @@ class FollowUpList extends Component {
                 api.post('Jobs/followUpStart', toSendData).then((res) => {
                     if (res.response.type == "Error") {
                         this.setState({ IsVisible: false });
-                        Alert.alert('Please try again later.');
-                    }
-                    else {
+                        Alert.alert(I18n.t('please_try_again_later'));
+                    } else {
                         this.setState({ IsVisible: false });
                         AsyncStorage.removeItem("jobDetails");
                         AsyncStorage.removeItem("totalPrice");
@@ -130,30 +129,30 @@ class FollowUpList extends Component {
                                             setTimeout(() => {
                                                 refFollowFirebase.off();
                                                 if(this.state.loader){
-                                                    Alert.alert('Internal Error Please Try Again');
+                                                    Alert.alert(I18n.t('internal_error_try_again'));
                                                     this.setState({ loader: false });
                                                 }                                        
                                             }, 5000);
                                         }
                                     }, 5000);
                                 }) 
-                            }else{
+                            } else {
                                 this.setState({ loader: false, IsVisible: false });
-                                Alert.alert('Please add price for all material(s)');
+                                Alert.alert(I18n.t('please_add_price_for_material'));
                             }
-                        }else{
-                            Alert.alert('Please add at least a material');
+                        } else {
+                            Alert.alert(I18n.t('please_add_a_material'));
                             this.setState({ loader: false, IsVisible: false });
                         }
                     }
                 }).catch((err) => {
                     this.setState({ loader: false });
                 })
-            }else{
-                Alert.alert('Please add price for the material to submit the request');
+            } else {
+                Alert.alert(I18n.t('please_add_price_material_to_submit'));
             }
-        }else{
-            Alert.alert('Please select time and date.');
+        } else {
+            Alert.alert(I18n.t('please_select_time_date'));
         }
         
                 

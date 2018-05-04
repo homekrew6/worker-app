@@ -30,34 +30,34 @@ class Signup extends Component {
     pressSignup() {
         //return false;
         if (!this.state.name.trim()) {
-            Alert.alert('Please enter name');
+            Alert.alert(I18n.t('enter_name'));
             return false;
         }
         
         if (!this.state.email.trim()) {
-            Alert.alert('Please enter email');
+            Alert.alert(I18n.t('enter_email'));
             return false;
         }
         let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         if(!regEmail.test(this.state.email)){
-            Alert.alert('Please enter a valid email');
+            Alert.alert(I18n.t('please_enter_valid_email'));
             return false;
         }
         if (!this.state.password) {
-            Alert.alert('Please enter password');
+            Alert.alert(I18n.t('please_enter_password'));
             return false;
         }
         const password_pattern = /(?=.*[A-Z]).{6,}/;
         if (!password_pattern.test(this.state.password)) {
-            Alert.alert('Password must have one capital letter and min six characters');
+            Alert.alert(I18n.t('password_must_have_validation'));
             return false;
         }
         if (!this.state.phone.trim()) {
-            Alert.alert('Please enter phone');
+            Alert.alert(I18n.t('enter_phone'));
             return false;
         }
         if (!this.state.chkbox_chk) {
-            Alert.alert('Please check Terms and Conditions');
+            Alert.alert(I18n.t('please_check_terms_cond'));
             return false;
         }
         const name = this.state.name;
@@ -72,15 +72,15 @@ class Signup extends Component {
                 }
             }else{
                 if (res.type == 'success') {
-                    Alert.alert('Successfully Registered.');
+                    Alert.alert(I18n.t('successfully_registered'));
                     this.props.navigation.navigate("Login");
                 } else {
-                    Alert.alert('Please check all fields and try again');
+                    Alert.alert(I18n.t('please_check_all_field_and_try'));
                 }
             }
             
         }).catch(err => {
-            Alert.alert('Please check all fields and try again');
+            Alert.alert(I18n.t('please_check_all_field_and_try'));
 
         })
 

@@ -29,18 +29,18 @@ class ResetPassword extends Component {
 
     pressSend() {
         if (!this.state.otp) {
-            Alert.alert('Please enter otp');
+            Alert.alert(I18n.t('please_enter_otp'));
             return false;
         }
 
         if (!this.state.password) {
-            Alert.alert('Please enter password');
+            Alert.alert(I18n.t('please_enter_password'));
             return false;
         }
 
         let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         if (!regEmail.test(this.state.email)) {
-            Alert.alert('Please enter a valid email');
+            Alert.alert(I18n.t('please_enter_valid_email'));
             return false;
         }
         
@@ -49,16 +49,16 @@ class ResetPassword extends Component {
             api.post('Workers/reset-password?access_token=' + res.response.access_token, { newPassword: this.state.password }).then(resReset => {
                 
                 this.setState({ visible: false });
-                Alert.alert('Password changed successfully')
+                Alert.alert(I18n.t('password_changed_successfully'));
                 //this.props.navigation.navigate("Login");
                 this.props.navigation.dispatch(resetAction);                
             }).catch((errReset) => {
                 this.setState({ visible: false });
-                Alert.alert('Please try again')
+                Alert.alert(I18n.t('please_try_again'));
             })
         }).catch((err) => {
             this.setState({ visible: false });
-            Alert.alert('Wrong OTP.')
+            Alert.alert(I18n.t('wrong_otp'));
         })
     }
 

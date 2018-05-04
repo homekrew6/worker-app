@@ -130,10 +130,10 @@ class Quote extends Component {
             }).then((PendingRes) => {
                 
                 if(PendingRes.type === 'Error'){
-                    Alert.alert('Please try again later');
+                    Alert.alert(I18n.t('please_try_again_later'));
                     this.setState({ IsModalVisible: false });
                 }else{
-                    Alert.alert('Added SuccessFully');
+                    Alert.alert(I18n.t('added_successfully'));
                     api.post("jobMaterials/getJobMaterialByJobId", { "jobId": this.props.navigation.state.params.jobId }).then((addedList) => {                
                         if (addedList.type != "Error") {
                             let addedItemsList = [];
@@ -175,12 +175,12 @@ class Quote extends Component {
                 }
                 
             }).catch((err) => {
-                Alert.alert('Please try again later');
+                Alert.alert(I18n.t('please_try_again_later'));
                 this.setState({ IsModalVisible: false });
             })
         }else{
             this.setState({ IsModalVisible: false });
-            Alert.alert('Please add price');
+            Alert.alert(I18n.t('please_add_price'));
         }
     }
     render() {

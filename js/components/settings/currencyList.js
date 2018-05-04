@@ -57,7 +57,7 @@ class CurrencyList extends Component {
 
         }).catch((err) => {
             this.setState({ visible: false });
-            Alert.alert("Please try again later.");
+            Alert.alert(I18n.t('please_try_again_later'));
         })
     }
     selectActive(data) {

@@ -76,7 +76,7 @@ class NotificationList extends Component {
         });
     }
     else{
-        Alert.alert('Please login');
+        Alert.alert(I18n.t('please_login'));
     }
     }
 
