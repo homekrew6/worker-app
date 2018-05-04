@@ -770,8 +770,8 @@ class AvailableJobs extends Component {
                             }
                         />
                         ):(
-                            <View>
-                                <Text>No data found</Text>
+                            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                                    <Text>{I18n.t('nodatafound')}</Text>
                             </View>
                         )
                         }
