@@ -9,11 +9,11 @@ import ImagePicker from 'react-native-image-crop-picker';
 import config from '../../config'
 import { RNS3 } from 'react-native-aws3';
 import api from '../../api';
-import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title, ActionSheet, Switch } from 'native-base';
+import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Input, Text, Body, ActionSheet, Switch } from 'native-base';
 import { NavigationActions } from "react-navigation";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
-const deviceHeight = Dimensions.get('window').height;
+
 const deviceWidth = Dimensions.get('window').width;
 const profileImage = require('../../../img/atul.png');
 const carveImage = require('../../../img/bg-1.png');
