@@ -1,17 +1,17 @@
 import React, { Component } from "react";
-import { Image, View, StatusBar, ImageBackground, AsyncStorage, } from "react-native";
+import { View, StatusBar, ImageBackground, AsyncStorage, } from "react-native";
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import FCM, { FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType } from "react-native-fcm";
+import FCM, { FCMEvent } from "react-native-fcm";
 import { checkAuth, getUserDetail } from '../accounts/elements/authActions'
-import { Container, Button, H3, Text, Header, Title, Body, Left, Right } from "native-base";
+import { Container, Text } from "native-base";
 import { NavigationActions } from "react-navigation";
 import api from '../../api';
 import styles from "./styles";
 
 //const launchscreenBg = require("../../../img/launchscreen-bg.png");
 const launchscreenBg = require("../../../img/splash.png");
-const launchscreenLogo = require("../../../img/logo-kitchen-sink.png");
+
 const resetActionIntro = NavigationActions.reset({
 	index: 0,
 	actions: [NavigationActions.navigate({ routeName: 'Intro' })],

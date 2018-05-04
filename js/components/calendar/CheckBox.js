@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, TouchableOpacity, Alert, AsyncStorage } from 'react-native';
+import { View, Image, TouchableOpacity, AsyncStorage } from 'react-native';
 import { connect } from 'react-redux';
 import { ChangeCheckBox } from '../../actions/ActionCheckBox';
 

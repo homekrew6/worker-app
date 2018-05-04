@@ -2,19 +2,17 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { NavigationActions } from "react-navigation";
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, ListView } from "react-native";
+import { View, StatusBar, Dimensions, ListView } from "react-native";
 import Ico from 'react-native-vector-icons/MaterialIcons';
-import Icon from 'react-native-vector-icons/FontAwesome'; 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FSpinner from 'react-native-loading-spinner-overlay';
-import { selectedLocation, allLocation } from './elements/locationAction';
-import {navigateAndSaveCurrentScreen} from '../accounts/elements/authActions';
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title } from "native-base";
+import { selectedLocation } from './elements/locationAction';
+import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
+import { Container, Header, Button, Content, Text, Body } from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
+
 
 const resetAction = NavigationActions.reset({
     index: 0,

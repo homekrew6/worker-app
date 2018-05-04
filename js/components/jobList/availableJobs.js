@@ -3,18 +3,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import 'moment-timezone';
-import DeviceInfo from 'react-native-device-info';
-import { NavigationActions } from "react-navigation";
-import { Image, RefreshControl, BackHandler, View, StatusBar, Dimensions, Alert, TouchableOpacity, ListView, Geolocation, platform, AsyncStorage } from "react-native";
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, List, ListItem, Icon, Tab, Tabs, ScrollableTab, Body } from "native-base";
+import { Image, RefreshControl, View, StatusBar, Alert, TouchableOpacity, ListView, AsyncStorage } from "react-native";
+import { Container, Header, Button, Content, Text, List, ListItem, Tab, Tabs, ScrollableTab, Body } from "native-base";
 import FSpinner from 'react-native-loading-spinner-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './styles';
 import I18n from '../../i18n/i18n';
 import api from '../../api/index';
 import { availablejobs, setNewData, acceptJob, declineJob } from './elements/jobActions';
-import {  navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
-const imageIcon1 = require('../../../img/icon/home.png');
+import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
+
 
 class AvailableJobs extends Component {
     constructor(props) {

@@ -1,11 +1,7 @@
 import React, { Component } from "react";
-import { Image, View, StatusBar,Dimensions } from "react-native";
 
-import { Container, Header, Content, Form, Item, Input, Label,Text } from "native-base";
-import ImageSlider from 'react-native-image-slider';
+import { Container, Content, Form, Item, Input, Text } from "native-base";
 import I18n from '../../i18n/i18n';
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
 
 class Demo extends Component {
 	constructor(props) {

@@ -1,21 +1,15 @@
 import React, { Component } from "react";
-import { NavigationActions } from "react-navigation";
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Image, View, StatusBar, TouchableOpacity, Text, TextInput, Alert, ListView, BackHandler } from "react-native";
-import { Container, Header, Content, Body, Title, Footer, FooterTab, Button, List, ListItem, Icon } from "native-base";
+import { Image, View, StatusBar, TouchableOpacity, Text, Alert, ListView } from "react-native";
+import { Container, Header, Content, Body, Title, Button, List, ListItem } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons'; 
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import moment from 'moment';
 import I18n from '../../i18n/i18n';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import styles from "./styles";
 import api from '../../api/index';
-
-const icon1 = require('../../../img/chatIcon3.png');
-const icon2 = require('../../../img/chatIcon1.png');
-const icon3 = require('../../../img/chatIcon2.png');
 
 
 class NotificationList extends Component {

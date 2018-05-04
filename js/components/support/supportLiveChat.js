@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Image, View, StatusBar, TouchableOpacity, Text, TextInput, ScrollView } from "react-native"; 
-import { Container, Header, Content, Body, Title, Footer, FooterTab, Button } from "native-base";
+import { Container, Header, Body, Title, Footer, FooterTab, Button } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 import I18n from '../../i18n/i18n';
 import styles from "./styles";

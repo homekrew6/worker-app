@@ -1,22 +1,13 @@
 import React, { Component } from "react";
-import { Image, View, StatusBar, Dimensions, StyleSheet, ImageBackground, AsyncStorage } from "react-native";
-import { Container, Button, H3, Text, Header, Title, Body, Left, Right,Grid } from "native-base";
+import { Image, View, Dimensions, ImageBackground, AsyncStorage } from "react-native";
+import { Container, Button, Text, } from "native-base";
 // import ImageSlider from 'react-native-image-slider';
 import AppIntroSlider from './AppIntroSlider';
 import styles from './styles';
 import api from '../../api';
-import FSpinner from 'react-native-loading-spinner-overlay';
-
 import Swiper from 'react-native-swiper';
 
-
-
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
-const img1 = require('../../../img/splash-bg2.png');
 const launchscreenBg = require("../../../img/splash.png");
-const imageht = ( deviceHeight - 88 );
-const test = { uri: 'https://s3.eu-central-1.amazonaws.com/files.homekrew.com/1519816388650_splash-bg2.png' };
 
 const slides = [];
 const logo = require("../../../img/logo22.png");

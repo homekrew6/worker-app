@@ -2,16 +2,15 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { signup } from './elements/authActions'
-import { Image, ImageBackground, View, ScrollView, StatusBar, Dimensions, Alert, TouchableOpacity } from "react-native";
+import { Image, ImageBackground, View, StatusBar, Alert, TouchableOpacity } from "react-native";
 
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, CheckBox } from "native-base";
+import { Container, Content, Item, Input, Text, CheckBox } from "native-base";
 import styles from "./styles";
 import I18n from '../../i18n/i18n';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import PopoverTooltip from 'react-native-popover-tooltip';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
+
 const launchscreenBg = require("../../../img/bg-login.png");
 const launchscreenLogo = require("../../../img/logo.png");
 const buttonImage = require("../../../img/bg-button.png");

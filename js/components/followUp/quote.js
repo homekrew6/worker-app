@@ -1,27 +1,16 @@
 import React, { Component } from 'react';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, AsyncStorage } from 'react-native';
-import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title, ActionSheet } from 'native-base';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { Image, View, StatusBar, Alert, TouchableOpacity, AsyncStorage } from 'react-native';
+import { Container, Header, Button, Content, Item, Input, Text, Body, Title, } from 'native-base';
 import Modal from "react-native-modal";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import FSpinner from 'react-native-loading-spinner-overlay';
 import styles from './styles';
 import I18n from '../../i18n/i18n';
 import api from '../../api/index';
 
-
 const icon2 = require("../../../img/icon/hourglass.png"); 
-const icon3 = require("../../../img/icon/calendar2.png");
 const icon4 = require("../../../img/icon/shopping-cart2.png");
 const icon5 = require("../../../img/icon/coins2.png");
-const icon6 = require("../../../img/icon6.png");
-const icon7 = require("../../../img/icon7.png");
-const icon8 = require("../../../img/icon/lightBulb2.png");
 const back_arow = require("../../../img/arrow_back.png");
-
-
 
 class Quote extends Component {
     constructor(props) {

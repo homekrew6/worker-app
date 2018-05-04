@@ -3,7 +3,6 @@ import { View, Text, StatusBar, TouchableOpacity, Image, FlatList, AsyncStorage 
 import { Container, Header, Button, Content, Body } from "native-base";
 import { connect } from 'react-redux';
 import styles from '../location/styles';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import CheckBox from './CheckBox';
 import { ChangeData } from '../../actions/ActionWeek';
 import api from '../../api';

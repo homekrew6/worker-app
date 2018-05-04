@@ -2,22 +2,16 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { AsyncStorage } from 'react-native';
-import { NavigationActions } from "react-navigation";
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, ListView } from "react-native";
-import Ico from 'react-native-vector-icons/MaterialIcons';
-import Icon from 'react-native-vector-icons/FontAwesome'; 
+import { View, StatusBar, Alert, } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Entypo from 'react-native-vector-icons/Entypo';
 import api from '../../api/index';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import { allLocation, checkUncheck, clearMyLocation, selectedLocation } from './elements/locationAction';
-
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, CheckBox } from "native-base";
+import { Container, Header, Button, Content, Text, Body, CheckBox } from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 //this.props.navigation.dispatch(resetAction);
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
+
 // const resetAction = NavigationActions.reset({
 //     index: 0,
 //     actions: [NavigationActions.navigate({ routeName: 'MyLocation' })]

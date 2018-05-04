@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Image, View, StatusBar, TouchableOpacity, Text, TextInput } from "react-native";
-import { Container, Header, Content, Body, Title, Footer, FooterTab, Button } from "native-base";
+import { Image, View, StatusBar, TouchableOpacity, Text, } from "react-native";
+import { Container, Header, Content, Body, Title, Button } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import I18n from '../../i18n/i18n';
