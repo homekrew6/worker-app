@@ -30,12 +30,18 @@ class Signup extends Component {
 
     pressSignup() {
         //return false;
-        if (!this.state.name) {
+        if (!this.state.name.trim()) {
             Alert.alert('Please enter name');
             return false;
         }
-        if (!this.state.email) {
+        
+        if (!this.state.email.trim()) {
             Alert.alert('Please enter email');
+            return false;
+        }
+        let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if(!regEmail.test(this.state.email)){
+            Alert.alert('Please enter a valid email');
             return false;
         }
         if (!this.state.password) {
@@ -47,7 +53,7 @@ class Signup extends Component {
             Alert.alert('Password must have one capital letter and min six characters');
             return false;
         }
-        if (!this.state.phone) {
+        if (!this.state.phone.trim()) {
             Alert.alert('Please enter phone');
             return false;
         }
@@ -61,14 +67,20 @@ class Signup extends Component {
         const phone = this.state.phone;
 
         this.props.signup(name, email, password, phone).then(res => {
-            if (res.type == 'success') {
-                Alert.alert('Successfully saved.');
-                this.props.navigation.navigate("Login");
-            } else {
-                Alert.alert('Please check all fields and try again');
+            if(res.worker && res.worker.Error){
+                if(res.worker.Error === true){
+                    Alert.alert(res.worker.message);
+                }
+            }else{
+                if (res.type == 'success') {
+                    Alert.alert('Successfully Registered.');
+                    this.props.navigation.navigate("Login");
+                } else {
+                    Alert.alert('Please check all fields and try again');
+                }
             }
+            
         }).catch(err => {
-            console.log(err);
             Alert.alert('Please check all fields and try again');
 
         })

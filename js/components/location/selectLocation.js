@@ -38,14 +38,12 @@ class selectLocation extends Component {
     componentWillMount() {
         
         this.props.allLocation().then((allLst) => {            
-            console.log(this.props.location.data);
-            console.log(allLst); 
             this.setState({
                 locationFlag: true
             })
 
         }).catch(err => {
-            console.log(err);
+         
         })
     }
 
@@ -75,29 +73,20 @@ class selectLocation extends Component {
                 api.delete('Workers/' + this.props.auth.data.id + '/workerLocations?' + 'access_token=' + JSON.parse(result).id).then((res) => {
                     for ( i = 0; i < newSelectedItemIds.length; i++) {
                         api.post('WorkerLocations?' + 'access_token=' + JSON.parse(result).id, { workerId: this.props.auth.data.id, zoneId: newSelectedItemIds[i] }).then((res1) => {
-                            //console.log((newSelectedItemIds.length - 1),i);
                             if (i === newSelectedItemIds.length) {
-                                //console.log('a')
-                                //this.props.navigation.navigate('MyLocation');
                                 this.setState({
                                     locationFlag: false
                                 })
                                 this.setState({
                                     loader: false,
-                                });
-                                this.props.navigation.navigate("MyLocation");
-                            }
+                                });                            }
 
                         }).catch((err) => {
                             //reject(err);
-
-                        });
-                        
+                        }); 
                     }
+                    this.props.navigation.navigate("MyLocation");                    
                 })
-                
-
-
             } else {
                 //reject(err);
             }
@@ -106,31 +95,6 @@ class selectLocation extends Component {
         }else{
             Alert.alert('Please select atleast one zone')
         }
-        // console.log('newSelectedItemIds' + newSelectedItemIds);
-        // AsyncStorage.getItem('userToken', (err, result) => {
-        //     if (!err) {
-        //         api.delete('Workers/' + this.props.auth.data.id + '/workerLocations?' + 'access_token=' + JSON.parse(result).id).then((res) => {
-        //             //resolve(res)
-        //         })
-        //         for (var i = 0; i < newSelectedItemIds.length; i++ ){
-        //             api.post('/workerLocations?' + 'access_token=' + JSON.parse(result).id, { workerId: this.props.auth.data.id, zoneId: newSelectedItemIds[i] }).then((res) => {
-        //                 console.log(res);
-                            
-        //             }).catch((err) => {
-        //                 //reject(err);
-                        
-        //             });
-        //             //if (i == newSelectedItemIds.length - 1){
-        //                 this.props.navigation.dispatch(resetAction);
-        //             //}
-        //         }
-                
-            
-        //     } else {
-        //         //reject(err);
-        //     }
-
-        // })
         
     }
     
@@ -139,12 +103,11 @@ class selectLocation extends Component {
         let locationList
         if(this.state.locationFlag){
             let locationListItm = this.props.location.data;
-            // locationListItm[2].is_active = false;
             locationList = (
                 locationListItm.map((data, key) => (
                     <View style={styles.mainItem} key={data.id}>
                     <View style={styles.checkBoxWarp}>
-                            <CheckBox color='#29416f' checked={data.selected} id={data.id} onPress={() => this.chkbox_check(data.id)} />
+                        <CheckBox color='#29416f' checked={data.selected} id={data.id} onPress={() => this.chkbox_check(data.id)} />
                     </View>
                     <View style={styles.mainItemText}>
                         <Text style={styles.lstHeader}>{data.name}</Text>
@@ -169,7 +132,7 @@ class selectLocation extends Component {
                             <Ionicons name="ios-arrow-back" style={styles.backBt} />
                         </Button>
                         <Body style={styles.tac}>
-                            <Text style={styles.hdClr}>My Locations</Text>
+                            <Text style={styles.hdClr}>{I18n.t('my_location')}</Text>
                         </Body>
                         <Button transparent onPress={() => this.save_select_location()}>
                             <Text>Save</Text>
@@ -178,67 +141,9 @@ class selectLocation extends Component {
                     </Header>
                     
                     <View>
+
                         {locationList}
 
-                        {/* <View style={styles.mainItem}>
-                            <View style={styles.checkBoxWarp}>
-                                <CheckBox color='#29416f' checked={true} onPress={() => this.chkbox_check(1)} />
-                            </View>
-                            <View style={styles.mainItemText}>
-                                <Text style={styles.lstHeader}>Deira</Text>
-                                <Text style={styles.lstHeader2}>Port Saeed</Text>
-                            </View>
-                        </View>
-
-                        <View style={styles.mainItem}>
-                            <View style={styles.checkBoxWarp}>
-                                <CheckBox color='#29416f' checked={false} />
-                            </View>
-                            <View style={styles.mainItemText}>
-                                <Text style={styles.lstHeader}>Deira</Text>
-                                <Text style={styles.lstHeader2}>Port Saeed</Text>
-                            </View>
-                        </View>
-
-                        <View style={styles.mainItem}>
-                            <View style={styles.checkBoxWarp}>
-                                <CheckBox color='#29416f' checked={false} />
-                            </View>
-                            <View style={styles.mainItemText}>
-                                <Text style={styles.lstHeader}>Deira</Text>
-                                <Text style={styles.lstHeader2}>Port Saeed</Text>
-                            </View>
-                        </View>
-
-                        <View style={styles.mainItem}>
-                            <View style={styles.checkBoxWarp}>
-                                <CheckBox color='#29416f' checked={false} />
-                            </View>
-                            <View style={styles.mainItemText}>
-                                <Text style={styles.lstHeader}>Deira</Text>
-                                <Text style={styles.lstHeader2}>Port Saeed</Text>
-                            </View>
-                        </View>
-
-                        <View style={styles.mainItem}>
-                            <View style={styles.checkBoxWarp}>
-                                <CheckBox color='#29416f' checked={false} />
-                            </View>
-                            <View style={styles.mainItemText}>
-                                <Text style={styles.lstHeader}>Deira</Text>
-                                <Text style={styles.lstHeader2}>Port Saeed</Text>
-                            </View>
-                        </View>
-                        
-                        <View style={styles.mainItem}>
-                            <View style={styles.checkBoxWarp}>
-                                <CheckBox color='#29416f' checked={false} />
-                            </View>
-                            <View style={styles.mainItemText}>
-                                <Text style={styles.lstHeader}>Deira</Text>
-                                <Text style={styles.lstHeader2}>Port Saeed</Text>
-                            </View>
-                        </View> */}
                     </View>
                     
                     

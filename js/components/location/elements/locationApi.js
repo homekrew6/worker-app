@@ -6,7 +6,6 @@ class locationApi {
     static allLocation() {
         return new Promise((resolve, reject) => {
             AsyncStorage.getItem('userToken', (err, result) => {
-                console.log(result);
                 if (!err){
                     api.get('Zones?access_token=' + JSON.parse(result).id).then((res) => {
                         resolve(res)
@@ -26,7 +25,6 @@ class locationApi {
         return new Promise((resolve, reject) => {
             AsyncStorage.getItem('userToken', (err, result) => {
                 let workerInclude = '{"include":["zone"]}';
-                console.log(workerID);
                 if (!err) {
                     api.get('Workers/' + workerID + '/workerLocations?filter=' + workerInclude +'&'+ 'Zones?access_token=' + JSON.parse(result).id).then((res) => {
                     // api.get('Zones?access_token=' + JSON.parse(result).id).then((res) => {  

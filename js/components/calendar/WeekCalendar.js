@@ -7,6 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import CheckBox from './CheckBox';
 import { ChangeData } from '../../actions/ActionWeek';
 import api from '../../api';
+import I18n from '../../i18n/i18n';
 
 class WeekCalendar extends Component {
   state = { dataRemote: '', ScrollWidth: 10 }
@@ -288,10 +289,8 @@ class WeekCalendar extends Component {
     if (timimgData.length === 0) {
       this.setState({ dataRemote: data.data });
       const dataRemoteString = JSON.stringify(data.data);
-      console.log('dataRemoteString', dataRemoteString);
 
       AsyncStorage.setItem('StoreData', dataRemoteString, (res) => {
-           console.log('====FirstPage====setItem==async==='+res)
        })
 
     }else {
@@ -314,7 +313,6 @@ class WeekCalendar extends Component {
        this.flatList.scrollToOffset({ offset: EffectWidth });
    }
     renderWeekData(item) {
-      console.log('item', item);
         return(
             <View style={{ flex: 5 }}>
                 <View style={{ justifyContent: 'center', alignSelf: 'center', width: 50, height: 28, alignItems: 'center' }} >
@@ -337,29 +335,29 @@ class WeekCalendar extends Component {
       AsyncStorage.getItem("StoreData").then((value) => {
         const JSONdata = JSON.parse(value);
 
-        if (timimgDataCheck === 0) {
+        if (timimgDataCheck === '') {
           //api to hit adding Timing
-          api.post('worker-available-timings',{"timings": JSONdata, "workerId": workerId}).then(res => {
-              console.log(res);
+          api.post('Workeravailabletimings',{"timings": JSONdata, "workerId": workerId}).then(res => {
+			  this.props.navigation.navigate('Menu');
+			  
           }).catch((err) => {
-              console.log(err);
           });
         }else {
           //API hiting editiing
-          const patchUrl = `worker-available-timings/${tableRowId}`;
+          const patchUrl = `Workeravailabletimings/${tableRowId}`;
           api.put(patchUrl, {"timings": JSONdata,"id": tableRowId,"workerId": workerId}).then(res => {
-              console.log('patch Promise', res);
+			  this.props.navigation.navigate('myTiming');
           }).catch((err) => {
-              console.log(err);
+			  
           });
         }
 
 
 
-      }).then(res => {
+      }).catch(res => {
           AsyncStorage.setItem('StoreData', dataRemoteString);
       });
-      this.props.navigation.goBack();
+     
     }
 
     render() {
@@ -373,15 +371,15 @@ class WeekCalendar extends Component {
                     <Header style={styleSelf.appHdr2} androidStatusBarColor= "#cbf0ed">
                         <Button transparent >
                             <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                                <Text style={styleSelf.backBt} >Cancel</Text>
+                                <Text style={styleSelf.backBt} >{I18n.t('cancel')}</Text>
                             </TouchableOpacity>
                         </Button>
                         <Body style={styleSelf.tac}>
-                            <Text style={styleSelf.hdClr}>Add Timing</Text>
+                            <Text style={styleSelf.hdClr}>{I18n.t('add_timing')}</Text>
                         </Body>
                         <Button transparent >
                             <TouchableOpacity onPress={this.onDonePress.bind(this)}>
-                              <Text style={styleSelf.backBt} >Done</Text>
+                              <Text style={styleSelf.backBt} >{I18n.t('done')}</Text>
                             </TouchableOpacity>
                         </Button>
                     </Header>
@@ -468,7 +466,6 @@ styleSelf = {
 }
 
 function mapStateToProps(state) {
-  console.log('WeekCalendar', state); // state
   return {
     loading: state.CheckBox.loading,
     workerId: state.auth.data.id

@@ -1,0 +1,94 @@
+{
+  "project_info": {
+    "project_number": "16831185707",
+    "firebase_url": "https://krew-user-app.firebaseio.com",
+    "project_id": "krew-user-app",
+    "storage_bucket": "krew-user-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:16831185707:android:ebed8de3c3c23d1d",
+        "android_client_info": {
+          "package_name": "com.KrewUserApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "16831185707-ppi2issar2p3ke9o3r1iqbksnk0mjm4n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.KrewUserApp",
+            "certificate_hash": "79ead8790a58ce0131467275039e639aeae4c5c1"
+          }
+        },
+        {
+          "client_id": "16831185707-ga3ukv465k5cmjcksn6m1biroakgansv.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "16831185707-hpfq3aigemrct3qnfogjf19t864fr0kp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ9MrcXyNbc_6rO2da_SKrVWNoC-8gxnM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "16831185707-ga3ukv465k5cmjcksn6m1biroakgansv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:16831185707:android:adb5d5923ad5818d",
+        "android_client_info": {
+          "package_name": "com.KrewWorkerApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "16831185707-ga3ukv465k5cmjcksn6m1biroakgansv.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "16831185707-hpfq3aigemrct3qnfogjf19t864fr0kp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ9MrcXyNbc_6rO2da_SKrVWNoC-8gxnM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

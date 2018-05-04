@@ -1,12 +1,16 @@
 /* @flow */
 
-import React from "react";
+import React, { Component } from "react";
 
-import { Platform } from "react-native";
+import { Platform,Easing, Animated, Text} from "react-native";
 import { Root } from "native-base";
 import { StackNavigator } from "react-navigation";
+import RouterOwn from './router';
+import { connect } from 'react-redux';
+import { ChangeRoute } from './actions/routerAction';
 
 import Drawer from "./Drawer";
+import Home from "./components/home/";
 import Intro  from "./components/intro";
 import Demo  from "./components/intro/demo";
 import Signup from "./components/accounts/signup";
@@ -24,10 +28,48 @@ import myTiming from './components/location/myTiming';
 import TestLocation from "./components/location/TestLocation";
 import MyPaymentList from './components/payment/payment-list';
 import AvailableJobs from './components/jobList/availableJobs';
+import JobDetails from './components/jobList/jobDetails';
+import Settings from './components/settings/settings';
+import LanguageList from './components/settings/languageList';
+import CurrencyList from './components/settings/currencyList';
+import TotalBill from './components/jobList/totalBill';
+import FollowUpList from './components/followUp/followUpList';
+import AddMaterial from './components/followUp/addMaterals';
+import FollowUpDate from './components/followUp/followUpDate';
+import Chat from './components/jobList/chat';
+import JobTracker from './components/jobList/jobTracker';
+import Quote from './components/followUp/quote';
+import jobSummary from './components/jobList/jobSummary';
+import NotificationList from './components/notification/notificationList';
+import Support from './components/support/supportList';
 
+const transitionConfig = () => {
+    return {
+      transitionSpec: {
+        duration: 750,
+        easing: Easing.out(Easing.poly(4)),
+        timing: Animated.timing,
+        useNativeDriver: true,
+      },
+      screenInterpolator: sceneProps => {      
+        const { layout, position, scene } = sceneProps
+  
+        const thisSceneIndex = scene.index
+        const width = layout.initWidth
+  
+        const translateX = position.interpolate({
+          inputRange: [thisSceneIndex - 1, thisSceneIndex],
+          outputRange: [width, 0],
+        })
+  
+        return { transform: [ { translateX } ] }
+      },
+    }
+  }
 const AppNavigator = StackNavigator(
     {
         Drawer: { screen: Drawer },
+        Home: { screen: Home },
         Intro: {screen: Intro},
         Demo: {screen: Demo},
         Signup: {screen: Signup},
@@ -44,15 +86,52 @@ const AppNavigator = StackNavigator(
         myTiming: { screen: myTiming },
         TestLocation: { screen: TestLocation },
         MyPaymentList: { screen: MyPaymentList },
-        AvailableJobs: { screen: AvailableJobs}
+        AvailableJobs: { screen: AvailableJobs },
+        JobDetails: { screen: JobDetails },
+        Settings: { screen: Settings},
+        LanguageList:{screen:LanguageList},
+        CurrencyList:{screen:CurrencyList},
+        TotalBill:{screen:TotalBill},
+        FollowUpList: { screen: FollowUpList},
+        AddMaterial: { screen: AddMaterial},
+        FollowUpDate: { screen: FollowUpDate},
+        Chat: { screen: Chat }, 
+        JobTracker: { screen: JobTracker },
+        Quote: { screen: Quote},
+        jobSummary: { screen: jobSummary },
+        NotificationList: {screen: NotificationList},
+        Support: { screen: Support },
     },
     {
-        initialRouteName: "Drawer",
+        initialRouteName: "Home",
         headerMode: "none",
+        transitionConfig
     }
 );
 
-export default () =>
-    <Root>
-        <AppNavigator />
-    </Root>;
+class App extends Component{
+  updateRedux(prevState, newState){
+    this.props.ChangeRoute(prevState, newState)
+  }
+  render(){
+    return(
+      <Root>
+          <AppNavigator
+            onNavigationStateChange={(prevState, newState) =>  this.updateRedux(prevState, newState) }
+          />
+      </Root>
+    );
+    
+  }
+}
+
+function mapStateToProps(state) {
+  console.log('mapStateToProps App', state);
+  return {
+      currentRoute: state.newState,
+      prevRoute: state.prevRoute
+  }
+}
+
+export default connect(mapStateToProps, {ChangeRoute})(App);
+     

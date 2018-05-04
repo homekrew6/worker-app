@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { checkAuth, getUserDetail } from './elements/authActions';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from 'react-native';
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, BackHandler } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -10,7 +10,7 @@ import config from '../../config'
 import { RNS3 } from 'react-native-aws3';
 import api from '../../api';
 import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title, ActionSheet, Switch } from 'native-base';
-
+import { NavigationActions } from "react-navigation";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 const deviceHeight = Dimensions.get('window').height;
@@ -21,7 +21,10 @@ var BUTTONS = [
     { text: "Camera", icon: "ios-camera", iconColor: "#2c8ef4" },
     { text: "File", icon: "ios-images", iconColor: "#f42ced" }
 ];
-
+const resetActionForTiming = NavigationActions.reset({
+    index: 0,
+    actions: [NavigationActions.navigate({ routeName: 'myTiming' })],
+});
 class EditProfile extends Component {
     constructor(props) {
         super(props);
@@ -41,8 +44,47 @@ class EditProfile extends Component {
             serviceList: [],
             zoneList: []
         };
-    }
+        this.actionSheet = null;
 
+    }
+    renderBackButton() {
+        if (this.props.currentRoute === "EditProfile" && !this.props.prevRoute) {
+            this.backHandler = BackHandler.addEventListener('hardwareBackPress', function () {
+                console.log('hardwareBackPress', this.props);
+                if (this.props.currentRoute === 'EditProfile') {
+                    Alert.alert(
+                        'Confirm',
+                        'Are you sure to exit the app?',
+                        [
+                            { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                            { text: 'OK', onPress: () => BackHandler.exitApp() },
+                        ],
+                        { cancelable: false }
+                    );
+                    return true;
+                } else {
+                    this.props.navigation.goBack(null);
+                    return true;
+                }
+
+            }.bind(this));
+        }
+    }
+    showActionSheet() {
+        if (this.actionSheet !== null) {
+            // Call as you would ActionSheet.show(config, callback)
+            this.actionSheet._root.showActionSheet({
+                options: BUTTONS,
+            },
+                (buttonIndex) => {
+                    this.setState({ clicked: BUTTONS[buttonIndex] });
+                    // this.setState({ filecat: buttonIndex });
+                    // this.setState({ filecat: buttonIndex});
+                    this.fileUploadType(buttonIndex);
+                });
+        }
+
+    }
 
 
     componentWillMount() {
@@ -51,7 +93,7 @@ class EditProfile extends Component {
             if (res.zone.length > 0) {
                 this.setState({ zoneList: res.zone, selectedZoneDetails: res.zone[0], selected1: res.zone[0].id })
 
-                api.post('serviceZones/getZoneRelatedService', { id: res.zone[0].id }).then((resService) => {
+                api.post('serviceZones/getZoneRelatedService', { zone: res.zone[0].id }).then((resService) => {
                     //console.log(res);
                     if (resService.response.length > 0) {
                         this.setState({ serviceList: resService.response })
@@ -60,7 +102,7 @@ class EditProfile extends Component {
                         });
                         this.props.checkAuth((res) => {
                             this.props.getUserDetail(res.userId, res.id).then((userRes) => {
-
+                                console.log(this.props.auth);
                                 let filter = '{"where":{"workerId":' + res.userId + '}}';
                                 api.get('WorkerSkills?filter=' + filter + '&access_token=' + res.id).then((skills) => {
                                     let serviceIds = [];
@@ -68,9 +110,12 @@ class EditProfile extends Component {
                                         serviceIds.push(item.serviceId);
                                     });
                                     resService.response.map((data1) => {
-                                        if (serviceIds.includes(data1.id)) {
-                                            data1.selected = true;
+                                        if (data1.service) {
+                                            if (serviceIds.includes(data1.service.id)) {
+                                                data1.selected = true;
+                                            }
                                         }
+
                                     });
                                     this.setState({ serviceList: resService.response });
 
@@ -130,10 +175,11 @@ class EditProfile extends Component {
                 if (response.status == 201) {
                     this.setState({ uploadButton: true });
                     this.setState({ uploaded: true });
+                    //this.props.setProfilePic(response.body.postResponse.location);
 
-                    // this.props.setProfilePic(response.body.postResponse.location);
                     this.setState({ image: response.body.postResponse.location })
                     this.setState({ visible: false });
+                    Alert.alert('', 'Press the save button to save the image.');
                 }
             }).catch((err) => {
                 console.log(err);
@@ -183,8 +229,9 @@ class EditProfile extends Component {
                 if (response.status == 201) {
                     this.setState({ cameraButton: true });
                     this.setState({ cameraUploaded: true });
-                    this.setState({ image: response.body.postResponse.location })
+                    this.setState({ image: response.body.postResponse.location });
                     this.setState({ visible: false });
+                    Alert.alert('', 'Press the save button to save the image.');
                 }
             }).catch((err) => {
                 this.setState({ visible: false });
@@ -218,8 +265,8 @@ class EditProfile extends Component {
                     let data = {};
                     let serviceIds = [];
                     this.state.serviceList.map((item) => {
-                        if (item.selected) {
-                            serviceIds.push(item.id);
+                        if (item.selected && item.service) {
+                            serviceIds.push(item.service.id);
                         }
                     });
                     if (serviceIds.length > 0) {
@@ -227,13 +274,28 @@ class EditProfile extends Component {
                         data.workerId = res.userId;
                         console.log(data);
                         api.post(`WorkerSkills/insertWorkerSkill?access_token=${res.id}`, data).then((skillRes) => {
-                            this.props.getUserDetail(res.userId, res.id).then((userRes) => {
-                                this.setState({ visible: false });
-                                this.props.navigation.navigate('Menu');
-                            }).catch((err) => {
-                                this.setState({ visible: false });
-                                Alert.alert('Data not saved, Please try again');
+                            const WorkerAvailabilitiesUrl = `Workeravailabletimings?filter={"where":{"workerId":"${res.userId}"}}`;
+                            api.get(WorkerAvailabilitiesUrl).then((timings) => {
+                                if (timings.length && timings.length > 0) {
+                                    this.props.getUserDetail(res.userId, res.id).then((userRes) => {
+                                        this.setState({ visible: false });
+                                        this.props.navigation.navigate('Menu');
+                                    }).catch((err) => {
+                                        this.setState({ visible: false });
+                                        Alert.alert('Data not saved, Please try again');
+                                    });
+                                }
+                                else {
+                                    this.props.getUserDetail(res.userId, res.id).then((userRes) => {
+                                        this.setState({ visible: false });
+                                        this.props.navigation.dispatch(resetActionForTiming);
+                                    }).catch((err) => {
+                                        this.setState({ visible: false });
+                                        Alert.alert('Data not saved, Please try again');
+                                    });
+                                }
                             });
+
                         }).catch((err) => {
                             this.setState({ visible: false });
                             Alert.alert("Please try again later.");
@@ -241,13 +303,15 @@ class EditProfile extends Component {
                         })
                     }
                     else {
-                        this.props.getUserDetail(res.userId, res.id).then((userRes) => {
-                            this.setState({ visible: false });
-                            this.props.navigation.navigate('Menu');
-                        }).catch((err) => {
-                            this.setState({ visible: false });
-                            Alert.alert('Data not saved, Please try again');
-                        });
+                        this.setState({ visible: false });
+                        Alert.alert('', 'Please select atleast one skill to continue.');
+                        // this.props.getUserDetail(res.userId, res.id).then((userRes) => {
+                        //     this.setState({ visible: false });
+                        //     this.props.navigation.navigate('Menu');
+                        // }).catch((err) => {
+                        //     this.setState({ visible: false });
+                        //     Alert.alert('Data not saved, Please try again');
+                        // });
 
                     }
                 }).catch((err) => {
@@ -294,7 +358,7 @@ class EditProfile extends Component {
                 this.state.serviceList.map((data, key) => {
                     if (!data.service) return;
                     return (
-                        <View key={data.id} style={{flexDirection: 'row', paddingTop: 7, paddingBottom: 7, alignItems: 'center'}}>
+                        <View key={data.id} style={{ flexDirection: 'row', paddingTop: 7, paddingBottom: 7, alignItems: 'center' }}>
                             <View style={styles.catIten_img_view}>
                                 <Switch value={data.selected} onValueChange={(value) => this.switchChange(value, data)} />
                             </View>
@@ -316,7 +380,7 @@ class EditProfile extends Component {
                             <Icon name="chevron-left" style={{ fontSize: 18, color: '#71beb8' }} />
                         </Button>
                         <Body style={styles.appHdrtitleWarp}>
-                            <Text style={{ color: '#1e3768' }}>Edit My Profile</Text>
+                            <Text style={{ color: '#1e3768' }}> {I18n.t('edit_my_profile')}</Text>
                         </Body>
                         <Button transparent />
                     </Header>
@@ -324,7 +388,7 @@ class EditProfile extends Component {
                     <View style={styles.editPflHdr}>
                         <View style={styles.editPflHdrWrap}>
                             {
-                                this.props.auth.data.image ? (
+                                this.state.image ? (
                                     <Thumbnail source={{ uri: this.state.image }} style={styles.editPflHdrThumbnail} />
                                 ) : (
                                         <Thumbnail source={profileImage} style={styles.editPflHdrThumbnail} />
@@ -335,22 +399,11 @@ class EditProfile extends Component {
                                 primary noShadow small
                                 style={styles.editPflHdrBtn}
                                 onPress={() =>
-                                    ActionSheet.show(
-                                        {
-                                            options: BUTTONS
-                                        },
-                                        (buttonIndex) => {
-                                            this.setState({ clicked: BUTTONS[buttonIndex] });
-                                            //this.setState({ filecat: buttonIndex });
-                                            console.log(buttonIndex);
-                                            //this.setState({ filecat: buttonIndex});
-                                            this.fileUploadType(buttonIndex);
-
-                                        }
-                                    )}
+                                    this.showActionSheet()}
                             >
-                                <Text> Change Photo </Text>
+                                <Text>{I18n.t('change_photo')}</Text>
                             </Button>
+                            <ActionSheet ref={(c) => { this.actionSheet = c; }} />
                         </View>
                     </View>
 
@@ -361,7 +414,7 @@ class EditProfile extends Component {
                     <View>
                         <View style={styles.editprofileLst}>
                             <View style={styles.editprofileWarp}>
-                                <Text>Name</Text>
+                                <Text>{I18n.t('name')}</Text>
                                 <Text style={styles.starRed}>*</Text>
                             </View>
                             <View style={styles.editprofileInputwrap}>
@@ -370,7 +423,7 @@ class EditProfile extends Component {
                         </View>
                         <View style={styles.editprofileLst}>
                             <View style={styles.editprofileWarp}>
-                                <Text>Email Id</Text>
+                                <Text>{I18n.t('email_id')}</Text>
                                 <Text style={styles.starRed}>*</Text>
                             </View>
                             <View style={styles.editprofileInputwrap}>
@@ -380,29 +433,29 @@ class EditProfile extends Component {
 
                         <View style={styles.editprofileLst}>
                             <View style={styles.editprofileWarp}>
-                                <Text>Phone No</Text>
+                                <Text>{I18n.t('phone_no')}</Text>
                                 <Text style={styles.starRed}>*</Text>
                             </View>
                             <View style={styles.editprofileInputwrap}>
-                                <Input style={styles.editprofileInput} onChangeText={text => this.setState({ phone: text })} value={this.state.phone} />
+                                <Input style={styles.editprofileInput} onChangeText={text => this.setState({ phone: text })} value={this.state.phone} keyboardType={'numeric'} />
                             </View>
                         </View>
 
                         <View style={styles.editprofileLst}>
                             <View style={styles.editprofileWarp}>
-                                <Text>Password</Text>
+                                <Text>{I18n.t('password_small_case')}</Text>
                                 <Text style={styles.starRed}>*</Text>
                             </View>
                             <View style={styles.editprofileInputwrap}>
-                                <Input style={styles.editprofileInput} value={'password'} secureTextEntry />
+                                <Input style={styles.editprofileInput} value={I18n.t('password_small_case')} secureTextEntry editable={false} />
                             </View>
                         </View>
                         <View style={{ padding: 10 }}>
                             <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-                                <Text style={{ paddingBottom: 5, paddingLeft: 5 }}>Skills</Text>
+                                <Text style={{ paddingBottom: 5, paddingLeft: 5 }}>{I18n.t('skills')}</Text>
                                 <Text style={styles.starRedSkill}>*</Text>
                             </View>
-                            
+
                             <View>{serviceListing}</View>
                         </View>
                     </View>
@@ -410,7 +463,7 @@ class EditProfile extends Component {
                     <Footer>
                         <FooterTab>
                             <TouchableOpacity full style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#81cdc7' }} onPress={() => this.pressSave()}>
-                                <Text style={{ color: '#fff', fontSize: 16 }}>Save</Text>
+                                <Text style={{ color: '#fff', fontSize: 16 }}>{I18n.t('save')}</Text>
                             </TouchableOpacity>
                         </FooterTab>
                     </Footer>
@@ -425,6 +478,8 @@ EditProfile.propTypes = {
 };
 const mapStateToProps = state => ({
     auth: state.auth,
+    currentRoute: state.RouterOwn.currentRoute,
+    prevRoute: state.RouterOwn.prevRoute
 });
 
 const mapDispatchToProps = dispatch => ({

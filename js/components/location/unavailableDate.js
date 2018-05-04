@@ -2,53 +2,46 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import api from '../../api/index';
-import { NavigationActions } from "react-navigation";
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, FlatList, ScrollView } from "react-native";
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body,Card, CardItem  } from "native-base";
+//import { NavigationActions } from "react-navigation";
+import { View, StatusBar, Dimensions, Alert, TouchableOpacity, FlatList, } from "react-native";
+import { Container, Header, Button, Content, Form, Item, Text, Body, Card, CardItem } from "native-base";
 import styles from './styles';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Calendar } from 'react-native-calendars';
-import { setAvilableDate } from './elements/locationAction';
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
-class MyListItem extends React.PureComponent {
-    _onPress = () => {
-        this.props.onPressItem(this.props.id);
-    };
+//import { setAvilableDate } from './elements/locationAction';
+import FSpinner from 'react-native-loading-spinner-overlay';
+import I18n from '../../i18n/i18n';
+//const deviceHeight = Dimensions.get('window').height;
+//const deviceWidth = Dimensions.get('window').width;
+
+// class MyListItem extends React.PureComponent {
+//     _onPress = () => {
+//         this.props.onPressItem(this.props.id);
+//     };
 
 
-    render() {
-        const textColor = this.props.selected ? "red" : "black";
-        return (
-            <TouchableOpacity onPress={this._onPress}>
-                <View>
-                    <Text style={{ color: textColor }}>
-                        {this.props.title}
-                    </Text>
-                </View>
-            </TouchableOpacity>
-        );
-    }
-}
+//     render() {
+//         const textColor = this.props.selected ? "red" : "black";
+//         return (
+//             <TouchableOpacity onPress={this._onPress}>
+//                 <View>
+//                     <Text style={{ color: textColor }}>
+//                         {this.props.title}
+//                     </Text>
+//                 </View>
+//             </TouchableOpacity>
+//         );
+//     }
+// }
 
 
 class UnavailableDate extends Component {
     constructor(props) {
         super(props);
-        var today = new Date();
-        var dy = parseInt(today.getMonth() + 1);
-        var dm = today.getDate();
-        if (dy < 10){
-            dy = '0' + dy;
-        }
-        if (dm < 10) {
-            dm = '0' + dm;
-        }
 
-        date = today.getFullYear() + "-" + dy + "-" + dm;
         this.state = {
-            daYSelected: [date],
-            daYSelected2: [date],
+            daYSelected: '',
+            daYSelected2: '',
             satStartDate: '',
             setStartWeek: '',
             satEndDate: '',
@@ -58,67 +51,16 @@ class UnavailableDate extends Component {
             setEndTime: '',
             setEndTimeKey: '',
             startDay: '',
+            visible: false,
             endDay: '',
-            colectionData :[
-                { key: '1', time: '00:00 AM', isActive: false },
-                { key: '2', time: '01:00 AM', isActive: false },
-                { key: '3', time: '02:00 AM', isActive: false },
-                { key: '4', time: '03:00 AM', isActive: false },
-                { key: '5', time: '04:00 AM', isActive: false },
-                { key: '6', time: '05:00 AM', isActive: false },
-                { key: '7', time: '06:00 AM', isActive: false },
-                { key: '8', time: '07:00 AM', isActive: false },
-                { key: '9', time: '08:00 AM', isActive: false },
-                { key: '10', time: '09:00 AM', isActive: false },
-                { key: '11', time: '10:00 AM', isActive: false },
-                { key: '12', time: '11:00 AM', isActive: false },
-                { key: '13', time: '12:00 AM', isActive: false },
-                { key: '14', time: '01:00 PM', isActive: false },
-                { key: '15', time: '02:00 PM', isActive: false },
-                { key: '16', time: '03:00 PM', isActive: false },
-                { key: '17', time: '04:00 PM', isActive: false },
-                { key: '18', time: '05:00 PM', isActive: false },
-                { key: '19', time: '06:00 PM', isActive: false },
-                { key: '20', time: '07:00 PM', isActive: false },
-                { key: '21', time: '08:00 PM', isActive: false },
-                { key: '22', time: '09:00 PM', isActive: false },
-                { key: '23', time: '10:00 PM', isActive: false },
-                { key: '24', time: '11:00 PM', isActive: false }
-            ],
-
-
-        colectionData2 : [
-            { key: '1', time: '00:00 AM', isActive: false },
-            { key: '2', time: '01:00 AM', isActive: false },
-            { key: '3', time: '02:00 AM', isActive: false },
-            { key: '4', time: '03:00 AM', isActive: false },
-            { key: '5', time: '04:00 AM', isActive: false },
-            { key: '6', time: '05:00 AM', isActive: false },
-            { key: '7', time: '06:00 AM', isActive: false },
-            { key: '8', time: '07:00 AM', isActive: false },
-            { key: '9', time: '08:00 AM', isActive: false },
-            { key: '10', time: '09:00 AM', isActive: false },
-            { key: '11', time: '10:00 AM', isActive: false },
-            { key: '12', time: '11:00 AM', isActive: false },
-            { key: '13', time: '12:00 AM', isActive: false },
-            { key: '14', time: '01:00 PM', isActive: false },
-            { key: '15', time: '02:00 PM', isActive: false },
-            { key: '16', time: '03:00 PM', isActive: false },
-            { key: '17', time: '04:00 PM', isActive: false },
-            { key: '18', time: '05:00 PM', isActive: false },
-            { key: '19', time: '06:00 PM', isActive: false },
-            { key: '20', time: '07:00 PM', isActive: false },
-            { key: '21', time: '08:00 PM', isActive: false },
-            { key: '22', time: '09:00 PM', isActive: false },
-            { key: '23', time: '10:00 PM', isActive: false },
-            { key: '24', time: '11:00 PM', isActive: false },
-        ],
-        weekday: ['Sun', 'Mon', 'Tues', 'Wed', 'Thu', 'Fri', 'Sat'],
-        months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+            minDate: '',
+            colectionData: '',
+            colectionData2: '',
+            weekday: '',
+            months: '',
+        }
     }
-    }
-    onDaySelect(day){
-        console.log
+    onDaySelect(day) {
         let d = new Date(day.dateString);
         let weekday = new Array(7);
         weekday[0] = "Sun";
@@ -149,19 +91,18 @@ class UnavailableDate extends Component {
         weekday[6] = "Sat";
 
         let n = weekday[d.getDay()];
-        console.log(n);
         this.setState({
             daYSelected2: day.dateString,
             satEndDate: day.day + '-' + this.state.months[day.month - 1] + '-' + day.year,
             setEndWeek: n
         })
     }
-    pressOnCircle(index){
+    pressOnCircle(index) {
         let newColectionData = this.state.colectionData;
 
-        for (var i = 0; i < (newColectionData.length ); i++){
+        for (var i = 0; i < (newColectionData.length); i++) {
             newColectionData[i].isActive = false;
-            if (newColectionData[i].key == index){
+            if (newColectionData[i].key == index) {
                 newColectionData[i].isActive = true;
                 this.setState({
                     setStartTimeKey: newColectionData[i].key,
@@ -192,30 +133,214 @@ class UnavailableDate extends Component {
         })
     }
 
-    doneDateAndTime(){
-        console.log(this.props.auth);
-        if (this.state.satStartDate == ''){
-            Alert.alert('please enter Start Date' );
-        } else if (this.state.setStartTime == ''){
-            Alert.alert('please enter Start Time');
+    componentDidMount() {
+        this.setState({ visible: true });
+        var today = new Date();
+        var dy = parseInt(today.getMonth() + 1);
+        var dm = today.getDate();
+        if (dy < 10) {
+            dy = '0' + dy;
+        }
+        if (dm < 10) {
+            dm = '0' + dm;
+        }
+
+        date = today.getFullYear() + "-" + dy + "-" + dm;
+
+        this.setState({ 
+            weekday: ['Sun', 'Mon', 'Tues', 'Wed', 'Thu', 'Fri', 'Sat'],
+            months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+            minDate: [today],
+            daYSelected: [date],
+            daYSelected2: [date],
+            colectionData: [
+                { key: '1', time: '00:00 AM', isActive: false },
+                { key: '2', time: '01:00 AM', isActive: false },
+                { key: '3', time: '02:00 AM', isActive: false },
+                { key: '4', time: '03:00 AM', isActive: false },
+                { key: '5', time: '04:00 AM', isActive: false },
+                { key: '6', time: '05:00 AM', isActive: false },
+                { key: '7', time: '06:00 AM', isActive: false },
+                { key: '8', time: '07:00 AM', isActive: false },
+                { key: '9', time: '08:00 AM', isActive: false },
+                { key: '10', time: '09:00 AM', isActive: false },
+                { key: '11', time: '10:00 AM', isActive: false },
+                { key: '12', time: '11:00 AM', isActive: false },
+                { key: '13', time: '12:00 AM', isActive: false },
+                { key: '14', time: '01:00 PM', isActive: false },
+                { key: '15', time: '02:00 PM', isActive: false },
+                { key: '16', time: '03:00 PM', isActive: false },
+                { key: '17', time: '04:00 PM', isActive: false },
+                { key: '18', time: '05:00 PM', isActive: false },
+                { key: '19', time: '06:00 PM', isActive: false },
+                { key: '20', time: '07:00 PM', isActive: false },
+                { key: '21', time: '08:00 PM', isActive: false },
+                { key: '22', time: '09:00 PM', isActive: false },
+                { key: '23', time: '10:00 PM', isActive: false },
+                { key: '24', time: '11:00 PM', isActive: false }
+            ],
+            colectionData2: [
+                { key: '1', time: '00:00 AM', isActive: false },
+                { key: '2', time: '01:00 AM', isActive: false },
+                { key: '3', time: '02:00 AM', isActive: false },
+                { key: '4', time: '03:00 AM', isActive: false },
+                { key: '5', time: '04:00 AM', isActive: false },
+                { key: '6', time: '05:00 AM', isActive: false },
+                { key: '7', time: '06:00 AM', isActive: false },
+                { key: '8', time: '07:00 AM', isActive: false },
+                { key: '9', time: '08:00 AM', isActive: false },
+                { key: '10', time: '09:00 AM', isActive: false },
+                { key: '11', time: '10:00 AM', isActive: false },
+                { key: '12', time: '11:00 AM', isActive: false },
+                { key: '13', time: '12:00 AM', isActive: false },
+                { key: '14', time: '01:00 PM', isActive: false },
+                { key: '15', time: '02:00 PM', isActive: false },
+                { key: '16', time: '03:00 PM', isActive: false },
+                { key: '17', time: '04:00 PM', isActive: false },
+                { key: '18', time: '05:00 PM', isActive: false },
+                { key: '19', time: '06:00 PM', isActive: false },
+                { key: '20', time: '07:00 PM', isActive: false },
+                { key: '21', time: '08:00 PM', isActive: false },
+                { key: '22', time: '09:00 PM', isActive: false },
+                { key: '23', time: '10:00 PM', isActive: false },
+                { key: '24', time: '11:00 PM', isActive: false },
+            ],
+         });
+        if (this.props.navigation.state.params.unAvailTiming) {
+            
+           if(this.props.navigation.state.params.unAvailTiming[0] && this.state.colectionData !== '')
+           {
+            this.state.colectionData.map((item) => {
+                if (item.time == this.props.navigation.state.params.unAvailTiming[0].start_time) {
+                    item.isActive = true;
+                }
+            });
+           }
+
+           if(this.props.navigation.state.params.unAvailTiming[0] && this.state.colectionData !== '')
+           {
+            this.state.colectionData2.map((item) => {
+                if (item.time == this.props.navigation.state.params.unAvailTiming[0].end_time) {
+                    item.isActive = true;
+                }
+            });
+           }
+           if(this.props.navigation.state.params.unAvailTiming[0])
+           {
+            var startDate = new Date(this.props.navigation.state.params.unAvailTiming[0].start_date);
+            var dy = parseInt(startDate.getMonth() + 1);
+            var dm = startDate.getDate();
+            if (dy < 10) {
+                dy = '0' + dy;
+            }
+            if (dm < 10) {
+                dm = '0' + dm;
+            }
+
+            var stdate = startDate.getFullYear() + "-" + dy + "-" + dm;
+            this.setState({ daYSelected: stdate });
+
+            var endtDate = new Date(this.props.navigation.state.params.unAvailTiming[0].end_date);
+            var dy = parseInt(endtDate.getMonth() + 1);
+            var dm = endtDate.getDate();
+            if (dy < 10) {
+                dy = '0' + dy;
+            }
+            if (dm < 10) {
+                dm = '0' + dm;
+            }
+
+            var enddate = endtDate.getFullYear() + "-" + dy + "-" + dm;
+            this.setState({ daYSelected2: enddate });
+           }
+            //this.state.daYSelected2=new Date(this.props.navigation.state.params.unAvailTiming[0].end_date);
+            this.setState({ visible: false });
+        }
+    }
+
+    doneDateAndTime() {
+        this.setState({ visible: true });
+        if (this.state.satStartDate == '') {
+            this.setState({ visible: false });
+            Alert.alert('Please enter Start Date');
+        } else if (this.state.setStartTime == '') {
+            this.setState({ visible: false });
+            Alert.alert('Please enter Start Time');
         } else if (this.state.satEndDate == '') {
-            Alert.alert('please enter End Date');
+            this.setState({ visible: false });
+            Alert.alert('Please enter End Date');
         } else if (this.state.setEndTime == '') {
-            Alert.alert('please enter End Time');
+            this.setState({ visible: false });
+            Alert.alert('Please enter End Time');
         } //else if (this.state.setStartTime < this.state.setEndTime) {
         //      Alert.alert('End time will be getter than start time');
         //  } else if (this.state.setStartTime < this.state.setEndTime){
         //     Alert.alert('End time will be getter than start time');
         // }
-        else{
+        else {
 
             let d1 = new Date(this.state.satStartDate);
             let d2 = new Date(this.state.satEndDate);
-            if (d1 <= d2 ){
-                if (!(d1 < d2)){
+            if (d1 <= d2) {
+                if (!(d1 < d2)) {
                     if (this.state.setStartTimeKey > this.state.setEndTimeKey) {
-                        Alert.alert('End time will be getter than start time');
-                    }else{
+                        Alert.alert('End time will be greater than start time');
+                    } else {
+                        if (this.props.navigation.state.params.unAvailId) {
+                            const patchUrl = `WorkerUnavailabilities/${this.props.navigation.state.params.unAvailId}`;
+                            api.put(patchUrl, {
+                                "start_time": this.state.setStartTime,
+                                "end_time": this.state.setEndTime,
+                                "status": "NA",
+                                "start_date": this.state.daYSelected,
+                                "end_date": this.state.daYSelected2,
+                                "workerId": this.props.auth.data.id,
+                            }).then(res => {
+                                this.setState({ visible: false });
+                                this.props.navigation.navigate('myTiming');
+                            }).catch((err) => {
+                                this.setState({ visible: false });
+                                Alert.alert('Please try again later.');
+                            });
+                        }
+                        else {
+                            api.post('WorkerUnavailabilities/', {
+                                "start_time": this.state.setStartTime,
+                                "end_time": this.state.setEndTime,
+                                "status": "NA",
+                                "start_date": this.state.daYSelected,
+                                "end_date": this.state.daYSelected2,
+                                "workerId": this.props.auth.data.id
+                            }
+                            ).then((res) => {
+                                this.setState({ visible: false });
+                                this.props.navigation.navigate('myTiming');
+                            }).catch((err) => {
+                                this.setState({ visible: false });
+                                Alert.alert('Please try again later.');
+                            });
+                        }
+
+                    }
+                } else {
+                    if (this.props.navigation.state.params.unAvailId) {
+                        const patchUrl = `WorkerUnavailabilities/${this.props.navigation.state.params.unAvailId}`;
+                        api.put(patchUrl, {
+                            "start_time": this.state.setStartTime,
+                            "end_time": this.state.setEndTime,
+                            "status": "NA",
+                            "start_date": this.state.daYSelected,
+                            "end_date": this.state.daYSelected2,
+                            "workerId": this.props.auth.data.id,
+                        }).then(res => {
+                            this.setState({ visible: false });
+                            this.props.navigation.navigate('myTiming');
+                        }).catch((err) => {
+                            this.setState({ visible: false });
+                            Alert.alert('Please try again later.');
+                        });
+                    }
+                    else {
                         api.post('WorkerUnavailabilities/', {
                             "start_time": this.state.setStartTime,
                             "end_time": this.state.setEndTime,
@@ -225,28 +350,18 @@ class UnavailableDate extends Component {
                             "workerId": this.props.auth.data.id
                         }
                         ).then((res) => {
-                            console.log(res);
+                            this.setState({ visible: false });
+                            this.props.navigation.navigate('myTiming');
                         }).catch((err) => {
-                            console.log(err);
+                            this.setState({ visible: false });
+                            Alert.alert('Please try again later.');
                         });
                     }
-                }else{
-                    api.post('WorkerUnavailabilities/', {
-                        "start_time": this.state.setStartTime,
-                        "end_time": this.state.setEndTime,
-                        "status": "NA",
-                        "start_date": this.state.daYSelected,
-                        "end_date": this.state.daYSelected2,
-                        "workerId": this.props.auth.data.id
-                    }
-                    ).then((res) => {
-                        console.log(res);
-                    }).catch((err) => {
-                        console.log(err);
-                    });
+
                 }
             }
-            else{
+            else {
+                this.setState({ visible: false })
                 Alert.alert("Start date is less than or equal to end Date ")
             }
 
@@ -258,60 +373,61 @@ class UnavailableDate extends Component {
         return (
             <Container >
                 <StatusBar
-                    backgroundColor="#81cdc7"/>
+                    backgroundColor="#81cdc7" />
 
-                    <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed">
+                <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed">
                     <Button transparent onPress={() => this.props.navigation.goBack()}>
-                            <Text>Cancle</Text>
-                        </Button>
-                        <Body style={styles.tac}>
-                            <Text style={styles.hdClr}>My Timings</Text>
-                        </Body>
-                        <Button transparent onPress={() => this.doneDateAndTime()}>
-                            <Text>Done</Text>
-                        </Button>
-                    </Header>
+                        <Text>{I18n.t('cancel')}</Text>
+                    </Button>
+                    <Body style={styles.tac}>
+                        <Text style={styles.hdClr}>{I18n.t('my_timing')}</Text>
+                    </Body>
+                    <Button transparent onPress={() => this.doneDateAndTime()}>
+                        <Text>{I18n.t('done')}</Text>
+                    </Button>
+                </Header>
 
-                    <Content>
-
-                        <View style={{ paddingLeft: 15, paddingRight: 15, }}>
+                <Content>
+                    <FSpinner visible={this.state.visible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
+                    <View style={{ paddingLeft: 15, paddingRight: 15, }}>
                         <Card style={{ backgroundColor: 'transparent', marginBottom: 20 }}>
-                            <CardItem style={{marginBottom: 2, alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
-                                <FontAwesome name='calendar' style={{ color: '#81cdc7', fontSize: 20, marginRight: 5 }}/>
-                                <Text>Start Day</Text>
+                            <CardItem style={{ marginBottom: 2, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+                                <FontAwesome name='calendar' style={{ color: '#81cdc7', fontSize: 20, marginRight: 5 }} />
+                                <Text>{I18n.t('start_day')}</Text>
                             </CardItem>
                             <CardItem>
-                            <Calendar
-                                onDayPress={(day) => this.onDaySelect(day)}
-                                monthFormat={ 'MMM yyyy'}
-                                hideArrows={false}
-                                hideExtraDays={true}
-                                disableMonthChange={false}
-                                markedDates={{
-                                    [this.state.daYSelected]: { selected: true, selectedColor: '#81cdc7' }
-                                }}
-                                theme={{
-                                    backgroundColor: '#ffffff',
-                                    calendarBackground: '#ffffff',
-                                    textSectionTitleColor: '#2d4150',
-                                    selectedDayBackgroundColor: '#2d4150',
-                                    selectedDayTextColor: '#ffffff',
-                                    todayTextColor: '#81cdc7',
-                                    dayTextColor: '#2d4150',
-                                    weekTextColor: '#000',
-                                    textDisabledColor: '#ccc',
-                                    arrowColor: '#81cdc7',
-                                    textDayFontSize: 14,
-                                    textMonthFontSize: 16,
-                                    textDayHeaderFontSize: 16,
+                                <Calendar
+                                    onDayPress={(day) => this.onDaySelect(day)}
+                                    monthFormat={'MMM yyyy'}
+                                    hideArrows={false}
+                                    hideExtraDays={true}
+                                    disableMonthChange={false}
+                                    minDate={this.state.minDate}
+                                    markedDates={{
+                                        [this.state.daYSelected]: { selected: true, selectedColor: '#81cdc7' }
+                                    }}
+                                    theme={{
+                                        backgroundColor: '#ffffff',
+                                        calendarBackground: '#ffffff',
+                                        textSectionTitleColor: '#2d4150',
+                                        selectedDayBackgroundColor: '#2d4150',
+                                        selectedDayTextColor: '#ffffff',
+                                        todayTextColor: '#81cdc7',
+                                        dayTextColor: '#2d4150',
+                                        weekTextColor: '#000',
+                                        textDisabledColor: '#ccc',
+                                        arrowColor: '#81cdc7',
+                                        textDayFontSize: 14,
+                                        textMonthFontSize: 16,
+                                        textDayHeaderFontSize: 16,
 
-                                }}
-                            />
+                                    }}
+                                />
                             </CardItem>
 
-                            <CardItem style={{ marginTop: 2, marginBottom:2, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+                            <CardItem style={{ marginTop: 2, marginBottom: 2, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
                                 <FontAwesome name='clock-o' style={{ color: '#81cdc7', fontSize: 20, marginRight: 5 }} />
-                                <Text>Start Time</Text>
+                                <Text>{I18n.t('start_time')}</Text>
                             </CardItem>
                             <CardItem>
                                 <View style={{ flex: 1, flexDirection: 'row', }}>
@@ -336,7 +452,7 @@ class UnavailableDate extends Component {
                         <Card style={{ backgroundColor: 'transparent' }}>
                             <CardItem style={{ marginBottom: 2, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
                                 <FontAwesome name='calendar' style={{ color: '#81cdc7', fontSize: 20, marginRight: 5 }} />
-                                <Text>End Day</Text>
+                                <Text>{I18n.t('end_day')}</Text>
                             </CardItem>
                             <CardItem>
                                 <Calendar
@@ -345,6 +461,7 @@ class UnavailableDate extends Component {
                                     hideArrows={false}
                                     hideExtraDays={true}
                                     disableMonthChange={false}
+                                    minDate={this.state.minDate}
                                     markedDates={{
                                         [this.state.daYSelected2]: { selected: true, selectedColor: '#81cdc7' }
                                     }}
@@ -368,7 +485,7 @@ class UnavailableDate extends Component {
                             </CardItem>
                             <CardItem style={{ marginBottom: 2, marginTop: 2, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
                                 <FontAwesome name='clock-o' style={{ color: '#81cdc7', fontSize: 20, marginRight: 5 }} />
-                                <Text>End Time</Text>
+                                <Text>{I18n.t('end_time')}</Text>
                             </CardItem>
                             <CardItem>
                                 <View style={{ flex: 1, flexDirection: 'row', }}>
@@ -389,8 +506,8 @@ class UnavailableDate extends Component {
                                 </View>
                             </CardItem>
                         </Card>
-                        </View>
-                    </Content>
+                    </View>
+                </Content>
             </Container>
         );
     }
@@ -415,4 +532,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UnavailableDate);
+export default connect(mapStateToProps, {})(UnavailableDate);

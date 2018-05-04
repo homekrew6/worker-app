@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image, View, StatusBar, Dimensions, StyleSheet, ImageBackground } from "react-native";
+import { Image, View, StatusBar, Dimensions, StyleSheet, ImageBackground, AsyncStorage } from "react-native";
 import { Container, Button, H3, Text, Header, Title, Body, Left, Right,Grid } from "native-base";
 // import ImageSlider from 'react-native-image-slider';
 import AppIntroSlider from './AppIntroSlider';
@@ -34,6 +34,10 @@ class Intro extends Component {
 	}
 
     componentWillMount() {
+		AsyncStorage.setItem("IsSliderShown", "true").then((res)=>{
+			
+		})
+
 		this.setState({
 			interval: setInterval(() => {
             this.setState({position: this.state.position === 2 ? 0 : this.state.position + 1});
@@ -58,7 +62,6 @@ class Intro extends Component {
 				sliderArray: res.response,
 				slidFlag: true
 			});
-			console.log('hi', res.response);
 
 		}).catch((err) => {
 			this.setState({ loader: false })
@@ -136,11 +139,10 @@ class Intro extends Component {
 					<Swiper
 						style={styles.wrapper}
 						loop={true}
-						autoplay={true}
-						autoplayTimeout={5}
+						//autoplay={true}
+						//autoplayTimeout={5}
 						dotColor={'#81cdc7'}
-						activeDotColor = {'#1e3768'}
-
+						activeDotColor={'#1e3768'}
 					>
 						{
 							this.state.sliderArray.map((item, key) => {

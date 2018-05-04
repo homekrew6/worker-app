@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Moment from 'moment';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, ListView } from "react-native";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, ListView, BackHandler } from "react-native";
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -12,33 +12,76 @@ import I18n from '../../i18n/i18n';
 import styles from './styles';
 const buttonImage = require("../../../img/lgo2.png");
 import api from '../../api';
-
+import {navigateAndSaveCurrentScreen} from '../accounts/elements/authActions';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 
 class myTiming extends Component {
-    state = {timimgData: '', weekOffStatus: true, unavailableTiming: '', tableRowId: ''};
+    state = {timimgData: '', weekOffStatus: true, unavailableTiming: '', tableRowId: '', unAvailId:''};
     componentDidMount(){
       const workerId = this.props.auth.data.id;
-      const WorkerAvailabilitiesUrl = `worker-available-timings?{"where":{"workerId":"${workerId}"}}`;
+      const WorkerAvailabilitiesUrl = `Workeravailabletimings?filter={"where":{"workerId":"${workerId}"}}`;
       api.get(WorkerAvailabilitiesUrl).then(res => {
-          console.log('timimgData', res);
           this.setState({ timimgData: res[0].timings, tableRowId: res[0].id });
       }).catch((err) => {
           //console.log(err);
       });
 
-      const WorkerUnavailabilitiesUrl = `WorkerUnavailabilities?{"where":{"workerId":"${workerId}"}}`;
+      const WorkerUnavailabilitiesUrl = `WorkerUnavailabilities?filter={"where":{"workerId":"${workerId}"}}`;
       api.get(WorkerUnavailabilitiesUrl).then(res => {
         this.setState({ unavailableTiming: res });
-        console.log('unavailableTiming', this.state.unavailableTiming);
+        if(res.length && res.length>0)
+        {
+            this.setState({unAvailId:this.state.unavailableTiming[0].id});
+        }
 
       }).catch((err) => {
-          console.log(err);
       })
 
     }
 
+
+    renderBackButton()
+    {
+        if (this.props.currentRoute === "myTiming" && !this.props.prevRoute) {
+         this.backHandler=   BackHandler.addEventListener('hardwareBackPress', function () {
+                console.log('hardwareBackPress', this.props);
+                if (this.props.currentRoute === 'myTiming') {
+                    Alert.alert(
+                        'Confirm',
+                        'Are you sure to exit the app?',
+                        [
+                            { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                            { text: 'OK', onPress: () => BackHandler.exitApp() },
+                        ],
+                        { cancelable: false }
+                    );
+                    return true;
+                } else {
+                    this.props.navigation.goBack(null);
+                    return true;
+                }
+
+            }.bind(this));
+        }
+    }
+    navigate(screen) {        
+        const data = this.props.auth.data;
+        data.activeScreen = screen;
+        data.previousScreen = "Settings";
+        this.props.navigateAndSaveCurrentScreen(data);
+        if(screen==='WeekCalendar')
+        {
+            this.props.navigation.navigate(screen, { timimgData: this.state.timimgData,
+                tableRowId: this.state.tableRowId})
+        }
+      else
+      {
+        this.props.navigation.navigate(screen, {  unAvailId: this.state.unAvailId,
+            unAvailTiming:this.state.unavailableTiming})
+      }
+        
+      }
 getWeekOff(day, data){
   const VarAr = [];
     data.map((OffCheck, key) => {
@@ -49,7 +92,7 @@ getWeekOff(day, data){
     })
     if (VarAr.length === 0) {
       return(
-        <Text key={1} style={{ color: '#828282', fontSize: 13, paddingLeft: 5, paddingRight: 5}}>Week Off</Text>
+        <Text key={1} style={{ color: '#828282', fontSize: 13, paddingLeft: 5, paddingRight: 5}}>{I18n.t('week_off')} </Text>
       );
     }
 }
@@ -63,7 +106,6 @@ getTimeAmPm(day, DataWeek, key){
     }
 
     const timing = DataWeek.time + CommaValue;
-    console.log('CommaValue', CommaValue, timing);
     if(day_status === true){
       return(
         <Text key={DataWeek.id} style={{ color: '#828282', fontSize: 13, paddingLeft: 5, paddingRight: 5}}>
@@ -76,7 +118,6 @@ getTimeAmPm(day, DataWeek, key){
 render
 
 renderUnavalData(UnAvData, key){
-  console.log('UnAvData', UnAvData, key);
   Moment.locale('en');
   const start_date = UnAvData.start_date;
   const end_date = UnAvData.end_date;
@@ -86,7 +127,7 @@ renderUnavalData(UnAvData, key){
         <View style={styles.flexOne}>
             <View style={styles.startTime}>
                 <View style={styles.wkDay}>
-                    <Text style={styles.wkDayd}> Start Date </Text>
+                    <Text style={styles.wkDayd}> {I18n.t('start_date')} </Text>
                 </View>
                 <View>
                     <Text style={styles.timedata}> {Moment(start_date).format('ddd, D MMM YYYY')} {UnAvData.start_time} </Text>
@@ -94,7 +135,7 @@ renderUnavalData(UnAvData, key){
             </View>
             <View style={styles.endTime}>
                 <View style={styles.wkDay}>
-                    <Text style={styles.wkDayd}> End Date </Text>
+                    <Text style={styles.wkDayd}> {I18n.t('end_date')} </Text>
                 </View>
                 <View>
                     <Text style={styles.timedata}> {Moment(end_date).format('ddd, D MMM YYYY')} {UnAvData.end_time} </Text>
@@ -106,6 +147,7 @@ renderUnavalData(UnAvData, key){
 }
 
     render() {
+        this.renderBackButton();
       const data = [
         {
             "id": 1,
@@ -152,13 +194,11 @@ renderUnavalData(UnAvData, key){
                 />
                 <Content>
                     <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed">
-                        <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                          <Button transparent >
+                          <Button transparent onPress={() => this.props.navigation.goBack()}>
                             <Ionicons name="ios-arrow-back" style={styles.backBt} />
                           </Button>
-                        </TouchableOpacity>
                         <Body style={styles.tac}>
-                            <Text style={styles.hdClr}>My Timings</Text>
+                            <Text style={styles.hdClr}>{I18n.t('my_timing')} </Text>
                         </Body>
                         <Button transparent />
                     </Header>
@@ -166,15 +206,12 @@ renderUnavalData(UnAvData, key){
 
                         <View style={styles.mainItemSec}>
                             <View style={styles.flexOne}>
-                                <Text style={styles.listHdr}>Available Timing</Text>
+                                <Text style={styles.listHdr}>{I18n.t('available_timing')}</Text>
                             </View>
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate("WeekCalendar", {
-                               timimgData: this.state.timimgData,
-                               tableRowId: this.state.tableRowId
-                             })}>
+                            <TouchableOpacity onPress={() => this.navigate("WeekCalendar")}>
                               <View style={{ flexDirection: 'row' }}>
                                   <Ico name='edit' style={styles.listHdrEdtIcn} />
-                                  <Text style={styles.listHdrEdt}>Edit</Text>
+                                  <Text style={styles.listHdrEdt}>{I18n.t('add_edit')}</Text>
                               </View>
                             </TouchableOpacity>
                         </View>
@@ -273,11 +310,11 @@ renderUnavalData(UnAvData, key){
 
                         <View style={styles.mainItemSec}>
                             <View style={styles.flexOne}>
-                                <Text style={styles.listHdr}>Unavailable Timing</Text>
+                                <Text style={styles.listHdr}>{I18n.t('unavailable_timing')}</Text>
                             </View>
-                            <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => this.props.navigation.navigate('UnavailableDate')}>
+                            <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => this.navigate('UnavailableDate')}>
                                 <Ico name='add-circle' style={styles.listHdrEdtIcn} />
-                                <Text style={styles.listHdrEdt}>Add</Text>
+                                <Text style={styles.listHdrEdt}>{I18n.t('add_edit')}</Text>
                             </TouchableOpacity>
                         </View>
                           {
@@ -302,13 +339,15 @@ myTiming.propTypes = {
 const mapStateToProps = (state) => {
     return {
         location: state.location,
-        auth: state.auth
+        auth: state.auth,
+        currentRoute: state.RouterOwn.currentRoute,
+        prevRoute: state.RouterOwn.prevRoute
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-
+        navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
     }
 }
 

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { login } from './elements/authActions'
 import api from '../../api'
 import { NavigationActions } from "react-navigation"
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from "react-native";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground } from "react-native";
 
 import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Icon, Frame, Input, Label, Text } from "native-base";
 
@@ -34,10 +34,18 @@ class ResetPassword extends Component {
             Alert.alert('Please enter otp');
             return false;
         }
+
         if (!this.state.password) {
             Alert.alert('Please enter password');
             return false;
         }
+
+        let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if (!regEmail.test(this.state.email)) {
+            Alert.alert('Please enter a valid email');
+            return false;
+        }
+        
         this.setState({ visible: true });
         api.post('Customers/otpChecking', { otp: this.state.otp }).then(res => {
             api.post('Workers/reset-password?access_token=' + res.response.access_token, { newPassword: this.state.password }).then(resReset => {
@@ -115,17 +123,23 @@ class ResetPassword extends Component {
                         </View>
                         <View style={{ marginTop: 30 }}>
                             <Item regular style={{ borderColor: '#29416f', borderWidth: 1, borderRadius: 2, height: 45 }}>
-                                <Input onChangeText={(text) => this.setState({ otp: text })} value={this.state.otp}  keyboardType={'numeric'} placeholder={I18n.t('four_digit_code')} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} />
+                                <Input onChangeText={(text) => this.setState({ otp: text })} value={this.state.otp} keyboardType={'numeric'} placeholder={I18n.t('four_digit_code')} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }}/>
                             </Item>
                             <Item regular style={{ borderColor: '#29416f', borderWidth: 1, borderRadius: 2, height: 45, marginTop: 10 }}>
                                 <Input onChangeText={(text) => this.setState({ password: text })} value={this.state.password} secureTextEntry={true} placeholder={I18n.t('new_password')} style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} />
                             </Item>
                         </View>
                     </View>
-                    <TouchableOpacity transparent style={{ height: 70, marginTop: 2, flex: 1, flexDirection: 'row', paddingLeft: 15, paddingRight: 15 }} onPress={() => this.pressSend()} >
-                        <Image source={buttonImage} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: deviceWidth / 1.3, height: 55 }} >
+                    <TouchableOpacity transparent 
+                        style={{ flex: 1, flexDirection: 'row', marginTop: 15, paddingLeft: 15, paddingRight: 15 }}
+                        onPress={() => this.pressSend()}
+                    >
+                        <ImageBackground 
+                            source={buttonImage} 
+                            style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 55 }}
+                        >
                             <Text style={{ color: '#fff', fontSize: 20, marginTop: -10, height: 30 }}>{I18n.t('save_password')}</Text>
-                        </Image>
+                        </ImageBackground>
                     </TouchableOpacity>
 
                 </Content>

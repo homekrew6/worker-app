@@ -8,7 +8,6 @@ export function login(email, password) {
 
       AsyncStorage.setItem('userToken', JSON.stringify(res), (err, result) => {
         AsyncStorage.getItem('userToken', (err, result) => {
-          console.log(result);
         })
       })
       res.type = 'success';
@@ -17,7 +16,6 @@ export function login(email, password) {
 
     }).catch(err => {
       err.type = 'error';
-      console.log(err)
       dispatch(authStateFailed())
       return err
     })
@@ -37,6 +35,31 @@ export function getUserDetail(id, auth) {
       err.type = 'error';
       console.log(err)
       dispatch(authStateFailed())
+      return err
+    })
+  }
+}
+
+export function getAllLanguagesList(id, auth) {
+  return function (dispatch) {
+    return authApi.getAllLanguagesList(id, auth).then(res => {
+      res.type = 'success';
+      return res
+
+    }).catch(err => {
+      err.type = 'error';
+      return err
+    })
+  }
+}
+export function getAllCurrencyList(id, auth) {
+  return function (dispatch) {
+    return authApi.getAllCurrencyList(id, auth).then(res => {
+      res.type = 'success';
+      return res
+
+    }).catch(err => {
+      err.type = 'error';
       return err
     })
   }
@@ -86,6 +109,11 @@ export function logout(cb) {
   }
 }
 
+export function navigateAndSaveCurrentScreen(data){
+  return function (dispatch) {
+    dispatch(authStateSuccess(data));
+  };
+}
 
 export function authStateBusy() {
   return {

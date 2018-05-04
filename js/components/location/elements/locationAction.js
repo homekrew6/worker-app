@@ -3,15 +3,12 @@ import * as TYPES from '../../../actions/actionTypes'
 import { AsyncStorage } from 'react-native'
 export function allLocation() {
     return function (dispatch) {
-        console.log('test');
         dispatch(locationStateBusy())
         return locationApi.allLocation().then(res => {
-            console.log(res);
             let i
             for (i = 0; i < res.length; i++) {
                 res[i].selected = false;
             }
-            console.log(res)
             dispatch(locationStateSuccess(res));
             res.type = 'success';
 
@@ -19,7 +16,6 @@ export function allLocation() {
 
         }).catch(err => {
             err.type = 'error';
-            console.log(err);
             dispatch(locationStateFailed());
             return err;
         })
@@ -29,10 +25,8 @@ export function allLocation() {
 
 export function selectedLocation(workerID) {
     return function (dispatch) {
-        console.log(workerID);
         dispatch(myLocationStateBusy())
         return locationApi.myLoaction(workerID).then(res => {
-            console.log(res);
             dispatch(myLocationStateSuccess(res));
             res.type = 'success';
 
@@ -40,7 +34,6 @@ export function selectedLocation(workerID) {
 
         }).catch(err => {
             err.type = 'error';
-            console.log(err);
             dispatch(myLocationStateFailed());
             return err;
         })
@@ -48,7 +41,6 @@ export function selectedLocation(workerID) {
 }
 
 export function checkUncheck(id, data) {
-    console.log(data);
     return function (dispatch) {
         dispatch(checkUncheckStateBusy())
         let newData = data.map((data, key) => {
@@ -58,7 +50,6 @@ export function checkUncheck(id, data) {
             return data
         })
 
-        console.log(newData);
 
         //dispatch(checkUncheckStateSuccess(newData));
         //return newData;
@@ -69,13 +60,11 @@ export function clearMyLocation(id) {
     return function (dispatch) {
         dispatch(clearMyLocationStateBusy());
         return locationApi.clearMyLocation(id).then(res => {          
-            console.log(res);
             dispatch(clearMyLocationStateSuccess());
             return res;
 
         }).catch(err => {
             err.type = 'error';
-            console.log('error2');
             //console.log(err);
             dispatch(clearMyLocationStateFailed());
             return err;
