@@ -5,8 +5,7 @@ import { login } from './elements/authActions';
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground  } from "react-native";
 import api from '../../api';
 import FSpinner from 'react-native-loading-spinner-overlay';
-
-import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Icon, Frame, Input, Label, Text } from "native-base";
+import { Container, Header, Button, Content, Left, Body, Title, Item, Icon, Input, Text } from "native-base";
 
 import I18n from '../../i18n/i18n';
 import styles from "./styles";
@@ -123,7 +122,7 @@ class ForgotPassword extends Component {
                             </Item>
 
                         </View>
-                        
+
                     </View>
 
                     <TouchableOpacity transparent style={{ height: 70, marginTop: 20, flexDirection: 'row', paddingLeft: 15, paddingRight:15 }} onPress={() => this.pressSend()} >
