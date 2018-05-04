@@ -9,11 +9,11 @@ import ImagePicker from 'react-native-image-crop-picker';
 import config from '../../config'
 import { RNS3 } from 'react-native-aws3';
 import api from '../../api';
-import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Form, Item, Frame, Input, Label, CardItem, Right, Card, Left, Body, Title, ActionSheet, Switch } from 'native-base';
+import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Input, Text, Body, ActionSheet, Switch } from 'native-base';
 import { NavigationActions } from "react-navigation";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
-const deviceHeight = Dimensions.get('window').height;
+
 const deviceWidth = Dimensions.get('window').width;
 const profileImage = require('../../../img/atul.png');
 const carveImage = require('../../../img/bg-1.png');
@@ -179,6 +179,7 @@ class EditProfile extends Component {
 
                     this.setState({ image: response.body.postResponse.location })
                     this.setState({ visible: false });
+                    Alert.alert('', 'Press the save button to save the image.');
                 }
             }).catch((err) => {
                 console.log(err);
@@ -228,8 +229,9 @@ class EditProfile extends Component {
                 if (response.status == 201) {
                     this.setState({ cameraButton: true });
                     this.setState({ cameraUploaded: true });
-                    this.setState({ image: response.body.postResponse.location })
+                    this.setState({ image: response.body.postResponse.location });
                     this.setState({ visible: false });
+                    Alert.alert('', 'Press the save button to save the image.');
                 }
             }).catch((err) => {
                 this.setState({ visible: false });
