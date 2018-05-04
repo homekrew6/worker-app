@@ -46,7 +46,6 @@ export default{
     menuCardTxt: {
         flex: 1,
         flexDirection: 'row',
-        color: '#606060',
         paddingLeft: 10,
         lineHeight: 25,
     }, 
@@ -174,13 +173,17 @@ export default{
         borderRadius: 90 
     },
     editPflHdrBtn:{ 
-    paddingTop: 20, 
-    paddingBottom: 20, 
-    marginTop: 15 
+        paddingTop: 20, 
+        paddingBottom: 20, 
+        marginTop: 15 
     },
-
-
-    starRed:{ color: 'red', fontSize: 12 },
-    starRedSkill:{ color: 'red', fontSize: 10 }
+    starRed:{ 
+        color: 'red', 
+        fontSize: 12 
+    },
+    starRedSkill:{ 
+        color: 'red', 
+        fontSize: 10 
+    }
 
 };

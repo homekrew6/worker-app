@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Image, View, StatusBar, ImageBackground, TouchableOpacity, AsyncStorage } from "react-native";
-import { Container, Button, H3, Text, Header, Title, Body, Left, Right, Content, Item, Footer, FooterTab } from "native-base";
+import { Image, View, StatusBar, ImageBackground, TouchableOpacity, AsyncStorage, Text } from "react-native";
+import { Container, Button, H3, Header, Title, Body, Left, Right, Content, Item, Footer, FooterTab } from "native-base";
 import FSpinner from 'react-native-loading-spinner-overlay';
 import styles from './styles'; 
 import Entypo from 'react-native-vector-icons/Entypo';

@@ -42,6 +42,25 @@ import Quote from './components/followUp/quote';
 import jobSummary from './components/jobList/jobSummary';
 import NotificationList from './components/notification/notificationList';
 import Support from './components/support/supportList';
+import { setCustomText, setCustomTextInput } from 'react-native-global-props';
+
+
+const customTextProps = {
+  style: {
+    color: '#1e3768',
+    fontFamily: 'Lato-Regular'
+  }
+}
+
+const customTextInputProps = {
+  style: {
+    color: '#1e3768',
+    fontFamily: 'Lato-Regular'
+  }
+}
+
+setCustomText(customTextProps);
+setCustomTextInput(customTextInputProps);
 
 const transitionConfig = () => {
     return {

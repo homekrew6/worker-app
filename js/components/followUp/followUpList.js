@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, BackHandler, ScrollView } from "react-native";
+import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, BackHandler, ScrollView, Text } from "react-native";
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import firebase from 'firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -12,7 +12,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { NavigationActions } from 'react-navigation';
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Footer, FooterTab, Card, CardItem } from "native-base";
+import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Body, Title, Footer, FooterTab, Card, CardItem } from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 import api from '../../api/index';

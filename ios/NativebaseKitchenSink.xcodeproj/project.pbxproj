@@ -62,6 +62,8 @@
 		4A272BA621BD452D93E34B11 /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58ADC658C41C4318BFDF2C0F /* libRNImagePicker.a */; };
 		CE8B9FBC5C204781A3FE6B05 /* libimageCropPicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A331D4B631140B8B6103204 /* libimageCropPicker.a */; };
 		3A3CF878E45147A8A03B0A41 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F245A997F69C43C48E7BE556 /* Feather.ttf */; };
+		85A9DD02730B45DC992460C3 /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2F91D72D7F464ED19055D8F8 /* Lato-Regular.ttf */; };
+		E0C33DD7CE294042B5DE8322 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F8CF805E681F4A84AA957102 /* Poppins-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -347,6 +349,8 @@
 		D33A89470FDB4105AE391429 /* imageCropPicker.xcodeproj */ = {isa = PBXFileReference; name = "imageCropPicker.xcodeproj"; path = "../node_modules/react-native-image-crop-picker/ios/imageCropPicker.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		2A331D4B631140B8B6103204 /* libimageCropPicker.a */ = {isa = PBXFileReference; name = "libimageCropPicker.a"; path = "libimageCropPicker.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		F245A997F69C43C48E7BE556 /* Feather.ttf */ = {isa = PBXFileReference; name = "Feather.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		2F91D72D7F464ED19055D8F8 /* Lato-Regular.ttf */ = {isa = PBXFileReference; name = "Lato-Regular.ttf"; path = "../assets/fonts/Lato-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F8CF805E681F4A84AA957102 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; name = "Poppins-Regular.ttf"; path = "../assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -550,6 +554,8 @@
 				6199411C465A4CBA8B4E3059 /* SimpleLineIcons.ttf */,
 				09B87D51AA6749408B167EE3 /* Zocial.ttf */,
 				F245A997F69C43C48E7BE556 /* Feather.ttf */,
+				2F91D72D7F464ED19055D8F8 /* Lato-Regular.ttf */,
+				F8CF805E681F4A84AA957102 /* Poppins-Regular.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1050,6 +1056,8 @@
 				A697FC5224BA4F498B12E40B /* SimpleLineIcons.ttf in Resources */,
 				FFDC93E86C9B42D9BE566AF6 /* Zocial.ttf in Resources */,
 				3A3CF878E45147A8A03B0A41 /* Feather.ttf in Resources */,
+				85A9DD02730B45DC992460C3 /* Lato-Regular.ttf in Resources */,
+				E0C33DD7CE294042B5DE8322 /* Poppins-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
