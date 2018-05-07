@@ -194,15 +194,15 @@ class NotificationList extends Component {
                 />
 
                 <Header style={styles.headerMain} androidStatusBarColor="#81cdc7" noShadow >
-                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 70, justifyContent: 'flex-start' }}>
+                    <TouchableOpacity transparent onPress={() => this.props.navigation.goBack()} activeOpacity={0.5} style={{ width: 40, justifyContent: 'center' }}>
                         <Ionicons style={styles.headerIconClose} name='ios-arrow-back-outline' />
-                    </Button>
+                    </TouchableOpacity>
                     <Body style={styles.headerBody}>
                         <Title style={styles.headerTitle}>{I18n.t('notification')}</Title>
                     </Body>
-                    <Button transparent style={{ width: 70 }} onPress={()=>this.clearAll()}>
+                    <TouchableOpacity transparent activeOpacity={0.5} style={{ width: 70, justifyContent: 'center', alignItems: 'flex-end' }} onPress={()=>this.clearAll()}>
                         <Text style={{ color: '#fff' }}>{I18n.t('clearAll')}</Text>
-                    </Button>
+                    </TouchableOpacity>
                 </Header>
                 {
                     !(this.state.NotificationListRead.length == 0 && this.state.NotificationListUnread.length == 0) ? 

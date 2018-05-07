@@ -446,17 +446,16 @@ class AvailableJobs extends Component {
                 />
 
                 <Header style={styles.headerWarp} noShadow androidStatusBarColor="#f3f3f3">
-                    <Button transparent onPress={() => this.props.navigation.navigate('Menu')}>
+                    <TouchableOpacity transparent onPress={() => this.props.navigation.navigate('Menu')} activeOpacity={0.5} style={{ width: 40, justifyContent: 'center' }}>
                         <MaterialIcons name="menu" style={styles.headIcon2} />
-                    </Button>
+                    </TouchableOpacity>
 
                     <Body style={styles.headBody}>
                         <Image source={require('../../../img/logo2.png')} style={{ height: 20, width: 115 }}/>
                     </Body>
-                    <Button transparent />
-                    <Button transparent onPress={() => this.props.navigation.navigate('NotificationList')}>
+                    <TouchableOpacity transparent onPress={() => this.props.navigation.navigate('NotificationList')} activeOpacity={0.5} style={{ width: 40, justifyContent: 'center', alignItems: 'flex-end' }}>
                         <MaterialIcons name="notifications" style={styles.headIcon2} />
-                    </Button>
+                    </TouchableOpacity>
                 </Header>
 
                 <Tabs
@@ -789,18 +788,17 @@ class AvailableJobs extends Component {
                     backgroundColor="#f3f3f3"
                 />
                  <FSpinner visible={true} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
-                    <Header style={styles.headerWarp} noShadow androidStatusBarColor="#f3f3f3">
-                        <Button transparent onPress={() => this.props.navigation.navigate('Menu')}>
+                    <Header style={styles.headerWarp} noShadow androidStatusBarColor="#f3f3f3" >
+                        <TouchableOpacity transparent onPress={() => this.props.navigation.navigate('Menu')} activeOpacity={0.5} style={{ width: 40, justifyContent: 'center' }}>
                             <MaterialIcons name="menu" style={styles.headIcon2} />
-                        </Button>
+                        </TouchableOpacity>
 
                         <Body style={styles.headBody}>
                             <Image source={require('../../../img/logo2.png')} style={{ height: 20, width: 115 }} />
                         </Body>
-                        <Button transparent />
-                        <Button transparent onPress={() => this.props.navigation.navigate('NotificationList')}>
+                        <TouchableOpacity transparent onPress={() => this.props.navigation.navigate('NotificationList')} activeOpacity={0.5} style={{ width: 40, justifyContent: 'center', alignItems: 'flex-end' }}>
                             <MaterialIcons name="notifications" style={styles.headIcon2} />
-                        </Button>
+                        </TouchableOpacity>
                     </Header>
 
                 </Container>

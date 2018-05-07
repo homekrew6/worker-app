@@ -191,13 +191,13 @@ class Quote extends Component {
                     backgroundColor="#81cdc7"
                 />
                 <Header style={styles.appHdr2} noShadow androidStatusBarColor="#81cdc7">
-                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }}>
+                    <TouchableOpacity transparent onPress={() => this.props.navigation.goBack()} activeOpacity={0.5} style={{ width: 40, justifyContent: 'center' }}>
                         <Ionicons name="ios-arrow-back" style={styles.headIcon2} />                       
-                    </Button>
+                    </TouchableOpacity>
                     <Body style={styles.headBody}>
-                        <Title>{I18n.t('quote')}</Title>
+                        <Title><Text>{I18n.t('quote')}</Text></Title>
                     </Body>
-                    <Button transparent style={{ width: 30, backgroundColor: 'transparent', }} disabled={true} />
+                    <TouchableOpacity activeOpacity={1} style={{ width: 40, justifyContent: 'center', alignItems: 'flex-end' }} />  
                 </Header>
                 <Content>
                     {/* <FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{ color: '#FFF' }} /> */}

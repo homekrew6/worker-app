@@ -56,14 +56,13 @@ class ForgotPassword extends Component {
                 <Content>
                     <FSpinner visible={this.state.visible} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
                     <Header style={{ backgroundColor: '#fff' }} androidStatusBarColor="#81cdc7">
-                        <Left style={{ marginRight: -15 }}>
-                            <Button transparent onPress={() => this.props.navigation.goBack()}>
-                                <Icon style={{ color: '#81cdc7' }} name='arrow-back' />
-                            </Button>
-                        </Left>
-                        <Body>
-                            <Title style={{ color: '#1e3768' }}>{I18n.t('reset_password')}</Title>
+                        <TouchableOpacity transparent onPress={() => this.props.navigation.goBack()} activeOpacity={0.5} style={{ width: 40, justifyContent: 'center' }}>
+                            <Icon style={{ color: '#81cdc7' }} name='arrow-back' />
+                        </TouchableOpacity>
+                        <Body style={{ alignItems: 'center' }}>
+                            <Title style={{ color: '#1e3768', textAlign: 'center' }}>{I18n.t('reset_password')}</Title>
                         </Body>
+                        <TouchableOpacity activeOpacity={1} style={{ width: 40, justifyContent: 'center', alignItems: 'flex-end' }} />                        
                     </Header>
 
                     <View style={{ padding: 20 }}>

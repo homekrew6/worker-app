@@ -24,15 +24,15 @@ class SupportLiveChat extends Component {
                 />
 
                 <Header style={styles.headerMain} androidStatusBarColor="#81cdc7" noShadow >
-                    <Button transparent onPress={() => this.props.navigation.goBack()} style={styles.buttonIconWarp}>
+                    <TouchableOpacity transparent onPress={() => this.props.navigation.goBack()} style={[styles.buttonIconWarp]} activeOpacity={0.5}>
                         <Ionicons style={styles.headerIconClose} name='ios-arrow-back' />
-                    </Button>
+                    </TouchableOpacity>
                     <Body style={styles.headerBody}>
                         <Title style={{ fontSize: 14 }}>{I18n.t('typicallyRepliesInAFewMinutes')}</Title>
                     </Body>
-                    <Button transparent style={styles.buttonIconWarp} >
+                    <TouchableOpacity transparent style={styles.buttonIconWarp} activeOpacity={0.5}>
                         <Ionicons style={styles.headerIconClose} name='ios-close' />
-                    </Button>
+                    </TouchableOpacity>
                 </Header>
 
                 

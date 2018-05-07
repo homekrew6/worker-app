@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { NavigationActions } from "react-navigation";
-import { View, StatusBar, ListView, Text } from "react-native";
+import { View, StatusBar, ListView, Text, TouchableOpacity } from "react-native";
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -115,18 +115,19 @@ class myLocation extends Component {
                     <FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
 
                     <Header style={styles.appHdr2} androidStatusBarColor= "#cbf0ed">
-                        <Button transparent onPress={() => this.props.navigation.goBack()} >
+                        <TouchableOpacity transparent onPress={() => this.props.navigation.goBack()} activeOpacity={0.5} style={{ width: 60, justifyContent: 'center' }} >
                             <Ionicons name="ios-arrow-back" style={styles.backBt} />
-                        </Button>
+                        </TouchableOpacity>
                         <Body style={styles.tac}>
                             <Text style={styles.hdClr}>{I18n.t('my_location')}</Text>
                         </Body>
-                        <Button transparent 
+                        <TouchableOpacity transparent 
                             onPress={() => this.navigate('SelectLocation')}
+                            activeOpacity={0.5} style={{ width: 60, justifyContent: 'flex-end', alignItems: 'center', flexDirection: 'row' }}
                             >
                             <Ico name='edit' style={styles.editIcon} />
                             <Text style={styles.editIconTxt}>{I18n.t('edit')}</Text>
-                        </Button>
+                        </TouchableOpacity>
                     </Header>
                     
                     <View>

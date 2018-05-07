@@ -813,18 +813,18 @@ class JobDetails extends Component {
                 />
 
                 <Header style={[styles.headerWarp, { alignItems: 'center', justifyContent: 'center' }]} noShadow androidStatusBarColor="#81cdc7" >
-                    <Button transparent onPress={() => this.props.navigation.goBack()} style={[{ justifyContent: 'flex-start' }, JobDetailsData.status == 'JOBSTARTED' ? { width: 90 } : { width: 30 }]}>
+                    <TouchableOpacity transparent onPress={() => this.props.navigation.goBack()} style={[{ justifyContent: 'center' }, JobDetailsData.status == 'JOBSTARTED' ? { width: 90 } : { width: 40 }]}>
                         <Ionicons name="ios-arrow-back" style={styles.headIcon2} />
-                    </Button>
+                    </TouchableOpacity>
                     <Body style={styles.headBody}>
-                        <Title>{I18n.t('jobDetails')}</Title>
+                        <Title><Text>{I18n.t('jobDetails')}</Text></Title>
                     </Body>
                     
                     {
                         
                         JobDetailsData.status=='JOBSTARTED'?(
-                            <Button transparent onPress={() => this.startFollowUp()} style={{ width: 90 }} ><Text style={{ fontWeight: '100' }}>{I18n.t('followUp')}</Text></Button>
-                        ) : (<Button transparent style={{ backgroundColor: 'transparent', width: 30 }} disabled></Button>)
+                            <TouchableOpacity transparent onPress={() => this.startFollowUp()} activeOpacity={0.5} style={{ width: 90, justifyContent: 'center', alignItems: 'flex-end' }} ><Text style={{ fontWeight: '100' }}>{I18n.t('followUp')}</Text></TouchableOpacity>
+                        ) : (<TouchableOpacity activeOpacity={1} style={{ width: 40, justifyContent: 'center', alignItems: 'flex-end' }} />  )
                     }
                 </Header>
 

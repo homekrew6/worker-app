@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image, AsyncStorage, View, StatusBar, Text } from "react-native";
+import { Image, AsyncStorage, View, StatusBar, Text, TouchableOpacity } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Container, Header, Button, Content, Body, Title, } from "native-base";
 import I18n from '../../i18n/i18n';
@@ -195,13 +195,13 @@ class jobSummary extends Component {
                     backgroundColor="#81cdc7"
                 />
                 <Header style={styles.appHdr2} androidStatusBarColor="#81cdc7" noShadow>
-                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }} >
+                    <TouchableOpacity transparent onPress={() => this.props.navigation.goBack()} activeOpacity={0.5} style={{ width: 40, justifyContent: 'center' }} >
                         <Ionicons name="ios-arrow-back" style={styles.headIcon} />
-                    </Button>
+                    </TouchableOpacity>
                     <Body style={{ alignItems: 'center' }}>
                         <Title style={styles.appHdr2Txt}>{I18n.t('jobSummary')}</Title>
                     </Body>
-
+                    <TouchableOpacity activeOpacity={1} style={{ width: 40, justifyContent: 'center', alignItems: 'flex-end' }} />  
                 </Header>
 
                 <Content style={styles.bgWhite} >
