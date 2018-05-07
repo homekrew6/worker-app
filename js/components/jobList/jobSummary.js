@@ -24,13 +24,13 @@ class jobSummary extends Component {
         };
     }
     componentDidMount() {
-        AsyncStorage.getItem("currency").then((value) => {
-            if (value) {
-                const value1 = JSON.parse(value);
-                this.setState({ currency: value1.language })
-            }
-        });
-
+        // AsyncStorage.getItem("currency").then((value) => {
+        //     if (value) {
+        //         const value1 = JSON.parse(value);
+        //         this.setState({ currency: value1.language })
+        //     }
+        // });
+        this.setState({ currency: this.props.navigation.state.params.jobDetails.currency.name });
         // console.log(this.props);
         let jodId = this.props.navigation.state.params.jobDetails.id;
         api.post('jobSelectedQuestions/getJobSelectedAnswerList', { "id": jodId }).then((resAns) => {

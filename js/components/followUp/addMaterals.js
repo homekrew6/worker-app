@@ -169,12 +169,8 @@ class AddMaterial extends Component {
             Alert.alert(I18n.t('please_try_again_later'));
         })
 
-        AsyncStorage.getItem("currency").then((value) => {
-            if (value) {
-                const value1 = JSON.parse(value);
-                this.setState({ currency: value1.language })
-            }
-        });
+        this.setState({ currency: this.props.navigation.state.params.jobDetails.currency.name });
+
         const { query } = this.state;
         const materialsList = this.findMaterial(query);
         this.setState({ renderMaterialsList: materialsList });

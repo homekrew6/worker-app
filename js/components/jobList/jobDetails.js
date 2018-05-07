@@ -48,7 +48,7 @@ class JobDetails extends Component {
             longitudeUser: '',
             errorLocationUser: '',
             markerStatus: true,
-            scrollStatus : 0,
+            scrollStatus: 0,
             waypointStart: { latitude: '', longitude: ''},
             waypointEnd: { latitude: '', longitude: ''},
             waypointMid: { latitude: '', longitude: '' },
@@ -61,7 +61,7 @@ class JobDetails extends Component {
             job_start_time: '',
             job_end_time: '',
             remoteJobDetails: '',
-            currency:'AED',
+            currency: 'AED',
             itemsRef: '',
             jobTrackingStatus: '',
             progressInterval:'',
@@ -463,6 +463,9 @@ class JobDetails extends Component {
     }
 
     componentDidMount() {
+
+
+        this.setState({ currency: this.props.navigation.state.params.jobDetails.currency.name });
         console.log('job details . . . . . ', this.props.navigation.state.params.jobDetails);
         navigator.geolocation.getCurrentPosition((position) => {
             this.setState({

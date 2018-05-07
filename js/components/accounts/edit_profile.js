@@ -34,6 +34,7 @@ class EditProfile extends Component {
             name: props.auth.data.name,
             phone: props.auth.data.phone,
             image: props.auth.data.image,
+            commission: props.auth.data.commission,
             id: props.auth.data.id,
             visible: false,
             uploadButton: true,
@@ -442,6 +443,16 @@ class EditProfile extends Component {
                                 <Input style={styles.editprofileInput} value={I18n.t('password_small_case')} secureTextEntry editable={false} />
                             </View>
                         </View>
+
+                         <View style={styles.editprofileLstComission}>
+                            <View style={styles.editprofileWarp}>
+                                <Text>{I18n.t('commission')}</Text>
+                            </View>
+                            <View style={styles.editprofileInputwrap}>
+                                <Text >{this.state.commission ? this.state.commission : ''}</Text>
+                            </View>
+                        </View>
+
                         <View style={{ padding: 10 }}>
                             <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
                                 <Text style={{ paddingBottom: 5, paddingLeft: 5 }}>{I18n.t('skills')}</Text>
@@ -450,6 +461,7 @@ class EditProfile extends Component {
 
                             <View>{serviceListing}</View>
                         </View>
+                       
                     </View>
 
                     <Footer>
