@@ -189,6 +189,11 @@ export default {
   please_select_job_add_material: 'Please select a job to add materials.',
   rating_given_successfully: 'Rating has given Successfully',
   start_date_less_than_end_date: 'Start date is less than or equal to end Date',
+  available_jobs: 'AVAILABLE JOBS',
+  upcoming_jobs: 'UPCOMING JOBS',
+  onGoingJobs: 'ON GOING JOBS',
+  completedJobs: 'COMPLETED JOBS',
+  ignoredJobs: 'IGNORED JOBS',
   credit_all: 'Credit:',
   commission_list: 'Commission List'
 };
