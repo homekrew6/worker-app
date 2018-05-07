@@ -185,5 +185,7 @@ export default {
   material_added_successfully: 'تمت إضافة المواد بنجاح',
   please_select_job_add_material: 'يرجى تحديد وظيفة لإضافة المواد',
   rating_given_successfully: 'لقد أعطى التقييم بنجاح',
-  start_date_less_than_end_date: 'تاريخ البدء أقل من أو يساوي تاريخ الانتهاء'
+  start_date_less_than_end_date: 'تاريخ البدء أقل من أو يساوي تاريخ الانتهاء',
+  credit_all: 'ائتمان',
+  commission_list: 'قائمة المفوضية'
 };

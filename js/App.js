@@ -41,6 +41,7 @@ import Quote from './components/followUp/quote';
 import jobSummary from './components/jobList/jobSummary';
 import NotificationList from './components/notification/notificationList';
 import Support from './components/support/supportList';
+import commissionList from './components/accounts/commissionList';
 import { setCustomText, setCustomTextInput } from 'react-native-global-props';
 
 
@@ -119,6 +120,7 @@ const AppNavigator = StackNavigator(
         jobSummary: { screen: jobSummary },
         NotificationList: { screen: NotificationList },
         Support: { screen: Support },
+        commissionList: { screen: commissionList }
     },
     {
         initialRouteName: "Home",
