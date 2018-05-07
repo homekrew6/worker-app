@@ -482,7 +482,7 @@ class AvailableJobs extends Component {
                     initialPage={0}
                     renderTabBar={() => <ScrollableTab tabsContainerStyle={{ backgroundColor: '#81cdc7' }} />}
                 >
-                    <Tab heading="AVAILABLE JOBS" tabStyle={{ backgroundColor: '#81cdc7', }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
+                    <Tab heading={I18n.t('available_jobs')} tabStyle={{ backgroundColor: '#81cdc7', }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
                         <Content
                             refreshControl={
                             <RefreshControl
@@ -570,7 +570,7 @@ class AvailableJobs extends Component {
                         </Content>
                     </Tab>
 
-                    <Tab heading="UPCOMING JOBS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
+                    <Tab heading={I18n.t('upcoming_jobs')} tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
                         <Content
                             refreshControl={
                                 <RefreshControl
@@ -632,7 +632,7 @@ class AvailableJobs extends Component {
                         </Content>
                     </Tab>
                     {/* On going jobs */}
-                    <Tab heading="ON GOING JOBS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
+                    <Tab heading={I18n.t('onGoingJobs')} tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
                         <Content
                             refreshControl={
                                 <RefreshControl
@@ -695,7 +695,7 @@ class AvailableJobs extends Component {
                     </Tab>
 
                     {/* Completed Jobs */}
-                    <Tab heading="COMPLETED JOBS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
+                    <Tab heading={I18n.t('completedJobs')} tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
                         <Content
                             refreshControl={
                                 <RefreshControl
@@ -757,7 +757,7 @@ class AvailableJobs extends Component {
                         </Content>
                     </Tab>
 
-                    <Tab heading="IGNORED JOBS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
+                    <Tab heading={I18n.t('ignoredJobs')} tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
                         {this.state.availableJobs.data.response.message.declinedJobs? (
                             <List
                                 dataArray={this.state.availableJobs.data.response.message.declinedJobs}

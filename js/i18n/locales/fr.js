@@ -95,5 +95,10 @@ export default {
   material_added_successfully: 'Matériaux ajoutés avec succès',
   please_select_job_add_material: 'Veuillez sélectionner un travail pour ajouter des matériaux',
   rating_given_successfully: 'La note a donné avec succès',
-  start_date_less_than_end_date: 'La date de début est inférieure ou égale à la date de fin'
+  start_date_less_than_end_date: 'La date de début est inférieure ou égale à la date de fin',
+  available_jobs: 'EMPLOIS DISPONIBLES',
+  upcoming_jobs: 'PROCHAINS TRAVAUX',
+  onGoingJobs: 'SUR LES EMPLOIS',
+  completedJobs: 'TRAVAUX COMPLÉTÉS',
+  ignoredJobs: 'EMPLOIS IGNORÉS'  
 };
