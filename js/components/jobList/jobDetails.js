@@ -98,7 +98,9 @@ class JobDetails extends Component {
                 "serviceId":this.state.remoteJobDetails.service.id
             };
             this.setState({loader:true});
+            console.log(ToSendData);
             api.post('Jobs/cancelJob', ToSendData).then((res)=>{
+                debugger;
                 if(res.response.type==="Error")
                 {
                     this.setState({loader:false});

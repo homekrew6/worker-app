@@ -35,15 +35,15 @@ export function acceptJob(jobId, workerId, customerId) {
 
 export function availablejobs(id) {
   return function (dispatch) {
-      dispatch(availableJobStateBusy())
+      //dispatch(availableJobStateBusy())
       return jobApi.availableJobs(id).then(res => {
-        dispatch(availableJobStateSuccess(res))
+      // dispatch(availableJobStateSuccess(res))
       return res
 
     }).catch(err => {
       err.type = 'error';
       console.log(err)
-        dispatch(availableJobStateFailed())
+      //dispatch(availableJobStateFailed())
       return err
     })
   }
