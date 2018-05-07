@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import 'moment-timezone';
-import { Image, View, StatusBar, AsyncStorage, Text } from "react-native";
+import { Image, View, StatusBar, AsyncStorage, Text, TouchableOpacity } from "react-native";
 import { Container, Header, Button, Content, Body, Title } from "native-base";
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -184,13 +184,13 @@ componentDidMount() {
                     backgroundColor="#81cdc7"
                 />
                 <Header style={styles.headerWarp} noShadow noShadow androidStatusBarColor="#81cdc7" onPress={() => this.props.navigation.goBack()}>
-                    <Button transparent style={{ width: 30 }} onPress={() => this.props.navigation.goBack()}>
+                    <TouchableOpacity transparent activeOpacity={0.5} style={{ width: 40, justifyContent: 'center' }} onPress={() => this.props.navigation.goBack()}>
                         <Ionicons name="ios-arrow-back" style={styles.headIcon2} />
-                    </Button>
+                    </TouchableOpacity>
                     <Body style={styles.headBody}>
-                        <Title>{I18n.t('total_bill')}</Title>
+                        <Title><Text>{I18n.t('total_bill')}</Text></Title>
                     </Body>
-                    <Button transparent style={{ width: 30, backgroundColor: 'transparent' }} disabled={true}/>
+                    <TouchableOpacity activeOpacity={1} style={{ width: 40, justifyContent: 'center', alignItems: 'flex-end' }} /> 
                 </Header>
                 <Content style={styles.bgWhite}>
                      <View style={{ flex: 1 }} >

@@ -14,7 +14,7 @@ export default {
     headerTitle: { color: '#1e3768', fontSize: 16 },
     headerIconClose: { color: '#fff', fontSize: 30 },
     headerIconBack: { color: '#fff', fontSize: 24 },
-    buttonIconWarp: { width: 30, backgroundColor: 'transparent' },
+    buttonIconWarp: { width: 40, backgroundColor: 'transparent', justifyContent: 'center' },
 
 
 

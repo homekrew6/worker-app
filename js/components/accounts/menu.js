@@ -61,6 +61,7 @@ class Menu extends Component {
                     })
                     this.props.logout(res => {
                         if (res) {
+                            I18n.locale = "en";
                             //this.props.navigation.navigate("Login");
                             this.props.navigation.dispatch(resetAction);
                         } else {
@@ -288,7 +289,7 @@ class Menu extends Component {
 
                 <Content>
                     <Header style={styles.bg_white} androidStatusBarColor="#81cdc7" >
-                        <Button transparent />
+                        {/* <Button transparent /> */}
                         <Body style={styles.appHdrtitleWarp}>
                             <Image source={logo_hdr} style={{ height: 18, width: 110 }} />
                         </Body>
@@ -310,9 +311,9 @@ class Menu extends Component {
                                 }
                                 <View>
                                     <TouchableOpacity onPress={() => this.navigate("EditProfile")}>
-                                        <Text style={styles.pname}>{this.props.auth.data.name}</Text>
-                                        <Text style={styles.pemail}>{this.props.auth.data.email}</Text>
-                                        <Text style={styles.pphone}>{this.props.auth.data.phone}</Text>
+                                        <Text style={[styles.pname, { lineHeight: 22 }]}>{this.props.auth.data.name}</Text>
+                                        <Text style={[styles.pemail, { lineHeight: 22 }]}>{this.props.auth.data.email}</Text>
+                                        <Text style={[styles.pphone, { lineHeight: 22 }]}>{this.props.auth.data.phone}</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>

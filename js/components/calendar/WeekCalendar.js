@@ -367,20 +367,16 @@ class WeekCalendar extends Component {
                     backgroundColor="#cbf0ed"
                 />
                 <Content>
-                    <Header style={styleSelf.appHdr2} androidStatusBarColor= "#cbf0ed">
-                        <Button transparent >
-                            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                                <Text style={styleSelf.backBt} >{I18n.t('cancel')}</Text>
-                            </TouchableOpacity>
-                        </Button>
+                    <Header style={styleSelf.appHdr2} androidStatusBarColor= "#cbf0ed" >
+						<TouchableOpacity onPress={() => this.props.navigation.goBack()} activeOpacity={0.5} style={{ width: 60, justifyContent: 'center' }}>
+							<Text style={styleSelf.backBt} >{I18n.t('cancel')}</Text>
+						</TouchableOpacity>
                         <Body style={styleSelf.tac}>
                             <Text style={styleSelf.hdClr}>{I18n.t('add_timing')}</Text>
                         </Body>
-                        <Button transparent >
-                            <TouchableOpacity onPress={this.onDonePress.bind(this)}>
-                              <Text style={styleSelf.backBt} >{I18n.t('done')}</Text>
-                            </TouchableOpacity>
-                        </Button>
+						<TouchableOpacity onPress={this.onDonePress.bind(this)} activeOpacity={0.5} style={{ width: 60, justifyContent: 'center', alignItems: 'flex-end' }} >
+							<Text style={styleSelf.backBt} >{I18n.t('done')}</Text>
+						</TouchableOpacity>
                     </Header>
                     <View style={{ paddingLeft: 20, paddingTop: 10, paddingRight: 5, flexDirection: 'row' }}>
                         <View style={{ paddingTop: 25 }}>
@@ -450,14 +446,14 @@ styleSelf = {
   },
   hdClr:{
       color: '#1e3768',
-      fontSize: 22
+      fontSize: 18
   },
   appHdr2: {
-      backgroundColor: '#cbf0ed',
+	  backgroundColor: '#81cdc7',
   },
   backBt: {
       fontSize: 16,
-      color: "#71beb8"
+      color: "#fff"
   },
   tac:{
       alignItems: 'center'

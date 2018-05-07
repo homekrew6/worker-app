@@ -139,11 +139,15 @@ class CurrencyList extends Component {
                 />
 
                 <Header style={styles.appHdr2} androidStatusBarColor="#81cdc7" noShadow>
-                    <Button transparent onPress={() => this.languageDone()} style={{ width: 70 }}><Text>{I18n.t('cancel')}</Text></Button>
+                    <TouchableOpacity transparent onPress={() => this.languageDone()} activeOpacity={0.5} style={{ width: 60, justifyContent: 'center' }}>
+                        <Text>{I18n.t('cancel')}</Text>
+                    </TouchableOpacity>
                     <Body style={{ alignItems: 'center' }}>
                         <Title style={styles.appHdr2Txt}>{I18n.t('myCurrency')}</Title>
                     </Body>
-                    <Button transparent onPress={() => this.languageDone()} style={{ width: 70 }}><Text>{I18n.t('done')}</Text></Button>
+                    <TouchableOpacity transparent onPress={() => this.languageDone()} activeOpacity={0.5} style={{ width: 60, justifyContent: 'center', alignItems: 'flex-end' }}>
+                        <Text>{I18n.t('done')}</Text>
+                    </TouchableOpacity>
                 </Header>
 
                 <Content style={styles.bgWhite} >

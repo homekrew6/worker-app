@@ -192,13 +192,13 @@ renderUnavalData(UnAvData, key){
                 />
                 <Content>
                     <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed">
-                          <Button transparent onPress={() => this.props.navigation.goBack()}>
+                        <TouchableOpacity transparent onPress={() => this.props.navigation.goBack()} activeOpacity={0.5} style={{ width: 40, justifyContent: 'center' }}>
                             <Ionicons name="ios-arrow-back" style={styles.backBt} />
-                          </Button>
+                        </TouchableOpacity>
                         <Body style={styles.tac}>
                             <Text style={styles.hdClr}>{I18n.t('my_timing')} </Text>
                         </Body>
-                        <Button transparent />
+                        <TouchableOpacity activeOpacity={1} style={{ width: 40, justifyContent: 'center', alignItems: 'flex-end' }} />  
                     </Header>
                    <View>
 
