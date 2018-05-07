@@ -140,6 +140,18 @@ export default{
         alignItems: 'center', 
         justifyContent: 'center' 
     },
+    editprofileLstComission: { 
+        flexDirection: 'row', 
+        flex: 1, 
+        borderBottomWidth: 1, 
+        borderBottomColor: '#e0e0e0', 
+        paddingLeft: 10, 
+        paddingRight: 10, 
+        paddingTop: 10,
+        paddingBottom: 10,
+        alignItems: 'center', 
+        justifyContent: 'center' 
+    },
     editprofileWarp:{ 
         width: 100, 
         paddingBottom: 0, 

@@ -23,7 +23,7 @@ class AvailableJobs extends Component {
             finalJobData: [],
             listItemFlag: false,
             loader: false,
-            currency:'AED',
+            currency: 'AED',
             refreshing: false,
             backReturn: false,
         };
@@ -108,8 +108,11 @@ class AvailableJobs extends Component {
         this.props.navigateAndSaveCurrentScreen(data);
         this.props.navigation.navigate('JobDetails',{jobDetails:item});
     }
+    componentWillMount(){
+        this.jobdata();
+    }
 
-    componentDidMount(){
+    componentDidMount() {
         AsyncStorage.getItem("currency").then((value) => {
             if (value) {
                 const value1 = JSON.parse(value);
@@ -117,34 +120,43 @@ class AvailableJobs extends Component {
             }
         });
 
-        // this.backhandler = BackHandler.addEventListener('hardwareBackPress', function () {
-
-        //     if(this.state.backReturn === true){
-        //         Alert.alert(
-        //             'Confirm',
-        //             'Are you sure to exit the app?',
-        //             [
-        //                 { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-        //                 { text: 'OK', onPress: () => BackHandler.exitApp() },
-        //             ],
-        //             { cancelable: false }
-        //         )
-        //         return true;
-        //     }else{
-        //         this.setState({ backReturn: true });
-        //         this.props.navigation.goBack(null);
-        //         return true;
-        //     }
-
-        // }.bind(this));
+        // api.get('Currencies').then((res) => {
+        //     let finalList = [];
+        //     res.map((item) => {
+        //      if (item.is_active) {
+        //       finalList.push(item);
+        //      }
+        //     });
+        //     this.setState({
+        //      currencyList: finalList
+        //     });
+        //     AsyncStorage.getItem('currency').then((value) => {
+        //      if (value) {
+        //       const value1 = JSON.parse(value);
+        //       if (this.props.navigation.state.params.jobDetails && this.props.navigation.state.params.jobDetails.currencyId) {
+        //        this.state.currencyList.map((item) => {
+        //         if (item.id == this.props.navigation.state.params.jobDetails.currencyId) {
+        //          this.setState({ currency: item.name });
+        //         }
+        //        });
+        //       }
+        //      } else {
+        //       if(this.props.navigation.state.params.jobDetails && this.props.navigation.state.params.jobDetails.currencyId) {
+        //        this.state.currencyList.map((item) => {
+        //         if (item.id == this.props.navigation.state.params.jobDetails.currencyId) {
+        //          this.setState({ currency: item.name });
+        //         }
+        //        });
+        //       }
+        //      }
+        //     });
+        //    }).catch((Err) => {
+        //     console.log(Err);
+        //    });
     }
 
-    componentWillMount(){
-        this.jobdata();
-    }
-
-    jobdata(){
-
+   
+    jobdata() {
         let id = this.props.auth.data.id;
         this.props.availablejobs(id).then(res => {
             this.setState({
@@ -154,8 +166,8 @@ class AvailableJobs extends Component {
         }).catch(err => {
             this.setState({
                 loader: false
-            })
-        })
+            });
+        });
     }
 
     onlyUnique(value, index, self) {
@@ -519,7 +531,7 @@ class AvailableJobs extends Component {
                                                             </View>
                                                         </View>
                                                         <View>
-                                                            <Text style={styles.listWarpPriceUp}>{this.state.currency} {item.price}</Text>
+                                                            <Text style={styles.listWarpPriceUp}>{item.currency.name} {item.price}</Text>
                                                             <Text style={styles.listWarpPriceDown}>{parseInt(item.service.time_interval / 60) + "."}{item.service.time_interval % 60 < 10 ? "0" + item.service.time_interval % 60 : item.service.time_interval % 60} hour</Text>
                                                         </View>
                                                     </View>
@@ -603,7 +615,7 @@ class AvailableJobs extends Component {
                                                         }
                                                     </View>
                                                     <View>
-                                                        <Text style={styles.listWarpPriceUp}>{this.state.currency} {item.price}</Text>
+                                                        <Text style={styles.listWarpPriceUp}>{item.currency.name} {item.price}</Text>
                                                         <Text style={styles.listWarpPriceDown}>4 hours</Text>
                                                     </View>
                                                 </TouchableOpacity>
@@ -665,7 +677,7 @@ class AvailableJobs extends Component {
                                                         }
                                                     </View>
                                                     <View>
-                                                        <Text style={styles.listWarpPriceUp}>{this.state.currency} {item.price}</Text>
+                                                        <Text style={styles.listWarpPriceUp}>{item.currency.name} {item.price}</Text>
                                                         <Text style={styles.listWarpPriceDown}>4 hours</Text>
                                                     </View>
                                                 </TouchableOpacity>
@@ -728,7 +740,7 @@ class AvailableJobs extends Component {
                                                         }
                                                     </View>
                                                     <View>
-                                                        <Text style={styles.listWarpPriceUp}>{this.state.currency} {item.price}</Text>
+                                                        <Text style={styles.listWarpPriceUp}>{item.currency.name} {item.price}</Text>
                                                         <Text style={styles.listWarpPriceDown}>4 hours</Text>
                                                     </View>
                                                 </TouchableOpacity>
@@ -760,7 +772,7 @@ class AvailableJobs extends Component {
                                             </View>
                                         </View>
                                         <View>
-                                            <Text style={styles.listWarpPriceUp}>{this.state.currency} {item.job.price}</Text>
+                                            <Text style={styles.listWarpPriceUp}>{item.currency.name} {item.job.price}</Text>
                                             <Text style={styles.listWarpPriceDown}>4 hours</Text>
                                         </View>
                                     </View>

@@ -164,13 +164,16 @@ class FollowUpList extends Component {
         }, 50);
 
 
-        AsyncStorage.getItem("currency").then((value) => {
-            if (value) {
-                const value1 = JSON.parse(value);
-                this.setState({ currency: value1.language })
-            }
-        }).catch((err) => {
-        });
+        // AsyncStorage.getItem("currency").then((value) => {
+        //     if (value) {
+        //         const value1 = JSON.parse(value);
+        //         this.setState({ currency: value1.language })
+        //     }
+        // }).catch((err) => {
+        // });
+
+        this.setState({ currency: this.props.navigation.state.params.jobDetails.currency.name });
+
         if (this.props.navigation.state.params.jobDetails) {
             AsyncStorage.setItem("jobDetails", JSON.stringify(this.props.navigation.state.params.jobDetails)).then((res) => {
                 this.setState({ jobDetails: this.props.navigation.state.params.jobDetails })
