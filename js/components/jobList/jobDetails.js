@@ -1017,7 +1017,7 @@ class JobDetails extends Component {
                     </TouchableOpacity>
                     <View style={styles.jobItemWarp}>
                         <View style={{ width: 30, alignItems: 'center'  }}>
-                            <EvilIcons name="location" style={{ color: '#81cdc7', fontSize: 24 }} />
+                            <EvilIcons name="location" style={{ color: '#1e3768', fontSize: 24 }} />
                         </View>
                         {
                             JobDetailsData.userLocation.buildingName? (
