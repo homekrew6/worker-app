@@ -85,13 +85,13 @@ class Settings extends Component {
                 />
 
                 <Header style={styles.appHdr2} androidStatusBarColor="#81cdc7" noShadow>
-                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }}>
+                    <TouchableOpacity transparent onPress={() => this.props.navigation.goBack()} activeOpacity={0.5} style={{ width: 40, justifyContent: 'center' }}>
                         <Ionicons name="ios-arrow-back" style={{ fontSize: 26, color: '#fff' }} />
-                    </Button>
+                    </TouchableOpacity>
                     <Body style={{ alignItems: 'center' }}>
-                        <Title>{I18n.t('setting_page_title')}</Title>
+                        <Title><Text>{I18n.t('setting_page_title')}</Text></Title>
                     </Body>
-                    <Button transparent style={{ width: 30, backgroundColor: 'transparent' }} disabled/>
+                    <TouchableOpacity activeOpacity={1} style={{ width: 40, justifyContent: 'center', alignItems: 'flex-end' }} />
                 </Header>
 
                 <Content style={styles.bgWhite} >

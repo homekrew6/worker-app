@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, StatusBar, TouchableOpacity, Text, TextInput, Dimensions } from "react-native";
+import { View, StatusBar, TouchableOpacity, Text, TextInput, Dimensions, AsyncStorage } from "react-native";
 import { Container, Header, Content, Body, Title, Button  } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FSpinner from 'react-native-loading-spinner-overlay';
@@ -25,18 +25,65 @@ class Support extends Component {
         this.setState({ loader: true });
         api.get('Faqs').then((res) => {
             let listResponce = res;
-            listResponce.map((item)=>{
-                let i = item;
-                i.is_active_item = false;
-                if (item.is_active){
-                    newsupportList.push(i);
-                }
-            })
+            let languageCode = '';
+
+            AsyncStorage.getItem("language").then((languageVal) => {
+            if (languageVal){
+                const languageValue = JSON.parse(languageVal);
+                languageCode = languageValue.Code;
+            }
+            
+
+            if (languageCode == 'fr') {
+                listResponce.map((item) => {
+                    let i = item;
+                    item.titleSelected = item.fr_title;
+                    item.answerSelected = item.fr_answer;
+                    item.questionSelected = item.fr_question;
+                    i.is_active_item = false;
+                    if (item.is_active) {
+                        newsupportList.push(i);
+                    }
+
+                })
+            } else if (languageCode == 'ar') {
+                listResponce.map((item) => {
+                    let i = item;
+                    item.titleSelected = item.ar_title;
+                    item.answerSelected = item.ar_answer;
+                    item.questionSelected = item.ar_question;
+                    i.is_active_item = false;
+                    if (item.is_active) {
+                        newsupportList.push(i);
+                    }
+
+                })
+            }
+            else {
+                listResponce.map((item) => {
+                    let i = item;
+                    item.titleSelected = item.title;
+                    item.answerSelected = item.answer;
+                    item.questionSelected = item.question;
+                    i.is_active_item = false;
+                    if (item.is_active) {
+                        newsupportList.push(i);
+                    }
+
+                })
+            }
+
+
             this.setState({
                 supportList: newsupportList,
                 loader: false,
                 allSupportList:newsupportList
             });
+
+
+        }).catch((err) => {
+            console.log(err);
+        })
         }).catch((error) => {
             console.log(error);
             this.setState({ loader: false });
@@ -87,13 +134,13 @@ class Support extends Component {
                 <FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />                
 
                 <Header style={styles.headerMain} androidStatusBarColor="#81cdc7" noShadow >
-                    <Button transparent onPress={() => this.props.navigation.goBack()} style={styles.buttonIconWarp}>
+                    <TouchableOpacity transparent onPress={() => this.props.navigation.goBack()} style={[styles.buttonIconWarp, { width: 40, justifyContent: 'center' }]} activeOpacity={0.5}>
                         <Ionicons style={styles.headerIconClose} name='ios-arrow-back' />
-                    </Button>
+                    </TouchableOpacity>
                     <Body style={styles.headerBody}>
                         <Title style={styles.headerTitle}>{I18n.t('faq')}</Title>
                     </Body>
-                    <Button transparent style={styles.buttonIconWarp} disabled />
+                    <TouchableOpacity activeOpacity={1} style={{ width: 40, justifyContent: 'center', alignItems: 'flex-end' }} />  
                 </Header>
 
                 <View style={styles.afterHeaderSearch}>
@@ -117,8 +164,8 @@ class Support extends Component {
                                     <View style={styles.chatListWarp} key={key}>
                                         <TouchableOpacity style={styles.chatListTouchWarp} onPress={()=> this.faqFunction(key)}>
                                             <View style={styles.chatListTextWarp}>
-                                                <Text style={styles.chatListTextName}>{item.title}</Text>
-                                                <Text style={styles.chatListTextQuestion}>{item.question}</Text>
+                                                <Text style={styles.chatListTextName}>{item.titleSelected}</Text>
+                                                <Text style={styles.chatListTextQuestion}>{item.questionSelected}</Text>
                                             </View>
                                             <View>
                                                 {
@@ -130,7 +177,7 @@ class Support extends Component {
                                         {
                                             item.is_active_item ? <View style={{ paddingBottom: 15 }}>
                                                 <HTML 
-                                                    style={styles.chatListTime} html={item.answer} 
+                                                    style={styles.chatListTime} html={item.answerSelected} 
                                                     imagesMaxWidth={Dimensions.get('window').width} 
                                                 />
                                                 {/* <Text style={styles.chatListTime}>{item.answer}</Text> */}

@@ -359,15 +359,15 @@ class AddMaterial extends Component {
                     backgroundColor="#81cdc7"
                 />
                 <Header style={styles.headerWarp} noShadow androidStatusBarColor="#81cdc7" >
-                    <Button transparent onPress={() => this.props.navigation.goBack()} >
+                    <TouchableOpacity transparent onPress={() => this.props.navigation.goBack()} activeOpacity={0.5} style={{ width: 60, justifyContent: 'center' }}>
                         <Text>{I18n.t('cancel')}</Text>
-                    </Button>
+                    </TouchableOpacity>
                     <Body style={styles.headBody}>
-                        <Title>{I18n.t('add_materials')}</Title>
+                        <Title><Text>{I18n.t('add_materials')}</Text></Title>
                     </Body>
-                    <Button transparent onPress={() => this.saveMaterials()}>
+                    <TouchableOpacity transparent onPress={() => this.saveMaterials()} activeOpacity={0.5} style={{ width: 60, justifyContent: 'center', alignItems: 'flex-end' }}>
                         <Text>Save</Text>
-                    </Button>
+                    </TouchableOpacity>
                 </Header>
                 <Content>
                     <Modal isVisible={this.state.IsModalVisible}>

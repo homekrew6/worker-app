@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { View, StatusBar, Alert, TouchableOpacity, AsyncStorage, Text } from "react-native";
+import { NavigationActions } from "react-navigation";
 import Entypo from 'react-native-vector-icons/Entypo';
 import { Container, Header, Button, Content, Body, Title } from "native-base";
 
@@ -9,6 +10,7 @@ import styles from './styles';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import { getAllLanguagesList } from '../accounts/elements/authActions';
 import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
+import api from '../../api/index';
 
 class LanguageList extends Component {
     constructor(props) {
@@ -96,24 +98,57 @@ class LanguageList extends Component {
             }
         })
         if (loc) {
-            //const data = { langId: loc.id, language: loc.name };
             const data = { langId: loc.id, language: loc.name, Code: loc.Code };
-            AsyncStorage.setItem("language", JSON.stringify(data)).then((res) => {
-                this.setState({ visible: false });
-                const data = this.props.auth.data;
-                data.activeScreen = 'Settings';
-                data.previousScreen = "";
-                this.props.navigateAndSaveCurrentScreen(data);
-                this.props.navigation.navigate('Settings');
-            }).catch((err) => {
-                this.setState({ visible: false });
-                this.props.navigation.navigate('Settings');
+            AsyncStorage.getItem("userToken").then((userToken) => {
+                if (userToken) {
+                    const response = JSON.parse(userToken);
+                    api.put(`Workers/editWorker/${this.props.auth.data.id}?access_token=${response.id}`, { language: data.Code, languageId: data.langId, languageName: data.language}).then((success) => {
+                        AsyncStorage.setItem("language", JSON.stringify(data)).then((res) => {
+                            this.setState({ visible: false });
+                            this.props.navigation.dispatch(
+                                NavigationActions.reset({
+                                    index: 1,
+                                    actions: [
+                                        NavigationActions.navigate({ routeName: 'Menu' }),
+                                        NavigationActions.navigate({ routeName: 'Settings' }),
+                                    ],
+                                })
+                            );
+                        }).catch((err) => {
+                            this.setState({ visible: false });
+                            this.props.navigation.dispatch(
+                                NavigationActions.reset({
+                                    index: 1,
+                                    actions: [
+                                        NavigationActions.navigate({ routeName: 'Menu' }),
+                                        NavigationActions.navigate({ routeName: 'Settings' }),
+                                    ],
+                                })
+                            );
+                        })
+                    }).catch((err) => {
+                        this.setState({ visible: false });
+                        Alert.alert(I18n.t("please_try_again_later"));
+                    })
+                }
+
             })
+
+
 
         }
         else {
             this.setState({ visible: false });
-            this.props.navigation.navigate('Settings');
+            this.props.navigation.dispatch(
+                NavigationActions.reset({
+                    index: 1,
+                    actions: [
+                        NavigationActions.navigate({ routeName: 'Menu' }),
+                        NavigationActions.navigate({ routeName: 'Settings' }),
+                    ],
+                })
+            );
+            //Alert.alert('Please select a location first.');
         }
 
     }
@@ -143,11 +178,15 @@ class LanguageList extends Component {
                 />
 
                 <Header style={styles.appHdr2} androidStatusBarColor="#81cdc7" noShadow>
-                    <Button transparent onPress={() => this.languageDone()} style={{ width: 70 }}><Text>{I18n.t('cancel')}</Text></Button>
+                    <TouchableOpacity transparent onPress={() => this.languageDone()} activeOpacity={0.5} style={{ width: 60, justifyContent: 'center' }}>
+                        <Text>{I18n.t('cancel')}</Text>
+                    </TouchableOpacity>
                     <Body style={{ alignItems: 'center' }}>
                         <Title style={styles.appHdr2Txt}>{I18n.t('my_language')}</Title>
                     </Body>
-                    <Button transparent onPress={() => this.languageDone()} style={{ width: 70 }}><Text>{I18n.t('done')}</Text></Button>
+                    <TouchableOpacity transparent onPress={() => this.languageDone()} activeOpacity={0.5} style={{ width: 60, justifyContent: 'center', alignItems: 'flex-end' }}>
+                        <Text>{I18n.t('done')}</Text>
+                    </TouchableOpacity>
                 </Header>
 
                 <Content style={styles.bgWhite} >

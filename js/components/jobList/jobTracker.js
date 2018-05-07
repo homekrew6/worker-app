@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, View, StatusBar, Text } from 'react-native';
+import { Image, View, StatusBar, Text, TouchableOpacity } from 'react-native';
 import { Container, Header, Button, Content, Body, Title, } from 'native-base';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import FSpinner from 'react-native-loading-spinner-overlay';
@@ -109,13 +109,13 @@ class JobTracker extends Component {
                 />
 
                 <Header style={styles.appHdr2} noShadow androidStatusBarColor="#81cdc7">
-                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }}>
+                    <TouchableOpacity transparent onPress={() => this.props.navigation.goBack()} activeOpacity={0.5} style={{ width: 40, justifyContent: 'center' }}>
                         <EvilIcons name="close" style={[styles.headIcon, { color: '#fff'}]} />
-                    </Button>
+                    </TouchableOpacity>
                     <Body style={styles.headBody}>
-                        <Title>{I18n.t('job_tracker')}</Title>
+                        <Title><Text>{I18n.t('job_tracker')}</Text></Title>
                     </Body>
-                    <Button transparent style={{ width: 30, backgroundColor: 'transparent', }} disabled={true} />
+                    <TouchableOpacity activeOpacity={1} style={{ width: 40, justifyContent: 'center', alignItems: 'flex-end' }} /> 
                 </Header>
 
                 <Content>

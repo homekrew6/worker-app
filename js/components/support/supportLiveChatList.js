@@ -26,15 +26,15 @@ class SupportLiveChatList extends Component {
                 />
 
                 <Header style={styles.headerMain} androidStatusBarColor="#81cdc7" noShadow >
-                    <Button transparent onPress={() => this.props.navigation.goBack()} style={styles.buttonIconWarp}>
+                    <TouchableOpacity transparent onPress={() => this.props.navigation.goBack()} style={styles.buttonIconWarp} activeOpacity={0.5}>
                         <FontAwesome style={[styles.headerIconClose, { fontSize: 18 }]} name='edit' />
-                    </Button>
+                    </TouchableOpacity>
                     <Body style={styles.headerBody}>
                         <Title style={styles.headerTitle}>{I18n.t('liveChat')}</Title>
                     </Body>
-                    <Button transparent style={styles.buttonIconWarp} >
+                    <TouchableOpacity transparent style={styles.buttonIconWarp} activeOpacity={0.5}>
                         <Ionicons style={styles.headerIconClose} name='ios-close' />
-                    </Button>
+                    </TouchableOpacity>
                 </Header>
 
                 <Content>

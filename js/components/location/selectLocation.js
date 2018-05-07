@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, TouchableOpacity } from 'react-native';
 import { View, StatusBar, Alert, Text } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import api from '../../api/index';
@@ -124,15 +124,15 @@ class selectLocation extends Component {
                     <FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
                     <Header style={styles.appHdr2} androidStatusBarColor= "#cbf0ed">
 
-                        <Button transparent onPress={() => this.props.navigation.goBack()}>
+                        <TouchableOpacity transparent onPress={() => this.props.navigation.goBack()} activeOpacity={0.5} style={{ width: 50, justifyContent: 'center' }}>
                             <Ionicons name="ios-arrow-back" style={styles.backBt} />
-                        </Button>
+                        </TouchableOpacity>
                         <Body style={styles.tac}>
                             <Text style={styles.hdClr}>{I18n.t('my_location')}</Text>
                         </Body>
-                        <Button transparent onPress={() => this.save_select_location()}>
+                        <TouchableOpacity transparent onPress={() => this.save_select_location()} activeOpacity={0.5} style={{ width: 50, justifyContent: 'center', alignItems: 'flex-end' }}>
                             <Text>Save</Text>
-                        </Button>
+                        </TouchableOpacity>
                         
                     </Header>
                     

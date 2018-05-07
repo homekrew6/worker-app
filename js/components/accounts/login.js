@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { login, getUserDetail, checkAuth } from './elements/authActions';
 import { NavigationActions } from "react-navigation";
-import { Image, ImageBackground, View, StatusBar, Alert, TouchableOpacity, Text } from "react-native";
+import { Image, ImageBackground, View, StatusBar, Alert, TouchableOpacity, Text, AsyncStorage } from "react-native";
 import FCM from "react-native-fcm";
 import { Container, Content, Item, Input } from "native-base";
 import FSpinner from 'react-native-loading-spinner-overlay';
@@ -78,7 +78,10 @@ class Login extends Component {
 						// if (userRes) {
 						this.setState({ IsVisible: true });
 						api.put(`Workers/editWorker/${res.userId}?access_token=${res.id}`, { deviceToken: this.state.deviceToken }).then((resEdit) => {
-
+							if (this.props.auth.data.language) {
+								const langData = { langId: this.props.auth.data.languageId, language: this.props.auth.data.languageName, Code: this.props.auth.data.language };
+								AsyncStorage.setItem("language", JSON.stringify(langData)).then((res) => { }).catch((err) => { })
+							}
 							let filter = '{"where":{"workerId":' + res.userId + '}}';
 							api.get('WorkerSkills?filter=' + filter + '&access_token=' + res.id).then((skills) => {
 								if (skills.length && skills.length > 0) {
