@@ -108,9 +108,10 @@ class JobDetails extends Component {
                 }
                 else
                 {
+                    debugger;
+                    this.setState({remoteJobDetails:jobDetails, loader:false, jobCancelModal: false});
                     let jobDetails=this.state.remoteJobDetails;
                     jobDetails.status='CANCELLED';
-                    this.setState({remoteJobDetails:jobDetails, loader:false, isModalVisible: false});
                     this.props.navigation.navigate('AvailableJobs');
                 }
             }).catch((error)=>{
