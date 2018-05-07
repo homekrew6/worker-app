@@ -101,7 +101,6 @@ class LanguageList extends Component {
             const data = { langId: loc.id, language: loc.name, Code: loc.Code };
             AsyncStorage.getItem("userToken").then((userToken) => {
                 if (userToken) {
-                    debugger;
                     const response = JSON.parse(userToken);
                     api.put(`Workers/editWorker/${this.props.auth.data.id}?access_token=${response.id}`, { language: data.Code, languageId: data.langId, languageName: data.language}).then((success) => {
                         AsyncStorage.setItem("language", JSON.stringify(data)).then((res) => {

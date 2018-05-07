@@ -30,7 +30,7 @@ export default {
     mainItemIcon:{
         borderRadius: 80,
         borderWidth: 1,
-        borderColor: '#81cdc7',
+        borderColor: '#1e3768',
         alignItems: 'center',
         justifyContent: 'center',
         height: 30,
@@ -39,7 +39,7 @@ export default {
     },
     mainItemIconIcon:{
         fontSize: 20,
-        color: '#81cdc7'
+        color: '#1e3768'
     },
     mainItemText:{
         flex: 1,
