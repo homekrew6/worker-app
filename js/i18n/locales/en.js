@@ -193,5 +193,7 @@ export default {
   upcoming_jobs: 'UPCOMING JOBS',
   onGoingJobs: 'ON GOING JOBS',
   completedJobs: 'COMPLETED JOBS',
-  ignoredJobs: 'IGNORED JOBS'
+  ignoredJobs: 'IGNORED JOBS',
+  credit_all: 'Credit:',
+  commission_list: 'Commission List'
 };

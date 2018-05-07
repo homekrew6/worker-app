@@ -190,5 +190,7 @@ export default {
   upcoming_jobs: 'وظائف قادمة',
   onGoingJobs: 'على الوظائف القادمة',
   completedJobs: 'وظائف مكتملة',
-  ignoredJobs: 'شغل وظائف'  
+  ignoredJobs: 'شغل وظائف' , 
+  credit_all: 'ائتمان',
+  commission_list: 'قائمة المفوضية'
 };

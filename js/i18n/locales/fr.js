@@ -100,5 +100,7 @@ export default {
   upcoming_jobs: 'PROCHAINS TRAVAUX',
   onGoingJobs: 'SUR LES EMPLOIS',
   completedJobs: 'TRAVAUX COMPLÉTÉS',
-  ignoredJobs: 'EMPLOIS IGNORÉS'  
+  ignoredJobs: 'EMPLOIS IGNORÉS'  ,
+  credit_all: 'Crédit:',
+  commission_list: 'Liste de la Commission'
 };
