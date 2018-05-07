@@ -7,6 +7,7 @@ import { logout, navigateAndSaveCurrentScreen } from './elements/authActions'
 import I18n from '../../i18n/i18n';
 import styles from "./styles";
 import api from '../../api';
+import FSpinner from 'react-native-loading-spinner-overlay';
 import { NavigationActions } from "react-navigation";
 
 const profileImage = require("../../../img/atul.png");
@@ -30,14 +31,13 @@ class Menu extends Component {
 
         super(props);
         this.state = {
-            visible: '',
+            visible: false,
             notificatonCount: 0,
         };
         AsyncStorage.getItem("language").then((value) => {
             if (value) {
                 const value1 = JSON.parse(value);
                 I18n.locale = value1.Code;
-                this.setState({ visible: 'fhfh' });
             }
         });
     };
@@ -51,24 +51,40 @@ class Menu extends Component {
     }
     
     logout() {
+        // AsyncStorage.getItem("userToken").then((userToken) => {
+        //     if (userToken) {
+        //         const userToken1 = JSON.parse(userToken);
+        //         api.put(`Workers/editWorker/${userToken1.userId}?access_token=${userToken1.id}`, { deviceToken: '' }).then((resEdit) => {
+        //             AsyncStorage.clear();
+        //             AsyncStorage.setItem("IsSliderShown", "true").then((res) => {
+
+        //             })
+        //             this.props.logout(res => {
+        //                 if (res) {
+        //                     I18n.locale = "en";
+        //                     //this.props.navigation.navigate("Login");
+        //                     this.props.navigation.dispatch(resetAction);
+        //                 } else {
+        //                     this.props.navigation.navigate("Menu")
+        //                 }
+        //             })
+        //         }).catch((err) => {
+        //         });
+        //     }
+        // })
+        this.setState({ visible: true });
         AsyncStorage.getItem("userToken").then((userToken) => {
             if (userToken) {
                 const userToken1 = JSON.parse(userToken);
                 api.put(`Workers/editWorker/${userToken1.userId}?access_token=${userToken1.id}`, { deviceToken: '' }).then((resEdit) => {
                     AsyncStorage.clear();
                     AsyncStorage.setItem("IsSliderShown", "true").then((res) => {
-
-                    })
-                    this.props.logout(res => {
-                        if (res) {
-                            I18n.locale = "en";
-                            //this.props.navigation.navigate("Login");
-                            this.props.navigation.dispatch(resetAction);
-                        } else {
-                            this.props.navigation.navigate("Menu")
-                        }
-                    })
+                        this.setState({ visible: false });
+                        this.props.navigation.dispatch(resetAction);
+                    });
+                    
                 }).catch((err) => {
+                    console.log(err);
                 });
             }
         })
@@ -82,6 +98,7 @@ class Menu extends Component {
     //        Alert.alert('unmount');
     //        this.backhandler.remove();
     //    }
+    
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', function () {
             console.log('hardwareBackPress', this.props);
@@ -286,7 +303,7 @@ class Menu extends Component {
         return (
             <Container >
                 <StatusBar backgroundColor="#81cdc7" />
-
+                <FSpinner visible={this.state.visible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
                 <Content>
                     <Header style={styles.bg_white} androidStatusBarColor="#81cdc7" >
                         {/* <Button transparent /> */}

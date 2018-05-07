@@ -26,6 +26,7 @@ class AvailableJobs extends Component {
             currency: 'AED',
             refreshing: false,
             backReturn: false,
+            availableJobs: {},
         };
     }
 
@@ -108,11 +109,12 @@ class AvailableJobs extends Component {
         this.props.navigateAndSaveCurrentScreen(data);
         this.props.navigation.navigate('JobDetails',{jobDetails:item});
     }
-    componentWillMount(){
-        this.jobdata();
-    }
+    // componentWillMount(){
+    //     this.jobdata();
+    // }
 
     componentDidMount() {
+        this.jobdata();
         AsyncStorage.getItem("currency").then((value) => {
             if (value) {
                 const value1 = JSON.parse(value);
@@ -159,9 +161,13 @@ class AvailableJobs extends Component {
     jobdata() {
         let id = this.props.auth.data.id;
         this.props.availablejobs(id).then(res => {
+            let data = { data: {}};
+            data.data = res;
+            debugger;
             this.setState({
                 listItemFlag: true,
-                loader: false
+                loader: false,
+                availableJobs: data,
             });
         }).catch(err => {
             this.setState({
@@ -173,7 +179,7 @@ class AvailableJobs extends Component {
     onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
     }
-//bala: Start
+//bala: Start~
     IgnoreJob(data){
         this.setState({
             loader: true
@@ -235,15 +241,15 @@ class AvailableJobs extends Component {
     render() {
 
         let items;
-        if (this.props.availableJobs.data) {
-            items = this.props.availableJobs.data.response.message.upcomingJobs;
-            console.log(this.props.availableJobs.data);
+        if (this.state.availableJobs.data) {
+            items = this.state.availableJobs.data.response.message.upcomingJobs;
+            console.log(this.state.availableJobs.data);
         }
-        if (this.props.availableJobs.data){
+        if (this.state.availableJobs.data){
 
 
             const dateList = [];
-            this.props.availableJobs.data.response.message.upcomingJobs.map((data, key) => {
+            this.state.availableJobs.data.response.message.upcomingJobs.map((data, key) => {
                 let dateConvertAva = new Date(data.postedDate);
                 let dataFormatAva = moment(dateConvertAva).format('DD MMM YYYY');
                 dateList.push(dataFormatAva);
@@ -271,7 +277,7 @@ class AvailableJobs extends Component {
                 dateNew = 'Tomorrow';
             }
             let finalObject = {date: dateNew, data: []};
-            this.props.availableJobs.data.response.message.upcomingJobs.map((dataNew, key) => {
+            this.state.availableJobs.data.response.message.upcomingJobs.map((dataNew, key) => {
                 let timeDiffNowRet = this.getTimeDiffLocal(dataNew.postedDate);
                 let postDateCompare = new Date(dataNew.postedDate);
                 if(dateOne === moment(postDateCompare).format('DD MMM YYYY')){
@@ -293,7 +299,7 @@ class AvailableJobs extends Component {
         // upcoming jobs
 
             const dateList2 = [];
-            this.props.availableJobs.data.response.message.acceptedJobs.map((data, key) => {
+            this.state.availableJobs.data.response.message.acceptedJobs.map((data, key) => {
                 let dateConvertUpa = new Date(data.postedDate);
                 let dataFormatUpa = moment(dateConvertUpa).format('DD MMM YYYY');
                 dateList2.push(dataFormatUpa);
@@ -322,7 +328,7 @@ class AvailableJobs extends Component {
                     dateNew = 'Tomorrow';
                 }
                 let finalObject = { date: dateNew, data: [] };
-                this.props.availableJobs.data.response.message.acceptedJobs.map((dataNew, key) => {
+                this.state.availableJobs.data.response.message.acceptedJobs.map((dataNew, key) => {
                     let timeDiffNowRet = this.getTimeDiffLocal(dataNew.postedDate);
                     let postDateCompare = new Date(dataNew.postedDate);
                     if (dateOne === moment(postDateCompare).format('DD MMM YYYY')) {
@@ -348,7 +354,7 @@ class AvailableJobs extends Component {
              // ongoing jobs
 
              const dateListOnGoing = [];
-             this.props.availableJobs.data.response.message.onGoingJobs.map((data, key) => {
+             this.state.availableJobs.data.response.message.onGoingJobs.map((data, key) => {
                  let dateConvertUpa = new Date(data.postedDate);
                  let dataFormatUpa = moment(dateConvertUpa).format('DD MMM YYYY');
                  dateListOnGoing.push(dataFormatUpa);
@@ -377,7 +383,7 @@ class AvailableJobs extends Component {
                      dateNew = 'Tomorrow';
                  }
                  let finalObject = { date: dateNew, data: [] };
-                 this.props.availableJobs.data.response.message.onGoingJobs.map((dataNew, key) => {
+                 this.state.availableJobs.data.response.message.onGoingJobs.map((dataNew, key) => {
                      let timeDiffNowRet = this.getTimeDiffLocal(dataNew.postedDate);
                      let postDateCompare = new Date(dataNew.postedDate);
                      if (dateOne === moment(postDateCompare).format('DD MMM YYYY')) {
@@ -400,7 +406,7 @@ class AvailableJobs extends Component {
 
              //complete job
              const dateListComp = [];
-             this.props.availableJobs.data.response.message.completedJobs.map((data, key) => {
+             this.state.availableJobs.data.response.message.completedJobs.map((data, key) => {
                  let dateConvertUpa = new Date(data.postedDate);
                  let dataFormatUpa = moment(dateConvertUpa).format('DD MMM YYYY');
                  dateListComp.push(dataFormatUpa);
@@ -429,7 +435,7 @@ class AvailableJobs extends Component {
                      dateNew = 'Tomorrow';
                  }
                  let finalObject = { date: dateNew, data: [] };
-                 this.props.availableJobs.data.response.message.completedJobs.map((dataNew, key) => {
+                 this.state.availableJobs.data.response.message.completedJobs.map((dataNew, key) => {
                      let timeDiffNowRet = this.getTimeDiffLocal(dataNew.postedDate);
                      let postDateCompare = new Date(dataNew.postedDate);
                      if (dateOne === moment(postDateCompare).format('DD MMM YYYY')) {
@@ -513,7 +519,7 @@ class AvailableJobs extends Component {
                                                         </View>
                                                         <View style={styles.listWarpTextWarp}>
                                                             <View style={styles.flexDirectionRow}>
-                                                                <Text>{item.service.name}</Text>
+                                                                <Text style={{ fontWeight: 'bold' }}>{item.service.name}</Text>
                                                             </View>
                                                             <View style={styles.flexDirectionRow}>
                                                                 {/* <Text style={[styles.fontWeight700, { fontSize: 14 }]}>
@@ -595,7 +601,7 @@ class AvailableJobs extends Component {
                                                     </View>
                                                     <View style={styles.listWarpTextWarp}>
                                                         <View style={styles.flexDirectionRow}>
-                                                            <Text>{item.service.name}</Text>
+                                                            <Text style={{ fontWeight: 'bold' }}>{item.service.name}</Text>
                                                         </View>
                                                         <View style={styles.flexDirectionRow}>
                                                             {/* <Text style={[styles.fontWeight700, { fontSize: 14 }]}>Tuesday </Text>
@@ -657,7 +663,7 @@ class AvailableJobs extends Component {
                                                     </View>
                                                     <View style={styles.listWarpTextWarp}>
                                                         <View style={styles.flexDirectionRow}>
-                                                            <Text>{item.service.name}</Text>
+                                                            <Text style={{ fontWeight: 'bold' }}>{item.service.name}</Text>
                                                         </View>
                                                         <View style={styles.flexDirectionRow}>
                                                             {/* <Text style={[styles.fontWeight700, { fontSize: 14 }]}>Tuesday </Text>
@@ -720,7 +726,7 @@ class AvailableJobs extends Component {
                                                     </View>
                                                     <View style={styles.listWarpTextWarp}>
                                                         <View style={styles.flexDirectionRow}>
-                                                            <Text>{item.service.name}</Text>
+                                                            <Text style={{ fontWeight: 'bold' }}>{item.service.name}</Text>
                                                         </View>
                                                         <View style={styles.flexDirectionRow}>
                                                             {/* <Text style={[styles.fontWeight700, { fontSize: 14 }]}>Tuesday </Text>
@@ -752,9 +758,9 @@ class AvailableJobs extends Component {
                     </Tab>
 
                     <Tab heading="IGNORED JOBS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
-                        {this.props.availableJobs.data.response.message.declinedJobs? (
+                        {this.state.availableJobs.data.response.message.declinedJobs? (
                             <List
-                                dataArray={this.props.availableJobs.data.response.message.declinedJobs}
+                                dataArray={this.state.availableJobs.data.response.message.declinedJobs}
                             style={styles.jobList}
                             renderRow={(item) =>
                                 <ListItem style={styles.jobListItem}>
@@ -764,7 +770,7 @@ class AvailableJobs extends Component {
                                         </View>
                                         <View style={styles.listWarpTextWarp}>
                                             <View style={styles.flexDirectionRow}>
-                                                <Text>{item.service.name}</Text>
+                                                <Text style={{ fontWeight: 'bold' }}>{item.service.name}</Text>
                                             </View>
                                             <View style={styles.flexDirectionRow}>
                                                 <Text style={{ fontSize: 14 }}> {item.job.postedDate } </Text>
