@@ -163,7 +163,6 @@ class AvailableJobs extends Component {
         this.props.availablejobs(id).then(res => {
             let data = { data: {}};
             data.data = res;
-            debugger;
             this.setState({
                 listItemFlag: true,
                 loader: false,
@@ -454,6 +453,59 @@ class AvailableJobs extends Component {
                      }
                  });
              });
+
+
+             //////////////////////////////////////////////////////////////////
+             //complete job
+            //  const dateListCancel = [];
+            //  this.state.availableJobs.data.response.message.completedJobs.map((data, key) => {
+            //      let dateConvertCan = new Date(data.postedDate);
+            //      let dataFormatCan = moment(dateConvertCan).format('DD MMM YYYY');
+            //      dateListCancel.push(dataFormatCan);
+            //  })
+            //  const uniqueList5 = dateListCancel.filter(this.onlyUnique);
+            //  const sortedList5 = uniqueList5.sort(function (a, b) {
+            //      const retValue = new Date(a) - new Date(b);
+            //      return retValue;
+            //  });
+
+            //  let finalArray5 = [];
+            //  sortedList5.map((dateOne, key) => {
+
+            //      let dateNow = new Date();
+            //      let nowDateFormat = moment(dateNow).format('DD MMM YYYY');
+            //      let convertedDate = new Date(dateOne);
+            //      let dateNew = moment(convertedDate).format('DD MMM YYYY');
+
+            //      var tomorrow = new Date();
+            //      tomorrow.setDate(dateNow.getDate() + 1);
+            //      let tomorrowFormat = moment(tomorrow).format('DD MMM YYYY');
+
+            //      if (nowDateFormat === dateNew) {
+            //          dateNew = 'Today';
+            //      } else if (tomorrowFormat === dateNew) {
+            //          dateNew = 'Tomorrow';
+            //      }
+            //      let finalObject = { date: dateNew, data: [] };
+            //      this.state.availableJobs.data.response.message.completedJobs.map((dataNew, key) => {
+            //          let timeDiffNowRet = this.getTimeDiffLocal(dataNew.postedDate);
+            //          let postDateCompare = new Date(dataNew.postedDate);
+            //          if (dateOne === moment(postDateCompare).format('DD MMM YYYY')) {
+            //              dataNew.startTime = timeDiffNowRet;
+            //              finalObject.data.push(dataNew);
+            //          }
+            //      })
+
+            //      finalArray5.push(finalObject);
+
+            //  });
+            //  finalArray5.map((item)=>{
+            //      item.data.map((item1)=>{
+            //          if(item1.price && typeof(item1.price) !='string'){
+            //              item1.price=item1.price.toFixed(2);
+            //          }
+            //      });
+            //  });
 
         return (
 
@@ -791,9 +843,42 @@ class AvailableJobs extends Component {
                         )
                         }
                     </Tab>
-                    {/* <Tab heading="STATS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
-                        <Text>Tab1</Text>
-                    </Tab> */}
+
+                    <Tab heading="CANCELLED JOBS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
+                        {this.state.availableJobs.data.response.message.cancelledJobs? (
+                            <List
+                                dataArray={this.state.availableJobs.data.response.message.cancelledJobs}
+                            style={styles.jobList}
+                            renderRow={(item) =>
+                                <ListItem style={styles.jobListItem}>
+                                    <View style={styles.listWarp}>
+                                        <View style={styles.listWarpImageWarp}>
+                                            <Image source={{ uri: item.service.banner_image }} style={styles.listWarpImage} />
+                                        </View>
+                                        <View style={styles.listWarpTextWarp}>
+                                            <View style={styles.flexDirectionRow}>
+                                                <Text style={{ fontWeight: 'bold' }}>{item.service.name}</Text>
+                                            </View>
+                                            <View style={styles.flexDirectionRow}>
+                                                <Text style={{ fontSize: 14 }}> {item.job.postedDate } </Text>
+                                            </View>
+                                        </View>
+                                        {/* <View>
+                                            <Text style={styles.listWarpPriceUp}>{item.currency.name} {item.job.price}</Text>
+                                            <Text style={styles.listWarpPriceDown}>4 hours</Text>
+                                        </View> */}
+                                    </View>
+                                </ListItem>
+                            }
+                        />
+                        ):(
+                            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                                    <Text>{I18n.t('nodatafound')}</Text>
+                            </View>
+                        )
+                        }
+                    </Tab>
+                    
                 </Tabs>
                 <FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
             </Container>
