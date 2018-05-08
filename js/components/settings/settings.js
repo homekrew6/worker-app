@@ -9,9 +9,15 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import I18n from '../../i18n/i18n';
 import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
+import { NavigationActions } from "react-navigation";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import api from '../../api';
 const carve = require("../../../img/icon17.png");
+const resetAction = NavigationActions.reset({
+    index: 0,
+    actions: [NavigationActions.navigate({ routeName: 'Login' })],
+});
 class Settings extends Component {
 
     constructor(props) {
@@ -63,6 +69,25 @@ class Settings extends Component {
 
     }
 
+    logout() {
+        this.setState({ visible: true });
+        AsyncStorage.getItem("userToken").then((userToken) => {
+            if (userToken) {
+                const userToken1 = JSON.parse(userToken);
+                api.put(`Workers/editWorker/${userToken1.userId}?access_token=${userToken1.id}`, { deviceToken: '' }).then((resEdit) => {
+                    AsyncStorage.clear();
+                    AsyncStorage.removeItem('userToken');
+                    AsyncStorage.setItem("IsSliderShown", "true").then((res) => {
+                        debugger;
+                        I18n.locale = 'en';
+                        this.setState({ visible: false });
+                        this.props.navigation.dispatch(resetAction);
+                    });
+                }).catch((err) => {
+                });
+            }
+        })
+    }
 
 
     navigate(screen) {
@@ -128,6 +153,9 @@ class Settings extends Component {
                         {/* <TouchableOpacity style={styles.confirmationServicefooterItem} onPress={() => this.confirmationContinue()} >
                         <Text style={styles.confirmationServicefooterItmTxt}>CONTINUE</Text>
                         </TouchableOpacity> */}
+                        <TouchableOpacity style={[styles.confirmationServicefooterItem, { backgroundColor: '#1e3768' }]} onPress={() => this.logout()} >
+                            <Text style={[styles.confirmationServicefooterItmTxt]}>{I18n.t('logout').toUpperCase()}</Text>
+                        </TouchableOpacity>
                         <TouchableOpacity style={styles.confirmationServicefooterItem} onPress={() => this.props.navigation.navigate('Menu')} >
                             <Text style={styles.confirmationServicefooterItmTxt}>{I18n.t('continue')}</Text>
                         </TouchableOpacity>

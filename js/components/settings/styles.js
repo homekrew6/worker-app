@@ -136,6 +136,7 @@ export default {
     confirmationDateTime: {
         color: '#a9a9a9',
         fontSize: 13,
+        marginLeft: 10
     },
     confirmationArwNxt: {
         paddingLeft: 5,

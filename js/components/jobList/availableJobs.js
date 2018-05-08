@@ -844,7 +844,7 @@ class AvailableJobs extends Component {
                         }
                     </Tab>
 
-                    <Tab heading="CANCELLED JOBS" tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
+                    <Tab heading={I18n.t('cancel_jobs')} tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
                         {this.state.availableJobs.data.response.message.cancelledJobs? (
                             <List
                                 dataArray={this.state.availableJobs.data.response.message.cancelledJobs}

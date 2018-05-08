@@ -193,10 +193,10 @@ export default {
   upcoming_jobs: 'UPCOMING JOBS',
   onGoingJobs: 'ON GOING JOBS',
   completedJobs: 'COMPLETED JOBS',
-
   ignoredJobs: 'IGNORED JOBS',
   chat: 'Chat',
   camera: 'Camera',
   credit_all: 'Credit:',
-  commission_list: 'Commission List'
+  commission_list: 'Commission List',
+  cancel_jobs:'CANCELLED JOBS'
 };
