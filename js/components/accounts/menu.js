@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Image, View, StatusBar, Alert, TouchableOpacity, AsyncStorage, BackHandler, Text } from "react-native";
 import { Container, Header, Button, Content, CardItem, Card, Body, Thumbnail } from "native-base";
+import FSpinner from 'react-native-loading-spinner-overlay';
 import { logout, navigateAndSaveCurrentScreen } from './elements/authActions'
 import I18n from '../../i18n/i18n';
 import styles from "./styles";
 import api from '../../api';
-import FSpinner from 'react-native-loading-spinner-overlay';
 import { NavigationActions } from "react-navigation";
 
 const profileImage = require("../../../img/atul.png");
@@ -21,6 +21,8 @@ const icon7 = require("../../../img/icon7.png");
 const icon8 = require("../../../img/icon8.png");
 const back_arow = require("../../../img/arrow_back.png");
 const logo_hdr = require("../../../img/logo2.png");
+const countImage = require('../../../img/icon/coins.png');
+
 const resetAction = NavigationActions.reset({
     index: 0,
     actions: [NavigationActions.navigate({ routeName: 'Login' })],
@@ -28,16 +30,19 @@ const resetAction = NavigationActions.reset({
 
 class Menu extends Component {
     constructor(props) {
-
         super(props);
         this.state = {
             visible: false,
             notificatonCount: 0,
+            totalCommission: '0.00',
+            currency: 'AED',
+            reRender: ''
         };
         AsyncStorage.getItem("language").then((value) => {
             if (value) {
                 const value1 = JSON.parse(value);
                 I18n.locale = value1.Code;
+                this.setState({ reRender: 'fhfh' });
             }
         });
     };
@@ -51,55 +56,44 @@ class Menu extends Component {
     }
     
     logout() {
-        // AsyncStorage.getItem("userToken").then((userToken) => {
-        //     if (userToken) {
-        //         const userToken1 = JSON.parse(userToken);
-        //         api.put(`Workers/editWorker/${userToken1.userId}?access_token=${userToken1.id}`, { deviceToken: '' }).then((resEdit) => {
-        //             AsyncStorage.clear();
-        //             AsyncStorage.setItem("IsSliderShown", "true").then((res) => {
-
-        //             })
-        //             this.props.logout(res => {
-        //                 if (res) {
-        //                     I18n.locale = "en";
-        //                     //this.props.navigation.navigate("Login");
-        //                     this.props.navigation.dispatch(resetAction);
-        //                 } else {
-        //                     this.props.navigation.navigate("Menu")
-        //                 }
-        //             })
-        //         }).catch((err) => {
-        //         });
-        //     }
-        // })
         this.setState({ visible: true });
         AsyncStorage.getItem("userToken").then((userToken) => {
             if (userToken) {
                 const userToken1 = JSON.parse(userToken);
                 api.put(`Workers/editWorker/${userToken1.userId}?access_token=${userToken1.id}`, { deviceToken: '' }).then((resEdit) => {
                     AsyncStorage.clear();
+                    
+                    AsyncStorage.removeItem('userToken');
                     AsyncStorage.setItem("IsSliderShown", "true").then((res) => {
+                        I18n.locale = 'en';
                         this.setState({ visible: false });
                         this.props.navigation.dispatch(resetAction);
                     });
-                    
+                    // this.props.logout(res => {
+                    //     if (res) {
+                    //         //this.props.navigation.navigate("Login");
+                    //         this.props.navigation.dispatch(resetAction);
+                    //     } else {
+                    //         this.props.navigation.navigate("Menu")
+                    //     }
+                    // })
                 }).catch((err) => {
-                    console.log(err);
                 });
             }
         })
     }
 
 
-
-
-    //    componentWillUnmount()
-    //    {
-    //        Alert.alert('unmount');
-    //        this.backhandler.remove();
-    //    }
-    
     componentDidMount() {
+        api.post('Workers/totalCommission', { id: this.props.auth.data.id }).then((resCon) => {
+            this.setState({ totalCommission: resCon.response.message });
+        });
+        AsyncStorage.getItem("currency").then((value) => {
+            if (value) {
+                const value1 = JSON.parse(value);
+                this.setState({ currency: value1.language })
+            }
+        });
         BackHandler.addEventListener('hardwareBackPress', function () {
             console.log('hardwareBackPress', this.props);
             if(this.props.currentRoute === 'Menu'){
@@ -121,172 +115,7 @@ class Menu extends Component {
         }.bind(this));
     }
 
-    // componentDidMount() {
-    //     const data = this.props.auth.data;
-    //     data.activeScreen = "Menu";
-    //     this.props.navigateAndSaveCurrentScreen(data);
-    //     BackHandler.addEventListener('hardwareBackPress', function () {
-
-    //       const { dispatch, navigation, nav } = this.props;
-    //       if (this.props.auth.data.activeScreen && this.props.auth.data.activeScreen == 'Menu') {
-    //         Alert.alert(
-    //           'Confirm',
-    //           'Are you sure to exit the app?',
-    //           [
-    //             { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-    //             { text: 'OK', onPress: () => BackHandler.exitApp() },
-    //           ],
-    //           { cancelable: false }
-    //         )
-    //       }
-    //       else {
-    //         let saveData = this.props.auth.data;
-    //         // if (this.props.auth.data.previousScreen)
-    //         //   this.props.navigation.navigate(this.props.auth.data.previousScreen);
-    //         // else {
-    //         //   this.props.navigation.navigate('Menu');
-    //         // }
-
-
-    //         switch (this.props.auth.data.activeScreen) {
-    //           case "EditProfile":
-    //             saveData.activeScreen = "Menu";
-    //             saveData.previousScreen = "";
-    //             this.props.navigateAndSaveCurrentScreen(saveData);
-    //             break;
-    //             case "NotificationList":
-    //             saveData.activeScreen = "Menu";
-    //             saveData.previousScreen = "";
-    //             this.props.navigateAndSaveCurrentScreen(saveData);
-    //             break;
-    //           case "MyLocation":
-    //             break;
-    //           case "myTiming":
-    //             break;
-    //             case "Settings":
-    //             break;
-    //           case "LocationList":
-    //             // saveData.activeScreen = "Confirmation";
-    //             // saveData.previousScreen = "ServiceDetails";
-    //             // this.props.navigateAndSaveCurrentScreen(saveData);
-    //             break;
-    //             case "Support":
-    //             break;
-    //         case "AvailableJobs" :
-    //             // saveData.activeScreen = "Menu";
-    //             // saveData.previousScreen = "Menu";
-    //             // this.props.navigateAndSaveCurrentScreen(saveData);
-    //             break;
-    //           default:
-    //             break;
-    //         }
-
-    //          if(this.props.auth.data.activeScreen==='MyLocation')
-    //         {
-    //           saveData.activeScreen = "Menu";
-    //           saveData.previousScreen = "";
-    //           this.props.navigateAndSaveCurrentScreen(saveData);
-    //           this.props.navigation.navigate(saveData.activeScreen);
-    //         }
-    //         else if(this.props.auth.data.activeScreen==='myTiming')
-    //         {
-    //           saveData.activeScreen = "Menu";
-    //           saveData.previousScreen = "";
-    //           this.props.navigateAndSaveCurrentScreen(saveData);
-    //           this.props.navigation.navigate(saveData.activeScreen);
-    //         }
-    //         else if(this.props.auth.data.activeScreen==='WeekCalendar' || this.props.auth.data.activeScreen==="UnavailableDate")
-    //         {
-    //           saveData.activeScreen = "myTiming";
-    //           saveData.previousScreen = "";
-    //           this.props.navigateAndSaveCurrentScreen(saveData);
-    //           this.props.navigation.navigate(saveData.activeScreen);
-    //         }
-    //         else if(this.props.auth.data.activeScreen=="Support")
-    //         {
-    //             saveData.activeScreen = "Menu";
-    //             saveData.previousScreen = "";
-    //             this.props.navigateAndSaveCurrentScreen(saveData);
-    //             this.props.navigation.navigate(saveData.activeScreen);
-    //         }
-    //         else if(this.props.auth.data.activeScreen=="Settings")
-    //         {
-    //             saveData.activeScreen = "Menu";
-    //             saveData.previousScreen = "";
-    //             this.props.navigateAndSaveCurrentScreen(saveData);
-    //             this.props.navigation.navigate(saveData.activeScreen);
-    //         }
-    //         else if(this.props.auth.data.activeScreen=="AvailableJobs")
-    //         {
-    //             saveData.activeScreen = "Menu";
-    //             saveData.previousScreen = "";
-    //             this.props.navigateAndSaveCurrentScreen(saveData);
-    //             this.props.navigation.navigate(saveData.activeScreen);
-    //         }
-    //         else if(this.props.auth.data.activeScreen=="LanguageList" ||this.props.auth.data.activeScreen=="CurrencyList" )
-    //         {
-    //             saveData.activeScreen = "Settings";
-    //             saveData.previousScreen = "Menu";
-    //             this.props.navigateAndSaveCurrentScreen(saveData);
-    //             this.props.navigation.navigate(saveData.activeScreen);
-    //         }
-    //         else if(this.props.auth.data.activeScreen=="SelectLocation" )
-    //         {
-    //             saveData.activeScreen = "MyLocation";
-    //             saveData.previousScreen = "Menu";
-    //             this.props.navigateAndSaveCurrentScreen(saveData);
-    //             this.props.navigation.navigate(saveData.activeScreen);
-    //         }
-    //         else if(this.props.auth.data.activeScreen==='LocationList')
-    //         {
-    //           saveData.activeScreen = "Confirmation";
-    //           saveData.previousScreen = "ServiceDetails";
-    //           this.props.navigateAndSaveCurrentScreen(saveData);
-    //           this.props.navigation.navigate(saveData.activeScreen);
-    //         }
-    //         else if(this.props.auth.data.activeScreen==='JobDetails')
-    //         {
-    //           saveData.activeScreen = "AvailableJobs";
-    //           saveData.previousScreen = "Menu";
-    //           this.props.navigateAndSaveCurrentScreen(saveData);
-    //           this.props.navigation.navigate(saveData.activeScreen);
-    //         }
-    //         else if(this.props.auth.data.activeScreen==='MyMap')
-    //         {
-    //           AsyncStorage.getItem("fromConfirmation").then((value)=>{
-    //             if(value)
-    //             {
-    //               saveData.activeScreen = "LocationList";
-    //               saveData.previousScreen = "Menu";
-    //               this.props.navigateAndSaveCurrentScreen(saveData);
-    //               this.props.navigation.navigate(saveData.activeScreen);
-    //             }
-    //             else
-    //             {
-    //               saveData.activeScreen = "MyLocation";
-    //               saveData.previousScreen = "Menu";
-    //               this.props.navigateAndSaveCurrentScreen(saveData);
-    //               this.props.navigation.navigate(saveData.activeScreen);
-    //             }
-    //           })
-
-    //         }
-    //         else {
-    //           this.props.navigation.goBack(null);
-    //           return true;
-    //         }
-
-    //       }
-
-    //       return true;
-    //     }.bind(this));
-
-    // }
-
-
-
-
-
+   
     componentWillMount() {
         // console.log('this is saikat bala');    
         // console.log(this.props.auth.data);
@@ -306,7 +135,7 @@ class Menu extends Component {
                 <FSpinner visible={this.state.visible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
                 <Content>
                     <Header style={styles.bg_white} androidStatusBarColor="#81cdc7" >
-                        {/* <Button transparent /> */}
+                        <Button transparent />
                         <Body style={styles.appHdrtitleWarp}>
                             <Image source={logo_hdr} style={{ height: 18, width: 110 }} />
                         </Body>
@@ -328,9 +157,9 @@ class Menu extends Component {
                                 }
                                 <View>
                                     <TouchableOpacity onPress={() => this.navigate("EditProfile")}>
-                                        <Text style={[styles.pname, { lineHeight: 22 }]}>{this.props.auth.data.name}</Text>
-                                        <Text style={[styles.pemail, { lineHeight: 22 }]}>{this.props.auth.data.email}</Text>
-                                        <Text style={[styles.pphone, { lineHeight: 22 }]}>{this.props.auth.data.phone}</Text>
+                                        <Text style={styles.pname}>{this.props.auth.data.name}</Text>
+                                        <Text style={styles.pemail}>{this.props.auth.data.email}</Text>
+                                        <Text style={styles.pphone}>{this.props.auth.data.phone}</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -338,7 +167,7 @@ class Menu extends Component {
                         </CardItem>
                         <CardItem>
                             <View style={styles.pBtmTxt}>
-                                <Text style={styles.pBtmTxt_Txt}>Credit: AED 0.00</Text>
+                                <Text style={styles.pBtmTxt_Txt}>{I18n.t('credit_all')} {this.state.currency} {this.state.totalCommission}</Text>
                             </View>
                         </CardItem>
                     </Card>
@@ -403,6 +232,21 @@ class Menu extends Component {
                             </TouchableOpacity>
                         </CardItem>
 
+                        {/* <CardItem style={styles.menuCarditem}>
+                            <TouchableOpacity
+                                style={styles.menuCardView} 
+                                onPress={() => this.props.navigation.navigate('commissionList', {
+                                        workerId: this.props.auth.data.id,
+                                        commission: this.props.auth.data.commission
+                                    })}
+                            >
+                                <Image source={countImage} style={styles.menuCardIcon} />
+                                <Text style={styles.menuCardTxt}>{I18n.t('commission_list')}</Text>
+                                <View style={styles.arw_lft}>
+                                    <Image source={back_arow} style={styles.arw_lft_img} />
+                                </View>
+                            </TouchableOpacity>
+                        </CardItem> */}
  {/* <CardItem style={styles.menuCarditem}>
                             <View style={styles.menuCardView}>
                                 <Image source={icon5} style={styles.menuCardIcon} />

@@ -194,4 +194,6 @@ export default {
   chat: 'دردشة' ,
   save: 'حفظ',
   camera: 'الة تصوير'     
+  credit_all: 'ائتمان',
+  commission_list: 'قائمة المفوضية'
 };
