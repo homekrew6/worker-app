@@ -193,7 +193,7 @@ export default {
   ignoredJobs: 'شغل وظائف',
   chat: 'دردشة' ,
   save: 'حفظ',
-  camera: 'الة تصوير'     
+  camera: 'الة تصوير',     
   credit_all: 'ائتمان',
   commission_list: 'قائمة المفوضية'
 };
