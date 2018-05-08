@@ -167,7 +167,7 @@ class Support extends Component {
                                                 <Text style={styles.chatListTextName}>{item.titleSelected}</Text>
                                                 <Text style={styles.chatListTextQuestion}>{item.questionSelected}</Text>
                                             </View>
-                                            <View>
+                                            <View >
                                                 {
                                                     item.is_active_item ? <Ionicons name='ios-arrow-down-outline' style={styles.chatListTextIcon} /> : <Ionicons name='ios-arrow-forward-outline' style={styles.chatListTextIcon} />
                                                 }

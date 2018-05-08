@@ -49,7 +49,7 @@ export default {
     chatListTextWarp: { flex: 1 },
     chatListTextName: { color: '#000' },
     chatListTextQuestion: { color: '#a9a9a9', fontSize: 14 },
-    chatListTextIcon: { fontSize: 18 },
+    chatListTextIcon: { fontSize: 18, marginLeft: 15 },
     chatListTime: { fontSize: 14 },
 
 
