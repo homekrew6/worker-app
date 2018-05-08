@@ -100,5 +100,9 @@ export default {
   upcoming_jobs: 'PROCHAINS TRAVAUX',
   onGoingJobs: 'SUR LES EMPLOIS',
   completedJobs: 'TRAVAUX COMPLÉTÉS',
-  ignoredJobs: 'EMPLOIS IGNORÉS'  
+  ignoredJobs: 'EMPLOIS IGNORÉS',
+  chat_call: 'appel de chat',
+  chat: 'bavarder'  ,
+  save: 'enregistrer',
+  camera: 'Caméra'  
 };

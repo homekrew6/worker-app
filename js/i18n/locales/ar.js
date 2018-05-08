@@ -120,7 +120,7 @@ export default {
   liveChat: 'دردشة مباشرة',
   callMe: 'اتصل بي',
   callUs: 'اتصل بنا',
-  call: 'Appel',
+  call: 'مكالمة',
   pay_pending: 'انتظار الدفع',
   setting_page_title: 'إعدادات',
   promoPrice: 'سعر العرض',
@@ -190,5 +190,8 @@ export default {
   upcoming_jobs: 'وظائف قادمة',
   onGoingJobs: 'على الوظائف القادمة',
   completedJobs: 'وظائف مكتملة',
-  ignoredJobs: 'شغل وظائف'  
+  ignoredJobs: 'شغل وظائف',
+  chat: 'دردشة' ,
+  save: 'حفظ',
+  camera: 'الة تصوير'     
 };
