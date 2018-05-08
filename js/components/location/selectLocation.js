@@ -131,7 +131,7 @@ class selectLocation extends Component {
                             <Text style={styles.hdClr}>{I18n.t('my_location')}</Text>
                         </Body>
                         <TouchableOpacity transparent onPress={() => this.save_select_location()} activeOpacity={0.5} style={{ width: 50, justifyContent: 'center', alignItems: 'flex-end' }}>
-                            <Text>Save</Text>
+                            <Text>{I18n.t('save')}</Text>
                         </TouchableOpacity>
                         
                     </Header>

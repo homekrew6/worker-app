@@ -1065,13 +1065,13 @@ class JobDetails extends Component {
                                     <View style={[styles.jobItemWarp, { paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 0 }]}>
                                         <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', height: 50, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }} onPress={() => this.MyChat(JobDetailsData)}>
                                             <MaterialIcons name="chat" style={{ fontSize: 18, color: '#fff' }} />
-                                            <Text style={{ color: '#fff' }}>  Chat</Text>
+                                            <Text style={{ color: '#fff' }}>  {I18n.t('chat')}</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity style={{ flex: 1, backgroundColor: '#1e3768', height: 50, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}
                                             onPress={() => Communications.phonecall(JobDetailsData.worker.phone, true)}
                                         >
                                             <MaterialIcons name="call" style={{ fontSize: 18, color: '#fff' }} />
-                                            <Text style={{ color: '#fff' }}>Call</Text>
+                                            <Text style={{ color: '#fff' }}>{I18n.t('call')}</Text>
                                         </TouchableOpacity>
                                     </View>
                                 )
