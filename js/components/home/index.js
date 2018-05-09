@@ -48,7 +48,6 @@ class Home extends Component {
 		FCM.requestPermissions();
 		//update fcm token
 		FCM.getFCMToken().then(token => {
-			console.log('fcm token', token);
 			AsyncStorage.getItem("userToken").then((userToken) => {
 				if (userToken) {
 					const userToken1 = JSON.parse(userToken);
@@ -60,7 +59,6 @@ class Home extends Component {
 		});
 		//called on initial
 		FCM.getInitialNotification().then(notif => {
-			console.log('getInitialNotification', notif);
 			setTimeout(() => {
 				AsyncStorage.getItem("userToken").then((userToken) => {
 					if (userToken) {
@@ -180,9 +178,7 @@ class Home extends Component {
 		});
 		//
 		this.notificationUnsubscribe = FCM.on(FCMEvent.Notification, notif => {
-			console.log('notificationUnsubscribe', notif);
 			if (notif && notif.local_notification) {
-				//when notification clicked
 				if (notif.screenType && notif.screenType == 'JobDetails') {
 					api.post('Jobs/getJobDetailsById', { 
 						"id": Number(notif.jobId),
@@ -207,7 +203,6 @@ class Home extends Component {
 						})
 					);
 				}
-				console.log('notificationUnsubscribe inside', notif);
 				//return;
 			}
 			//call to only send notification
@@ -246,7 +241,6 @@ class Home extends Component {
 
 	}
 	sendRemote(notif) {
-		console.log('notify sent', notif);
 		FCM.presentLocalNotification({
 			id: new Date().valueOf().toString(),
 			title: notif.fcm.body,

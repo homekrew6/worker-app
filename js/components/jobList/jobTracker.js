@@ -53,8 +53,6 @@ class JobTracker extends Component {
             else {
                 statusArray = res.response.message;
             }
-            
-            console.log('trackingDetails', res.response.message);
 
             statusArray.map((newdata) => {
                 if (newdata.status == 'JOBCOMPLITED') {

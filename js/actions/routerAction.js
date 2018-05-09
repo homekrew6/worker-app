@@ -1,5 +1,4 @@
 export function ChangeRoute(prevState, newState){
-  console.log('routerAction', prevState, newState)
     return(dispatch => {
       let lastRoute = Number(newState.routes.length) - 1;
       let prevRoute;

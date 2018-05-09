@@ -94,7 +94,7 @@ android {
     buildToolsVersion "26.0.2"
 
     defaultConfig {
-        applicationId "com.KrewWorkerApp"
+        applicationId "com.HomeKrew.Worker"
         minSdkVersion 16
         targetSdkVersion 26
         versionCode 1

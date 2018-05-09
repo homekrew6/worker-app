@@ -49,8 +49,7 @@ class NotificationList extends Component {
     }
 
     notificationListData(){
-        let workerId = this.props.auth.data.id ? this.props.auth.data.id : '';
-        console.log('cuId', workerId);       
+        let workerId = this.props.auth.data.id ? this.props.auth.data.id : '';      
         if(workerId){
         let notiDataread = [], notiDataunread = [], notiData;
         this.setState({
@@ -67,9 +66,7 @@ class NotificationList extends Component {
                 NotificationListUnread: notiDataunread,
                 loader: false
             })
-            console.log('notiData', res);
         }).catch((err) => {
-            console.log(err);
             this.setState({
                 loader: false
             })
@@ -84,7 +81,6 @@ class NotificationList extends Component {
         this.setState({
             loader: true
         })
-        console.log(data.id);
         api.delete( 'Notifications/'+ data.id  ).then((res) => {
             this.setState({
                 loader: false
@@ -92,7 +88,6 @@ class NotificationList extends Component {
             this.notificationListData()
           
         }).catch((err) => {
-            console.log(err);
             this.setState({
                 loader: false
             })
@@ -113,7 +108,6 @@ class NotificationList extends Component {
             })
             this.notificationListData()
         }).catch((err) => {
-            console.log(err);
             this.setState({
                 loader: false
             })
@@ -152,7 +146,6 @@ class NotificationList extends Component {
                 })
                 this.notificationListData();                
             }).catch((err) => {
-                console.log(err);
                 this.setState({
                     loader: false
                 })
@@ -175,7 +168,6 @@ class NotificationList extends Component {
                     loader: false,
                 });               
             }).catch((err) => {
-                console.log(err);
                 this.setState({
                     loader: false,
                 });

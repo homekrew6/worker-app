@@ -25,7 +25,8 @@ class Settings extends Component {
         this.state = {
             language: 'English',
             visible: false,
-            currency: 'AED'
+            currency: 'AED',
+            IsProfileDisabled: false
         }
 
     }
@@ -88,9 +89,15 @@ class Settings extends Component {
             }
         })
     }
-
+    clickDisable() {
+        this.setState({ IsProfileDisabled: true });
+        setTimeout(() => {
+            this.setState({ IsProfileDisabled: false });
+        }, 3000);
+    }
 
     navigate(screen) {
+        this.clickDisable();
         const data = this.props.auth.data;
         data.activeScreen = screen;
         data.previousScreen = "Settings";
@@ -127,7 +134,7 @@ class Settings extends Component {
                     </View>
                     <View>
 
-                        <TouchableOpacity style={styles.confirmationItem} onPress={() => this.navigate('LanguageList')}>
+                        <TouchableOpacity style={styles.confirmationItem} onPress={() => this.navigate('LanguageList')} disabled={this.state.IsProfileDisabled}>
                             <View style={styles.confirmationIconView}>
                                 <Entypo name='language' style={{ fontSize: 20, color: '#1e3768' }} />
                             </View>
@@ -135,7 +142,7 @@ class Settings extends Component {
                             <Text style={styles.confirmationDateTime}>{this.state.language}</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.confirmationItem} onPress={() => this.navigate('CurrencyList')}>
+                        <TouchableOpacity style={styles.confirmationItem} onPress={() => this.navigate('CurrencyList')} disabled={this.state.IsProfileDisabled}>
                             <View style={styles.confirmationIconView}>
                                 <MaterialCommunityIcons name='currency-usd' style={{ fontSize: 20, color: '#1e3768' }} />
                             </View>

@@ -82,10 +82,8 @@ class Support extends Component {
 
 
         }).catch((err) => {
-            console.log(err);
         })
         }).catch((error) => {
-            console.log(error);
             this.setState({ loader: false });
         })
     }

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 
 class RouterOwn extends Component{
     componentDidMount(){
-        console.log('router', this.props);
     }
     render(){
         return(

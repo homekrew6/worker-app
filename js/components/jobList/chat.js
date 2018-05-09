@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
-import { Image, View, StatusBar, Alert, TouchableOpacity, TextInput, ScrollView, Text } from 'react-native';
+import { Image, View, StatusBar, Alert, TouchableOpacity, TextInput, ScrollView, Text, AsyncStorage } from 'react-native';
 import { Footer, FooterTab, Container, Header, Button, Body, Title, ActionSheet } from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
@@ -12,19 +12,38 @@ import styles from './styles';
 import I18n from '../../i18n/i18n';
 import config from '../../config';
 import * as firebase from 'firebase';
+// const firebaseConfig = {
+//     apiKey: "AIzaSyCnS3M8ZZBYRH4QubDH3OJPKSgk-03Nm9w",
+//     authDomain: "krew-user-app.firebaseapp.com",
+//     databaseURL: "https://krew-user-app.firebaseio.com",
+//     storageBucket: "krew-user-app.appspot.com"
+// };
 const firebaseConfig = {
-    apiKey: "AIzaSyCnS3M8ZZBYRH4QubDH3OJPKSgk-03Nm9w",
-    authDomain: "krew-user-app.firebaseapp.com",
-    databaseURL: "https://krew-user-app.firebaseio.com",
-    storageBucket: "krew-user-app.appspot.com"
+    apiKey: "AIzaSyCRclijPdb65nW25fvZozVv0LekbC0GHRM",
+    authDomain: "homekrew-91b4e.firebaseapp.com",
+    databaseURL: "https://homekrew-91b4e.firebaseio.com",
+    storageBucket: "homekrew-91b4e.appspot.com"
 };
 
 import { RNS3 } from 'react-native-aws3';
-var BUTTONS = [
-    { text: "Camera", icon: "ios-camera", iconColor: "#2c8ef4" },
-    { text: "File", icon: "ios-images", iconColor: "#f42ced" }
-];
+// var BUTTONS = [
+//     { text: "Camera", icon: "ios-camera", iconColor: "#2c8ef4" },
+//     { text: "File", icon: "ios-images", iconColor: "#f42ced" }
+// ];
 
+var BUTTONS = [
+
+];
+AsyncStorage.getItem("language").then((value) => {
+    if (value) {
+        const value1 = JSON.parse(value);
+        I18n.locale = value1.Code;
+        BUTTONS = [
+            { text: I18n.t('camera'), icon: "ios-camera", iconColor: "#2c8ef4" },
+            { text: I18n.t('file'), icon: "ios-images", iconColor: "#f42ced" }
+        ]
+    }
+});
 
 class Chat extends Component {
     constructor(props) {
@@ -82,22 +101,18 @@ class Chat extends Component {
         }
         let chatRoomId = this.state.customerId + '_' + this.state.workerId;
         this.state.chatRef.orderByChild('chatRoomId').equalTo(chatRoomId).once('value').then((snapshot) => {
-            console.log(snapshot);
             if (snapshot.val()) {
                 var listMesage = [];
                 for (let key in snapshot.val()) {
                     listMesage.push(snapshot.val()[key]);
                 }
                 this.setState({ chatList: listMesage });
-                console.log(this.state.chatList);
             }
         }).catch((Err) => {
-            console.log(Err);
         })
     }
     sendMessage() {
         if (this.state.typeMessage) {
-            console.log(this.state.typeMessage);
             this.state.chatRef.push({ "customerId": this.state.customerId, "workerId": this.state.workerId, "chatRoomId": this.state.chatRoomId, "IsCustomerSender": false, "Message": this.state.typeMessage });
         }
         else {
@@ -166,11 +181,9 @@ class Chat extends Component {
                 }
             }).catch((err) => {
                 this.setState({ visible: false });
-                console.log(err);
             });
         }).catch((err) => {
             this.setState({ visible: false });
-            console.log(err);
         });
     }
 
@@ -194,8 +207,6 @@ class Chat extends Component {
             };
             const options = config.s3;
             RNS3.put(file, config.s3).then((response) => {
-                console.log("myImageCapture");
-                console.log(response);
                 if (response.status !== 201) {
                     this.setState({ visible: false });
                     throw new Error('Failed to upload image to S3');
@@ -210,7 +221,6 @@ class Chat extends Component {
                     });
                 }
             }).catch((err) => {
-                console.log(err);
                 this.setState({ visible: false });
             });
         }).catch((err) => {
@@ -301,7 +311,7 @@ class Chat extends Component {
                                                     </View>
                                                     <Image source={require('../../../img/icon/chats2.png')} style={{ height: 12, width: 12, position: 'absolute', right: -3, bottom: -3, zIndex: 999 }} />
                                                 </View>
-                                                <TouchableOpacity style={{ marginLeft: 15, justifyContent: 'flex-end' }} onPress={() => console.log('test 1')} >
+                                                <TouchableOpacity style={{ marginLeft: 15, justifyContent: 'flex-end' }} >
                                                     {
                                                         this.props.auth.data.image ? (
                                                             <Image source={{ uri: this.props.auth.data.image }} style={{ height: 30, width: 30, borderRadius: 70 }} />

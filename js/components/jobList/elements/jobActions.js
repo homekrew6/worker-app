@@ -6,7 +6,6 @@ import { AsyncStorage } from 'react-native'
 
 export function setNewData(data) {
   return function (dispatch) {
-    console.log('setNewData', data);
     dispatch(serviceStateSuccess(data));
   };
   
@@ -35,15 +34,11 @@ export function acceptJob(jobId, workerId, customerId) {
 
 export function availablejobs(id) {
   return function (dispatch) {
-      //dispatch(availableJobStateBusy())
       return jobApi.availableJobs(id).then(res => {
-      // dispatch(availableJobStateSuccess(res))
       return res
 
     }).catch(err => {
       err.type = 'error';
-      console.log(err)
-      //dispatch(availableJobStateFailed())
       return err
     })
   }

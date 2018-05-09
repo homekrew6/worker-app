@@ -196,7 +196,10 @@ export default {
   ignoredJobs: 'EMPLOIS IGNORÉS',
   chat: 'Bavarder',
   camera: 'Caméra',
-  credit_all: 'Crédit:',
+  credit_all: 'Commission:',
   commission_list: 'Liste de la Commission',
-  cancel_jobs: 'ANNULATIONS D\'EMPLOIS'  
+  cancel_jobs: 'ANNULATIONS D\'EMPLOIS'  ,
+  reload_app: "Veuillez recharger l'application pour voir les modifications.",
+  camera: 'Caméra',
+  file: "Fichier",
 };

@@ -194,7 +194,11 @@ export default {
   chat: 'دردشة' ,
   save: 'حفظ',
   camera: 'الة تصوير',     
-  credit_all: 'ائتمان',
+  credit_all: 'عمولة',
   commission_list: 'قائمة المفوضية',
-  cancel_jobs: 'وظائف ملغاة'
+  cancel_jobs: 'وظائف ملغاة',
+  reload_app: "يرجى إعادة تحميل التطبيق للاطلاع على التغييرات.",
+  camera: 'الة تصوير',
+  file: "ملف",
+
 };

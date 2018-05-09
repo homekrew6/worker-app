@@ -43,6 +43,11 @@ class myLocation extends Component {
         }
     }
     navigate(screen) {
+        this.setState({ IsProfileDisabled: true });
+
+        setTimeout(() => {
+            this.setState({ IsProfileDisabled: false });
+        }, 3000);
         const data = this.props.auth.data;
         data.activeScreen = screen;
         data.previousScreen = "MyLocation";
@@ -60,21 +65,9 @@ class myLocation extends Component {
                 locationFlag: true,
                 loader: false,
             })
-
-
-            //console.log(locationListState)
         }).catch(err => {
         })
     }
-    
-    // test(){
-    //     console.log(this.props.auth.data);
-    //     this.props.selectedLocation(this.props.auth.data.id).then((allLst) => {
-    //         console.log(allLst)
-    //     }).catch(err => {
-    //         console.log(err);
-    //     })
-    // }
 
     myLocationlist(){
         if (this.state.locationFlag) {
@@ -123,6 +116,7 @@ class myLocation extends Component {
                         </Body>
                         <TouchableOpacity transparent 
                             onPress={() => this.navigate('SelectLocation')}
+                            disabled={this.state.IsProfileDisabled}
                             activeOpacity={0.5} style={{ width: 60, justifyContent: 'flex-end', alignItems: 'center', flexDirection: 'row' }}
                             >
                             <Ico name='edit' style={styles.editIcon} />

@@ -196,7 +196,10 @@ export default {
   ignoredJobs: 'IGNORED JOBS',
   chat: 'Chat',
   camera: 'Camera',
-  credit_all: 'Credit:',
+  credit_all: 'Commission:',
   commission_list: 'Commission List',
-  cancel_jobs:'CANCELLED JOBS'
+  cancel_jobs:'CANCELLED JOBS',
+  reload_app:'Please reload the app to see the changes.',
+  camera: 'Camera',
+  file: "File",
 };

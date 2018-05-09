@@ -51,7 +51,6 @@ class MyPaymentList extends Component {
     render() {
 
         let myPaymentList
-        console.log(this.state.myPaymentList, "My payment List");
         if (this.state.paymentList && this.state.paymentList.length > 0) {
             myPaymentList = (
                 this.state.paymentList.map((data, key) => (

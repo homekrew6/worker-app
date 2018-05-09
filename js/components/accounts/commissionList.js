@@ -22,7 +22,6 @@ class commissionList extends Component {
             id: this.props.navigation.state.params.workerId,
             commission: this.props.navigation.state.params.commission
         }).then((resConList) => {
-            console.log('resConList', resConList);
             this.setState({ conList: resConList.response.message });
         });
     }

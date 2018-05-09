@@ -1,8 +1,9 @@
 const React = require("react-native");
 
-const { StyleSheet, Dimensions, Platform } = React;
+const { StyleSheet, Dimensions, Platform  } = React;
 
 const deviceHeight = Dimensions.get("window").height;
+import { I18nManager } from "react-native";
 
 export default{
     imageContainer: {
@@ -47,6 +48,7 @@ export default{
         flex: 1,
         flexDirection: 'row',
         paddingLeft: 10,
+        paddingRight: 10,
         lineHeight: 25,
     }, 
     appHdr: {
@@ -119,7 +121,8 @@ export default{
     arw_lft_img: {
         height: 20,
         width: 10,
-        marginLeft: 10
+        marginLeft: 10,
+        transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }]
     },
     version: {
         textAlign: 'center',

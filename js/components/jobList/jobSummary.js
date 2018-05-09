@@ -31,7 +31,6 @@ class jobSummary extends Component {
         //     }
         // });
         this.setState({ currency: this.props.navigation.state.params.jobDetails.currency.name });
-        // console.log(this.props);
         let jodId = this.props.navigation.state.params.jobDetails.id;
         api.post('jobSelectedQuestions/getJobSelectedAnswerList', { "id": jodId }).then((resAns) => {
             if (resAns.response.message.length && resAns.response.message.length > 0 && resAns.response.message[0].questionList) {
@@ -87,7 +86,6 @@ class jobSummary extends Component {
                 if (this.props.navigation.state.params.jobDetails.service && this.props.navigation.state.params.jobDetails.service.min_charge) {
                     minCharge = parseFloat(this.props.navigation.state.params.jobDetails.service.min_charge).toFixed(2);
                 }
-                //console.log('jsonAnswer', jsonAnswer);
                 this.setState({ jsonAnswer: jsonAnswer, totalPrice: totalPrice, min_charge: minCharge });
             }
 
@@ -115,9 +113,7 @@ class jobSummary extends Component {
                     grndtotal: grndtotal,
                     IsShow: IsShow
                 })
-                console.log(materialList);
             }).catch(err => {
-                console.log('err', err);
             });
 
         })
@@ -175,7 +171,6 @@ class jobSummary extends Component {
                 break;
             case 3:
                 AnsArray.map((ansData) => {
-                    // console.log('ansData', ansData);
                     if (ansData.selected) {
                         retPrice = Number(ansData.price_impact);
                     }
@@ -209,7 +204,6 @@ class jobSummary extends Component {
                         {
                             this.state.jsonAnswer.length > 0 ?
                                 this.state.jsonAnswer.map((AnsList, key) => {
-                                    // console.log('AnsList', AnsList)
                                     return (
                                         AnsList.type === 5 ? null :
                                             <View key={key} style={styles.totalBillitem}>
@@ -229,12 +223,12 @@ class jobSummary extends Component {
                                                     {
                                                         AnsList.type === 1 ? (
                                                             <Text style={[styles.text2, { fontSize: 12 }]}>{AnsList.IncrementId}</Text>
-                                                        ) : (console.log())
+                                                        ) : (null)
                                                     }
                                                     {
                                                         AnsList.priceImp ? (
                                                             <Text style={[styles.text2, { color: '#ccc', fontSize: 12 }]}>{AnsList.option_price_impact == 'Addition' ? '+ ' : 'x '}{this.state.currency} {(AnsList.priceImp)}</Text>
-                                                        ) : (console.log())
+                                                        ) : (null)
                                                     }
 
                                                 </View>
@@ -248,7 +242,7 @@ class jobSummary extends Component {
                                             </View>
 
                                     )
-                                }) : console.log()
+                                }) : null
                         }
 
                         <View style={styles.totalBillitem}>

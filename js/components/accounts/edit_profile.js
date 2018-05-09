@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, BackHandler, Text } from 'react-native';
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, BackHandler, Text, AsyncStorage } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -17,10 +17,24 @@ import { checkAuth, getUserDetail } from './elements/authActions';
 const deviceWidth = Dimensions.get('window').width;
 const profileImage = require('../../../img/atul.png');
 const carveImage = require('../../../img/bg-1.png');
-const BUTTONS = [
-    { text: 'Camera', icon: 'ios-camera', iconColor: '#2c8ef4' },
-    { text: 'File', icon: 'ios-images', iconColor: '#f42ced' }
+// const BUTTONS = [
+//     { text: 'Camera', icon: 'ios-camera', iconColor: '#2c8ef4' },
+//     { text: 'File', icon: 'ios-images', iconColor: '#f42ced' }
+// ];
+
+var BUTTONS = [
+
 ];
+AsyncStorage.getItem("language").then((value) => {
+    if (value) {
+        const value1 = JSON.parse(value);
+        I18n.locale = value1.Code;
+        BUTTONS = [
+            { text: I18n.t('camera'), icon: "ios-camera", iconColor: "#2c8ef4" },
+            { text: I18n.t('file'), icon: "ios-images", iconColor: "#f42ced" }
+        ]
+    }
+});
 const resetActionForTiming = NavigationActions.reset({
     index: 0,
     actions: [NavigationActions.navigate({ routeName: 'myTiming' })],
@@ -28,7 +42,6 @@ const resetActionForTiming = NavigationActions.reset({
 class EditProfile extends Component {
     constructor(props) {
         super(props);
-        console.log(props);
         this.state = {
             email: props.auth.data.email,
             name: props.auth.data.name,
@@ -51,13 +64,12 @@ class EditProfile extends Component {
     renderBackButton() {
         if (this.props.currentRoute === "EditProfile" && !this.props.prevRoute) {
             this.backHandler = BackHandler.addEventListener('hardwareBackPress', function () {
-                console.log('hardwareBackPress', this.props);
                 if (this.props.currentRoute === 'EditProfile') {
                     Alert.alert(
                         'Confirm',
                         'Are you sure to exit the app?',
                         [
-                            { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                            { text: 'Cancel', onPress: () => '', style: 'cancel' },
                             { text: 'OK', onPress: () => BackHandler.exitApp() },
                         ],
                         { cancelable: false }
@@ -90,12 +102,10 @@ class EditProfile extends Component {
 
     componentWillMount() {
         api.get('Zones/getParentZone').then((res) => {
-            //console.log(res);
             if (res.zone.length > 0) {
                 this.setState({ zoneList: res.zone, selectedZoneDetails: res.zone[0], selected1: res.zone[0].id })
 
                 api.post('serviceZones/getZoneRelatedService', { zone: res.zone[0].id }).then((resService) => {
-                    //console.log(res);
                     if (resService.response.length > 0) {
                         this.setState({ serviceList: resService.response })
                         this.state.serviceList.map((data) => {
@@ -103,7 +113,6 @@ class EditProfile extends Component {
                         });
                         this.props.checkAuth((res) => {
                             this.props.getUserDetail(res.userId, res.id).then((userRes) => {
-                                console.log(this.props.auth);
                                 let filter = '{"where":{"workerId":' + res.userId + '}}';
                                 api.get('WorkerSkills?filter=' + filter + '&access_token=' + res.id).then((skills) => {
                                     let serviceIds = [];
@@ -131,7 +140,6 @@ class EditProfile extends Component {
                         //this.setState({ visible: false })
                     }
                 }).catch((err) => {
-                    //console.log(err);
                     this.setState({ visible: false })
                 });
 
@@ -164,7 +172,6 @@ class EditProfile extends Component {
             const options = config.s3;
 
             RNS3.put(file, config.s3).then((response) => {
-                console.log("profioleImage", response);
                 if (response.status !== 201) {
                     this.setState({ uploadButton: true });
 
@@ -183,12 +190,10 @@ class EditProfile extends Component {
                     Alert.alert(I18n.t('press_the_save_button_to_save_image'));
                 }
             }).catch((err) => {
-                console.log(err);
                 this.setState({ visible: false });
             });
         }).catch((err) => {
             this.setState({ visible: false });
-            // console.log(err);
             //this.setState({ uploadButton: true });
         });
     }
@@ -214,12 +219,9 @@ class EditProfile extends Component {
                 name: `${Math.floor((Math.random() * 100000000) + 1)}_.png`,
                 type: response.mime || 'image/png',
             };
-            console.log(file);
 
             const options = config.s3;
-            console.log(options);
             RNS3.put(file, config.s3).then((response) => {
-                console.log(response);
                 if (response.status !== 201) {
                     this.setState({ cameraButton: true });
                     this.setState({ visible: true });
@@ -236,16 +238,15 @@ class EditProfile extends Component {
                 }
             }).catch((err) => {
                 this.setState({ visible: false });
-                console.log(err);
             });
         }).catch((err) => {
             this.setState({ visible: false });
-            console.log(err);
             this.setState({ cameraButton: true });
         });
     }
 
     pressSave() {
+
         if (!this.state.email) {
             Alert.alert(I18n.t('enter_email'));
             return false;
@@ -260,7 +261,6 @@ class EditProfile extends Component {
         }
         this.setState({ visible: true });
         this.props.checkAuth((res) => {
-            console.log(res);
             if (res) {
                 api.put(`Workers/editWorker/${res.userId}?access_token=${res.id}`, { name: this.state.name, phone: this.state.phone, image: this.state.image }).then((resEdit) => {
                     let data = {};
@@ -273,7 +273,6 @@ class EditProfile extends Component {
                     if (serviceIds.length > 0) {
                         data.serviceIds = serviceIds;
                         data.workerId = res.userId;
-                        console.log(data);
                         api.post(`WorkerSkills/insertWorkerSkill?access_token=${res.id}`, data).then((skillRes) => {
                             const WorkerAvailabilitiesUrl = `Workeravailabletimings?filter={"where":{"workerId":"${res.userId}"}}`;
                             api.get(WorkerAvailabilitiesUrl).then((timings) => {
@@ -300,7 +299,6 @@ class EditProfile extends Component {
                         }).catch((err) => {
                             this.setState({ visible: false });
                             Alert.alert(I18n.t('please_try_again_later'));
-                            console.log(err);
                         })
                     }
                     else {
@@ -466,7 +464,7 @@ class EditProfile extends Component {
 
                     <Footer>
                         <FooterTab>
-                            <TouchableOpacity full style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#81cdc7' }} onPress={() => this.pressSave()}>
+                            <TouchableOpacity full style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#81cdc7' }} onPress={() => this.pressSave()} >
                                 <Text style={{ color: '#fff', fontSize: 16 }}>{I18n.t('save')}</Text>
                             </TouchableOpacity>
                         </FooterTab>

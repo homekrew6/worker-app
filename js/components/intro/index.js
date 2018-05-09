@@ -35,7 +35,6 @@ class Intro extends Component {
 			}, 2000)
 		});
 		api.post('IntroSliders/getSliders', { type: 'Worker' }).then(res => {
-			// console.log("sliders",res);
 			// var sliderList = res.response;
 			// for (let i = 0; i < sliderList.length; i++) {
 
@@ -48,7 +47,6 @@ class Intro extends Component {
 			// 	}
 			// 	slides.push(rowData);
 			// }
-			// console.log(slides);
 			this.setState({
 				sliderArray: res.response,
 				slidFlag: true

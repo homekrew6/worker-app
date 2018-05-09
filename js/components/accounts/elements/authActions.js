@@ -27,13 +27,11 @@ export function getUserDetail(id, auth) {
     dispatch(authStateBusy())
     return authApi.getUserDetail(id, auth).then(res => {
       res.type = 'success';
-      console.log(res);
       dispatch(authStateSuccess(res))
       return res
 
     }).catch(err => {
       err.type = 'error';
-      console.log(err)
       dispatch(authStateFailed())
       return err
     })
@@ -70,13 +68,11 @@ export function signup(name, email, password, phone) {
     dispatch(authStateBusy())
     return authApi.signup(name, email, password, phone).then(res => {
       res.type = 'success';
-      console.log(res);
       dispatch(authStateSuccess(res))
       return res
 
     }).catch(err => {
       err.type = 'error';
-      console.log(err)
       dispatch(authStateFailed())
       return err
     })

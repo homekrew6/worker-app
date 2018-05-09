@@ -18,7 +18,6 @@ export default function lacationReducer(state = initialState.auth, action) {
             }
         }
         case TYPES.LOCATION_STATE_SUCCESS: {
-            //console.log(action.data)
             let i;
             let newLocationArray = action.data;
             let selectedLocationId = []
@@ -26,7 +25,6 @@ export default function lacationReducer(state = initialState.auth, action) {
                 for (i = 0; i < state.selectedData.length; i++) {
                     selectedLocationId.push(state.selectedData[i].zoneId)
                 }
-                //console.log(selectedLocationId)
                 if (selectedLocationId.length > 0){
                     let j;
                     for (j = 0; j < newLocationArray.length; j++) {
@@ -39,7 +37,6 @@ export default function lacationReducer(state = initialState.auth, action) {
 
                     }
                 }
-                //console.log(newLocationArray);
             }
             
             return {

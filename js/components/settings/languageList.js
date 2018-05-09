@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { View, StatusBar, Alert, TouchableOpacity, AsyncStorage, Text } from "react-native";
+import { View, StatusBar, Alert, TouchableOpacity, AsyncStorage, Text, I18nManager } from "react-native";
 import { NavigationActions } from "react-navigation";
 import Entypo from 'react-native-vector-icons/Entypo';
 import { Container, Header, Button, Content, Body, Title } from "native-base";
@@ -104,6 +104,21 @@ class LanguageList extends Component {
                     const response = JSON.parse(userToken);
                     api.put(`Workers/editWorker/${this.props.auth.data.id}?access_token=${response.id}`, { language: data.Code, languageId: data.langId, languageName: data.language}).then((success) => {
                         AsyncStorage.setItem("language", JSON.stringify(data)).then((res) => {
+                            if (data.Code == 'ar') {
+                                I18nManager.allowRTL(true);
+                                Alert.alert(I18n.t('reload_app'));
+                            }else{
+                                if(data.Code=='en')
+                                {
+                                    Alert.alert('Please reload the app to see the changes.');
+                                }
+                                else if(data.Code=="fr")
+                                {
+                                    Alert.alert('Please reload the app to see the changes.');
+                                }
+                                I18nManager.allowRTL(false);
+                            }
+
                             this.setState({ visible: false });
                             this.props.navigation.dispatch(
                                 NavigationActions.reset({
@@ -133,9 +148,6 @@ class LanguageList extends Component {
                 }
 
             })
-
-
-
         }
         else {
             this.setState({ visible: false });

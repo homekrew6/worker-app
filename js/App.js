@@ -2,7 +2,7 @@
 
 import React, { Component } from "react";
 
-import { Easing, Animated } from "react-native";
+import { Easing, Animated, I18nManager } from "react-native";
 import { Root } from "native-base";
 import { StackNavigator } from "react-navigation";
 import { connect } from 'react-redux';
@@ -48,7 +48,8 @@ import { setCustomText, setCustomTextInput } from 'react-native-global-props';
 const customTextProps = {
   style: {
     color: '#1e3768',
-    fontFamily: 'Lato-Regular'
+    fontFamily: 'Lato-Regular',
+    textAlign: 'left', 
   }
 }
 
@@ -58,6 +59,8 @@ const customTextInputProps = {
     fontFamily: 'Lato-Regular'
   }
 }
+
+
 
 setCustomText(customTextProps);
 setCustomTextInput(customTextInputProps);
@@ -146,7 +149,6 @@ class App extends Component{
 }
 
 function mapStateToProps(state) {
-  console.log('mapStateToProps App', state);
   return {
       currentRoute: state.newState,
       prevRoute: state.prevRoute

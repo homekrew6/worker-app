@@ -378,13 +378,13 @@ class UnavailableDate extends Component {
                     backgroundColor="#81cdc7" />
 
                 <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" >
-                    <TouchableOpacity transparent onPress={() => this.props.navigation.goBack()} activeOpacity={0.5} style={{ width: 40, justifyContent: 'center' }}>
+                    <TouchableOpacity transparent onPress={() => this.props.navigation.goBack()} activeOpacity={0.5} style={{ width: 50, justifyContent: 'center' }}>
                         <Text>{I18n.t('cancel')}</Text>
                     </TouchableOpacity>
                     <Body style={styles.tac}>
                         <Text style={styles.hdClr}>{I18n.t('my_timing')}</Text>
                     </Body>
-                    <TouchableOpacity transparent onPress={() => this.doneDateAndTime()} activeOpacity={0.5} style={{ width: 40, justifyContent: 'center', alignItems: 'flex-end' }}>
+                    <TouchableOpacity transparent onPress={() => this.doneDateAndTime()} activeOpacity={0.5} style={{ width: 50, justifyContent: 'center', alignItems: 'flex-end' }}>
                         <Text>{I18n.t('done')}</Text>
                     </TouchableOpacity>
                 </Header>

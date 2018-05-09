@@ -65,7 +65,6 @@ export function clearMyLocation(id) {
 
         }).catch(err => {
             err.type = 'error';
-            //console.log(err);
             dispatch(clearMyLocationStateFailed());
             return err;
         })

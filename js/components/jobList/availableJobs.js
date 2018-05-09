@@ -27,6 +27,7 @@ class AvailableJobs extends Component {
             refreshing: false,
             backReturn: false,
             availableJobs: {},
+            IsProfileDisabled: false,
         };
     }
 
@@ -103,66 +104,39 @@ class AvailableJobs extends Component {
     }
 
     goDetails(item){
+        this.setState({ IsProfileDisabled: true });
+        setTimeout(() => {
+            this.setState({ IsProfileDisabled: false });
+        }, 3000);
         const data = this.props.auth.data;
         data.activeScreen = 'JobDetails';
         data.previousScreen = "AvailableJobs";
         this.props.navigateAndSaveCurrentScreen(data);
         this.props.navigation.navigate('JobDetails',{jobDetails:item});
     }
-    // componentWillMount(){
-    //     this.jobdata();
-    // }
 
     componentDidMount() {
         this.jobdata();
+        
         AsyncStorage.getItem("currency").then((value) => {
             if (value) {
                 const value1 = JSON.parse(value);
                 this.setState({ currency: value1.language })
             }
         });
-
-        // api.get('Currencies').then((res) => {
-        //     let finalList = [];
-        //     res.map((item) => {
-        //      if (item.is_active) {
-        //       finalList.push(item);
-        //      }
-        //     });
-        //     this.setState({
-        //      currencyList: finalList
-        //     });
-        //     AsyncStorage.getItem('currency').then((value) => {
-        //      if (value) {
-        //       const value1 = JSON.parse(value);
-        //       if (this.props.navigation.state.params.jobDetails && this.props.navigation.state.params.jobDetails.currencyId) {
-        //        this.state.currencyList.map((item) => {
-        //         if (item.id == this.props.navigation.state.params.jobDetails.currencyId) {
-        //          this.setState({ currency: item.name });
-        //         }
-        //        });
-        //       }
-        //      } else {
-        //       if(this.props.navigation.state.params.jobDetails && this.props.navigation.state.params.jobDetails.currencyId) {
-        //        this.state.currencyList.map((item) => {
-        //         if (item.id == this.props.navigation.state.params.jobDetails.currencyId) {
-        //          this.setState({ currency: item.name });
-        //         }
-        //        });
-        //       }
-        //      }
-        //     });
-        //    }).catch((Err) => {
-        //     console.log(Err);
-        //    });
     }
-
+    goNotification(){
+        this.setState({ IsProfileDisabled: true });
+        setTimeout(() => { this.setState({ IsProfileDisabled: false }); }, 3000);
+        this.props.navigation.navigate('NotificationList')
+    }
    
     jobdata() {
         let id = this.props.auth.data.id;
         this.props.availablejobs(id).then(res => {
             let data = { data: {}};
             data.data = res;
+            // debugger
             this.setState({
                 listItemFlag: true,
                 loader: false,
@@ -178,7 +152,9 @@ class AvailableJobs extends Component {
     onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
     }
-//bala: Start~
+
+    //bala: Start~
+    
     IgnoreJob(data){
         this.setState({
             loader: true
@@ -186,7 +162,7 @@ class AvailableJobs extends Component {
         let jobId = data.id;
         let workerId = this.props.auth.data.id;
         let serviceId = data.serviceId;
-        api.post('Jobs/ignoreJob', {"id": jobId, "workerId": workerId, "serviceId": serviceId}).then((resIgnore) => {
+        api.post('Jobs/ignoreJob', { "id": jobId, "workerId": workerId, "serviceId": serviceId, 'currencyId': data.currencyId}).then((resIgnore) => {
             this.jobdata();
         }).catch((errCatch) => {
             Alert.alert(I18n.t('failed_please_try_again'));
@@ -208,7 +184,9 @@ class AvailableJobs extends Component {
             })
         })
     }
-//bala: End
+
+    //bala: End
+
     acceptJob(data) {
         this.setState({ loader: true });
         let jobId = data.id;
@@ -216,11 +194,9 @@ class AvailableJobs extends Component {
         let customerId=data.customer.id;
 
         api.post('Jobs/acceptJob', { "id": jobId, "status": "ACCEPTED", "workerId": workerId , "customerId":customerId}).then(responseJson => {
-            console.log(responseJson);
             this.setState({ loader: false });
             this.props.navigation.navigate('JobDetails',{jobDetails:data});
         }).catch(err => {
-            console.log(err);
         })
 
         // this.props.acceptJob( jobId , workerId,customerId ).then(res => {
@@ -242,7 +218,6 @@ class AvailableJobs extends Component {
         let items;
         if (this.state.availableJobs.data) {
             items = this.state.availableJobs.data.response.message.upcomingJobs;
-            console.log(this.state.availableJobs.data);
         }
         if (this.state.availableJobs.data){
 
@@ -516,14 +491,24 @@ class AvailableJobs extends Component {
                 />
 
                 <Header style={styles.headerWarp} noShadow androidStatusBarColor="#f3f3f3">
-                    <TouchableOpacity transparent onPress={() => this.props.navigation.navigate('Menu')} activeOpacity={0.5} style={{ width: 40, justifyContent: 'center' }}>
+                    <TouchableOpacity transparent onPress={() => 
+                    {
+                        this.setState({ IsProfileDisabled: true });
+                        setTimeout(() => {
+                            this.setState({ IsProfileDisabled: false });
+                        }, 3000);
+                        this.props.navigation.navigate('Menu')
+                    }
+                        } activeOpacity={0.5} style={{ width: 40, justifyContent: 'center' }}
+                        disabled={this.state.IsProfileDisabled}
+                        >
                         <MaterialIcons name="menu" style={styles.headIcon2} />
                     </TouchableOpacity>
 
                     <Body style={styles.headBody}>
                         <Image source={require('../../../img/logo2.png')} style={{ height: 20, width: 115 }}/>
                     </Body>
-                    <TouchableOpacity transparent onPress={() => this.props.navigation.navigate('NotificationList')} activeOpacity={0.5} style={{ width: 40, justifyContent: 'center', alignItems: 'flex-end' }}>
+                    <TouchableOpacity transparent onPress={() => this.goNotification()} activeOpacity={0.5} style={{ width: 40, justifyContent: 'center', alignItems: 'flex-end' }} disabled={this.state.IsProfileDisabled} >
                         <MaterialIcons name="notifications" style={styles.headIcon2} />
                     </TouchableOpacity>
                 </Header>
@@ -561,8 +546,9 @@ class AvailableJobs extends Component {
                                         renderRow={( item, data ) =>
                                             <ListItem style={item.startTime.timeInt === false ? styles.jobListItemDisable : styles.jobListItem}>
                                                 <TouchableOpacity
+                                                    disabled={this.state.IsProfileDisabled}
                                                     style={styles.listWarp}
-                                                    onPress={() => item.startTime.timeInt === true ? this.goDetails(item) : console.log()}
+                                                    onPress={() => item.startTime.timeInt === true ? this.goDetails(item) : null}
                                                     activeOpacity={item.startTime.timeInt === true ? 0 : 1}
                                                 >
                                                     <View style={styles.listWarp}>
@@ -597,16 +583,16 @@ class AvailableJobs extends Component {
                                         }
                                         renderLeftHiddenRow={data =>
                                             data.startTime.timeInt === true ?
-                                            <TouchableOpacity style={styles.leftAction} onPress={() => this.IgnoreJob(data)}>
-                                                <MaterialIcons name="close" style={styles.leftActionIcon} />
-                                                <Text style={styles.leftActionText}>{I18n.t('ignore_button')}</Text>
-                                            </TouchableOpacity>
+                                                <TouchableOpacity style={styles.leftAction} onPress={() => this.IgnoreJob(data)} >
+                                                    <MaterialIcons name="close" style={styles.leftActionIcon} />
+                                                    <Text style={styles.leftActionText}>{I18n.t('ignore_button')}</Text>
+                                                </TouchableOpacity>
                                                 : <View style={styles.leftAction}>
                                                 </View>}
 
                                         renderRightHiddenRow={(data, secId, rowId, rowMap) =>
                                             data.startTime.timeInt === true ?
-                                                <TouchableOpacity style={styles.rightAction} onPress={() => this.acceptJob(data)}>
+                                                <TouchableOpacity style={styles.rightAction} onPress={() => this.acceptJob(data)} >
                                                 <MaterialIcons name="done" style={styles.leftActionIcon} />
                                                 <Text style={styles.leftActionText}>{I18n.t('accept_button')}</Text>
                                             </TouchableOpacity>
@@ -647,7 +633,7 @@ class AvailableJobs extends Component {
                                             style={styles.jobList}
                                             renderRow={(item) =>
                                             <ListItem style={styles.jobListItem}>
-                                                <TouchableOpacity style={styles.listWarp} onPress={() => this.goDetails(item)}>
+                                                    <TouchableOpacity style={styles.listWarp} onPress={() => this.goDetails(item)} disabled={this.state.IsProfileDisabled}>
                                                     <View style={styles.listWarpImageWarp}>
                                                             <Image source={{uri: item.service.banner_image}} style={styles.listWarpImage} />
                                                     </View>
@@ -709,7 +695,12 @@ class AvailableJobs extends Component {
                                             style={styles.jobList}
                                             renderRow={(item) =>
                                             <ListItem style={styles.jobListItem}>
-                                                <TouchableOpacity style={styles.listWarp} onPress={() => this.goDetails(item)}>
+                                                    <TouchableOpacity 
+                                                    disabled={this.state.IsProfileDisabled}
+                                                    style={styles.listWarp} 
+                                                    onPress={() => { console.log('onGoing Jobs'); this.goDetails(item) }
+                                                    } 
+                                                        >
                                                     <View style={styles.listWarpImageWarp}>
                                                             <Image source={{uri: item.service.banner_image}} style={styles.listWarpImage} />
                                                     </View>
@@ -747,6 +738,7 @@ class AvailableJobs extends Component {
                     </Tab>
 
                     {/* Completed Jobs */}
+
                     <Tab heading={I18n.t('completedJobs')} tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
                         <Content
                             refreshControl={
@@ -772,7 +764,7 @@ class AvailableJobs extends Component {
                                             style={styles.jobList}
                                             renderRow={(item) =>
                                             <ListItem style={styles.jobListItem}>
-                                                <TouchableOpacity style={styles.listWarp} onPress={() => this.goDetails(item)}>
+                                                    <TouchableOpacity style={styles.listWarp} onPress={() => this.goDetails(item)} disabled={this.state.IsProfileDisabled}>
                                                     <View style={styles.listWarpImageWarp}>
                                                             <Image source={{uri: item.service.banner_image}} style={styles.listWarpImage} />
                                                     </View>
@@ -899,7 +891,15 @@ class AvailableJobs extends Component {
                         <Body style={styles.headBody}>
                             <Image source={require('../../../img/logo2.png')} style={{ height: 20, width: 115 }} />
                         </Body>
-                        <TouchableOpacity transparent onPress={() => this.props.navigation.navigate('NotificationList')} activeOpacity={0.5} style={{ width: 40, justifyContent: 'center', alignItems: 'flex-end' }}>
+                        <TouchableOpacity 
+                            transparent 
+                            onPress={() => {
+                                this.goNotification()
+                            }} 
+                            activeOpacity={0.5} 
+                            style={{ width: 40, justifyContent: 'center', alignItems: 'flex-end' }}
+                            disabled={this.state.IsProfileDisabled} 
+                            >
                             <MaterialIcons name="notifications" style={styles.headIcon2} />
                         </TouchableOpacity>
                     </Header>

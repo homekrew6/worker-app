@@ -82,7 +82,6 @@ componentDidMount() {
 
             }
             totalPrice=parseFloat(totalPrice).toFixed(2);
-            //console.log('jsonAnswer', jsonAnswer);
             this.setState({ jsonAnswer: jsonAnswer, totalPrice:totalPrice });
             }
           
@@ -160,7 +159,6 @@ componentDidMount() {
                 break;
             case 3:
                 AnsArray.map((ansData) => {
-                    // console.log('ansData', ansData);
                     if (ansData.selected) {
                         retPrice = Number(ansData.price_impact);
                     }
@@ -197,7 +195,6 @@ componentDidMount() {
                         {
                             this.state.jsonAnswer.length > 0 ?
                                 this.state.jsonAnswer.map((AnsList, key) => {
-                                    // console.log('AnsList', AnsList)
                                     return (
                                         AnsList.type === 5 ? null :
                                             <View key={key} style={styles.totalBillitem}>
@@ -218,12 +215,12 @@ componentDidMount() {
                                                 {
                                                     AnsList.type === 1? (
                                                         <Text style={[styles.text2, { fontSize: 12 }]}>{AnsList.IncrementId}</Text>
-                                                    ):(console.log())
+                                                    ):(null)
                                                 }
                                                 {
                                                     AnsList.priceImp ? (
                                                         <Text style={[styles.text2, { color: '#ccc', fontSize: 12 }]}>{AnsList.option_price_impact == 'Addition'? '+ ': 'x '}{ this.state.currency} { (AnsList.priceImp)}</Text>
-                                                    ):(console.log())
+                                                    ):(null)
                                                 }
                                                     
                                                 </View>
@@ -237,7 +234,7 @@ componentDidMount() {
                                             </View>
 
                                     )
-                                }) : console.log()
+                                }) : null
                         }
 
                         <View style={styles.totalBillitem}>

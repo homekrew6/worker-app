@@ -69,7 +69,8 @@ class JobDetails extends Component {
             reasonList: '',
             reasonName: '',
             reasonId: '',
-            navId: ''
+            navId: '',
+            IsProfileDisabled: false,
         }
 
     }
@@ -88,7 +89,15 @@ class JobDetails extends Component {
         return localTime;
     }
 
+    clickDisable(){
+        this.setState({ IsProfileDisabled: true });
+        setTimeout(() => {
+            this.setState({ IsProfileDisabled: false });
+        }, 3000);
+    }
+
     cancelJob(){
+        debugger;
         if(this.state.reasonId !== '')
         {
             const ToSendData={jobId:this.state.remoteJobDetails.id,
@@ -100,7 +109,7 @@ class JobDetails extends Component {
             this.setState({loader:true});
             console.log(ToSendData);
             api.post('Jobs/cancelJob', ToSendData).then((res)=>{
-                debugger;
+                // debugger;
                 if(res.response.type==="Error")
                 {
                     this.setState({loader:false});
@@ -108,10 +117,10 @@ class JobDetails extends Component {
                 }
                 else
                 {
-                    debugger;
+                    // debugger;
+                    let jobDetails = this.state.remoteJobDetails;
+                    jobDetails.status = 'CANCELLED';
                     this.setState({remoteJobDetails:jobDetails, loader:false, jobCancelModal: false});
-                    let jobDetails=this.state.remoteJobDetails;
-                    jobDetails.status='CANCELLED';
                     this.props.navigation.navigate('AvailableJobs');
                 }
             }).catch((error)=>{
@@ -148,7 +157,6 @@ class JobDetails extends Component {
         this.setState({ bottomButtonStatus: 'start', loader: true });
         //navigator watch location start
                 let navId = navigator.geolocation.watchPosition((position) => {
-                    
                     this.setState({
                         latitudeUser: position.coords.latitude,
                         longitudeUser: position.coords.longitude,
@@ -192,6 +200,7 @@ class JobDetails extends Component {
                                 }
                                 this.setState({ remoteJobDetails: response.response.message[0], loader: false, });
                                 setTimeout(() => {
+                                    if (this.refs && this.refs.ScrollViewStart)
                                     this.refs.ScrollViewStart.scrollToEnd();
                                 }, 50);
                             }).catch((err) => {
@@ -226,6 +235,7 @@ class JobDetails extends Component {
                                     }).then((response) => {
                                         this.setState({ remoteJobDetails: response.response.message[0], loader: false });
                                         setTimeout(() => {
+                                            if (this.refs && this.refs.ScrollViewStart)
                                             this.refs.ScrollViewStart.scrollToEnd();
                                         }, 50);
                                     }).catch((err) => {
@@ -237,8 +247,7 @@ class JobDetails extends Component {
                                 })
                                 //Change job status in DB end
                         })
-                         } 
-                 
+                        } 
                     setTimeout(() => {
                         if(this.state.loader === true){
                             this.state.itemsRef.off();
@@ -246,9 +255,7 @@ class JobDetails extends Component {
                             this.setState({ loader: false });
                         }
                     }, 5000);
-
                         }).catch((err) => {
-                          
                         })
         
                     },
@@ -336,6 +343,7 @@ class JobDetails extends Component {
                     }).then((response) => {
                         this.setState({ remoteJobDetails: response.response.message[0], loader: false, jobTrackingStatus: 'Job Started' });
                         setTimeout(() => {
+                            if (this.refs && this.refs.ScrollViewComplete)
                             this.refs.ScrollViewComplete.scrollToEnd();
                         }, 50);
                     }).catch((err) => {
@@ -460,6 +468,7 @@ class JobDetails extends Component {
     }
 
     MyChat(JobDetailsData){
+        this.clickDisable();
         this.props.navigation.navigate('Chat', { workerDetails: JobDetailsData });
         this.setState({ callChat: true })
         
@@ -519,14 +528,18 @@ class JobDetails extends Component {
                     this.setState({ workProgressTime: this.state.workProgressTime + 1 });
                 }, progressSpeed);
                 this.setState({ progressInterval: progressInterval });
+                if (this.refs && this.refs.ScrollViewComplete);                
                 this.refs.ScrollViewComplete.scrollToEnd();
             }else{
                 if(this.props.navigation.state.params.jobDetails.status === 'ACCEPTED'){
+                    if (this.refs && this.refs.ScrollViewEnd);
                     this.refs.ScrollViewEnd.scrollToEnd();
                 }else if(this.props.navigation.state.params.jobDetails.status === 'ONMYWAY'){
+                    if (this.refs && this.refs.ScrollViewStart);
                     this.refs.ScrollViewStart.scrollToEnd();
                     this.setState({ markerStatus: false });
                 }else if(this.props.navigation.state.params.jobDetails.status === 'JOBSTARTED'){
+                    if (this.refs && this.refs.ScrollViewComplete);
                     this.refs.ScrollViewComplete.scrollToEnd();
 
                     api.post('Jobs/getJobDetailsById', {
@@ -596,9 +609,11 @@ class JobDetails extends Component {
                          response.response.message[0].price = materialTotalPrice;
                          this.setState({ remoteJobDetails: response.response.message[0], jobTrackingStatus: response.response.message[0].status });
                          if (this.state.remoteJobDetails.status === 'ONMYWAY') {
+                             if (this.refs && this.refs.ScrollViewStart);                             
                              this.refs.ScrollViewStart.scrollToEnd();
                              this.setState({ jobTrackingStatus: 'Krew On The Way' });
                          } else if (this.state.remoteJobDetails.status === 'JOBSTARTED') {
+                             if (this.refs && this.refs.ScrollViewComplete);
                              this.refs.ScrollViewComplete.scrollToEnd();
                              this.setState({ jobTrackingStatus: 'Job Started' });
                          } else if (this.state.remoteJobDetails.status === 'ACCEPTED') {
@@ -607,7 +622,8 @@ class JobDetails extends Component {
                              this.setState({ jobTrackingStatus: 'Job Requested' });
                          }
                          else if (this.state.remoteJobDetails.status === 'FOLLOWEDUP') {
-                             this.refs.ScrollViewRenew.scrollToEnd();
+                             if (this.refs && this.refs.ScrollViewComplete);
+                             this.refs.ScrollViewComplete.scrollToEnd();
                              this.setState({ jobTrackingStatus: 'Job Followed Up' });
                          }
                          else if (this.state.remoteJobDetails.status === 'PAYPENDING') {
@@ -635,9 +651,11 @@ class JobDetails extends Component {
                      this.setState({ jobCancelbuttonStatus: jobCancelbuttonStatus ,remoteJobDetails: response.response.message[0], jobTrackingStatus: response.response.message[0].status });
                      
                      if (this.state.remoteJobDetails.status === 'ONMYWAY') {
+                         if (this.refs && this.refs.ScrollViewStart);                         
                          this.refs.ScrollViewStart.scrollToEnd();
                          this.setState({ jobTrackingStatus: 'Krew On The Way' });
                      } else if (this.state.remoteJobDetails.status === 'JOBSTARTED') {
+                         if (this.refs && this.refs.ScrollViewComplete);
                          this.refs.ScrollViewComplete.scrollToEnd();
                          this.setState({ jobTrackingStatus: 'Job Started' });
                      } else if (this.state.remoteJobDetails.status === 'ACCEPTED') {
@@ -649,6 +667,7 @@ class JobDetails extends Component {
                          this.setState({ jobTrackingStatus: 'Payment Pending' });
                      }
                      else if (this.state.remoteJobDetails.status === 'FOLLOWEDUP') {
+                         if (this.refs && this.refs.ScrollViewRenew);
                          this.refs.ScrollViewRenew.scrollToEnd();
                          this.setState({ jobTrackingStatus: 'Job Followed Up' });
                      }
@@ -677,6 +696,7 @@ class JobDetails extends Component {
     swipeButtonReady(){
         setTimeout(() => {
             this.setState({ scrollStatus: 1 });
+            if (this.refs && this.refs.ScrollViewEnd);
             this.refs.ScrollViewEnd.scrollToEnd();
         }, 50);
     }
@@ -688,7 +708,7 @@ class JobDetails extends Component {
         let jobId = this.props.navigation.state.params.jobDetails.id;
         let workerId = this.props.auth.data.id;
         let serviceId = this.props.navigation.state.params.jobDetails.serviceId;
-        api.post('Jobs/ignoreJob', {"id": jobId, "workerId": workerId, "serviceId": serviceId}).then((resIgnore) => {
+        api.post('Jobs/ignoreJob', { "id": jobId, "workerId": workerId, "serviceId": serviceId, 'currencyId': this.props.navigation.state.params.jobDetails.currencyId}).then((resIgnore) => {
             this.props.navigation.navigate('AvailableJobs');
             this.setState({ loader: false });
         }).catch((errCatch) => {
@@ -784,6 +804,7 @@ class JobDetails extends Component {
 
     startFollowUp()
     {
+        this.clickDisable();
         clearInterval(this.state.progressInterval);
         this.props.navigation.navigate('FollowUpList', { jobDetails: this.state.remoteJobDetails });
 
@@ -829,7 +850,12 @@ class JobDetails extends Component {
                     {
                         
                         JobDetailsData.status=='JOBSTARTED'?(
-                            <TouchableOpacity transparent onPress={() => this.startFollowUp()} activeOpacity={0.5} style={{ width: 90, justifyContent: 'center', alignItems: 'flex-end' }} ><Text style={{ fontWeight: '100' }}>{I18n.t('followUp')}</Text></TouchableOpacity>
+                            <TouchableOpacity transparent 
+                            onPress={() => this.startFollowUp()} 
+                            activeOpacity={0.5} 
+                            style={{ width: 90, justifyContent: 'center', alignItems: 'flex-end' }} 
+                            disabled={this.state.IsProfileDisabled}
+                            ><Text style={{ fontWeight: '100' }}>{I18n.t('followUp')}</Text></TouchableOpacity>
                         ) : (<TouchableOpacity activeOpacity={1} style={{ width: 40, justifyContent: 'center', alignItems: 'flex-end' }} />  )
                     }
                 </Header>
@@ -1011,7 +1037,14 @@ class JobDetails extends Component {
                         :console.log()
                     }
 
-                    <TouchableOpacity style={styles.jobItemWarp} onPress={() => this.props.navigation.navigate('JobTracker', { Jobid : JobDetailsData.id})}>
+                    <TouchableOpacity style={styles.jobItemWarp} onPress={() => 
+                        {
+                            this.clickDisable();
+                            this.props.navigation.navigate('JobTracker', { Jobid: JobDetailsData.id });
+                        }
+                        }
+                        disabled={this.state.IsProfileDisabled}
+                        >
                         <View style={{ width: 30, alignItems: 'center' }}>
                             <Ionicons name="ios-man-outline" style={styles.jobItemIconIonicons} />
                         </View>
@@ -1063,7 +1096,7 @@ class JobDetails extends Component {
                                 </View>
                             ) : (
                                     <View style={[styles.jobItemWarp, { paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 0 }]}>
-                                        <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', height: 50, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }} onPress={() => this.MyChat(JobDetailsData)}>
+                                        <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', height: 50, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }} onPress={() => this.MyChat(JobDetailsData)} disabled={this.state.IsProfileDisabled}>
                                             <MaterialIcons name="chat" style={{ fontSize: 18, color: '#fff' }} />
                                             <Text style={{ color: '#fff' }}>  {I18n.t('chat')}</Text>
                                         </TouchableOpacity>
@@ -1097,7 +1130,15 @@ class JobDetails extends Component {
                     </View>
                     {
                         JobDetailsData.status!='STARTED'?(
-<TouchableOpacity style={styles.jobItemWarp} onPress={() => this.props.navigation.navigate('jobSummary', {jobDetails: JobDetailsData})}>
+                    <TouchableOpacity 
+                        style={styles.jobItemWarp} 
+                        disabled={this.state.IsProfileDisabled}
+                        onPress={() => {
+                            this.clickDisable();
+                            this.props.navigation.navigate('jobSummary', { jobDetails: JobDetailsData })
+                            }
+                        }
+                        >
                         <View style={{ width: 30, alignItems: 'center'  }}>
                             <SimpleLineIcons name="docs" style={styles.jobItemIcon} />
                         </View>
@@ -1112,7 +1153,15 @@ class JobDetails extends Component {
                     {
 
                         JobDetailsData.status === 'JOBSTARTED' || JobDetailsData.status === 'FOLLOWEDUP' ? (
-                            <TouchableOpacity style={styles.jobItemWarp} onPress={() => this.props.navigation.navigate('Quote', { jobId: JobDetailsData.id})}>
+                            <TouchableOpacity style={styles.jobItemWarp} onPress={() => 
+                                {
+                                    this.clickDisable();
+                                    this.props.navigation.navigate('Quote', { jobId: JobDetailsData.id })
+                                }  
+                                }
+                                disabled={this.state.IsProfileDisabled}
+                            
+                            >
                                 <View style={{ width: 30, alignItems: 'center' }}>
                                     <Ionicons name="ios-flag-outline" style={styles.jobItemIconIonicons} />
                                 </View>
@@ -1179,7 +1228,14 @@ class JobDetails extends Component {
                     } */}
                     {
                         JobDetailsData.status === 'COMPLETED' ?
-                            <TouchableOpacity style={styles.jobItemWarp} onPress={() => this.props.navigation.navigate('TotalBill', {jobDetails: JobDetailsData})}>
+                            <TouchableOpacity style={styles.jobItemWarp} onPress={() => 
+                                {
+                                    this.clickDisable();
+                                    this.props.navigation.navigate('TotalBill', { jobDetails: JobDetailsData });
+                                }
+                                }
+                                disabled={this.state.IsProfileDisabled}
+                            >
                                 <View style={{ width: 30, alignItems: 'center' }}>
                                     <FontAwesome name="money" style={styles.jobItemIcon} />
                                 </View>

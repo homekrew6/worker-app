@@ -259,7 +259,7 @@ class Quote extends Component {
                                     )
                                 })
                             }
-                        </View>): (console.log())
+                        </View>): (null)
                         }
                         <View style={styles.totalBillitem}>
                             <View style={styles.imagesWarp}>

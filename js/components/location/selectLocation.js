@@ -28,7 +28,8 @@ class selectLocation extends Component {
             locationListState: [],
             checkboxes: [],
             filter: 'ALL',
-            loader: false
+            loader: false,
+            IsProfileDisabled: false
         }
     }
     componentWillMount() {
@@ -96,7 +97,7 @@ class selectLocation extends Component {
     
 
     render() {
-        let locationList
+        let locationList;
         if(this.state.locationFlag){
             let locationListItm = this.props.location.data;
             locationList = (

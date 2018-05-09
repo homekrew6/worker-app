@@ -15,7 +15,7 @@ import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 
 
 class myTiming extends Component {
-    state = {timimgData: '', weekOffStatus: true, unavailableTiming: '', tableRowId: '', unAvailId:''};
+    state = { timimgData: '', weekOffStatus: true, unavailableTiming: '', tableRowId: '', unAvailId: '', IsProfileDisabled: false };
     componentDidMount(){
       const workerId = this.props.auth.data.id;
       const WorkerAvailabilitiesUrl = `Workeravailabletimings?filter={"where":{"workerId":"${workerId}"}}`;
@@ -63,7 +63,14 @@ class myTiming extends Component {
             }.bind(this));
         }
     }
-    navigate(screen) {        
+    clickDisable() {
+        this.setState({ IsProfileDisabled: true });
+        setTimeout(() => {
+            this.setState({ IsProfileDisabled: false });
+        }, 3000);
+    }
+    navigate(screen) {
+        this.clickDisable();
         const data = this.props.auth.data;
         data.activeScreen = screen;
         data.previousScreen = "Settings";
@@ -206,7 +213,7 @@ renderUnavalData(UnAvData, key){
                             <View style={styles.flexOne}>
                                 <Text style={styles.listHdr}>{I18n.t('available_timing')}</Text>
                             </View>
-                            <TouchableOpacity onPress={() => this.navigate("WeekCalendar")}>
+                            <TouchableOpacity onPress={() => this.navigate("WeekCalendar")} disabled={this.state.IsProfileDisabled}>
                               <View style={{ flexDirection: 'row' }}>
                                   <Ico name='edit' style={styles.listHdrEdtIcn} />
                                   <Text style={styles.listHdrEdt}>{I18n.t('add_edit')}</Text>
@@ -310,7 +317,7 @@ renderUnavalData(UnAvData, key){
                             <View style={styles.flexOne}>
                                 <Text style={styles.listHdr}>{I18n.t('unavailable_timing')}</Text>
                             </View>
-                            <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => this.navigate('UnavailableDate')}>
+                            <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => this.navigate('UnavailableDate')} disabled={this.state.IsProfileDisabled}>
                                 <Ico name='add-circle' style={styles.listHdrEdtIcn} />
                                 <Text style={styles.listHdrEdt}>{I18n.t('add_edit')}</Text>
                             </TouchableOpacity>
