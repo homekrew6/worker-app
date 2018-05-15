@@ -134,12 +134,21 @@ class Menu extends Component {
     }
 
    
-    componentWillMount() {
+    componentDidMount() {
         api.post('Notifications/getUnreadWorkerNot', { "workerId": this.props.auth.data.id }).then((res) => {
             this.setState({
                 notificatonCount: res.response.message,
             })
         }).catch((err) => {});
+    }
+
+
+    componentWillReceiveProps(){
+        api.post('Notifications/getUnreadWorkerNot', { "workerId": this.props.auth.data.id }).then((res) => {
+            this.setState({
+                notificatonCount: res.response.message,
+            })
+        }).catch((err) => { });
     }
 
     render() {

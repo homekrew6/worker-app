@@ -225,7 +225,7 @@ renderUnavalData(UnAvData, key){
                             <View style={styles.wkDay}>
                                 <Text style={styles.wkDayd}>Sunday</Text>
                             </View>
-                            <View style={{ flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', flex: 1, flexWrap: 'wrap' }}>
                               { this.state.timimgData !== '' ?
                                 this.state.timimgData.map((DataWeek, key) => (
                                 this.getTimeAmPm('sun', DataWeek, key)
@@ -238,7 +238,7 @@ renderUnavalData(UnAvData, key){
                             <View style={styles.wkDay}>
                                 <Text style={styles.wkDayd}>Monday</Text>
                             </View>
-                            <View style={{ flexDirection: 'row' }} >
+                            <View style={{ flexDirection: 'row', flex: 1, flexWrap: 'wrap' }} >
                               { this.state.timimgData !== '' ?
                                 this.state.timimgData.map((DataWeek, key) => (
                                 this.getTimeAmPm('mon', DataWeek, key)
@@ -251,7 +251,7 @@ renderUnavalData(UnAvData, key){
                             <View style={ styles.wkDay }>
                                 <Text style={styles.wkDayd}> Tuesday </Text>
                             </View>
-                            <View style={{ flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', flex: 1, flexWrap: 'wrap' }}>
                               { this.state.timimgData !== '' ?
                                 this.state.timimgData.map((DataWeek, key) => (
                                 this.getTimeAmPm('tue', DataWeek, key)
@@ -265,7 +265,7 @@ renderUnavalData(UnAvData, key){
                             <View style={styles.wkDay}>
                                 <Text style={styles.wkDayd}> Wednesday </Text>
                             </View>
-                            <View style={{ flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', flex: 1, flexWrap: 'wrap' }}>
                               { this.state.timimgData !== '' ?
                                 this.state.timimgData.map((DataWeek, key) => (
                                 this.getTimeAmPm('wed', DataWeek, key)
@@ -279,7 +279,7 @@ renderUnavalData(UnAvData, key){
                             <View style={styles.wkDay}>
                                 <Text style={styles.wkDayd}> Thursday </Text>
                             </View>
-                            <View style={{ flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', flex: 1, flexWrap: 'wrap' }}>
                               { this.state.timimgData !== '' ?
                                 this.state.timimgData.map((DataWeek, key) => (
                                 this.getTimeAmPm('thu', DataWeek, key)
@@ -292,7 +292,7 @@ renderUnavalData(UnAvData, key){
                             <View style={styles.wkDay}>
                                 <Text style={styles.wkDayd}> Friday </Text>
                             </View>
-                            <View style={{ flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', flex: 1, flexWrap: 'wrap' }}>
                               { this.state.timimgData !== '' ?
                                 this.state.timimgData.map((DataWeek, key) => (
                                 this.getTimeAmPm('fri', DataWeek, key)
@@ -304,7 +304,7 @@ renderUnavalData(UnAvData, key){
                             <View style={styles.wkDay}>
                                 <Text style={styles.wkDayd}> Saturday </Text>
                             </View>
-                            <View style={{ flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', flex: 1, flexWrap: 'wrap' }}>
                               { this.state.timimgData !== '' ?
                                 this.state.timimgData.map((DataWeek, key) => (
                                 this.getTimeAmPm('sat', DataWeek, key)

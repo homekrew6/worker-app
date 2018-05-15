@@ -117,7 +117,6 @@ class AvailableJobs extends Component {
 
     componentDidMount() {
         this.jobdata();
-        
         AsyncStorage.getItem("currency").then((value) => {
             if (value) {
                 const value1 = JSON.parse(value);
@@ -136,7 +135,6 @@ class AvailableJobs extends Component {
         this.props.availablejobs(id).then(res => {
             let data = { data: {}};
             data.data = res;
-            // debugger
             this.setState({
                 listItemFlag: true,
                 loader: false,
@@ -162,8 +160,15 @@ class AvailableJobs extends Component {
         let jobId = data.id;
         let workerId = this.props.auth.data.id;
         let serviceId = data.serviceId;
-        api.post('Jobs/ignoreJob', { "id": jobId, "workerId": workerId, "serviceId": serviceId, 'currencyId': data.currencyId}).then((resIgnore) => {
-            this.jobdata();
+        let language = this.props.auth.data.language ? this.props.auth.data.language : 'en';
+        debugger;
+        api.post('Jobs/ignoreJob', { "id": jobId, "workerId": workerId, "serviceId": serviceId, 'currencyId': data.currencyId, 'language': language}).then((resIgnore) => {
+            if (resIgnore.response.type == "Error") {
+                Alert.alert('', resIgnore.response.message);
+                this.setState({ loader: false });
+            } else {
+                this.jobdata();
+            }
         }).catch((errCatch) => {
             Alert.alert(I18n.t('failed_please_try_again'));
         })
@@ -176,8 +181,9 @@ class AvailableJobs extends Component {
         let jobId = data.id;
         let workerId = this.props.auth.data.id;
         let serviceId = data.serviceId;
+        
         this.props.declineJob(jobId, workerId, serviceId).then(res => {
-            this.jobdata();
+                this.jobdata();                
         }).catch(err => {
             this.setState({
                 loader: false
@@ -192,20 +198,20 @@ class AvailableJobs extends Component {
         let jobId = data.id;
         let workerId = this.props.auth.data.id;
         let customerId=data.customer.id;
+        let language = this.props.auth.data.language ? this.props.auth.data.language: 'en';
+        debugger;
 
-        api.post('Jobs/acceptJob', { "id": jobId, "status": "ACCEPTED", "workerId": workerId , "customerId":customerId}).then(responseJson => {
-            this.setState({ loader: false });
-            this.props.navigation.navigate('JobDetails',{jobDetails:data});
+        api.post('Jobs/acceptJob', { "id": jobId, "status": "ACCEPTED", "workerId": workerId, "customerId": customerId, "language": language}).then(responseJson => {
+            debugger;
+            if (responseJson.response.type == "Error"){
+                Alert.alert('', responseJson.response.message);
+                this.setState({ loader: false });                
+            }else{
+                this.setState({ loader: false });
+                this.props.navigation.navigate('JobDetails', { jobDetails: data });
+            }
         }).catch(err => {
         })
-
-        // this.props.acceptJob( jobId , workerId,customerId ).then(res => {
-        //     this.jobdata();
-        // }).catch(err => {
-        //     this.setState({
-        //         loader: false
-        //     })
-        // })
     }
 
     onRefresh(){
@@ -557,14 +563,14 @@ class AvailableJobs extends Component {
                                                         </View>
                                                         <View style={styles.listWarpTextWarp}>
                                                             <View style={styles.flexDirectionRow}>
-                                                                <Text style={{ fontWeight: 'bold' }}>{item.service.name}</Text>
+                                                                <Text style={{ fontWeight: 'bold' }}>{item.service?item.service.name:''}</Text>
                                                             </View>
                                                             <View style={styles.flexDirectionRow}>
                                                                 {/* <Text style={[styles.fontWeight700, { fontSize: 14 }]}>
                                                                     Tuesday
                                                                 </Text>
                                                                 <Text style={{ fontSize: 14 }}> 10:00 AM</Text> */}
-                                                                <Text style={{ fontSize: 14 }}>{this.getLocalTimeFormat(item.postedDate)}</Text>
+                                                                <Text style={{ fontSize: 14 }}>{item.postedDate?this.getLocalTimeFormat(item.postedDate):''}</Text>
                                                             </View>
                                                             <View style={styles.flexDirectionRow}>
                                                                 <Text>{item.userLocation ? item.userLocation.name : ''}</Text>
@@ -573,9 +579,9 @@ class AvailableJobs extends Component {
                                                                 <Text style={ item.startTime.timeInt === true ? {color: '#81cdc7'} : {color: '#FF0000'} }>{item.startTime.startTime}</Text>
                                                             </View>
                                                         </View>
-                                                        <View>
-                                                            <Text style={styles.listWarpPriceUp}>{item.currency.name} {item.price}</Text>
-                                                            <Text style={styles.listWarpPriceDown}>{parseInt(item.service.time_interval / 60) + "."}{item.service.time_interval % 60 < 10 ? "0" + item.service.time_interval % 60 : item.service.time_interval % 60} hour</Text>
+                                                        <View style={{ paddingLeft: 5 }}>
+                                                            <Text style={styles.listWarpPriceUp}>{item.currency?item.currency.name:'AED'} {item.price}</Text>
+                                                            <Text style={styles.listWarpPriceDown}>{item.service ? parseInt(item.service.time_interval / 60) + "." : ''}{item.service?item.service.time_interval % 60 < 10 ? "0" + item.service.time_interval % 60 : item.service.time_interval % 60:''} hour(s)</Text>
                                                         </View>
                                                     </View>
                                                 </TouchableOpacity>
@@ -593,9 +599,9 @@ class AvailableJobs extends Component {
                                         renderRightHiddenRow={(data, secId, rowId, rowMap) =>
                                             data.startTime.timeInt === true ?
                                                 <TouchableOpacity style={styles.rightAction} onPress={() => this.acceptJob(data)} >
-                                                <MaterialIcons name="done" style={styles.leftActionIcon} />
-                                                <Text style={styles.leftActionText}>{I18n.t('accept_button')}</Text>
-                                            </TouchableOpacity>
+                                                    <MaterialIcons name="done" style={styles.leftActionIcon} />
+                                                    <Text style={styles.leftActionText}>{I18n.t('accept_button')}</Text>
+                                                </TouchableOpacity>
                                                 : <View style={styles.leftAction}>
                                                 </View>}
                                         leftOpenValue={75}
@@ -635,31 +641,30 @@ class AvailableJobs extends Component {
                                             <ListItem style={styles.jobListItem}>
                                                     <TouchableOpacity style={styles.listWarp} onPress={() => this.goDetails(item)} disabled={this.state.IsProfileDisabled}>
                                                     <View style={styles.listWarpImageWarp}>
-                                                            <Image source={{uri: item.service.banner_image}} style={styles.listWarpImage} />
+                                                        <Image source={{uri: item.service.banner_image}} style={styles.listWarpImage} />
                                                     </View>
                                                     <View style={styles.listWarpTextWarp}>
                                                         <View style={styles.flexDirectionRow}>
-                                                            <Text style={{ fontWeight: 'bold' }}>{item.service.name}</Text>
+                                                            <Text style={{ fontWeight: 'bold' }}>{item.service ? item.service.name:''}</Text>
                                                         </View>
                                                         <View style={styles.flexDirectionRow}>
                                                             {/* <Text style={[styles.fontWeight700, { fontSize: 14 }]}>Tuesday </Text>
                                                             <Text style={{ fontSize: 14 }}> 10:00 AM</Text> */}
-                                                                <Text style={{ fontSize: 12 }}>{this.getLocalTimeFormat(item.postedDate)}</Text>
+                                                            <Text style={{ fontSize: 12 }}>{item.postedDate?this.getLocalTimeFormat(item.postedDate):''}</Text>
                                                         </View>
                                                         <View style={styles.flexDirectionRow}>
                                                             <Text>{item.userLocation ? item.userLocation.name : ''}</Text>
-
                                                         </View>
                                                         {
-                                                                item.status === 'STARTED'?
+                                                            item.status === 'STARTED' ?
                                                             <View style={styles.flexDirectionRow}>
                                                                 <Text style={{ color: '#81cdc7', fontSize: 16 }}>{item.startTime.startTime}</Text>
                                                             </View>: null
                                                         }
                                                     </View>
-                                                    <View>
+                                                    <View style={{ paddingLeft: 5 }}>
                                                         <Text style={styles.listWarpPriceUp}>{item.currency.name} {item.price}</Text>
-                                                        <Text style={styles.listWarpPriceDown}>4 hours</Text>
+                                                        <Text style={styles.listWarpPriceDown}>{item.service ? parseInt(item.service.time_interval / 60) + "." : ''}{item.service ? item.service.time_interval % 60 < 10 ? "0" + item.service.time_interval % 60 : item.service.time_interval % 60 : ''} hour(s)</Text>
                                                     </View>
                                                 </TouchableOpacity>
                                             </ListItem>}
@@ -669,7 +674,9 @@ class AvailableJobs extends Component {
                             })}
                         </Content>
                     </Tab>
+
                     {/* On going jobs */}
+
                     <Tab heading={I18n.t('onGoingJobs')} tabStyle={{ backgroundColor: '#81cdc7' }} textStyle={{ color: '#b1fff5' }} activeTabStyle={{ backgroundColor: '#81cdc7' }} activeTextStyle={{ color: '#1e3768' }}>
                         <Content
                             refreshControl={
@@ -696,11 +703,10 @@ class AvailableJobs extends Component {
                                             renderRow={(item) =>
                                             <ListItem style={styles.jobListItem}>
                                                     <TouchableOpacity 
-                                                    disabled={this.state.IsProfileDisabled}
-                                                    style={styles.listWarp} 
-                                                    onPress={() => { console.log('onGoing Jobs'); this.goDetails(item) }
-                                                    } 
-                                                        >
+                                                        disabled={this.state.IsProfileDisabled}
+                                                        style={styles.listWarp} 
+                                                        onPress={() => { console.log('onGoing Jobs'); this.goDetails(item) }} 
+                                                    >
                                                     <View style={styles.listWarpImageWarp}>
                                                             <Image source={{uri: item.service.banner_image}} style={styles.listWarpImage} />
                                                     </View>
@@ -711,7 +717,7 @@ class AvailableJobs extends Component {
                                                         <View style={styles.flexDirectionRow}>
                                                             {/* <Text style={[styles.fontWeight700, { fontSize: 14 }]}>Tuesday </Text>
                                                             <Text style={{ fontSize: 14 }}> 10:00 AM</Text> */}
-                                                                <Text style={{ fontSize: 12 }}>{this.getLocalTimeFormat(item.postedDate)}</Text>
+                                                                <Text style={{ fontSize: 12 }}>{item.postedDate ? this.getLocalTimeFormat(item.postedDate) : ''}</Text>
                                                         </View>
                                                         <View style={styles.flexDirectionRow}>
                                                             <Text>{item.userLocation ? item.userLocation.name : ''}</Text>
@@ -724,9 +730,9 @@ class AvailableJobs extends Component {
                                                             </View>: null
                                                         }
                                                     </View>
-                                                    <View>
+                                                    <View style={{ paddingLeft: 5 }}>
                                                         <Text style={styles.listWarpPriceUp}>{item.currency.name} {item.price}</Text>
-                                                        <Text style={styles.listWarpPriceDown}>4 hours</Text>
+                                                        <Text style={styles.listWarpPriceDown}>{item.service ? parseInt(item.service.time_interval / 60) + "." : ''}{item.service ? item.service.time_interval % 60 < 10 ? "0" + item.service.time_interval % 60 : item.service.time_interval % 60 : ''} hour(s)</Text>
                                                     </View>
                                                 </TouchableOpacity>
                                             </ListItem>}
@@ -775,7 +781,7 @@ class AvailableJobs extends Component {
                                                         <View style={styles.flexDirectionRow}>
                                                             {/* <Text style={[styles.fontWeight700, { fontSize: 14 }]}>Tuesday </Text>
                                                             <Text style={{ fontSize: 14 }}> 10:00 AM</Text> */}
-                                                                <Text style={{ fontSize: 12 }}>{this.getLocalTimeFormat(item.postedDate)}</Text>
+                                                                <Text style={{ fontSize: 12 }}>{item.postedDate ? this.getLocalTimeFormat(item.postedDate) : ''}</Text>
                                                         </View>
                                                         <View style={styles.flexDirectionRow}>
                                                             <Text>{item.userLocation ? item.userLocation.name : ''}</Text>
@@ -788,9 +794,9 @@ class AvailableJobs extends Component {
                                                             </View>: null
                                                         }
                                                     </View>
-                                                    <View>
+                                                    <View style={{ paddingLeft: 5 }}>
                                                         <Text style={styles.listWarpPriceUp}>{item.currency.name} {item.price}</Text>
-                                                        <Text style={styles.listWarpPriceDown}>4 hours</Text>
+                                                        <Text style={styles.listWarpPriceDown}>{item.service ? parseInt(item.service.time_interval / 60) + "." : ''}{item.service ? item.service.time_interval % 60 < 10 ? "0" + item.service.time_interval % 60 : item.service.time_interval % 60 : ''} hour(s)</Text>
                                                     </View>
                                                 </TouchableOpacity>
                                             </ListItem>}
@@ -805,8 +811,8 @@ class AvailableJobs extends Component {
                         {this.state.availableJobs.data.response.message.declinedJobs? (
                             <List
                                 dataArray={this.state.availableJobs.data.response.message.declinedJobs}
-                            style={styles.jobList}
-                            renderRow={(item) =>
+                                style={styles.jobList}
+                                renderRow={(item) =>
                                 <ListItem style={styles.jobListItem}>
                                     <View style={styles.listWarp}>
                                         <View style={styles.listWarpImageWarp}>
@@ -814,15 +820,15 @@ class AvailableJobs extends Component {
                                         </View>
                                         <View style={styles.listWarpTextWarp}>
                                             <View style={styles.flexDirectionRow}>
-                                                <Text style={{ fontWeight: 'bold' }}>{item.service.name}</Text>
+                                                <Text style={{ fontWeight: 'bold' }}>{item.service?item.service.name:''}</Text>
                                             </View>
                                             <View style={styles.flexDirectionRow}>
-                                                <Text style={{ fontSize: 14 }}> {item.job.postedDate } </Text>
+                                                <Text style={{ fontSize: 14 }}> {item.job ? this.getLocalTimeFormat(item.job.postedDate):'' } </Text>
                                             </View>
                                         </View>
-                                        <View>
-                                            <Text style={styles.listWarpPriceUp}>{item.currency.name} {item.job.price}</Text>
-                                            <Text style={styles.listWarpPriceDown}>4 hours</Text>
+                                        <View style={{ paddingLeft: 5 }}>
+                                            <Text style={styles.listWarpPriceUp}>{item.currency?item.currency.name:'AED'} {item.job?item.job.price:''}</Text>
+                                            <Text style={styles.listWarpPriceDown}>{item.service ? parseInt(item.service.time_interval / 60) + "." : ''}{item.service ? item.service.time_interval % 60 < 10 ? "0" + item.service.time_interval % 60 : item.service.time_interval % 60 : ''} hour(s)</Text>
                                         </View>
                                     </View>
                                 </ListItem>
@@ -830,7 +836,7 @@ class AvailableJobs extends Component {
                         />
                         ):(
                             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                                    <Text>{I18n.t('nodatafound')}</Text>
+                                <Text>{I18n.t('nodatafound')}</Text>
                             </View>
                         )
                         }
@@ -840,32 +846,28 @@ class AvailableJobs extends Component {
                         {this.state.availableJobs.data.response.message.cancelledJobs? (
                             <List
                                 dataArray={this.state.availableJobs.data.response.message.cancelledJobs}
-                            style={styles.jobList}
-                            renderRow={(item) =>
+                                style={styles.jobList}
+                                renderRow={(item) =>
                                 <ListItem style={styles.jobListItem}>
                                     <View style={styles.listWarp}>
                                         <View style={styles.listWarpImageWarp}>
-                                            <Image source={{ uri: item.service.banner_image }} style={styles.listWarpImage} />
+                                            <Image source={{ uri: item.service ? item.service.banner_image: '' }} style={styles.listWarpImage} />
                                         </View>
                                         <View style={styles.listWarpTextWarp}>
                                             <View style={styles.flexDirectionRow}>
-                                                <Text style={{ fontWeight: 'bold' }}>{item.service.name}</Text>
+                                                <Text style={{ fontWeight: 'bold' }}>{item.service ? item.service.name: ''}</Text>
                                             </View>
                                             <View style={styles.flexDirectionRow}>
-                                                <Text style={{ fontSize: 14 }}> {item.job.postedDate } </Text>
+                                                <Text style={{ fontSize: 14 }}> {item.job ? this.getLocalTimeFormat(item.job.postedDate) : ''} </Text>
                                             </View>
                                         </View>
-                                        {/* <View>
-                                            <Text style={styles.listWarpPriceUp}>{item.currency.name} {item.job.price}</Text>
-                                            <Text style={styles.listWarpPriceDown}>4 hours</Text>
-                                        </View> */}
                                     </View>
                                 </ListItem>
                             }
                         />
                         ):(
                             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                                    <Text>{I18n.t('nodatafound')}</Text>
+                                <Text>{I18n.t('nodatafound')}</Text>
                             </View>
                         )
                         }
@@ -926,7 +928,7 @@ const mapDispatchToProps = (dispatch) => {
         availablejobs: (id) => dispatch(availablejobs(id)),
         setNewData: (data) => dispatch(setNewData(data)),
         acceptJob: (jobId, workerId) => dispatch(acceptJob(jobId, workerId)),
-        declineJob: (jobId, workerId, serviceId) => dispatch(declineJob(jobId, workerId, serviceId)),
+        declineJob: (jobId, workerId, serviceId, language) => dispatch(declineJob(jobId, workerId, serviceId, language)),
         navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
     }
 }

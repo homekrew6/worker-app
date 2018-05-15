@@ -12,9 +12,9 @@ export function setNewData(data) {
 }
 
 
-export function declineJob(jobId, workerId, serviceId) {
+export function declineJob(jobId, workerId, serviceId, language) {
   return function (dispatch) {
-    return jobApi.declineJob(jobId, workerId, serviceId).then(res => {
+    return jobApi.declineJob(jobId, workerId, serviceId, language).then(res => {
       return res
     }).catch(err => {
       return err
@@ -22,9 +22,9 @@ export function declineJob(jobId, workerId, serviceId) {
   }
 }
 
-export function acceptJob(jobId, workerId, customerId) {
+export function acceptJob(jobId, workerId, customerId, language) {
   return function (dispatch) {
-    return jobApi.acceptJob(jobId, workerId, customerId).then(res => {
+    return jobApi.acceptJob(jobId, workerId, customerId, language).then(res => {
       return res
     }).catch(err => {
       return err

@@ -97,7 +97,6 @@ class JobDetails extends Component {
     }
 
     cancelJob(){
-        debugger;
         if(this.state.reasonId !== '')
         {
             const ToSendData={jobId:this.state.remoteJobDetails.id,
@@ -476,7 +475,6 @@ class JobDetails extends Component {
 
     componentDidMount() {
 
-
         this.setState({ currency: this.props.navigation.state.params.jobDetails.currency.name });
         console.log('job details . . . . . ', this.props.navigation.state.params.jobDetails);
         navigator.geolocation.getCurrentPosition((position) => {
@@ -561,8 +559,8 @@ class JobDetails extends Component {
                             job_start_time: job_start_time1,
                             job_end_time: start_time_full1,
                         });
-                        const progressInterval = setInterval(() => {;
-                            this.setState({ workProgressTime: this.state.workProgressTime + 1 });
+                        const progressInterval = setInterval(() => {
+                        this.setState({ workProgressTime: this.state.workProgressTime + 1 });
                         }, progressSpeed);
                         this.setState({ progressInterval: progressInterval });
                     }).catch((err) => {
@@ -723,16 +721,23 @@ class JobDetails extends Component {
         let jobId = this.props.navigation.state.params.jobDetails.id;
         let workerId = this.props.auth.data.id;
         let serviceId = this.props.navigation.state.params.jobDetails.serviceId;
-        this.props.declineJob(jobId, workerId, serviceId).then(res => {
+        let language = this.props.auth.data.language ? this.props.auth.data.language : 'en';
+        this.props.declineJob(jobId, workerId, serviceId, language).then(res => {
             //this.jobdata();
-            api.post('Jobs/getJobDetailsById', {
-                "id": this.props.navigation.state.params.jobDetails.id,
-                "workerId": this.props.auth.data.id
-            }).then((response) => {
-                this.setState({ remoteJobDetails: response.response.message[0], loader: false });
-            }).catch((err) => {
-    
-            })
+            if (res.response.type == "Error"){
+                Alert.alert('', responseJson.response.message);
+                this.setState({ loader: false });
+            }else{
+                api.post('Jobs/getJobDetailsById', {
+                    "id": this.props.navigation.state.params.jobDetails.id,
+                    "workerId": this.props.auth.data.id
+                }).then((response) => {
+                    this.setState({ remoteJobDetails: response.response.message[0], loader: false });
+                }).catch((err) => {
+                    
+                })
+            }
+            
         }).catch(err => {
            
             this.setState({
@@ -744,25 +749,30 @@ class JobDetails extends Component {
         this.props.navigation.setParams({ jobDetails: newJobDetails });
     }
     acceptJob() {
-        this.setState({
-            loader: true,
-            bottomButtonStatus: 'way'
-        })
+        this.setState({ loader: true, bottomButtonStatus: 'way' })
         let jobId = this.props.navigation.state.params.jobDetails.id;
         let workerId = this.props.auth.data.id;
         let customerId=this.state.remoteJobDetails.customerId;
-        this.props.acceptJob(jobId, workerId, customerId).then(res => {
-            api.post('Jobs/getJobDetailsById', {
-                "id": this.props.navigation.state.params.jobDetails.id,
-                "workerId": this.props.auth.data.id
-            }).then((response) => {
-                this.setState({ remoteJobDetails: response.response.message[0], loader: false, jobTrackingStatus: 'Krew Assigned' });
-                this.swipeButtonReady();
-            }).catch((err) => {
-    
-            })
+        var  language = this.props.auth.data.language ? this.props.auth.data.language : 'en';
+        this.props.acceptJob(jobId, workerId, customerId, language).then(res => {
+            console.log(res);
+            if (res.response.type == "Error") {
+                debugger;
+                Alert.alert('', res.response.message);
+                this.setState({ loader: false });
+            } else {
+                debugger;
+                api.post('Jobs/getJobDetailsById', {
+                    "id": this.props.navigation.state.params.jobDetails.id,
+                    "workerId": this.props.auth.data.id
+                }).then((response) => {
+                    this.setState({ remoteJobDetails: response.response.message[0], loader: false, jobTrackingStatus: 'Krew Assigned' });
+                    this.swipeButtonReady();
+                }).catch((err) => {
+                })
+            }
+            
         }).catch(err => {
-           
             this.setState({
                 loader: false
             })
@@ -1521,8 +1531,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         availablejobs: (id) => dispatch(availablejobs(id)), 
-        acceptJob: (jobId, workerId, customerId) => dispatch(acceptJob(jobId, workerId, customerId)),
-        declineJob: (jobId, workerId, serviceId) => dispatch(declineJob(jobId, workerId, serviceId)),
+        acceptJob: (jobId, workerId, customerId, language) => dispatch(acceptJob(jobId, workerId, customerId, language)),
+        declineJob: (jobId, workerId, serviceId, language) => dispatch(declineJob(jobId, workerId, serviceId, language)),
     }
 }
 

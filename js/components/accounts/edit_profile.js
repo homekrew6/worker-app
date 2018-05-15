@@ -23,18 +23,19 @@ const carveImage = require('../../../img/bg-1.png');
 // ];
 
 var BUTTONS = [
-
+    { text: I18n.t('camera'), icon: "ios-camera", iconColor: "#2c8ef4" },
+    { text: I18n.t('file'), icon: "ios-images", iconColor: "#f42ced" }
 ];
-AsyncStorage.getItem("language").then((value) => {
-    if (value) {
-        const value1 = JSON.parse(value);
-        I18n.locale = value1.Code;
-        BUTTONS = [
-            { text: I18n.t('camera'), icon: "ios-camera", iconColor: "#2c8ef4" },
-            { text: I18n.t('file'), icon: "ios-images", iconColor: "#f42ced" }
-        ]
-    }
-});
+// AsyncStorage.getItem("language").then((value) => {
+//     if (value) {
+//         const value1 = JSON.parse(value);
+//         I18n.locale = value1.Code;
+//         BUTTONS = [
+//             { text: I18n.t('camera'), icon: "ios-camera", iconColor: "#2c8ef4" },
+//             { text: I18n.t('file'), icon: "ios-images", iconColor: "#f42ced" }
+//         ]
+//     }
+// });
 const resetActionForTiming = NavigationActions.reset({
     index: 0,
     actions: [NavigationActions.navigate({ routeName: 'myTiming' })],
@@ -432,7 +433,7 @@ class EditProfile extends Component {
                             </View>
                         </View>
 
-                        <View style={styles.editprofileLst}>
+                        {/* <View style={styles.editprofileLst}>
                             <View style={styles.editprofileWarp}>
                                 <Text>{I18n.t('password_small_case')}</Text>
                                 <Text style={styles.starRed}>*</Text>
@@ -440,7 +441,7 @@ class EditProfile extends Component {
                             <View style={styles.editprofileInputwrap}>
                                 <Input style={styles.editprofileInput} value={I18n.t('password_small_case')} secureTextEntry editable={false} />
                             </View>
-                        </View>
+                        </View> */}
 
                          <View style={styles.editprofileLstComission}>
                             <View style={styles.editprofileWarp}>

@@ -68,7 +68,7 @@ export default {
         color: '#1e3768' 
     },
     wkDay:{ 
-        flex: 1 
+        width: 80
     },
     wkDayd:{
         fontSize: 14

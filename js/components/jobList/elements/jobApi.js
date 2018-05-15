@@ -12,9 +12,9 @@ class jobApi {
 		})
 	}
 
-	static declineJob(jobId, workerId, serviceId) {
+	static declineJob(jobId, workerId, serviceId, language) {
 		return new Promise((resolve, reject) => {
-			api.post('Jobs/declineJob', { "jobId": jobId, "serviceId": serviceId, "workerId": workerId }).then(responseJson => {
+			api.post('Jobs/declineJob', { "jobId": jobId, "serviceId": serviceId, "workerId": workerId, "language": language }).then(responseJson => {
 				resolve(responseJson)
 			}).catch(err => {
 				reject(err)
@@ -22,9 +22,9 @@ class jobApi {
 		})
 	}
 
-	static acceptJob(jobId, workerId,customerId) {
+	static acceptJob(jobId, workerId, customerId, language) {
 		return new Promise((resolve, reject) => {
-			api.post('Jobs/acceptJob', { "id": jobId, "status": "ACCEPTED", "workerId": workerId , "customerId":customerId}).then(responseJson => {
+			api.post('Jobs/acceptJob', { "id": jobId, "status": "ACCEPTED", "workerId": workerId, "customerId": customerId, "language": language}).then(responseJson => {
 				resolve(responseJson)
 			}).catch(err => {
 				reject(err)
