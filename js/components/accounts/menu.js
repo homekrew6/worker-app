@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Image, View, StatusBar, Alert, TouchableOpacity, AsyncStorage, BackHandler, Text, I18nManager } from "react-native";
 import { Container, Header, Button, Content, CardItem, Card, Body, Thumbnail } from "native-base";
 import FSpinner from 'react-native-loading-spinner-overlay';
-import { logout, navigateAndSaveCurrentScreen } from './elements/authActions'
+import { logout, navigateAndSaveCurrentScreen} from './elements/authActions'
 import I18n from '../../i18n/i18n';
 import styles from "./styles";
 import api from '../../api';
@@ -40,6 +40,7 @@ class Menu extends Component {
             currency: 'AED',
             reRender: '',
             IsProfileDisabled: false,
+            starRating:0
         };
         
         I18nManager.forceRTL(false);
@@ -107,12 +108,22 @@ class Menu extends Component {
         api.post('Workers/totalCommission', { id: this.props.auth.data.id }).then((resCon) => {
             this.setState({ totalCommission: resCon.response.message });
         });
+        
         AsyncStorage.getItem("currency").then((value) => {
             if (value) {
                 const value1 = JSON.parse(value);
                 this.setState({ currency: value1.language })
             }
         });
+        api.post('Notifications/getUnreadWorkerNot', { "workerId": this.props.auth.data.id }).then((res) => {
+            this.setState({
+                notificatonCount: res.response.message,
+            })
+        }).catch((err) => { });
+        let data={id:this.props.auth.data.id};
+        api.post('Workers/getWorkerDetailsById',data).then((res)=>{
+            this.setState({ starRating: res.response.message.starRating});
+        })
         BackHandler.addEventListener('hardwareBackPress', function () {
             if(this.props.currentRoute === 'Menu'){
                 Alert.alert(
@@ -134,13 +145,7 @@ class Menu extends Component {
     }
 
    
-    componentDidMount() {
-        api.post('Notifications/getUnreadWorkerNot', { "workerId": this.props.auth.data.id }).then((res) => {
-            this.setState({
-                notificatonCount: res.response.message,
-            })
-        }).catch((err) => {});
-    }
+
 
 
     componentWillReceiveProps(){
@@ -190,7 +195,10 @@ class Menu extends Component {
                         </CardItem>
                         <CardItem>
                             <View style={styles.pBtmTxt}>
-                                <Text style={styles.pBtmTxt_Txt}>{I18n.t('credit_all')} {this.state.currency} {this.state.totalCommission}</Text>
+                                <Text style={styles.pBtmTxt_Left}>{I18n.t('credit_all')} {this.state.currency} {this.state.totalCommission}</Text>
+                            </View>
+                             <View style={styles.pBtmTxt}>
+                                <Text style={styles.pBtmTxt_Txt}>{I18n.t('star_rating')}: {this.state.starRating}</Text>
                             </View>
                         </CardItem>
                     </Card>

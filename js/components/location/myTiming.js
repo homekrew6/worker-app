@@ -43,7 +43,7 @@ class myTiming extends Component {
     {
         if (this.props.currentRoute === "myTiming" && !this.props.prevRoute) {
          this.backHandler=   BackHandler.addEventListener('hardwareBackPress', function () {
-                console.log('hardwareBackPress', this.props);
+              
                 if (this.props.currentRoute === 'myTiming') {
                     Alert.alert(
                         'Confirm',

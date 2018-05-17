@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, StatusBar, ImageBackground, AsyncStorage, Alert } from "react-native";
+import { View, StatusBar, ImageBackground, AsyncStorage, Alert, NetInfo, BackHandler } from "react-native";
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import FCM, { FCMEvent } from "react-native-fcm";
@@ -38,13 +38,42 @@ class Home extends Component {
 	// eslint-disable-line
 	constructor(params) {
 		super(params)
-		this.state={
-			
+		this.state = {
+
 		}
 	}
-	componentWillMount() {
-		
 
+	componentWillMount() {
+
+		NetInfo.getConnectionInfo().then((connectionInfo) => {
+			if(connectionInfo.type=="none")
+			{
+				Alert.alert(
+					'Info',
+					'There is no Internet Connection',
+					[
+						{ text: 'OK', onPress: () => BackHandler.exitApp() },
+					],
+				);
+				return true;
+			}
+		});
+		function handleFirstConnectivityChange(connectionInfo) {
+			if (connectionInfo.type == "none") {
+				Alert.alert(
+					'Info',
+					'There is no Internet Connection',
+					[
+						{ text: 'OK', onPress: () => BackHandler.exitApp() },
+					],
+				);
+				return true;
+			}  
+		}
+		NetInfo.addEventListener(
+			'connectionChange',
+			handleFirstConnectivityChange
+		);
 		FCM.requestPermissions();
 		//update fcm token
 		FCM.getFCMToken().then(token => {
@@ -65,28 +94,30 @@ class Home extends Component {
 						const userToken1 = JSON.parse(userToken);
 						this.props.getUserDetail(userToken1.userId, userToken1.id).then(userRes => {
 							//this.props.navigation.dispatch(resetAction);
-							if(notif.screenType){
-								if(notif.screenType == 'JobDetails'){
-									api.post('Jobs/getJobDetailsById', { 
+							if (notif.screenType) {
+								if (notif.screenType == 'JobDetails') {
+									api.post('Jobs/getJobDetailsById', {
 										"id": Number(notif.jobId),
 										"workerId": this.props.auth.data.id
-									}).then((resJob)=>{
+									}).then((resJob) => {
 										this.props.navigation.dispatch(
 											NavigationActions.reset({
 												index: 1,
 												actions: [
-												NavigationActions.navigate({ routeName: 'Menu' }),
-												NavigationActions.navigate({ routeName: 'JobDetails', params: {
-													jobId: notif.jobId, 
-													jobDetails: resJob.response.message[0]
-												} }),
+													NavigationActions.navigate({ routeName: 'Menu' }),
+													NavigationActions.navigate({
+														routeName: 'JobDetails', params: {
+															jobId: notif.jobId,
+															jobDetails: resJob.response.message[0]
+														}
+													}),
 												],
 											})
 										);
 									}).catch((err) => {
 										connect.log('err', err);
 									})
-								}else if(notif.screenType == 'AvailableJobs'){
+								} else if (notif.screenType == 'AvailableJobs') {
 									this.props.navigation.dispatch(
 										NavigationActions.reset({
 											index: 1,
@@ -97,9 +128,9 @@ class Home extends Component {
 										})
 									);
 								}
-							}else{
+							} else {
 								let filter = '{"where":{"workerId":' + userToken1.userId + '}}';
-								api.get('WorkerSkills?filter=' + filter + '&access_token=' + userToken1.id).then((skills)=>{
+								api.get('WorkerSkills?filter=' + filter + '&access_token=' + userToken1.id).then((skills) => {
 									if (skills.length && skills.length > 0) {
 										//this.props.navigation.dispatch(resetAction);
 										const WorkerAvailabilitiesUrl = `Workeravailabletimings?filter={"where":{"workerId":"${userToken1.userId}"}}`;
@@ -117,11 +148,11 @@ class Home extends Component {
 									else {
 										this.props.navigation.dispatch(resetActionForSkill);
 									}
-								}).catch((error1)=>{
+								}).catch((error1) => {
 									this.props.navigation.dispatch(resetAction);
 								});
 							}
-							
+
 						}).catch(err => {
 							Alert.alert(I18n.t('please_login'));
 							this.props.navigation.navigate("Login")
@@ -131,14 +162,14 @@ class Home extends Component {
 						AsyncStorage.getItem('IsSliderShown').then((res) => {
 							if (res) {
 								this.props.navigation.dispatch(resetActionCategory);
-							}else {
+							} else {
 								this.props.navigation.dispatch(resetActionIntro);
 							}
 						}).catch((err) => {
 							this.props.navigation.dispatch(resetActionIntro);
 						})
 					}
-				}).catch((err)=>{
+				}).catch((err) => {
 					this.props.navigation.navigate("Login");
 				})
 			}, 4000);
@@ -180,19 +211,19 @@ class Home extends Component {
 		this.notificationUnsubscribe = FCM.on(FCMEvent.Notification, notif => {
 			if (notif && notif.local_notification) {
 				if (notif.screenType && notif.screenType == 'JobDetails') {
-					api.post('Jobs/getJobDetailsById', { 
+					api.post('Jobs/getJobDetailsById', {
 						"id": Number(notif.jobId),
-            			"workerId": this.props.auth.data.id
-					}).then((resJob)=>{
+						"workerId": this.props.auth.data.id
+					}).then((resJob) => {
 						this.props.navigation.navigate('JobDetails', {
-							jobId: notif.jobId, 
+							jobId: notif.jobId,
 							jobDetails: resJob.response.message[0]
 						});
 					}).catch((err) => {
 						connect.log('err', err);
 					})
 					this.setState({ isPush: true, jobId: notif.jobId });
-				}else if(notif.screenType == 'AvailableJobs'){
+				} else if (notif.screenType == 'AvailableJobs') {
 					this.props.navigation.dispatch(
 						NavigationActions.reset({
 							index: 1,

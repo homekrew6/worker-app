@@ -95,6 +95,10 @@ export default{
         textAlign: 'right',
         color: '#060606'
     },
+    pBtmTxt_Left: {
+        textAlign: 'left',
+        color: '#060606'
+    },
     flx_View: {
         flex: 1,
         flexDirection: 'row',

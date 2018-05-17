@@ -32,9 +32,9 @@ export function acceptJob(jobId, workerId, customerId, language) {
   }
 }
 
-export function availablejobs(id) {
+export function availablejobs(id, timeZone) {
   return function (dispatch) {
-      return jobApi.availableJobs(id).then(res => {
+    return jobApi.availableJobs(id, timeZone).then(res => {
       return res
 
     }).catch(err => {

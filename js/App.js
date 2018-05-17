@@ -2,7 +2,7 @@
 
 import React, { Component } from "react";
 
-import { Easing, Animated, I18nManager } from "react-native";
+import { Easing, Animated } from "react-native";
 import { Root } from "native-base";
 import { StackNavigator } from "react-navigation";
 import { connect } from 'react-redux';

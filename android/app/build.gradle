@@ -97,8 +97,8 @@ android {
         applicationId "com.HomeKrew.Worker"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -165,7 +165,8 @@ dependencies {
 //    }
     compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:23.0.1"
-    compile "com.facebook.react:react-native:+"  // From node_modules
+    //compile "com.facebook.react:react-native:+"  // From node_modules
+    compile("com.facebook.react:react-native:0.51.0") { force = true }
 //     compile ("com.google.android.gms:play-services-base:10.0.1") {
 //       force = true;
 //    }

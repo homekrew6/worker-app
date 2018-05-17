@@ -79,7 +79,6 @@ class Settings extends Component {
                     AsyncStorage.clear();
                     AsyncStorage.removeItem('userToken');
                     AsyncStorage.setItem("IsSliderShown", "true").then((res) => {
-                        debugger;
                         I18n.locale = 'en';
                         this.setState({ visible: false });
                         this.props.navigation.dispatch(resetAction);

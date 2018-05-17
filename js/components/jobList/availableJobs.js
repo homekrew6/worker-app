@@ -116,6 +116,7 @@ class AvailableJobs extends Component {
     }
 
     componentDidMount() {
+       
         this.jobdata();
         AsyncStorage.getItem("currency").then((value) => {
             if (value) {
@@ -132,7 +133,7 @@ class AvailableJobs extends Component {
    
     jobdata() {
         let id = this.props.auth.data.id;
-        this.props.availablejobs(id).then(res => {
+        this.props.availablejobs(id, moment.tz.guess()).then(res => {
             let data = { data: {}};
             data.data = res;
             this.setState({
@@ -161,7 +162,6 @@ class AvailableJobs extends Component {
         let workerId = this.props.auth.data.id;
         let serviceId = data.serviceId;
         let language = this.props.auth.data.language ? this.props.auth.data.language : 'en';
-        debugger;
         api.post('Jobs/ignoreJob', { "id": jobId, "workerId": workerId, "serviceId": serviceId, 'currencyId': data.currencyId, 'language': language}).then((resIgnore) => {
             if (resIgnore.response.type == "Error") {
                 Alert.alert('', resIgnore.response.message);
@@ -199,10 +199,8 @@ class AvailableJobs extends Component {
         let workerId = this.props.auth.data.id;
         let customerId=data.customer.id;
         let language = this.props.auth.data.language ? this.props.auth.data.language: 'en';
-        debugger;
 
         api.post('Jobs/acceptJob', { "id": jobId, "status": "ACCEPTED", "workerId": workerId, "customerId": customerId, "language": language}).then(responseJson => {
-            debugger;
             if (responseJson.response.type == "Error"){
                 Alert.alert('', responseJson.response.message);
                 this.setState({ loader: false });                
@@ -705,7 +703,7 @@ class AvailableJobs extends Component {
                                                     <TouchableOpacity 
                                                         disabled={this.state.IsProfileDisabled}
                                                         style={styles.listWarp} 
-                                                        onPress={() => { console.log('onGoing Jobs'); this.goDetails(item) }} 
+                                                        onPress={() => { this.goDetails(item) }} 
                                                     >
                                                     <View style={styles.listWarpImageWarp}>
                                                             <Image source={{uri: item.service.banner_image}} style={styles.listWarpImage} />
@@ -925,7 +923,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        availablejobs: (id) => dispatch(availablejobs(id)),
+        availablejobs: (id, timeZone) => dispatch(availablejobs(id, timeZone)),
         setNewData: (data) => dispatch(setNewData(data)),
         acceptJob: (jobId, workerId) => dispatch(acceptJob(jobId, workerId)),
         declineJob: (jobId, workerId, serviceId, language) => dispatch(declineJob(jobId, workerId, serviceId, language)),

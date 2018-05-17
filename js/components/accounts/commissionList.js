@@ -17,7 +17,6 @@ class commissionList extends Component {
     }
 
     componentDidMount() {
-        debugger;
         api.post('Workers/getCommissionList', { 
             id: this.props.navigation.state.params.workerId,
             commission: this.props.navigation.state.params.commission

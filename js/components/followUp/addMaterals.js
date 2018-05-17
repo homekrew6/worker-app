@@ -95,7 +95,7 @@ class AddMaterial extends Component {
         let addStatus = true;
         addedItemArray.map((dataA, key) => {
             if(id === dataA.materialsId){
-                addedItemArray[key].price = Number(dataA.count + 1 ) * dataA.price;
+                addedItemArray[key].price = Number(dataA.count + 1 ) * dataA.actualPrice;
                 addedItemArray[key].count = Number(dataA.count) + 1;
                 addStatus = false
             }
@@ -115,7 +115,7 @@ class AddMaterial extends Component {
         let totalPrice = 0;
         let itemTotalPrice;
         addedItemArray.map((item) => {
-            itemTotalPrice = parseFloat(item.price) * item.count;
+            itemTotalPrice = parseFloat(item.actualPrice) * item.count;
             totalPrice = totalPrice + itemTotalPrice;
         });
         totalPrice = totalPrice.toFixed(2);
@@ -302,42 +302,52 @@ class AddMaterial extends Component {
             this.setState({ loader: true });
 
             let toSendData = [];
-            this.state.addedMaterialsList.map((item) => {
-                if(item.count!=0)
-                {
-                    let insertData = { "count": item.count, "price": item.price, "materialsId": item.materialsId };
-                    toSendData.push(insertData);
-                }
-            });
-            const data = { "materials": toSendData, "jobId": jobId };
-            api.post('jobMaterials/insertJobMaterial', data).then((res) => {
-                this.setState({ loader: false });
-                if (res.response.type == "error") {
-                    Alert.alert(res.response.message);
-                }
-                else {
-                    Alert.alert(I18n.t('material_added_successfully'));
-                    this.props.navigation.dispatch(
-                        NavigationActions.reset({
-                            index: 3,
-                            actions: [
-                            NavigationActions.navigate({ routeName: 'Menu' }),
-                            NavigationActions.navigate({ routeName: 'AvailableJobs' }),
-                            NavigationActions.navigate({ routeName: 'JobDetails', params: { jobDetails: this.props.navigation.state.params.jobDetails } }),
-                            NavigationActions.navigate({ routeName: 'FollowUpList', params: {
-                                totalPrice: this.state.totalPrice,
-                                materialsId: res.response.message[0].materialsId,
-                                jobDetails : this.props.navigation.state.params.jobDetails,
-                            } }),
-                            ],
-                        })
-                    );
-                }
+            if (this.state.addedMaterialsList.length>0)
+            {
+                this.state.addedMaterialsList.map((item) => {
+                    if (item.count != 0) {
+                        let insertData = { "count": item.count, "price": item.price, "materialsId": item.materialsId };
+                        toSendData.push(insertData);
+                    }
+                });
+                const data = { "materials": toSendData, "jobId": jobId };
+                api.post('jobMaterials/insertJobMaterial', data).then((res) => {
+                    this.setState({ loader: false });
+                    if (res.response.type == "error") {
+                        Alert.alert(res.response.message);
+                    }
+                    else {
+                        Alert.alert(I18n.t('material_added_successfully'));
+                        this.props.navigation.dispatch(
+                            NavigationActions.reset({
+                                index: 3,
+                                actions: [
+                                    NavigationActions.navigate({ routeName: 'Menu' }),
+                                    NavigationActions.navigate({ routeName: 'AvailableJobs' }),
+                                    NavigationActions.navigate({ routeName: 'JobDetails', params: { jobDetails: this.props.navigation.state.params.jobDetails } }),
+                                    NavigationActions.navigate({
+                                        routeName: 'FollowUpList', params: {
+                                            totalPrice: this.state.totalPrice,
+                                            materialsId: res.response.message[0].materialsId,
+                                            jobDetails: this.props.navigation.state.params.jobDetails,
+                                        }
+                                    }),
+                                ],
+                            })
+                        );
+                    }
 
-            }).catch((err) => {
-                this.setState({ loader: false });
-                Alert.alert(I18n.t('please_try_again_later'));
-            })
+                }).catch((err) => {
+                    this.setState({ loader: false });
+                    Alert.alert(I18n.t('please_try_again_later'));
+                })
+            }
+            else
+            {
+                this.setState({ loader: false });  
+                Alert.alert(I18n.t('please_add_material'));
+            }
+           
         }
         else {
             Alert.alert(I18n.t('please_select_job_add_material'));

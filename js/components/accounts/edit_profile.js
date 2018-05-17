@@ -57,10 +57,22 @@ class EditProfile extends Component {
             cameraUploaded: false,
             filecat: 3,
             serviceList: [],
-            zoneList: []
+            zoneList: [],
+            currency:'AED'
         };
         this.actionSheet = null;
 
+    }
+
+
+    componentDidMount()
+    {
+        AsyncStorage.getItem("currency").then((value) => {
+            if (value) {
+                const value1 = JSON.parse(value);
+                this.setState({ currency: value1.language })
+            }
+        });
     }
     renderBackButton() {
         if (this.props.currentRoute === "EditProfile" && !this.props.prevRoute) {
@@ -406,7 +418,7 @@ class EditProfile extends Component {
                     <View>
                         <View style={styles.editprofileLst}>
                             <View style={styles.editprofileWarp}>
-                                <Text>{I18n.t('name')}</Text>
+                                <Text>{I18n.t('smallName')}</Text>
                                 <Text style={styles.starRed}>*</Text>
                             </View>
                             <View style={styles.editprofileInputwrap}>
@@ -415,7 +427,7 @@ class EditProfile extends Component {
                         </View>
                         <View style={styles.editprofileLst}>
                             <View style={styles.editprofileWarp}>
-                                <Text>{I18n.t('email_id')}</Text>
+                                <Text>{I18n.t('smaillEmail')}</Text>
                                 <Text style={styles.starRed}>*</Text>
                             </View>
                             <View style={styles.editprofileInputwrap}>
@@ -448,7 +460,7 @@ class EditProfile extends Component {
                                 <Text>{I18n.t('commission')}</Text>
                             </View>
                             <View style={styles.editprofileInputwrap}>
-                                <Text >{this.state.commission ? this.state.commission : ''}</Text>
+                                <Text >{this.state.currency} {this.state.commission ? this.state.commission : ''}</Text>
                             </View>
                         </View>
 

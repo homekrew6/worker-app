@@ -2,9 +2,9 @@ import api from '../../../api/index'
 class jobApi {
 
 	
-	static availableJobs(id) {
+	static availableJobs(id, timeZone) {
 		return new Promise((resolve, reject) => {
-			api.post('Jobs/getJobListingForWorker', { "workerId": id }).then(responseJson => {
+			api.post('Jobs/getJobListingForWorker', { "workerId": id, "timeZone": timeZone }).then(responseJson => {
 				resolve(responseJson)
 			}).catch(err => {
 				reject(err)

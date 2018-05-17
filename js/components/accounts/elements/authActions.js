@@ -38,6 +38,8 @@ export function getUserDetail(id, auth) {
   }
 }
 
+
+
 export function getAllLanguagesList(id, auth) {
   return function (dispatch) {
     return authApi.getAllLanguagesList(id, auth).then(res => {

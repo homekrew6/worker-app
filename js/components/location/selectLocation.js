@@ -59,7 +59,7 @@ class selectLocation extends Component {
                 //console.log(newSelectedItemIds);
             }
         }
-        console.log(newSelectedItemIds);
+       
         if (newSelectedItemIds.length > 0){
             this.setState({
                 loader: true,
