@@ -149,7 +149,7 @@ class UnavailableDate extends Component {
 
         date = today.getFullYear() + "-" + dy + "-" + dm;
 
-        this.setState({ 
+        this.setState({
             weekday: ['Sun', 'Mon', 'Tues', 'Wed', 'Thu', 'Fri', 'Sat'],
             months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
             minDate: [today],
@@ -207,82 +207,126 @@ class UnavailableDate extends Component {
                 { key: '23', time: '10:00 PM', isActive: false },
                 { key: '24', time: '11:00 PM', isActive: false },
             ],
-         });
-        if (this.props.navigation.state.params.unAvailTiming) {
-            
-           if(this.props.navigation.state.params.unAvailTiming[0] && this.state.colectionData !== '')
-           {
-            this.state.colectionData.map((item) => {
-                if (item.time == this.props.navigation.state.params.unAvailTiming[0].start_time) {
-                    item.isActive = true;
+        });
+        setTimeout(() => {
+            if (this.props.navigation.state.params.unAvailTiming) {
+                let startTime, endTime;
+                if (this.props.navigation.state.params.unAvailTiming[0] && this.state.colectionData !== '') {
+                    this.state.colectionData.map((item) => {
+                        if (item.time == this.props.navigation.state.params.unAvailTiming[0].start_time) {
+                            item.isActive = true;
+                            startTime = this.props.navigation.state.params.unAvailTiming[0].start_time;
+                        }
+                    });
                 }
-            });
-           }
 
-           if(this.props.navigation.state.params.unAvailTiming[0] && this.state.colectionData !== '')
-           {
-            this.state.colectionData2.map((item) => {
-                if (item.time == this.props.navigation.state.params.unAvailTiming[0].end_time) {
-                    item.isActive = true;
+                if (this.props.navigation.state.params.unAvailTiming[0] && this.state.colectionData !== '') {
+                    this.state.colectionData2.map((item) => {
+                        if (item.time == this.props.navigation.state.params.unAvailTiming[0].end_time) {
+                            item.isActive = true;
+                            endTime = this.props.navigation.state.params.unAvailTiming[0].end_time;
+                        }
+                    });
                 }
-            });
-           }
-           if(this.props.navigation.state.params.unAvailTiming[0])
-           {
-            var startDate = new Date(this.props.navigation.state.params.unAvailTiming[0].start_date);
-            var dy = parseInt(startDate.getMonth() + 1);
-            var dm = startDate.getDate();
-            if (dy < 10) {
-                dy = '0' + dy;
-            }
-            if (dm < 10) {
-                dm = '0' + dm;
-            }
+                if (this.props.navigation.state.params.unAvailTiming[0]) {
+                    var startDate = new Date(this.props.navigation.state.params.unAvailTiming[0].start_date);
+                    var dy = parseInt(startDate.getMonth() + 1);
+                    var dm = startDate.getDate();
+                    if (dy < 10) {
+                        dy = '0' + dy;
+                    }
+                    if (dm < 10) {
+                        dm = '0' + dm;
+                    }
 
-            var stdate = startDate.getFullYear() + "-" + dy + "-" + dm;
-            this.setState({ daYSelected: stdate });
+                    var stdate = startDate.getFullYear() + "-" + dy + "-" + dm;
+                    this.setState({ daYSelected: stdate });
 
-            var endtDate = new Date(this.props.navigation.state.params.unAvailTiming[0].end_date);
-            var dy = parseInt(endtDate.getMonth() + 1);
-            var dm = endtDate.getDate();
-            if (dy < 10) {
-                dy = '0' + dy;
-            }
-            if (dm < 10) {
-                dm = '0' + dm;
-            }
+                    var endtDate = new Date(this.props.navigation.state.params.unAvailTiming[0].end_date);
+                    var dy = parseInt(endtDate.getMonth() + 1);
+                    var dm = endtDate.getDate();
+                    if (dy < 10) {
+                        dy = '0' + dy;
+                    }
+                    if (dm < 10) {
+                        dm = '0' + dm;
+                    }
 
-            var enddate = endtDate.getFullYear() + "-" + dy + "-" + dm;
-            this.setState({ daYSelected2: enddate });
-           }
-            //this.state.daYSelected2=new Date(this.props.navigation.state.params.unAvailTiming[0].end_date);
-            this.setState({ visible: false });
-        }
+                    var enddate = endtDate.getFullYear() + "-" + dy + "-" + dm;
+                    this.setState({ daYSelected2: enddate });
+                }
+                //this.state.daYSelected2=new Date(this.props.navigation.state.params.unAvailTiming[0].end_date);
+                this.setState({ visible: false, setStartTime:startTime?startTime:'', setEndTime:endTime?endTime:'' });
+            }
+        }, 200)
     }
 
     doneDateAndTime() {
+        let IsValid=true;
         this.setState({ visible: true });
         if (this.state.satStartDate == '') {
-            this.setState({ visible: false });
-            Alert.alert(I18n.t('please_enter_start_date'));
-        } else if (this.state.setStartTime == '') { 
-            this.setState({ visible: false });
-            Alert.alert(I18n.t('please_enter_start_time'));
-        } else if (this.state.satEndDate == '') {
-            this.setState({ visible: false });
-            Alert.alert(I18n.t('please_enter_end_date'));
-        } else if (this.state.setEndTime == '') {
-            this.setState({ visible: false });
-            Alert.alert(I18n.t('please_enter_end_time'));
-        } //else if (this.state.setStartTime < this.state.setEndTime) {
-        //      Alert.alert('End time will be getter than start time');
-        //  } else if (this.state.setStartTime < this.state.setEndTime){
-        //     Alert.alert('End time will be getter than start time');
-        // }
-        else {
+            if (this.props.navigation.state.params.unAvailTiming.length > 0 && this.props.navigation.state.params.unAvailTiming[0].start_date) {
 
-            let d1 = new Date(this.state.satStartDate);
-            let d2 = new Date(this.state.satEndDate);
+            }
+            else {
+                this.setState({ visible: false });
+                Alert.alert(I18n.t('please_enter_start_date'));
+                IsValid=false;
+                return;
+            }
+
+        } else if (this.state.setStartTime == '') {
+            if (this.props.navigation.state.params.unAvailTiming.length > 0 && this.props.navigation.state.params.unAvailTiming[0].start_time) {
+
+            }
+            else {
+                this.setState({ visible: false });
+                Alert.alert(I18n.t('please_enter_start_time'));
+                IsValid = false;
+                return;
+            }
+
+        } else if (this.state.satEndDate == '') {
+            if (this.props.navigation.state.params.unAvailTiming.length > 0 && this.props.navigation.state.params.unAvailTiming[0].end_date) {
+
+            }
+            else {
+                this.setState({ visible: false });
+                Alert.alert(I18n.t('please_enter_end_date'));
+                IsValid = false;
+                return;
+            }
+
+        } else if (this.state.setEndTime == '') {
+            if (this.props.navigation.state.params.unAvailTiming.length > 0 && this.props.navigation.state.params.unAvailTiming[0].end_time) {
+
+            }
+            else {
+                this.setState({ visible: false });
+                Alert.alert(I18n.t('please_enter_end_time'));
+                IsValid = false;
+                return;
+            }
+        }
+        if(IsValid)
+        {
+            let d1, d2;
+            if(this.state.satStartDate)
+            {
+                d1 = new Date(this.state.satStartDate);
+            }
+            else if (this.props.navigation.state.params.unAvailTiming.length > 0 && this.props.navigation.state.params.unAvailTiming[0].start_date )
+            {
+                d1 = new Date(this.props.navigation.state.params.unAvailTiming[0].start_date );
+            }
+            if(this.state.satEndDate)
+            {
+                d2= new Date(this.state.satEndDate);
+            }
+
+            else if (this.props.navigation.state.params.unAvailTiming.length > 0 && this.props.navigation.state.params.unAvailTiming[0].end_date) {
+                d2 = new Date(this.props.navigation.state.params.unAvailTiming[0].end_date);
+            }
             if (d1 <= d2) {
                 if (!(d1 < d2)) {
                     if (this.state.setStartTimeKey > this.state.setEndTimeKey) {
@@ -366,8 +410,6 @@ class UnavailableDate extends Component {
                 this.setState({ visible: false })
                 Alert.alert(I18n.t('start_date_less_than_end_date'));
             }
-
-
         }
     }
 

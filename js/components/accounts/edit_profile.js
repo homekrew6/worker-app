@@ -10,7 +10,7 @@ import api from '../../api';
 import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Input, Body, ActionSheet, Switch } from 'native-base';
 import { NavigationActions } from "react-navigation";
 import I18n from '../../i18n/i18n';
-import styles from './styles';'react-navigation'
+import styles from './styles';
 import config from '../../config'
 import { checkAuth, getUserDetail } from './elements/authActions';
 
@@ -393,7 +393,7 @@ class EditProfile extends Component {
                         <View style={styles.editPflHdrWrap}>
                             {
                                 this.state.image ? (
-                                    <Thumbnail source={{ uri: this.state.image }} style={styles.editPflHdrThumbnail} />
+                                    <Thumbnail  source={{ uri: this.state.image }} style={styles.editPflHdrThumbnail} />
                                 ) : (
                                         <Thumbnail source={profileImage} style={styles.editPflHdrThumbnail} />
                                     )
