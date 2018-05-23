@@ -417,16 +417,20 @@ class JobDetails extends Component {
             }
             ref.update(data).then((thenRes) => {
                 //complete job DB update
-                let start_time = moment(new Date(this.state.start_time_full));
+                //let start_time = moment(new Date(this.state.start_time_full));
+                debugger;
+                let start_time = moment(new Date(this.state.remoteJobDetails.jobStartTime));
                 let end_time = moment(new Date());
                 let minuteDiff = end_time.diff(start_time, 'minute');
                 let price = this.props.navigation.state.params.jobDetails.price;
                 const jobId = this.props.navigation.state.params.jobDetails.id;
                 const customerId = this.props.navigation.state.params.jobDetails.customerId;
+                const language = this.props.navigation.state.params.jobDetails.customer && this.props.navigation.state.params.jobDetails.customer.language ? this.props.navigation.state.params.jobDetails.customer.language :'en';
                 api.post('Jobs/completeJob', {
                     "id": jobId, "status": "PAYPENDING", "customerId": customerId, "actualTime": minuteDiff,
                     price: price,
-                    "serviceId": this.props.navigation.state.params.jobDetails.serviceId
+                    "serviceId": this.props.navigation.state.params.jobDetails.serviceId,
+                    "language": language
                 }).then(responseJson => {
                     api.post('Jobs/getJobDetailsById', {
                         "id": this.props.navigation.state.params.jobDetails.id,
@@ -449,15 +453,15 @@ class JobDetails extends Component {
         let jobIdTr = `${this.props.navigation.state.params.jobDetails.id}`;
         let refCompleteFirebase = firebase.database().ref().child('tracking');
         refCompleteFirebase.orderByChild('jobId').equalTo(jobIdTr).once('value').then((snapshot) => {
-            this.onCompleteFirebaseCall(snapshot);
+           // this.onCompleteFirebaseCall(snapshot);
             setTimeout(() => {
                 if (this.state.loader === true) {
                     this.onCompleteFirebaseCall(snapshot);
-                    setTimeout(() => {
-                        refCompleteFirebase.off();
-                        Alert.alert(I18n.t('internal_error_try_again'));
-                        this.setState({ loader: false });
-                    }, 5000);
+                    // setTimeout(() => {
+                    //     refCompleteFirebase.off();
+                    //     Alert.alert(I18n.t('internal_error_try_again'));
+                    //     this.setState({ loader: false });
+                    // }, 9000);
                 }
             }, 5000);
         })
@@ -1088,10 +1092,12 @@ class JobDetails extends Component {
                                         }
 
                                     </View>
-                                    <View style={{ paddingLeft: 10, flex: 1 }}>
-                                        <Text style={{ fontSize: 16, fontWeight: '700' }}>{JobDetailsData.customer ? JobDetailsData.customer.name : console.log()}</Text>
-                                        <TouchableOpacity style={{ width: 90 }} onPress={this._toggleModal}>
-                                            {/* <StarRating
+                                    {
+                                        JobDetailsData.status=='PAYPENDING' || JobDetailsData.status=='COMPLETED'?(
+                                            <View style={{ paddingLeft: 10, flex: 1 }}>
+                                                <Text style={{ fontSize: 16, fontWeight: '700' }}>{JobDetailsData.customer ? JobDetailsData.customer.name : console.log()}</Text>
+                                                <TouchableOpacity style={{ width: 90 }} onPress={this._toggleModal}>
+                                                    {/* <StarRating
                                                 disabled={false}
                                                 maxStars={5}
                                                 starSize={14}
@@ -1100,10 +1106,15 @@ class JobDetails extends Component {
                                                 fullStarColor='#81cdc7'
                                                 selectedStar={this._toggleModal}
                                             /> */}
-                                            <TouchableOpacity style={{ backgroundColor: '#81cdc7', borderRadius: 10, padding: 10 }} onPress={() => this._toggleModal()}>
-                                                <Text style={{color:'white'}}>{I18n.t('rate_now')}</Text></TouchableOpacity>
-                                        </TouchableOpacity>
-                                    </View>
+                                                    <TouchableOpacity style={{ backgroundColor: '#81cdc7', borderRadius: 10, padding: 10 }} onPress={() => this._toggleModal()}>
+                                                        <Text style={{ color: 'white' }}>{I18n.t('rate_now')}</Text></TouchableOpacity>
+                                                </TouchableOpacity>
+                                            </View>
+                                        ):(
+                                            console.log(null)
+                                        )
+                                    }
+                                   
                                     <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.setState({ callChat: false })}>
                                         <Image source={require('../../../img/icon/chat-support.png')} style={{ height: 25, width: 25 }} />
                                         <Text style={{ fontSize: 12 }}>{I18n.t('chat_call')}</Text>

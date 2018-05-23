@@ -50,6 +50,7 @@ class AvailableJobs extends Component {
         return localTime;
     }
     getTimeDiffLocal(gmtTime){
+       
 
         // const gmtToDeiveTimeObj = moment.tz(gmtTime, "Europe/London");
         // const timezoneDevice = DeviceInfo.getTimezone();
