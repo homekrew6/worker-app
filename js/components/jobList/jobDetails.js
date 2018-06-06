@@ -166,10 +166,10 @@ class JobDetails extends Component {
             this.state.itemsRef = firebase.database().ref().child('tracking');
             jobIdTr = jobIdTr.toString();
             this.state.itemsRef.orderByChild('jobId').equalTo(jobIdTr).once('value').then((snapshot) => {
-                console.warn(snapshot);
                 if (snapshot && snapshot.val()) {
                     const key = Object.keys(snapshot.val())[0];
                     const ref = this.state.itemsRef.child(key);
+                    const onMyWayTime = new Date().toUTCString();
                     const data = {
                         "jobId": this.props.navigation.state.params.jobDetails.id,
                         "customerId": this.props.navigation.state.params.jobDetails.customerId,
@@ -184,7 +184,8 @@ class JobDetails extends Component {
                         api.post('Jobs/changeJobStatusByWorker', {
                             "id": this.props.navigation.state.params.jobDetails.id,
                             "status": 'ONMYWAY',
-                            "customerId": this.props.navigation.state.params.jobDetails.customerId
+                            "customerId": this.props.navigation.state.params.jobDetails.customerId,
+                            "onMyWayTime":onMyWayTime
                         }).then((response) => {
                             //get job latest details and update state
                             api.post('Jobs/getJobDetailsById', {
@@ -209,6 +210,7 @@ class JobDetails extends Component {
                         //Change job status in DB end
                     });
                 } else {
+                    const onMyWayTime = new Date().toUTCString();
                     this.state.itemsRef.push({
                         "jobId": this.props.navigation.state.params.jobDetails.id,
                         "customerId": this.props.navigation.state.params.jobDetails.customerId,
@@ -222,12 +224,14 @@ class JobDetails extends Component {
                         api.post('Jobs/changeJobStatusByWorker', {
                             "id": this.props.navigation.state.params.jobDetails.id,
                             "status": 'ONMYWAY',
-                            "customerId": this.props.navigation.state.params.jobDetails.customerId
+                            "customerId": this.props.navigation.state.params.jobDetails.customerId,
+                            "onMyWayTime": onMyWayTime
                         }).then((response) => {
                             //get job latest details and update state
                             api.post('Jobs/getJobDetailsById', {
                                 "id": this.props.navigation.state.params.jobDetails.id,
-                                "workerId": this.props.auth.data.id
+                                "workerId": this.props.auth.data.id,
+                                "onMyWayTime": onMyWayTime
                             }).then((response) => {
                                 this.setState({ remoteJobDetails: response.response.message[0], loader: false });
                                 setTimeout(() => {
@@ -418,7 +422,6 @@ class JobDetails extends Component {
             ref.update(data).then((thenRes) => {
                 //complete job DB update
                 //let start_time = moment(new Date(this.state.start_time_full));
-                debugger;
                 let start_time = moment(new Date(this.state.remoteJobDetails.jobStartTime));
                 let end_time = moment(new Date());
                 let minuteDiff = end_time.diff(start_time, 'minute');

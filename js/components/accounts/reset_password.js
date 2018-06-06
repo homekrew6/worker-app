@@ -38,11 +38,7 @@ class ResetPassword extends Component {
             return false;
         }
 
-        let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        if (!regEmail.test(this.state.email)) {
-            Alert.alert(I18n.t('please_enter_valid_email'));
-            return false;
-        }
+     
         
         this.setState({ visible: true });
         api.post('Customers/otpChecking', { otp: this.state.otp }).then(res => {

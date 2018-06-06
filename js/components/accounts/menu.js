@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Image, View, StatusBar, Alert, TouchableOpacity, AsyncStorage, BackHandler, Text, I18nManager } from "react-native";
 import { Container, Header, Button, Content, CardItem, Card, Body, Thumbnail } from "native-base";
 import FSpinner from 'react-native-loading-spinner-overlay';
-import { logout, navigateAndSaveCurrentScreen} from './elements/authActions'
+import { logout, navigateAndSaveCurrentScreen } from './elements/authActions'
 import I18n from '../../i18n/i18n';
 import styles from "./styles";
 import api from '../../api';
@@ -40,9 +40,10 @@ class Menu extends Component {
             currency: 'AED',
             reRender: '',
             IsProfileDisabled: false,
-            starRating:0
+            starRating: 0,
+            jobCount: 0
         };
-        
+
         I18nManager.forceRTL(false);
 
         AsyncStorage.getItem("language").then((value) => {
@@ -50,7 +51,7 @@ class Menu extends Component {
                 const value1 = JSON.parse(value);
                 I18n.locale = value1.Code;
                 this.setState({ reRender: 'fhfh' });
-                if (value1.Code =='ar'){
+                if (value1.Code == 'ar') {
                     I18nManager.forceRTL(true);
                 }
             }
@@ -69,7 +70,7 @@ class Menu extends Component {
             this.props.navigation.navigate(screen);
         }
     }
-    
+
     logout() {
         this.setState({ visible: true });
         this.setState({ IsProfileDisabled: true });
@@ -82,7 +83,7 @@ class Menu extends Component {
                 const userToken1 = JSON.parse(userToken);
                 api.put(`Workers/editWorker/${userToken1.userId}?access_token=${userToken1.id}`, { deviceToken: '' }).then((resEdit) => {
                     AsyncStorage.clear();
-                    
+
                     AsyncStorage.removeItem('userToken');
                     AsyncStorage.setItem("IsSliderShown", "true").then((res) => {
                         I18n.locale = 'en';
@@ -108,7 +109,7 @@ class Menu extends Component {
         api.post('Workers/totalCommission', { id: this.props.auth.data.id }).then((resCon) => {
             this.setState({ totalCommission: resCon.response.message });
         });
-        
+
         AsyncStorage.getItem("currency").then((value) => {
             if (value) {
                 const value1 = JSON.parse(value);
@@ -120,12 +121,18 @@ class Menu extends Component {
                 notificatonCount: res.response.message,
             })
         }).catch((err) => { });
-        let data={id:this.props.auth.data.id};
-        api.post('Workers/getWorkerDetailsById',data).then((res)=>{
-            this.setState({ starRating: res.response.message.starRating});
+
+        api.post('Workers/getJobCount', { "workerId": this.props.auth.data.id }).then((res) => {
+            this.setState({
+                jobCount: res.response.message,
+            })
+        })
+        let data = { id: this.props.auth.data.id };
+        api.post('Workers/getWorkerDetailsById', data).then((res) => {
+            this.setState({ starRating: res.response.message.starRating });
         })
         BackHandler.addEventListener('hardwareBackPress', function () {
-            if(this.props.currentRoute === 'Menu'){
+            if (this.props.currentRoute === 'Menu') {
                 Alert.alert(
                     'Confirm',
                     'Are you sure to exit the app?',
@@ -136,24 +143,35 @@ class Menu extends Component {
                     { cancelable: false }
                 );
                 return true;
-            }else{
-                this.props.navigation.goBack(null);
+            } else {
+                if (this.props.currentRoute == "myTiming") {
+                    this.props.navigation.navigate("Menu");
+                }
+                else {
+                    this.props.navigation.goBack(null);
+                }
+
                 return true;
             }
-            
+
         }.bind(this));
     }
 
-   
 
 
 
-    componentWillReceiveProps(){
+
+    componentWillReceiveProps() {
         api.post('Notifications/getUnreadWorkerNot', { "workerId": this.props.auth.data.id }).then((res) => {
             this.setState({
                 notificatonCount: res.response.message,
             })
         }).catch((err) => { });
+        api.post('Workers/getJobCount', { "workerId": this.props.auth.data.id }).then((res) => {
+            this.setState({
+                jobCount: res.response.message,
+            })
+        })
     }
 
     render() {
@@ -187,7 +205,7 @@ class Menu extends Component {
                                     <TouchableOpacity onPress={() => this.navigate("EditProfile")} disabled={this.state.IsProfileDisabled}>
                                         <Text style={[styles.pname, { lineHeight: 22 }]}>{this.props.auth.data.name}</Text>
                                         <Text style={[styles.pemail, { lineHeight: 22 }]}>{this.props.auth.data.email}</Text>
-                                        <Text style={[styles.pphone, {lineHeight: 22 }]}>{this.props.auth.data.phone}</Text>
+                                        <Text style={[styles.pphone, { lineHeight: 22 }]}>{this.props.auth.data.phone}</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -197,7 +215,7 @@ class Menu extends Component {
                             <View style={styles.pBtmTxt}>
                                 <Text style={styles.pBtmTxt_Left}>{I18n.t('credit_all')} {this.state.currency} {this.state.totalCommission}</Text>
                             </View>
-                             <View style={styles.pBtmTxt}>
+                            <View style={styles.pBtmTxt}>
                                 <Text style={styles.pBtmTxt_Txt}>{I18n.t('star_rating')}: {this.state.starRating}</Text>
                             </View>
                         </CardItem>
@@ -227,6 +245,14 @@ class Menu extends Component {
                             <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate("AvailableJobs")} disabled={this.state.IsProfileDisabled}>
                                 <Image source={icon2} style={styles.menuCardIcon} />
                                 <Text style={styles.menuCardTxt}>{I18n.t('my_job')}</Text>
+                                {
+                                    this.state.jobCount != 0 ? (
+                                        <View style={styles.artNt}>
+                                            <Text style={styles.artNtTxt}>{this.state.jobCount}</Text>
+                                        </View>
+                                    ) : null
+
+                                }
                                 <View style={styles.arw_lft}>
                                     <Image source={back_arow} style={styles.arw_lft_img} />
                                 </View>
@@ -243,7 +269,7 @@ class Menu extends Component {
                             </TouchableOpacity>
                         </CardItem>
 
-                       {/* <CardItem style={styles.menuCarditem}>
+                        {/* <CardItem style={styles.menuCarditem}>
                             <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate("MyPaymentList")}>
                                 <Image source={icon4} style={styles.menuCardIcon} />
                                 <Text style={styles.menuCardTxt}>{I18n.t('my_card')}</Text>
@@ -278,7 +304,7 @@ class Menu extends Component {
                                 </View>
                             </TouchableOpacity>
                         </CardItem> */}
- {/* <CardItem style={styles.menuCarditem}>
+                        {/* <CardItem style={styles.menuCarditem}>
                             <View style={styles.menuCardView}>
                                 <Image source={icon5} style={styles.menuCardIcon} />
                                 <Text style={styles.menuCardTxt}>{I18n.t('my_promo_code')}</Text>
@@ -297,7 +323,7 @@ class Menu extends Component {
                                 </View>
                             </TouchableOpacity>
                         </CardItem>
-                       
+
 
                         <CardItem style={styles.menuCarditem}>
                             <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate("Settings")} disabled={this.state.IsProfileDisabled}>
