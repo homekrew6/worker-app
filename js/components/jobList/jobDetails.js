@@ -1014,7 +1014,7 @@ class JobDetails extends Component {
                                 :
                                 JobDetailsData.status === 'COMPLETED' ?
                                     <View>
-                                        <ImageBackground source={{ uri: JobDetailsData.service.cover_image }} style={{ alignItems: 'center', justifyContent: 'flex-start', width: win, height: (win * 0.62), paddingTop: 25 }}>
+                                        <ImageBackground source={{ uri: JobDetailsData.service?JobDetailsData.service.cover_image:'' }} style={{ alignItems: 'center', justifyContent: 'flex-start', width: win, height: (win * 0.62), paddingTop: 25 }}>
                                             <View style={{ alignItems: 'center' }}>
                                                 <Text>{I18n.t('rate_your_customer')}</Text>
                                             </View>
@@ -1024,7 +1024,7 @@ class JobDetails extends Component {
                                     :
                                     JobDetailsData.status === 'STARTED' || JobDetailsData.status === 'FOLLOWEDUP' || JobDetailsData.status === 'PAYPENDING' ?
 
-                                        JobDetailsData.service.banner_image ?
+                                        JobDetailsData.service && JobDetailsData.service.banner_image ?
                                             <View>
                                                 <ImageBackground source={{ uri: JobDetailsData.service.cover_image }} style={{ alignItems: 'center', justifyContent: 'flex-start', width: win, height: (win * 0.62), paddingTop: 25 }}>
                                                     <View style={{ alignItems: 'center' }}>
@@ -1038,7 +1038,7 @@ class JobDetails extends Component {
                                             <View>
                                                 <ImageBackground source={require('../../../img/bg-6.png')} style={{ alignItems: 'center', justifyContent: 'flex-start', width: win, height: (win * 0.62), paddingTop: 25 }}>
                                                     <View style={{ alignItems: 'center' }}>
-                                                        <Text style={{ fontWeight: '700', fontSize: 18 }}>{JobDetailsData.service.name}</Text>
+                                                        <Text style={{ fontWeight: '700', fontSize: 18 }}>{JobDetailsData.service?JobDetailsData.service.name:''}</Text>
                                                         <Text>{this.state.currency} {JobDetailsData.price}</Text>
                                                     </View>
                                                 </ImageBackground>

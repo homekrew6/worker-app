@@ -9,6 +9,8 @@ import I18n from '../../i18n/i18n';
 import styles from "./styles";
 import api from '../../api';
 import { NavigationActions } from "react-navigation";
+import moment from 'moment';
+import 'moment-timezone';
 
 
 
@@ -122,7 +124,7 @@ class Menu extends Component {
             })
         }).catch((err) => { });
 
-        api.post('Workers/getJobCount', { "workerId": this.props.auth.data.id }).then((res) => {
+        api.post('Workers/getJobCount', { "workerId": this.props.auth.data.id, "timeZone": moment.tz.guess()}).then((res) => {
             this.setState({
                 jobCount: res.response.message,
             })

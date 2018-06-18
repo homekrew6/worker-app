@@ -558,7 +558,7 @@ class AvailableJobs extends Component {
                                                 >
                                                     <View style={styles.listWarp}>
                                                         <View style={styles.listWarpImageWarp}>
-                                                            <Image source={{ uri: item.service.banner_image }} style={styles.listWarpImage} />
+                                                            <Image source={{ uri: item.service? item.service.banner_image :''}} style={styles.listWarpImage} />
                                                         </View>
                                                         <View style={styles.listWarpTextWarp}>
                                                             <View style={styles.flexDirectionRow}>
@@ -640,7 +640,7 @@ class AvailableJobs extends Component {
                                             <ListItem style={styles.jobListItem}>
                                                     <TouchableOpacity style={styles.listWarp} onPress={() => this.goDetails(item)} disabled={this.state.IsProfileDisabled}>
                                                     <View style={styles.listWarpImageWarp}>
-                                                        <Image source={{uri: item.service.banner_image}} style={styles.listWarpImage} />
+                                                        <Image source={{uri: item.service?item.service.banner_image:''}} style={styles.listWarpImage} />
                                                     </View>
                                                     <View style={styles.listWarpTextWarp}>
                                                         <View style={styles.flexDirectionRow}>
@@ -662,7 +662,7 @@ class AvailableJobs extends Component {
                                                         }
                                                     </View>
                                                     <View style={{ paddingLeft: 5 }}>
-                                                        <Text style={styles.listWarpPriceUp}>{item.currency.name} {item.price}</Text>
+                                                            <Text style={styles.listWarpPriceUp}>{item.currency?item.currency.name:'AED'} {item.price}</Text>
                                                         <Text style={styles.listWarpPriceDown}>{item.service ? parseInt(item.service.time_interval / 60) + "." : ''}{item.service ? item.service.time_interval % 60 < 10 ? "0" + item.service.time_interval % 60 : item.service.time_interval % 60 : ''} hour(s)</Text>
                                                     </View>
                                                 </TouchableOpacity>
@@ -707,11 +707,11 @@ class AvailableJobs extends Component {
                                                         onPress={() => { this.goDetails(item) }} 
                                                     >
                                                     <View style={styles.listWarpImageWarp}>
-                                                            <Image source={{uri: item.service.banner_image}} style={styles.listWarpImage} />
+                                                            <Image source={{uri:item.service? item.service.banner_image:''}} style={styles.listWarpImage} />
                                                     </View>
                                                     <View style={styles.listWarpTextWarp}>
                                                         <View style={styles.flexDirectionRow}>
-                                                            <Text style={{ fontWeight: 'bold' }}>{item.service.name}</Text>
+                                                            <Text style={{ fontWeight: 'bold' }}>{item.service?item.service.name:''}</Text>
                                                         </View>
                                                         <View style={styles.flexDirectionRow}>
                                                             {/* <Text style={[styles.fontWeight700, { fontSize: 14 }]}>Tuesday </Text>
@@ -730,7 +730,7 @@ class AvailableJobs extends Component {
                                                         }
                                                     </View>
                                                     <View style={{ paddingLeft: 5 }}>
-                                                        <Text style={styles.listWarpPriceUp}>{item.currency.name} {item.price}</Text>
+                                                            <Text style={styles.listWarpPriceUp}>{item.currency?item.currency.name:'AED'} {item.price}</Text>
                                                         <Text style={styles.listWarpPriceDown}>{item.service ? parseInt(item.service.time_interval / 60) + "." : ''}{item.service ? item.service.time_interval % 60 < 10 ? "0" + item.service.time_interval % 60 : item.service.time_interval % 60 : ''} hour(s)</Text>
                                                     </View>
                                                 </TouchableOpacity>
@@ -771,11 +771,11 @@ class AvailableJobs extends Component {
                                             <ListItem style={styles.jobListItem}>
                                                     <TouchableOpacity style={styles.listWarp} onPress={() => this.goDetails(item)} disabled={this.state.IsProfileDisabled}>
                                                     <View style={styles.listWarpImageWarp}>
-                                                            <Image source={{uri: item.service.banner_image}} style={styles.listWarpImage} />
+                                                            <Image source={{uri: item.service?item.service.banner_image:''}} style={styles.listWarpImage} />
                                                     </View>
                                                     <View style={styles.listWarpTextWarp}>
                                                         <View style={styles.flexDirectionRow}>
-                                                            <Text style={{ fontWeight: 'bold' }}>{item.service.name}</Text>
+                                                            <Text style={{ fontWeight: 'bold' }}>{item.service?item.service.name:''}</Text>
                                                         </View>
                                                         <View style={styles.flexDirectionRow}>
                                                             {/* <Text style={[styles.fontWeight700, { fontSize: 14 }]}>Tuesday </Text>
@@ -794,7 +794,7 @@ class AvailableJobs extends Component {
                                                         }
                                                     </View>
                                                     <View style={{ paddingLeft: 5 }}>
-                                                        <Text style={styles.listWarpPriceUp}>{item.currency.name} {item.price}</Text>
+                                                        <Text style={styles.listWarpPriceUp}>{item.currency?item.currency.name:'AED'} {item.price}</Text>
                                                         <Text style={styles.listWarpPriceDown}>{item.service ? parseInt(item.service.time_interval / 60) + "." : ''}{item.service ? item.service.time_interval % 60 < 10 ? "0" + item.service.time_interval % 60 : item.service.time_interval % 60 : ''} hour(s)</Text>
                                                     </View>
                                                 </TouchableOpacity>
@@ -815,7 +815,7 @@ class AvailableJobs extends Component {
                                 <ListItem style={styles.jobListItem}>
                                     <View style={styles.listWarp}>
                                         <View style={styles.listWarpImageWarp}>
-                                            <Image source={{ uri: item.service.banner_image }} style={styles.listWarpImage} />
+                                            <Image source={{ uri: item.service?item.service.banner_image:'' }} style={styles.listWarpImage} />
                                         </View>
                                         <View style={styles.listWarpTextWarp}>
                                             <View style={styles.flexDirectionRow}>
