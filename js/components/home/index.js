@@ -77,6 +77,7 @@ class Home extends Component {
 		FCM.requestPermissions();
 		//update fcm token
 		FCM.getFCMToken().then(token => {
+			debugger;
 			AsyncStorage.getItem("userToken").then((userToken) => {
 				if (userToken) {
 					const userToken1 = JSON.parse(userToken);

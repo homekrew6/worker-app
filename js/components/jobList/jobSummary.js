@@ -135,9 +135,10 @@ class jobSummary extends Component {
                     }
                 } else {
                     impact_no = Number(impact_no);
-                    for (let i = 1; i <= impact_no; i++) {
-                        totalPrice = totalPrice + (i * Number(price_impact));
-                    }
+                    // for (let i = 1; i <= impact_no; i++) {
+                    //     totalPrice = totalPrice + (i * Number(price_impact));
+                    // }
+                      totalPrice = totalPrice + (impact_no * Number(price_impact));
                     //retPrice = Number(price_impact) * Number(impact_no);
                 }
 
@@ -151,7 +152,7 @@ class jobSummary extends Component {
                         //retPrice = Number(price_impact) + Number(impact_no);
                         totalPrice = totalPrice + (start_range + Number(price_impact));
                     } else {
-                            totalPrice = totalPrice + (start_range * Number(price_impact));
+                            totalPrice = totalPrice + (start_range + Number(price_impact));
                         
                         //retPrice = Number(price_impact) * Number(impact_no);
                     }

@@ -357,6 +357,7 @@ class JobDetails extends Component {
         }
     }
     onStartPress() {
+        debugger;
         navigator.geolocation.clearWatch(this.state.navId);
         this.setState({ mapTrackingStatus: 'timing', bottomButtonStatus: 'complete', loader: true });
         const time_interval = this.props.navigation.state.params.jobDetails.service.time_interval;
@@ -364,13 +365,16 @@ class JobDetails extends Component {
         let timeNowConvert = moment(timeNowWork).format('LT');
         let momentConvert = moment(timeNowWork).add(time_interval, 'minutes').format('LT');
         const progressSpeed = (time_interval / 100) * 60000;
-
+         console.warn("progressSpeed", progressSpeed);
         let saveEndTime = moment(timeNowWork).add(time_interval, 'minute').format();
         let newNowTime = moment(timeNowWork).format();
+
         this.setState({ workProgressTime: 0.2 });
         const progressInterval = setInterval(() => {
+            
             this.setState({ workProgressTime: this.state.workProgressTime + 1 });
         }, progressSpeed);
+          console.warn("progressInterval", progressInterval);
         this.setState({ progressInterval: progressInterval });
 
         //update firebase database on job start
