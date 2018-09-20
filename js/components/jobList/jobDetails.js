@@ -22,7 +22,7 @@ import FSpinner from 'react-native-loading-spinner-overlay';
 import I18n from '../../i18n/i18n';
 import api from '../../api/index';
 import Modal from "react-native-modal";
-
+import { Stopwatch, Timer } from 'react-native-stopwatch-timer'
 const win = Dimensions.get('window').width;
 const { width } = Dimensions.get('window');
 const height = parseInt(Dimensions.get('window').height / 20);
@@ -71,7 +71,10 @@ class JobDetails extends Component {
             reasonId: '',
             navId: '',
             IsProfileDisabled: false,
-            IsCallModule: false
+            IsCallModule: false,
+            timerDuration:0,
+            IsTimerStart:false,
+            IsShowTimer:false
         }
 
     }
@@ -90,11 +93,21 @@ class JobDetails extends Component {
         return localTime;
     }
 
+    handleTimerFinish()
+    {
+        this.setState({
+            IsTimerStart:false
+        })
+    }
+
     clickDisable() {
-        this.setState({ IsProfileDisabled: true });
+        this.setState({ IsProfileDisabled: true,IsTimerStart:false });
         setTimeout(() => {
             this.setState({ IsProfileDisabled: false });
         }, 3000);
+        this.setState({
+            IsTimerStart:false
+        })
     }
 
     cancelJob() {
@@ -109,13 +122,15 @@ class JobDetails extends Component {
             this.setState({ loader: true });
    
             api.post('Jobs/cancelJob', ToSendData).then((res) => {
-                // debugger;
+               
+                
                 if (res.response.type === "Error") {
                     this.setState({ loader: false });
                     Alert.alert(I18n.t('please_try_again_later'));
                 }
                 else {
-                    // debugger;
+                   
+                    
                     let jobDetails = this.state.remoteJobDetails;
                     jobDetails.status = 'CANCELLED';
                     this.setState({ remoteJobDetails: jobDetails, loader: false, jobCancelModal: false });
@@ -281,10 +296,10 @@ class JobDetails extends Component {
         let saveEndTime = moment(timeNowWork).add(time_interval, 'minute').format();
         let newNowTime = moment(timeNowWork).format();
         this.setState({ workProgressTime: 0.2 });
-        const progressInterval = setInterval(() => {
-            this.setState({ workProgressTime: this.state.workProgressTime + 1 });
-        }, progressSpeed);
-        this.setState({ progressInterval: progressInterval });
+        // const progressInterval = setInterval(() => {
+        //     this.setState({ workProgressTime: this.state.workProgressTime + 1 });
+        // }, progressSpeed);
+        // this.setState({ progressInterval: progressInterval });
 
         //update firebase database on job start
 
@@ -357,7 +372,8 @@ class JobDetails extends Component {
         }
     }
     onStartPress() {
-        debugger;
+       
+        
         navigator.geolocation.clearWatch(this.state.navId);
         this.setState({ mapTrackingStatus: 'timing', bottomButtonStatus: 'complete', loader: true });
         const time_interval = this.props.navigation.state.params.jobDetails.service.time_interval;
@@ -370,12 +386,21 @@ class JobDetails extends Component {
         let newNowTime = moment(timeNowWork).format();
 
         this.setState({ workProgressTime: 0.2 });
-        const progressInterval = setInterval(() => {
+        // const progressInterval = setInterval(() => {
             
-            this.setState({ workProgressTime: this.state.workProgressTime + 1 });
-        }, progressSpeed);
-          console.warn("progressInterval", progressInterval);
-        this.setState({ progressInterval: progressInterval });
+        //     this.setState({ workProgressTime: this.state.workProgressTime + 1 });
+        // }, progressSpeed);
+        //   console.warn("progressInterval", progressInterval);
+        // this.setState({ progressInterval: progressInterval });
+
+        const totalDuration = Number(this.props.navigation.state.params.jobDetails.service.time_interval) * 60000;
+        this.setState({  timerDuration: totalDuration, IsTimerStart: true });
+        setTimeout(() => {
+            
+            this.setState({
+                IsShowTimer: true
+            })
+        }, 3000)
 
         //update firebase database on job start
 
@@ -443,7 +468,7 @@ class JobDetails extends Component {
                         "id": this.props.navigation.state.params.jobDetails.id,
                         "workerId": this.props.auth.data.id
                     }).then((response) => {
-                        this.setState({ remoteJobDetails: response.response.message[0], loader: false, jobTrackingStatus: 'Payment Pending' });
+                        this.setState({ remoteJobDetails: response.response.message[0], loader: false, jobTrackingStatus: 'Payment Pending', IsTimerStart:false });
                     }).catch((err) => {
 
                     })
@@ -514,8 +539,8 @@ class JobDetails extends Component {
         let jobIdDump = `key@${this.props.navigation.state.params.jobDetails.id}`;
         AsyncStorage.removeItem(jobIdDump, (err) => console.log('finished', err));
         AsyncStorage.getItem(jobIdDump).then((value) => {
-
             if (value) {
+               
                 const value1 = JSON.parse(value);
                 this.setState({
                     mapTrackingStatus: value1.buttonStatus,
@@ -531,14 +556,15 @@ class JobDetails extends Component {
                 const progressSpeed = (this.props.navigation.state.params.jobDetails.service.time_interval / 100) * 60000;
                 let earlierPercent = Number(minuteDiff / progressSpeed) - 1;
                 this.setState({ workProgressTime: earlierPercent })
-                const progressInterval = setInterval(() => {
-                    ;
-                    this.setState({ workProgressTime: this.state.workProgressTime + 1 });
-                }, progressSpeed);
-                this.setState({ progressInterval: progressInterval });
+                // const progressInterval = setInterval(() => {
+                //     ;
+                //     this.setState({ workProgressTime: this.state.workProgressTime + 1 });
+                // }, progressSpeed);
+                // this.setState({ progressInterval: progressInterval });
                 if (this.refs && this.refs.ScrollViewComplete);
                 this.refs.ScrollViewComplete.scrollToEnd();
             } else {
+                
                 if (this.props.navigation.state.params.jobDetails.status === 'ACCEPTED') {
                     if (this.refs && this.refs.ScrollViewEnd);
                     this.refs.ScrollViewEnd.scrollToEnd();
@@ -561,18 +587,34 @@ class JobDetails extends Component {
                         let job_start_time1 = moment(this.state.remoteJobDetails.jobStartTime).format('LT');
                         let end_time1 = moment(new Date());
                         let minuteDiff = end_time1.diff(start_time1, 'millisecond');
+                     
+                       const endTimeOfJobs = new Date(this.state.remoteJobDetails.jobEndTime).getMinutes();
+                       const nowTime=new Date().getMinutes();
 
+                        let totalDuration=endTimeOfJobs-nowTime;
+                        if(totalDuration>0)
+                        {
+                            totalDuration = totalDuration * 60000;
+                        }
                         const progressSpeed = (this.props.navigation.state.params.jobDetails.service.time_interval / 100) * 60000;
                         let earlierPercent = Number(minuteDiff / progressSpeed) - 1;
                         this.setState({
                             workProgressTime: earlierPercent,
                             job_start_time: job_start_time1,
                             job_end_time: start_time_full1,
+                            timerDuration: totalDuration,
+                            IsTimerStart:true
+
                         });
-                        const progressInterval = setInterval(() => {
-                            this.setState({ workProgressTime: this.state.workProgressTime + 1 });
-                        }, progressSpeed);
-                        this.setState({ progressInterval: progressInterval });
+                        setTimeout(() => {
+                            this.setState({
+                                IsShowTimer: true
+                            })
+                        }, 3000)
+                        // const progressInterval = setInterval(() => {
+                        //     this.setState({ workProgressTime: this.state.workProgressTime + 1 });
+                        // }, progressSpeed);
+                        // this.setState({ progressInterval: progressInterval });
                     }).catch((err) => {
 
                     })
@@ -600,6 +642,7 @@ class JobDetails extends Component {
             "id": this.props.navigation.state.params.jobDetails.id,
             "workerId": this.props.auth.data.id
         }).then((response) => {
+           
             if (response.response.message.length && response.response.message.length > 0 && response.response.message[0].price) {
                 if (response.response.message[0].status == 'FOLLOWEDUP') {
                     api.post('jobMaterials/getJobMaterialByJobId', { "jobId": this.props.navigation.state.params.jobDetails.id }).then((materialAns) => {
@@ -614,6 +657,8 @@ class JobDetails extends Component {
                         materialTotalPrice = materialTotalPrice.toFixed(2);
                         response.response.message[0].price = materialTotalPrice;
                         this.setState({ remoteJobDetails: response.response.message[0], jobTrackingStatus: response.response.message[0].status });
+                       
+                       
                         if (this.state.remoteJobDetails.status === 'ONMYWAY') {
                             if (this.refs && this.refs.ScrollViewStart);
                             this.refs.ScrollViewStart.scrollToEnd();
@@ -640,6 +685,7 @@ class JobDetails extends Component {
                     })
                 }
                 else {
+                    
                     response.response.message[0].price = parseFloat(response.response.message[0].price).toFixed(2);
                     let jobCancelbuttonStatus = false;
                     if (response.response.message[0].status == 'ACCEPTED') {
@@ -651,7 +697,6 @@ class JobDetails extends Component {
                         }
                     }
                     this.setState({ jobCancelbuttonStatus: jobCancelbuttonStatus, remoteJobDetails: response.response.message[0], jobTrackingStatus: response.response.message[0].status });
-
                     if (this.state.remoteJobDetails.status === 'ONMYWAY') {
                         if (this.refs && this.refs.ScrollViewStart);
                         this.refs.ScrollViewStart.scrollToEnd();
@@ -659,9 +704,10 @@ class JobDetails extends Component {
                     } else if (this.state.remoteJobDetails.status === 'JOBSTARTED') {
                         if (this.refs && this.refs.ScrollViewComplete);
                         this.refs.ScrollViewComplete.scrollToEnd();
-                        this.setState({ jobTrackingStatus: 'Job Started' });
+                        this.setState({ jobTrackingStatus: 'Job Started'});
                     } else if (this.state.remoteJobDetails.status === 'ACCEPTED') {
-                        this.setState({ jobTrackingStatus: 'Krew Assigned' });
+                        this.setState({ jobTrackingStatus: 'Krew Assigned'});
+                        
                     } else if (this.state.remoteJobDetails.status === 'STARTED') {
                         this.setState({ jobTrackingStatus: 'Job Requested' });
                     }
@@ -814,7 +860,7 @@ class JobDetails extends Component {
 
     startFollowUp() {
         this.clickDisable();
-        clearInterval(this.state.progressInterval);
+       // clearInterval(this.state.progressInterval);
         this.props.navigation.navigate('FollowUpList', { jobDetails: this.state.remoteJobDetails });
 
     }
@@ -823,6 +869,19 @@ class JobDetails extends Component {
     }
 
     render() {
+        const options = {
+            container: {
+                backgroundColor: '#3d5875',
+                padding: 5,
+                borderRadius: 5,
+                width: 220,
+            },
+            text: {
+                fontSize: 30,
+                color: '#FFF',
+                marginLeft: 7,
+            }
+        };
         let JobDetailsData;
         if (this.state.remoteJobDetails !== '') {
             JobDetailsData = this.state.remoteJobDetails;
@@ -989,6 +1048,7 @@ class JobDetails extends Component {
                                                 : console.log()
                                     }
                                 </MapView>
+                                
                             </View>
                             /* Time tracking map end */
                             :
@@ -1005,14 +1065,24 @@ class JobDetails extends Component {
                                         </View>
                                     </View>
                                     <View style={{ flex: 4 }}>
-                                        <AnimatedCircularProgress
+                                        {/* <AnimatedCircularProgress
                                             size={120}
                                             width={15}
                                             fill={this.state.workProgressTime}
                                             tintColor="#00e0ff"
                                             onAnimationComplete={() => console.log('none')}
                                             backgroundColor="#3d5875"
-                                        />
+                                        /> */}
+                                        {
+                                            this.state.IsShowTimer ? (
+                                                <Timer totalDuration={this.state.timerDuration} start={this.state.IsTimerStart}
+
+                                                    options={options}
+
+                                                />
+                                            ) : null
+                                        }
+                                        
                                     </View>
                                 </View>
                                 :
