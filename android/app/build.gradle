@@ -97,8 +97,8 @@ android {
         applicationId "com.HomeKrew.Worker"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 6
-        versionName "1.5"
+        versionCode 8
+        versionName "1.7"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }

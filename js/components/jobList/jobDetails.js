@@ -1078,6 +1078,7 @@ class JobDetails extends Component {
                                                 <Timer totalDuration={this.state.timerDuration} start={this.state.IsTimerStart}
 
                                                     options={options}
+                                                    handleFinish={()=>this.handleTimerFinish()}
 
                                                 />
                                             ) : null
